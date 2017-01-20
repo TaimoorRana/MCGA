@@ -9,4 +9,3 @@ Samuel - samuel.pcampbell@gmail.com
 Sylvain - sylvain.czyzewski@gmail.com    
 Taimoor - taimoorrana1@gmail.com (Leader)    
 
-Testing Jira Integration
