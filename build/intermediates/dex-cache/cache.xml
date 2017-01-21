@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-storage/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="dd39827d2067497e60e21da48a7926000b6d4b0c">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-storage-10.0.1_bd9c426a55e6222bc2a93a557787cf194c210d52/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads-lite/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b955cb3a1ad6f1b6ff728ce1e0cd592c1717b440">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-ads-lite-10.0.1_13a9052a55c87b8eed1926a5a4871b51060bdfc7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="2d5d113b0352ab60946fc44c518cf68fd26cbb79">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-wallet-10.0.1_130d49fff3d24052a83ff6ff52709246341fd710/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="867dad63c33388ff8c7644b236579355036d075f">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_f2144b68393d3274ac3bc83167152d28f327349f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-iid/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="486371f97baad8e607f332f20fee1d3dd00a731a">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-iid-10.0.1_e56f8acffde04ef36f32fdb0ded940908bfb766b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="27777b3cad3c20b1acab19f6e37fe3e03371bf6e">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-maps-10.0.1_4d2b9cf701bec667ec9be1420b7fec8bd7af12d2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4c829ff0ccfecb28a999ee46d9e75948dfc777a4">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-analytics-10.0.1_5bcb382d4527ae762429ba1118e8ace52bc7deaf/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="44a694d4095be84c2888764b1f7256b385c030ad">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-location-10.0.1_026fefbe0cfbe15e4c6e5880c32ec1093255d8b9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-crash/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="de29a39f9260f88151b1ef453140e71c76b6c415">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-crash-10.0.1_dd79785931932fad3857cb39711e68e7072d2d8a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/24.0.0/jars/libs/internal_impl-24.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b6763651ec29b4c95e7bbe63fc393ffcc8c4c2c5">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.0.0_cd29b7623ab19832baa70e5892dea0b3742617c4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e2185aff89caeb337b1ffc36d5e525d8318e7cfe">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-10.0.1_f0b32f40a9c0a6aa011398a34b190b9e1efae2c5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f6cf557be4dbd0282ea2388633e5378634423226">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-safetynet-10.0.1_b06bf3b89e59b5309c1d05b67729674edf041579/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="7a64bf6dc775198eed9db9468a133adf7dfe6562">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-fitness-10.0.1_37814ce86ebb05ef2a31d30d920e37237007a3cb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8308ed003522a2ee8958311afcc4cfd0470377cd">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-gcm-10.0.1_6f68fa3229e1c581865f8a162bd74f2613765512/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="a48dc0b148059764d32500be558702d5ff932058">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-identity-10.0.1_8f7e56420a32e8daaa42402b94b4a7a003c08e3c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c14f0c89f28cf782e42581ab0aba5f63af39b3d2">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-plus-10.0.1_09bf5c2a9fb77d2f13acee1dae7ea3dd64456341/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-24.2.1_4907d88360b3b536b1af0043ba0fac4d61b2732e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast-framework/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="df1cb17511aabbb63264a0024949d1e42502a512">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-cast-framework-10.0.1_43597205dc84275a49527a301af1af58f0f91f47/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.1_766269dc22318a84122d7b1ec2697199ebb882f7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-common/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="eb0d830e3eabb9deb9ec44869cf7ac7ea1ad794c">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-common-10.0.1_370139b1ebae0dde8db09eeef2dce81c4fa21257/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tagmanager/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="971509bbe30bb7b971fc1c49d7b23d0d818830ac">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tagmanager-10.0.1_1271cb5236639495214ef65ae0887cbda7f2babc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-24.2.1_3d8171d6e6024e692237ff13e8ec65be60a78cc4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="25438f55fc6d906a0e72f30b21487541430ede43">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-10.0.1_6ad09a82fdff7e1bf15db6ca83e48b261112fc09/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-database/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8f128aeeb7e31271b28a7adb9dac1f3a6ed9f5e7">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-database-10.0.1_f657fb755f309f1853e0c36e49b40ec51255f2fc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-database-connection/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8010ae6ed32828a145b25ec97bc07b7a83c6318f">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-database-connection-10.0.1_8eefa43745bf7fadbc0ea4b64686b31c9275b2c5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-24.2.1_92b98a0615e5b1830b5a4b7988533b4d54a5940c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_e719040026ee23d6681a4d26274f3244f616eba9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d0460bf07cc3657e0be518ca01c174493951c6b8">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-ads-10.0.1_325b3da4d14dad64622f4b81b0174373be88eae1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-appindexing/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="ae80d328a8548b4610ead6c624bab8c6a6984f5b">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-appindexing-10.0.1_b462bd21158e1c7ef64218ba6433b55985f2ced2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-messaging/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4b17463c814bdc562fb0392fa3494063623a0904">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-messaging-10.0.1_e28cd05cb28a085e5301ee6db100a252637c05cc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gass/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="57c2eceb8548de84509d1ebc293fedec53231f6c">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-gass-10.0.1_570c7ce8a11ee124dd602f2aea14f3a2d95de151/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/24.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b327fbe2fad414bc38cf0ce8f7efe1a38f572837">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-mediarouter-v7-24.0.0_b23ce4af728eca3497e17eb341c08783f05f6e6e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tagmanager-api/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b1df8fa3d372a27e4e969ce00b00689ee1eed031">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tagmanager-api-10.0.1_15feb8031c8b7dc8ea14cb873c9c0b6852579d73/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tagmanager-v4-impl/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f23ad0f8e58713ff4b55f61c0bbde3830378347c">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tagmanager-v4-impl-10.0.1_63a24d3ab281ae88bef01d02e714d3989ceb98bc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c6e1f361e9d61aece9dac39b77fcc98a337a144d">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-nearby-10.0.1_b855fbfe7f35f1d1f6d7cd521cad7b05dc644fd7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="408a599ac77cd17fe8e8919326bec617b3d005bd">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-wearable-10.0.1_08a3f193aa892beff1078771dece2fbe03d04d44/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="028f8255cb977b29cdffbfcf05caa0459686120c">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-drive-10.0.1_29deac6cb325f878c704ddc546d36448ed6893a8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-vision/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="ba6aa5e69ef31dee57208125323cee958fc67565">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-vision-10.0.1_4e7d58155628441e8e7d94c03bc8a9633b4e12e1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/multidex/1.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="78ea232052df889856dcb7b7b542707c89bb3bfb">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-multidex-1.0.1_7f658620e74e6c8d0004fde2860007c9722506fe/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b23df20b268f7e6f4a353d5f9aa768f54710f1d1">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_14d48b9b7ede1192e242601f918c4664ecc36fc3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.1_2e2fde25f28999c8d6ee8cbe586d3f29a9fa5f69/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_b1814e69344226e197aa2d42acb6fb7fcfe9efaf/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.2.1_0f4030448b145e27dd52023779b365941ea5faa6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tasks/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6addaba208e21c6da776d0ca75b6b23a6ccd5499">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tasks-10.0.1_ba4ef0d831f4b655f50f7942514dc9999dfa3562/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-storage-common/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="09cf6aa1390f95157e8295d02be7868f568825fc">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-storage-common-10.0.1_b688cf71cbaefc601026f5fbb2a83b0813ce1e8f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-instantapps/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="45305e6af414dab5aba6c3225081c2f15c3bdd1e">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-instantapps-10.0.1_72bf348b272387686f0d4688e89c4dcdb6946f48/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="39907d5c8f5902fffef30160ca7447c93b82405c">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-appinvite-10.0.1_ec284b71c64b5f62ef44861de2aabaaa39684505/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.2.1_48bb9010e3c85c44935e242b6fc2b0681f829356/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="433f4d6aa5f21f19552afe0e6c5eff0fedba73ad">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-10.0.1_0a367b41261e16542f01e3f48897943fb1f66901/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics-impl/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6116e0e7069de7fc259aac8e08b84f32c2038231">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-impl-10.0.1_8a5e603270a72546b997062ee50eb2f3a1f141e3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-clearcut/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="1d193729baf37df3d902a423291423a0df7e3779">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-clearcut-10.0.1_fb571ee7ecee3bdc29833dd4d1bda66087cd9ebc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="756f6297eef79784f5e356dcd4f39865028b2bd0">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-10.0.1_380ccdda8ca434ec8cd5a585c0b59f314d147c91/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_79a0d5197d4f6edbc7a2a16d4f3228633066863e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="9cca2818594cc5348806d6662133491e7ea0fa8d">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-10.0.1_a9b278aaf85a86504046231eff231aceb642c9a0/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-awareness/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="4385ccc0a88b33d182a836eadb47be55c8eb1107">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-awareness-10.0.1_9915dda95f4de0544dd0a771bebc079d53627c3b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="1e11c68fec92a17c84dd8d1dd80e74c4e67b12e2">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-games-10.0.1_110f710229c11a8e39a1013b1de07aecafc52fed/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="771267c5b0c7a5b348d3205dcfa1f871af7e0177">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-cast-10.0.1_d2023073c4d656467cdbed972741b571acc014c9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/palette-v7/24.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="734e80dffea7bd76c18ae256822a124c30d85850">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-palette-v7-24.0.0_b3eecd7482a3f6c89cbe8d576afb3441e12ddba1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="92c871a22463a247e8a77a9f3fd231c278788c4a">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-panorama-10.0.1_4f3b8c13943cbd1ee4b5f7c36b27406f82d5b746/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-auth-base/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e96c6974cf924e7ee3b230e6847d5731423388c9">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-auth-base-10.0.1_22990fb93df50a4c180bb829dc20dcae44de6b7d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-places/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="f3e51e9c5233b8897f61e08a6a27bc36283c2724">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-places-10.0.1_e760145117819bb6f35f243eb7cdba9f8849036d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-iid/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="6bb5d347ebc0c6ef3c83a905222a688da5d2f7b4">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-iid-10.0.1_21ea77e9c3006f5db861e8e0e3aa6ff69383e930/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-24.2.1_625386584a90580b18954ffefcc70b3191891de1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.firebase/firebase-config/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="ffc15e965a9e8c28f24455eedd4cac215c45d1fc">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-config-10.0.1_1d8c118a36d721d150beeb660144f8947fe6e222/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_6f2eae14bc2df4f2fb4b002c9a93b2b5f2f93041/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="9222734d91a741e3034610117a127f88a0a68092">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_f328b134b8e20d614e8b56a1589dc21acfc7dec9/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.1_89d8781cb6519f34f3ae67ea615ef0558de9edde/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics-impl/10.0.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e871881b36b32e6bfd271a830c6eeb54ff0fc185">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-analytics-impl-10.0.1_8dd89eba4ec417c6cbc7a426167d380c8246efe5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="/Users/taimoorrana/AndroidStudioProjects/MCGA/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_b6b653a7e97d99bd7294bdb77b75a8c7490e3cc2/classes.dex" />
+    </item>
+
+</items>
