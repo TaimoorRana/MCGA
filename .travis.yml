@@ -1,2 +1,5 @@
 language: android
 script: gradle test
+
+jdk:
+  - oraclejdk8
