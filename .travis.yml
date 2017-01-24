@@ -1,8 +1,3 @@
 language: android
-script: ./gradlew test
-android:
-  components:
-   - build-tools-25.0.2
-   - android-24
 jdk:
   - oraclejdk8
