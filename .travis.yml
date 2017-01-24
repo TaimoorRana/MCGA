@@ -1,5 +1,7 @@
 language: android
 script: ./gradlew test
-
+android:
+  components:
+   - build-tools-19.1.0
 jdk:
   - oraclejdk8
