@@ -5,6 +5,7 @@ android:
     - platform-tools
     - build-tools-25.0.2
     - android-24
+    - sys-img-armeabi-v7a-android-24
     - extra-android-m2repository
     - extra-google-m2repository
     - extra-android-support
@@ -12,7 +13,7 @@ android:
 jdk:
   - oraclejdk8
 before_script:
-  - echo no | android create avd --force -n test -t android-24 --abi google_apis/armeabi-v7a
+  - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
   - emulator -avd test -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
