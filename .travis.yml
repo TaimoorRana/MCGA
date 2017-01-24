@@ -1,5 +1,5 @@
 language: android
-script: gradle test
+script: ./gradlew test
 
 jdk:
   - oraclejdk8
