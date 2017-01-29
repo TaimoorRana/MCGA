@@ -37,4 +37,4 @@ ehthumbs.db
 Thumbs.db
 
 #keys
-app/src/debug/res/values/google_maps_api.xml
+app/src/debug/res/values/google_maps_key.xml
