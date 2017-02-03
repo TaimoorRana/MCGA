@@ -1,4 +1,4 @@
-package com.example.mcga.mcga;
+package com.concordia.mcga.activities;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

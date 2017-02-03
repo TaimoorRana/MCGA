@@ -1,4 +1,4 @@
-package com.example.mcga.mcga;
+package com.concordia.mcga.activities;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
