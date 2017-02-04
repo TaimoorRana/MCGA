@@ -68,6 +68,13 @@
         android:layout_alignParentEnd="true"
         app:useCompatPadding="true"
         app:backgroundTint="@color/colorPrimary" />
+      <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/campusButton"
+        android:onClick="switchCampus" />
     </RelativeLayout>
   </android.support.v7.widget.LinearLayoutCompat>
 </android.support.v7.widget.LinearLayoutCompat>

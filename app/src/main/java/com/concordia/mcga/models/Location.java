@@ -7,6 +7,11 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Location {
     private LatLng mapCoordinates;
 
+    private Location(){}
+
+    public Location(LatLng mapCoordinates) {
+        this.mapCoordinates = mapCoordinates;
+    }
 
     public LatLng getMapCoordinates() {
         return mapCoordinates;
