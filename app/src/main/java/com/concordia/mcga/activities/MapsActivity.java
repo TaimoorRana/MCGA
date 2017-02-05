@@ -2,16 +2,23 @@ package com.concordia.mcga.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import com.concordia.mcga.models.Location;
-import com.concordia.mcga.models.POI;
+import android.view.View;
+import android.widget.Button;
+import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    private static final MarkerOptions LOYOLA_MARKER = new MarkerOptions().position(Campus.LOYOLA.getMapCoordinates()).title(
+        Campus.LOYOLA.getName());
+    private static final MarkerOptions SGW_MARKER = new MarkerOptions().position(Campus.SGW.getMapCoordinates())
+        .title(Campus.SGW.getName());
+    Campus currentCampus = Campus.SGW;
+    GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +42,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Location l = new POI();
-        l.setMapCoordinates(new LatLng(45.497100, -73.579077));
-        googleMap.addMarker(new MarkerOptions().position(l.getMapCoordinates()).title("Hall Building"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(l.getMapCoordinates(), 17));
+        map = googleMap;
+        googleMap.addMarker(LOYOLA_MARKER);
+        googleMap.addMarker(SGW_MARKER);
+        updateCampus();
+    }
+
+    public void switchCampus(View v){
+        if (currentCampus.equals(Campus.LOYOLA)){
+            currentCampus = Campus.SGW;
+        } else {
+            currentCampus = Campus.LOYOLA;
+        }
+        updateCampus();
+    }
+
+    void updateCampus(){
+        Button campusButton = (Button) findViewById(R.id.campusButton);
+        campusButton.setText(currentCampus.getShortName());
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), 16));
     }
 }
