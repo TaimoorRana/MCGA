@@ -23,13 +23,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="80dp"
-        android:layout_marginRight="13dp"
+        android:layout_marginRight="20dp"
         android:clickable="true"
         android:tint="@android:color/white"
-        android:visibility="invisible"
 
+        android:visibility="invisible"
         app:backgroundTint="@color/colorPrimary"
-        app:fabSize="normal"
+        app:fabSize="mini"
         app:srcCompat="@drawable/ic_directions_walk_black_24dp" />
 
     <TextView
@@ -37,8 +37,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="95dp"
-        android:layout_marginRight="80dp"
+        android:layout_marginBottom="87dp"
+        android:layout_marginRight="70dp"
         android:background="@color/colorPrimary"
         android:padding="5dp"
         android:textColor="@color/white"
@@ -49,14 +49,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="140dp"
-        android:layout_marginRight="13dp"
+        android:layout_marginBottom="125dp"
+        android:layout_marginRight="20dp"
         android:clickable="true"
         android:tint="@android:color/white"
         android:visibility="invisible"
 
         app:backgroundTint="@color/colorPrimary"
-        app:fabSize="normal"
+        app:fabSize="mini"
         app:srcCompat="@drawable/ic_directions_bike_black_24dp" />
 
     <TextView
@@ -64,8 +64,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="153dp"
-        android:layout_marginRight="80dp"
+        android:layout_marginBottom="132dp"
+        android:layout_marginRight="70dp"
         android:background="@color/colorPrimary"
         android:padding="5dp"
         android:textColor="@color/white"
@@ -76,13 +76,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="200dp"
-        android:layout_marginRight="13dp"
+        android:layout_marginBottom="170dp"
+        android:layout_marginRight="20dp"
         android:clickable="true"
         android:tint="@android:color/white"
         android:visibility="invisible"
         app:backgroundTint="@color/colorPrimary"
-        app:fabSize="normal"
+        app:fabSize="mini"
         app:srcCompat="@drawable/ic_directions_car_black_24dp" />
 
     <TextView
@@ -90,8 +90,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="211dp"
-        android:layout_marginRight="80dp"
+        android:layout_marginBottom="177dp"
+        android:layout_marginRight="70dp"
         android:background="@color/colorPrimary"
         android:padding="5dp"
         android:textColor="@color/white"
@@ -102,14 +102,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="260dp"
-        android:layout_marginRight="13dp"
+        android:layout_marginBottom="215dp"
+        android:layout_marginRight="20dp"
         android:clickable="true"
         android:tint="@android:color/white"
         android:visibility="invisible"
 
         app:backgroundTint="@color/colorPrimary"
-        app:fabSize="normal"
+        app:fabSize="mini"
         app:srcCompat="@drawable/ic_directions_transit_black_24dp" />
 
     <TextView
@@ -117,8 +117,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="269dp"
-        android:layout_marginRight="80dp"
+        android:layout_marginBottom="222dp"
+        android:layout_marginRight="70dp"
         android:background="@color/colorPrimary"
         android:padding="5dp"
         android:textColor="@color/white"
@@ -129,22 +129,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="320dp"
-        android:layout_marginRight="13dp"
+        android:layout_marginBottom="260dp"
+        android:layout_marginRight="20dp"
         android:clickable="true"
-        android:scaleType="center"
+        android:scaleType="centerCrop"
         android:visibility="invisible"
         app:backgroundTint="@color/colorPrimary"
-        app:fabSize="normal"
-        app:srcCompat="@mipmap/ic_concordia_stingers" />
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_stingers_icon" />
 
     <TextView
         android:id="@+id/textViewShuttle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="327dp"
-        android:layout_marginRight="80dp"
+        android:layout_marginBottom="267dp"
+        android:layout_marginRight="70dp"
         android:background="@color/colorPrimary"
         android:padding="5dp"
         android:textColor="@color/white"

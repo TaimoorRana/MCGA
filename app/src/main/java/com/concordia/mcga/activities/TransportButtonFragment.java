@@ -18,6 +18,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private Animation transport_fab_open, transport_fab_close, transport_textview_open, transport_textview_close;
     private Boolean fabExpanded = false;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,14 +81,13 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
                 swapIcons(R.drawable.ic_directions_transit_black_24dp);
                 break;
             case R.id.shuttleFAB:
-                swapIcons(R.mipmap.ic_concordia_stingers);
+                swapIcons(R.drawable.ic_stingers_icon);
                 break;
         }
     }
 
-    private void expandFAB() {
+    public void expandFAB() {
         if (fabExpanded) {
-            Log.d("TransportButtonFragment", "Clicked to Minimize");
             fabExpanded = false;
             walkFAB.startAnimation(transport_fab_close);
             walkTextView.startAnimation(transport_textview_close);
@@ -109,7 +109,6 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             shuttleTextView.startAnimation(transport_textview_close);
             shuttleFAB.setClickable(false);
         } else {
-            Log.d("TransportButtonFragment", "Clicked to Expand");
             fabExpanded = true;
             walkFAB.startAnimation(transport_fab_open);
             walkTextView.startAnimation(transport_textview_open);
@@ -140,7 +139,15 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     private String formatTime(int hours, int minutes) {
-        return hours > 0 ? hours + "h" + " " + minutes + "min" : minutes + "min";
+        String time = null;
+        if (hours > 0) {
+            time =  hours + "h" + " " + minutes + "min";
+        } else if (hours == 0) {
+            time = minutes + "min";
+        } else if (minutes == 0) {
+            time = hours + "h";
+        }
+        return time;
     }
 
     public void setWalkTime(int hours, int minutes) {
@@ -163,4 +170,31 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         shuttleTextView.setText(formatTime(hours, minutes));
     }
 
+
+    /* Getters */
+
+    public TextView getBikeTextView() {
+        return bikeTextView;
+    }
+
+    public TextView getCarTextView() {
+        return carTextView;
+    }
+
+    public TextView getShuttleTextView() {
+        return shuttleTextView;
+    }
+
+    public TextView getWalkTextView() {
+        return walkTextView;
+    }
+
+    public TextView getPublicTransportTextView() {
+        return publicTransportTextView;
+    }
+
+
+    public Boolean isExpanded() {
+        return fabExpanded;
+    }
 }
