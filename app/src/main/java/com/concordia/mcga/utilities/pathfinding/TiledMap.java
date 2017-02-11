@@ -34,6 +34,9 @@ public class TiledMap {
     public PathFinderTile getEndTile() {
         return endTile;
     }
+    public void setTile(int x, int y, PathFinderTile tile){
+        allTiles[x][y] = tile;
+    }
 
     public PathFinderTile getTile(int x, int y){
         if (x < 0 || x >= allTiles.length ||

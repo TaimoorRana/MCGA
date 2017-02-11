@@ -10,14 +10,14 @@ import java.util.Set;
  */
 public class PathFinder {
 
-    private TiledMap map;
-    private Set<PathFinderTile> openSet;
-    private Set<PathFinderTile> closedSet;
+    TiledMap map;
+    Set<PathFinderTile> openSet;
+    Set<PathFinderTile> closedSet;
 
     public PathFinder() {
         openSet = new HashSet<>();
         closedSet = new HashSet<>();
-        map = new TiledMap(10); // Example map, 10x10 grid of all valid paths.
+        map = new TiledMap(10); // Example map, 10x10 grid of all valid tiles.
     }
 
     /**
@@ -37,7 +37,9 @@ public class PathFinder {
         PathFinderTile current;
         while (true) {
             current = lowestOpen();
-            if (current.equals(map.getEndTile())) {
+            if (current == null) {
+                throw new Exception("No valid path to destination!");
+            } else if (current.equals(map.getEndTile())) {
                 break;
             }
             nextIteration(current);
@@ -54,9 +56,8 @@ public class PathFinder {
     /**
      * Runs an iteration of the A* algorithm.
      * @param current - Currently examined tile.
-     * @throws Exception
      */
-    private void nextIteration(PathFinderTile current) throws Exception {
+    private void nextIteration(PathFinderTile current) {
         openSet.remove(current);
         closedSet.add(current);
 
@@ -76,8 +77,6 @@ public class PathFinder {
                     if (newDist < tile.getDistFromStart()) {
                         tile.setDistFromStart(newDist);
                         tile.setParent(current);
-                        openSet.remove(tile);
-                        openSet.add(tile);
                     }
                 } else {
                     tile.setParent(current);
@@ -96,7 +95,7 @@ public class PathFinder {
             }
         }
         if (lowest.equals(PathFinderTile.MAX_COST)) {
-            throw new Exception("No Valid Path Found!");
+            return null;
         }
         return lowest;
     }
