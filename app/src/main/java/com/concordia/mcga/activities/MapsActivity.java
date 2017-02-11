@@ -4,12 +4,16 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
+
+import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -45,6 +49,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map = googleMap;
         googleMap.addMarker(LOYOLA_MARKER);
         googleMap.addMarker(SGW_MARKER);
+
+        Campus.SGW.populateCampusWithBuildings();
+
+        ArrayList<Building> sgwBuildings = Campus.SGW.getBuildings();
+
+        for (Building building : sgwBuildings) {
+            map.addPolygon(building.getPolygonOverlayOptions());
+            map.addMarker(building.getMarkerOptions());
+        }
+
         updateCampus();
     }
 
@@ -62,4 +76,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         campusButton.setText(currentCampus.getShortName());
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), 16));
     }
+
 }
