@@ -180,28 +180,125 @@ public class Campus extends POI {
                         new LatLng(45.459576, -73.639230)));
 
 
-        /*
+        MarkerOptions scMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_sc_building));
+        buildings.add(new Building(new LatLng(45.459153, -73.639173), "Student Center", "SC", scMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.458991, -73.639125),
+                        new LatLng(45.459106, -73.639418),
+                        new LatLng(45.459215, -73.639332),
+                        new LatLng(45.459234, -73.639381),
+                        new LatLng(45.459304, -73.639324),
+                        new LatLng(45.459264, -73.639221),
+                        new LatLng(45.459318, -73.639178),
+                        new LatLng(45.459230, -73.638952),
+                        new LatLng(45.459159, -73.639009),
+                        new LatLng(45.459136, -73.638953),
+                        new LatLng(45.459078, -73.638997),
+                        new LatLng(45.459096, -73.639042)));
 
-        MarkerOptions adMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ad_building));
-        buildings.add(new Building(new LatLng(), "", "", adMarkerOptions)
-                .addEdgeCoordinate(new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng(),
-                        new LatLng()));
-         */
+        MarkerOptions ptMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_pt_building));
+        buildings.add(new Building(new LatLng(45.459318, -73.638964), "Oscar Peterson Concert Hall", "PT", ptMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.459163, -73.638780),
+                        new LatLng(45.459335, -73.639221),
+                        new LatLng(45.459351, -73.639208),
+                        new LatLng(45.459361, -73.639231),
+                        new LatLng(45.459483, -73.639136),
+                        new LatLng(45.459301, -73.638672)));
+
+        MarkerOptions vlMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_vl_building));
+        buildings.add(new Building(new LatLng(45.459073, -73.638395), "Vanier Library Building", "VL", vlMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.458825, -73.638271),
+                        new LatLng(45.459090, -73.638969),
+                        new LatLng(45.459195, -73.638887),
+                        new LatLng(45.459156, -73.638786),
+                        new LatLng(45.459312, -73.638663),
+                        new LatLng(45.459133, -73.638196),
+                        new LatLng(45.459212, -73.638133),
+                        new LatLng(45.459138, -73.637939),
+                        new LatLng(45.459131, -73.637944),
+                        new LatLng(45.459122, -73.637919),
+                        new LatLng(45.459128, -73.637915),
+                        new LatLng(45.459102, -73.637846),
+                        new LatLng(45.459075, -73.637868),
+                        new LatLng(45.459082, -73.637889),
+                        new LatLng(45.459046, -73.637916),
+                        new LatLng(45.459038, -73.637895),
+                        new LatLng(45.458902, -73.638001),
+                        new LatLng(45.458910, -73.638026),
+                        new LatLng(45.458882, -73.638050),
+                        new LatLng(45.458902, -73.638101),
+                        new LatLng(45.458869, -73.638127),
+                        new LatLng(45.458887, -73.638175),
+                        new LatLng(45.458853, -73.638203),
+                        new LatLng(45.458866, -73.638237)));
+
+        MarkerOptions veMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ve_building));
+        buildings.add(new Building(new LatLng(45.458848, -73.638634), "Vanier Extension", "VE", veMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.458825, -73.638271),
+                        new LatLng(45.458704, -73.638363),
+                        new LatLng(45.458718, -73.638399),
+                        new LatLng(45.458631, -73.638468),
+                        new LatLng(45.458829, -73.638981),
+                        new LatLng(45.458836, -73.638976),
+                        new LatLng(45.458854, -73.639019),
+                        new LatLng(45.459050, -73.638865)));
+
+        MarkerOptions fcMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_fc_building));
+        buildings.add(new Building(new LatLng(45.458588, -73.639350), "F.C. Smith Building", "FC", fcMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.458380, -73.639039),
+                        new LatLng(45.458392, -73.639070),
+                        new LatLng(45.458414, -73.639055),
+                        new LatLng(45.458425, -73.639084),
+                        new LatLng(45.458408, -73.639096),
+                        new LatLng(45.458427, -73.639149),
+                        new LatLng(45.458420, -73.639157),
+                        new LatLng(45.458428, -73.639183),
+                        new LatLng(45.458418, -73.639188),
+                        new LatLng(45.458426, -73.639223),
+                        new LatLng(45.458441, -73.639255),
+                        new LatLng(45.458453, -73.639247),
+                        new LatLng(45.458516, -73.639410),
+                        new LatLng(45.458511, -73.639430),
+                        new LatLng(45.458484, -73.639451),
+                        new LatLng(45.458510, -73.639529),
+                        new LatLng(45.458524, -73.639521),
+                        new LatLng(45.458535, -73.639549),
+                        new LatLng(45.458529, -73.639572),
+                        new LatLng(45.458539, -73.639600),
+                        new LatLng(45.458556, -73.639605),
+                        new LatLng(45.458583, -73.639586),
+                        new LatLng(45.458595, -73.639611),
+                        new LatLng(45.458632, -73.639681),
+                        new LatLng(45.458671, -73.639699),
+                        new LatLng(45.458749, -73.639641),
+                        new LatLng(45.458759, -73.639585),
+                        new LatLng(45.458732, -73.639511),
+                        new LatLng(45.458742, -73.639497),
+                        new LatLng(45.458717, -73.639429),
+                        new LatLng(45.458726, -73.639422),
+                        new LatLng(45.458711, -73.639375),
+                        new LatLng(45.458726, -73.639364),
+                        new LatLng(45.458724, -73.639353),
+                        new LatLng(45.458746, -73.639334),
+                        new LatLng(45.458730, -73.639296),
+                        new LatLng(45.458708, -73.639314),
+                        new LatLng(45.458696, -73.639302),
+                        new LatLng(45.458687, -73.639312),
+                        new LatLng(45.458672, -73.639289),
+                        new LatLng(45.458665, -73.639293),
+                        new LatLng(45.458605, -73.639132),
+                        new LatLng(45.458616, -73.639120),
+                        new LatLng(45.458622, -73.639086),
+                        new LatLng(45.458609, -73.639058),
+                        new LatLng(45.458583, -73.639057),
+                        new LatLng(45.458578, -73.639061),
+                        new LatLng(45.458570, -73.639046),
+                        new LatLng(45.458559, -73.639054),
+                        new LatLng(45.458537, -73.639000),
+                        new LatLng(45.458521, -73.639013),
+                        new LatLng(45.458508, -73.638980),
+                        new LatLng(45.458529, -73.638964),
+                        new LatLng(45.458518, -73.638935)));
+
 
     }
 
