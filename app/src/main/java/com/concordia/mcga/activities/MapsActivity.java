@@ -51,10 +51,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.addMarker(SGW_MARKER);
 
         Campus.SGW.populateCampusWithBuildings();
+        Campus.LOYOLA.populateCampusWithBuildings();
 
         ArrayList<Building> sgwBuildings = Campus.SGW.getBuildings();
+        ArrayList<Building> loyBuildings = Campus.LOYOLA.getBuildings();
 
         for (Building building : sgwBuildings) {
+            map.addPolygon(building.getPolygonOverlayOptions());
+            map.addMarker(building.getMarkerOptions());
+        }
+
+        for (Building building : loyBuildings) {
             map.addPolygon(building.getPolygonOverlayOptions());
             map.addMarker(building.getMarkerOptions());
         }
