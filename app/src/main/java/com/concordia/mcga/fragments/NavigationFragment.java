@@ -1,9 +1,13 @@
-package com.concordia.mcga.activities;
+package com.concordia.mcga.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.concordia.mcga.activities.R;
 import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -11,21 +15,26 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class NavigationFragment extends Fragment implements OnMapReadyCallback {
 
     private static final MarkerOptions LOYOLA_MARKER = new MarkerOptions().position(Campus.LOYOLA.getMapCoordinates()).title(
-        Campus.LOYOLA.getName());
+            Campus.LOYOLA.getName());
     private static final MarkerOptions SGW_MARKER = new MarkerOptions().position(Campus.SGW.getMapCoordinates())
-        .title(Campus.SGW.getName());
+            .title(Campus.SGW.getName());
     Campus currentCampus = Campus.SGW;
     GoogleMap map;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.navigation_fragment, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
@@ -48,7 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         updateCampus();
     }
 
-    public void switchCampus(View v){
+    public void switchCampus(){
         if (currentCampus.equals(Campus.LOYOLA)){
             currentCampus = Campus.SGW;
         } else {
@@ -58,7 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     void updateCampus(){
-        Button campusButton = (Button) findViewById(R.id.campusButton);
+        Button campusButton = (Button) getActivity().findViewById(R.id.campusButton);
         campusButton.setText(currentCampus.getShortName());
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), 16));
     }

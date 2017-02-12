@@ -6,10 +6,12 @@
 
     <group
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:checkableBehavior="single">
+
         <item
             android:id="@+id/navigation"
-            android:checked="false"
+            android:checked="true"
             android:title="@string/navigation_string"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

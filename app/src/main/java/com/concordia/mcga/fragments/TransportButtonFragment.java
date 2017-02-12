@@ -1,4 +1,4 @@
-package com.concordia.mcga.activities;
+package com.concordia.mcga.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+
+import com.concordia.mcga.activities.R;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
     private FloatingActionButton transportExpandFAB, walkFAB, bikeFAB, carFAB, publicTransportFAB, shuttleFAB;
