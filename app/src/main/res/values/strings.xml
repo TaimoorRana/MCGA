@@ -10,6 +10,10 @@
     <string name="about_string">About</string>
     <string name="open_drawer">Open sesame</string>
     <string name="close_drawer">Goodnight sweet prince</string>
+    <string name="search_hint">Enter your start destination</string>
+
+    <string name="username">Richard Stallman</string>
+    <string name="email">rms@gnu.org</string>
 
     <string-array name="campuses">
         <item>SGW</item>

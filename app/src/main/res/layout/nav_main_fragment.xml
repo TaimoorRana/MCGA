@@ -20,6 +20,7 @@
             app:srcCompat="@drawable/ic_search_black_24dp" />
 
         <EditText
+            android:hint="@string/search_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white" />

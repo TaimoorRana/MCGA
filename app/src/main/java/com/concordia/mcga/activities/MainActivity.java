@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         navigationFragment = new NavigationFragment();
 
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame, navigationFragment, "MAIN_NAV").addToBackStack("tag");
+        fragmentTransaction.replace(R.id.frame, navigationFragment, "MAIN_NAV");
         fragmentTransaction.commit();
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
