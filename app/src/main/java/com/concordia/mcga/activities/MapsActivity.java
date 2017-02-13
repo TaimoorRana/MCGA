@@ -1,7 +1,10 @@
 package com.concordia.mcga.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
 import com.concordia.mcga.models.Campus;
@@ -13,6 +16,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    private enum ViewType {
+        INDOOR, OUTDOOR
+    };
+
     private static final MarkerOptions LOYOLA_MARKER = new MarkerOptions().position(Campus.LOYOLA.getMapCoordinates()).title(
         Campus.LOYOLA.getName());
     private static final MarkerOptions SGW_MARKER = new MarkerOptions().position(Campus.SGW.getMapCoordinates())
@@ -20,14 +27,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Campus currentCampus = Campus.SGW;
     GoogleMap map;
 
+    //State
+    private ViewType viewType;
+
+    //Fragments
+    private SupportMapFragment mapFragment;
+    private TransportButtonFragment transportButtonFragment;
+    private IndoorMapFragment indoorMapFragment;
+
+    //View Components
+    private Button campusButton;
+    private Button viewSwitchButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        //Init Fragments
+        transportButtonFragment = (TransportButtonFragment) getSupportFragmentManager().findFragmentById(R.id.transportButton);
+        indoorMapFragment = (IndoorMapFragment) getSupportFragmentManager().findFragmentById(R.id.indoormap);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //Init View Components
+        campusButton = (Button) findViewById(R.id.campusButton);
+        viewSwitchButton = (Button) findViewById(R.id.viewSwitchButton);
+        viewSwitchButton.setText("GO INDOORS");
+
+
+        //Set initial view type
+        viewType = ViewType.OUTDOOR;
+
+        getSupportFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
     }
 
 
@@ -58,8 +92,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     void updateCampus(){
-        Button campusButton = (Button) findViewById(R.id.campusButton);
+        //Button campusButton = (Button) findViewById(R.id.campusButton);
         campusButton.setText(currentCampus.getShortName());
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), 16));
     }
+
+    public void toggleView(View v) {
+        if (viewType == ViewType.OUTDOOR) {
+            viewType = ViewType.INDOOR;
+            getSupportFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
+            getSupportFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
+            campusButton.setVisibility(View.GONE);
+            viewSwitchButton.setText("GO OUTDOORS");
+        } else {
+            viewType = ViewType.OUTDOOR;
+            getSupportFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
+            getSupportFragmentManager().beginTransaction().show(transportButtonFragment).commit();
+            campusButton.setVisibility(View.VISIBLE);
+            viewSwitchButton.setText("GO INDOORS");
+        }
+    }
+
 }

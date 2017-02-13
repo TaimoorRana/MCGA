@@ -65,6 +65,13 @@
                 android:layout_gravity="bottom"
                 tools:context="com.concordia.mcga.activities.MapsActivity" />
 
+            <fragment
+                android:id="@+id/indoormap"
+                android:name="com.concordia.mcga.activities.IndoorMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom" />
+
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/mapCenterButton"
                 android:layout_width="wrap_content"
@@ -80,7 +87,7 @@
                 app:useCompatPadding="true" />
 
             <fragment
-                android:id="@+id/fragment"
+                android:id="@+id/transportButton"
                 android:name="com.concordia.mcga.activities.TransportButtonFragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,6 +101,16 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:onClick="switchCampus" />
+
+            <Button
+                android:text="Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewSwitchButton"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:onClick="toggleView"/>
+
         </RelativeLayout>
     </android.support.v7.widget.LinearLayoutCompat>
 </android.support.v7.widget.LinearLayoutCompat>
