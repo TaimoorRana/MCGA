@@ -30,6 +30,8 @@ public class Campus extends POI {
 
     private void populateLOYCampusWithBuildings() {
 
+
+        //AD
         MarkerOptions adMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ad_building));
         buildings.add(new Building(new LatLng(45.458096, -73.639803), "Administration", "AD", adMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.458175, -73.640261),
@@ -41,6 +43,7 @@ public class Campus extends POI {
                         new LatLng(45.457915, -73.640136),
                         new LatLng(45.458080, -73.640012)));
 
+        //CC
         MarkerOptions ccMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_cc_building));
         buildings.add(new Building(new LatLng(45.458335, -73.640467), "Central", "CC", ccMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.458175, -73.640261),
@@ -48,6 +51,7 @@ public class Campus extends POI {
                         new LatLng(45.458523, -73.640692),
                         new LatLng(45.458379, -73.640806)));
 
+        //RF
         MarkerOptions rfMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_rf_building));
         buildings.add(new Building(new LatLng(45.458596, -73.641088), "Loyola Jesuit Hall And Conference Center", "RF", rfMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.458518, -73.640685),
@@ -59,6 +63,7 @@ public class Campus extends POI {
                         new LatLng(45.458686, -73.640803),
                         new LatLng(45.458588, -73.640879)));
 
+        // PY
         MarkerOptions pyMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_py_building));
         buildings.add(new Building(new LatLng(45.458994, -73.640456), "Psychology", "PY", pyMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.459292, -73.640558),
@@ -68,6 +73,7 @@ public class Campus extends POI {
                         new LatLng(45.459184, -73.640583),
                         new LatLng(45.459207, -73.640631)));
 
+        // RA
         MarkerOptions raMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ra_building));
         buildings.add(new Building(new LatLng(45.456854, -73.637734), "Recreation And Athletics Complex", "RA", raMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.456963, -73.638570),
@@ -77,6 +83,7 @@ public class Campus extends POI {
                         new LatLng(45.456828, -73.637089),
                         new LatLng(45.456494, -73.637359)));
 
+        // PC
         MarkerOptions pcMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_pc_building));
         buildings.add(new Building(new LatLng(45.457074, -73.637313), "Perform Center", "PC", pcMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.457118, -73.637829),
@@ -84,6 +91,7 @@ public class Campus extends POI {
                         new LatLng(45.457052, -73.636764),
                         new LatLng(45.456786, -73.636977)));
 
+        // CJ
         MarkerOptions cjMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_cj_building));
         buildings.add(new Building(new LatLng(45.457491, -73.640380), "Communication Studies and Journalism Building", "CJ", cjMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.457334, -73.640717),
@@ -115,6 +123,7 @@ public class Campus extends POI {
                         new LatLng(45.457304, -73.640639)
                 ));
 
+        // GE
         MarkerOptions geMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ge_building));
         buildings.add(new Building(new LatLng(45.456987, -73.640445), "Center For Structural And Functional Genomics", "GE", geMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.456945, -73.640740),
@@ -128,6 +137,7 @@ public class Campus extends POI {
                         new LatLng(45.456893, -73.640688),
                         new LatLng(45.456919, -73.640670)));
 
+        //SP
         MarkerOptions spMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_sp_building));
         buildings.add(new Building(new LatLng(45.457548, -73.641722), "Richard J. Renaud Science Complex", "SP", spMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.456983, -73.640829),
@@ -161,7 +171,7 @@ public class Campus extends POI {
                         new LatLng(45.457246, -73.640769),
                         new LatLng(45.457202, -73.640657)));
 
-
+        //PS
         MarkerOptions psMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ps_building));
         buildings.add(new Building(new LatLng(45.459658, -73.639771), "Physical Services Building", "PS", psMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.459287, -73.639458),
@@ -179,7 +189,7 @@ public class Campus extends POI {
                         new LatLng(45.459623, -73.639350),
                         new LatLng(45.459576, -73.639230)));
 
-
+        //SC
         MarkerOptions scMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_sc_building));
         buildings.add(new Building(new LatLng(45.459153, -73.639173), "Student Center", "SC", scMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.458991, -73.639125),
@@ -195,6 +205,7 @@ public class Campus extends POI {
                         new LatLng(45.459078, -73.638997),
                         new LatLng(45.459096, -73.639042)));
 
+        //PT
         MarkerOptions ptMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_pt_building));
         buildings.add(new Building(new LatLng(45.459318, -73.638964), "Oscar Peterson Concert Hall", "PT", ptMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.459163, -73.638780),
@@ -204,6 +215,7 @@ public class Campus extends POI {
                         new LatLng(45.459483, -73.639136),
                         new LatLng(45.459301, -73.638672)));
 
+        // VL
         MarkerOptions vlMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_vl_building));
         buildings.add(new Building(new LatLng(45.459073, -73.638395), "Vanier Library Building", "VL", vlMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.458825, -73.638271),
@@ -230,7 +242,7 @@ public class Campus extends POI {
                         new LatLng(45.458887, -73.638175),
                         new LatLng(45.458853, -73.638203),
                         new LatLng(45.458866, -73.638237)));
-
+        // VE
         MarkerOptions veMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ve_building));
         buildings.add(new Building(new LatLng(45.458848, -73.638634), "Vanier Extension", "VE", veMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.458825, -73.638271),
@@ -242,6 +254,7 @@ public class Campus extends POI {
                         new LatLng(45.458854, -73.639019),
                         new LatLng(45.459050, -73.638865)));
 
+        // FC
         MarkerOptions fcMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_fc_building));
         buildings.add(new Building(new LatLng(45.458588, -73.639350), "F.C. Smith Building", "FC", fcMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.458380, -73.639039),
@@ -298,6 +311,120 @@ public class Campus extends POI {
                         new LatLng(45.458508, -73.638980),
                         new LatLng(45.458529, -73.638964),
                         new LatLng(45.458518, -73.638935)));
+
+        // DO
+        MarkerOptions doMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_do_building));
+        buildings.add(new Building(new LatLng(45.457621, -73.636172), "Stinger Dome", "DO", doMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.456958, -73.636355),
+                        new LatLng(45.457375, -73.637085),
+                        new LatLng(45.458337, -73.635959),
+                        new LatLng(45.457927, -73.635243)));
+
+        MarkerOptions bbMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_bb_building));
+        buildings.add(new Building(new LatLng(45.459753, -73.639166), "Unknown", "BB", bbMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.459694, -73.639168),
+                        new LatLng(45.459725, -73.639242),
+                        new LatLng(45.459815, -73.639167),
+                        new LatLng(45.459785, -73.639092)));
+
+        MarkerOptions bhMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_bh_building));
+        buildings.add(new Building(new LatLng(45.459727, -73.639093), "Unknown", "BH", bhMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.459665, -73.639093),
+                        new LatLng(45.459694, -73.639166),
+                        new LatLng(45.459784, -73.639092),
+                        new LatLng(45.459753, -73.639018)));
+
+        MarkerOptions siMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_si_building));
+        buildings.add(new Building(new LatLng(45.457883, -73.642309), "St. Ignatius Of Loyaloa Church", "SI", siMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.457569, -73.642400),
+                        new LatLng(45.457634, -73.642575),
+                        new LatLng(45.457658, -73.642568),
+                        new LatLng(45.457729, -73.642512),
+                        new LatLng(45.457740, -73.642533),
+                        new LatLng(45.457779, -73.642502),
+                        new LatLng(45.457795, -73.642532),
+                        new LatLng(45.457846, -73.642493),
+                        new LatLng(45.457856, -73.642522),
+                        new LatLng(45.457893, -73.642494),
+                        new LatLng(45.457969, -73.642687),
+                        new LatLng(45.458171, -73.642531),
+                        new LatLng(45.458123, -73.642404),
+                        new LatLng(45.458100, -73.642419),
+                        new LatLng(45.458044, -73.642266),
+                        new LatLng(45.458057, -73.642232),
+                        new LatLng(45.457997, -73.642078),
+                        new LatLng(45.457971, -73.642078),
+                        new LatLng(45.457941, -73.642003),
+                        new LatLng(45.457879, -73.642049),
+                        new LatLng(45.457855, -73.641992),
+                        new LatLng(45.457821, -73.642018),
+                        new LatLng(45.457832, -73.642047),
+                        new LatLng(45.457764, -73.642103),
+                        new LatLng(45.457775, -73.642135),
+                        new LatLng(45.457721, -73.642182),
+                        new LatLng(45.457728, -73.642201),
+                        new LatLng(45.457680, -73.642243),
+                        new LatLng(45.457687, -73.642270),
+                        new LatLng(45.457621, -73.642330),
+                        new LatLng(45.457626, -73.642350)));
+
+        MarkerOptions shMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_sh_building));
+        buildings.add(new Building(new LatLng(45.459370, -73.642453), "Solar House", "SH", shMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.459335, -73.642363),
+                        new LatLng(45.459341, -73.642547),
+                        new LatLng(45.459409, -73.642543),
+                        new LatLng(45.459405, -73.642359)));
+
+
+        MarkerOptions hbMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_hb_building));
+        buildings.add(new Building(new LatLng(45.459300, -73.641901), "Hingston Hall, wing HB", "HB", hbMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.459029, -73.641800),
+                        new LatLng(45.459054, -73.641865),
+                        new LatLng(45.459020, -73.641895),
+                        new LatLng(45.459162, -73.642258),
+                        new LatLng(45.459197, -73.642231),
+                        new LatLng(45.459220, -73.642288),
+                        new LatLng(45.459417, -73.642132),
+                        new LatLng(45.459395, -73.642075),
+                        new LatLng(45.459419, -73.642057),
+                        new LatLng(45.459416, -73.642043),
+                        new LatLng(45.459530, -73.641952),
+                        new LatLng(45.459554, -73.642013),
+                        new LatLng(45.459584, -73.641989),
+                        new LatLng(45.459396, -73.641504)));
+
+        MarkerOptions haMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ha_building));
+        buildings.add(new Building(new LatLng(45.459769, -73.642045), "Hingston Hall, wing HA", "HA", haMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.459594, -73.642021),
+                        new LatLng(45.459692, -73.642269),
+                        new LatLng(45.459863, -73.642132),
+                        new LatLng(45.459963, -73.642007),
+                        new LatLng(45.459893, -73.641830),
+                        new LatLng(45.459782, -73.641918),
+                        new LatLng(45.459768, -73.641882)));
+
+        MarkerOptions hcMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_hc_building));
+        buildings.add(new Building(new LatLng(45.459458, -73.641224), "Hingston Hall, wing HA", "HC", hcMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.459253, -73.641071),
+                        new LatLng(45.459277, -73.641133),
+                        new LatLng(45.459261, -73.641145),
+                        new LatLng(45.459395, -73.641496),
+                        new LatLng(45.459410, -73.641485),
+                        new LatLng(45.459431, -73.641542),
+                        new LatLng(45.459676, -73.641352),
+                        new LatLng(45.459652, -73.641289),
+                        new LatLng(45.459663, -73.641281),
+                        new LatLng(45.459528, -73.640932),
+                        new LatLng(45.459514, -73.640943),
+                        new LatLng(45.459492, -73.640883)));
+
+        MarkerOptions taMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ta_building));
+        buildings.add(new Building(new LatLng(45.459987, -73.640898), "Terrebonne Building", "TA", taMarkerOptions)
+                .addEdgeCoordinate(new LatLng(45.459940, -73.640868),
+                        new LatLng(45.459978, -73.640970),
+                        new LatLng(45.460033, -73.640929),
+                        new LatLng(45.459993, -73.640827)));
+
 
 
     }
