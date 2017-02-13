@@ -20,11 +20,11 @@ public class Building {
     private MarkerOptions markerOptions;
     private List<LatLng> edgeCoordinateList;
 
-    public Building(LatLng centerCoordinates, String name, String shortName, MarkerOptions marker) {
+    public Building(LatLng centerCoordinates, String name, String shortName, MarkerOptions markerOptions) {
         this.centerCoordinate = centerCoordinates;
         this.name = name;
         this.shortName = shortName;
-        this.markerOptions = marker.position(centerCoordinates).anchor(0.5f, 0.5f);
+        this.markerOptions = markerOptions.position(centerCoordinates).anchor(0.5f, 0.5f);
         edgeCoordinateList = new ArrayList<>();
     }
 
