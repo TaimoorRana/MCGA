@@ -2,4 +2,21 @@
     <string name="app_name">MCGA</string>
     <string name="title_activity_maps">Map</string>
     <string name="toolbar_title">Campus Guide</string>
+
+    <string name="next_class_string">Next Class</string>
+    <string name="shuttle_schedule_string">Shuttle Schedule</string>
+    <string name="settings_string">Settings</string>
+    <string name="student_spots_string">Student Spots</string>
+    <string name="about_string">About</string>
+    <string name="open_drawer">Open sesame</string>
+    <string name="close_drawer">Goodnight sweet prince</string>
+    <string name="search_hint">Enter your start destination</string>
+
+    <string name="username">Richard Stallman</string>
+    <string name="email">rms@gnu.org</string>
+
+    <string-array name="campuses">
+        <item>SGW</item>
+        <item>LOY</item>
+    </string-array>
 </resources>

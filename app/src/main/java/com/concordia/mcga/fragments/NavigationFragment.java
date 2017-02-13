@@ -1,12 +1,14 @@
-package com.concordia.mcga.activities;
+package com.concordia.mcga.fragments;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 
+import com.concordia.mcga.activities.R;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,28 +19,42 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, OnCameraIdleListener {
+import org.honorato.multistatetogglebutton.MultiStateToggleButton;
+import org.honorato.multistatetogglebutton.ToggleButton;
 
-    private static final MarkerOptions LOYOLA_MARKER = new MarkerOptions().position(Campus.LOYOLA.getMapCoordinates()).title(
-        Campus.LOYOLA.getName());
-    private static final MarkerOptions SGW_MARKER = new MarkerOptions().position(Campus.SGW.getMapCoordinates())
-        .title(Campus.SGW.getName());
+public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener {
+
+    private static final MarkerOptions LOYOLA_MARKER = new MarkerOptions().position(Campus.LOYOLA.getMapCoordinates()).title(Campus.LOYOLA.getName());
+    private static final MarkerOptions SGW_MARKER = new MarkerOptions().position(Campus.SGW.getMapCoordinates()).title(Campus.SGW.getName());
     private static final float streetLevelZoom = 15f;
     Campus currentCampus = Campus.SGW;
     GoogleMap map;
     private ArrayList<Marker> buildingMarkers = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.nav_main_fragment, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        MultiStateToggleButton button = (MultiStateToggleButton) getView().findViewById(R.id.campusButton);
+        button.setValue(0); // set SGW by default
+        button.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int position) {
+                switchCampus(position == 1);
+            }
+        });
     }
 
     @Override
@@ -54,6 +70,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         updateCampus();
     }
 
+    public void switchCampus(boolean loyola){
+        if (loyola){
+            currentCampus = Campus.LOYOLA;
+        } else {
+            currentCampus = Campus.SGW;
+        }
+        updateCampus();
+    }
     private void addCampusMarkers() {
         map.addMarker(LOYOLA_MARKER);
         map.addMarker(SGW_MARKER);
@@ -85,7 +109,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // in a raw resource file.
             boolean success = map.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
-                            this, R.raw.style_json));
+                            getActivity(), R.raw.style_json));
 
             if (!success) {
                 Log.e("Google Map Style", "Style parsing failed.");
@@ -95,18 +119,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    public void switchCampus(View v){
-        if (currentCampus.equals(Campus.LOYOLA)){
-            currentCampus = Campus.SGW;
-        } else {
-            currentCampus = Campus.LOYOLA;
-        }
-        updateCampus();
-    }
+
 
     void updateCampus(){
-        Button campusButton = (Button) findViewById(R.id.campusButton);
-        campusButton.setText(currentCampus.getShortName());
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), 16));
     }
 
