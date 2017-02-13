@@ -91,17 +91,4 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
     }
-
-    /**
-     * We need to expose the fragment logic for the campus switch button to the activity
-     * This can be called at any time but will only run the fragment's logic if the navigation
-     * fragment is active
-     * @param view
-     */
-    public void switchCampus(View view) {
-        NavigationFragment myFragment = (NavigationFragment) getSupportFragmentManager().findFragmentByTag("MAIN_NAV");
-        if (myFragment != null && myFragment.isVisible()) {
-            myFragment.switchCampus();
-        }
-    }
 }

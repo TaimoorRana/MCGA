@@ -15,6 +15,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.honorato.multistatetogglebutton.MultiStateToggleButton;
+import org.honorato.multistatetogglebutton.ToggleButton;
+
 public class NavigationFragment extends Fragment implements OnMapReadyCallback {
 
     private static final MarkerOptions LOYOLA_MARKER = new MarkerOptions().position(Campus.LOYOLA.getMapCoordinates()).title(
@@ -27,7 +30,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.navigation_fragment, container, false);
+        return inflater.inflate(R.layout.nav_main_fragment, container, false);
     }
 
     @Override
@@ -37,6 +40,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        MultiStateToggleButton button = (MultiStateToggleButton) getView().findViewById(R.id.campusButton);
+        button.setValue(0); // set SGW by default
+        button.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int position) {
+                switchCampus(position == 1);
+            }
+        });
     }
 
 
@@ -57,18 +69,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback {
         updateCampus();
     }
 
-    public void switchCampus(){
-        if (currentCampus.equals(Campus.LOYOLA)){
-            currentCampus = Campus.SGW;
-        } else {
+    public void switchCampus(boolean loyola){
+        if (loyola){
             currentCampus = Campus.LOYOLA;
+        } else {
+            currentCampus = Campus.SGW;
         }
         updateCampus();
     }
 
     void updateCampus(){
-        Button campusButton = (Button) getActivity().findViewById(R.id.campusButton);
-        campusButton.setText(currentCampus.getShortName());
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), 16));
     }
 }

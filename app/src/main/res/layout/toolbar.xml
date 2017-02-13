@@ -5,9 +5,9 @@
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="1dp"
-    android:background="#850f02"
-    android:foregroundTint="#850f02">
+    android:layout_marginBottom="0dp"
+    android:background="@color/colorPrimary"
+    android:foregroundTint="@color/colorPrimary">
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="match_parent"
@@ -15,6 +15,6 @@
         android:fontFamily="sans-serif"
         android:text="@string/toolbar_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/cast_libraries_material_featurehighlight_text_body_color"
+        android:textColor="@color/white"
         android:textSize="24sp" />
 </android.support.v7.widget.Toolbar>
