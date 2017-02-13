@@ -29,9 +29,9 @@
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
         android:layout_gravity="start"
-        android:backgroundTint="@color/colorPrimary"
-        app:itemBackground="@color/colorPrimaryDark"
-        app:itemTextColor="@color/white"
+        android:backgroundTint="@color/white"
+        app:itemBackground="@color/white"
+        app:itemTextColor="@color/black"
         app:headerLayout="@layout/header"
         app:menu="@menu/drawer" />
 </android.support.v4.widget.DrawerLayout>

@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         navigationFragment = new NavigationFragment();
 
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame, navigationFragment, "MAIN_NAV");
+        fragmentTransaction.replace(R.id.frame, navigationFragment, "MAIN_NAV").addToBackStack("tag");
         fragmentTransaction.commit();
 
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -48,10 +48,8 @@ public class MainActivity extends AppCompatActivity {
                     drawerLayout.closeDrawers();
 
                     switch (menuItem.getItemId()) {
-                        case R.id.navigation:
-                            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(R.id.frame, navigationFragment, "MAIN_NAV");
-                            fragmentTransaction.commit();
+                        case R.id.next_class:
+                            Toast.makeText(getApplicationContext(), "Next Class", Toast.LENGTH_SHORT).show();
                             return true;
                         case R.id.shuttle_schedule:
                             Toast.makeText(getApplicationContext(), "Shuttle Schedule", Toast.LENGTH_SHORT).show();
