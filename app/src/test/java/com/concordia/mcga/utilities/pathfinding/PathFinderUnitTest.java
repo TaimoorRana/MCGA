@@ -11,7 +11,13 @@ public class PathFinderUnitTest {
     @Test
     public void testShortestPath_validPath() throws Exception {
         // Test Data
-        PathFinder finder = new PathFinder();
+        TiledMap map = new TiledMap(10,10);
+        for (int i = 0 ; i < 10; i++){
+            for (int j = 0; j < 10; j++){
+                map.makeWalkable(i,j);
+            }
+        }
+        PathFinder finder = new PathFinder(map);
 
         // Execute
         List<PathFinderTile> tiles = finder.shortestPath(1,1,4,4);
@@ -36,18 +42,16 @@ public class PathFinderUnitTest {
     @Test(expected = Exception.class)
     public void testShortestPath_invalidPath() throws Exception {
         // Test Data
-        PathFinder finder = new PathFinder();
-
-        finder.map.setTile(2,0, null);
-        finder.map.setTile(2,1, null);
-        finder.map.setTile(2,2, null);
-        finder.map.setTile(2,3, null);
-        finder.map.setTile(2,4, null);
-        finder.map.setTile(2,5, null);
-        finder.map.setTile(2,6, null);
-        finder.map.setTile(2,7, null);
-        finder.map.setTile(2,8, null);
-        finder.map.setTile(2,9, null);
+        TiledMap map = new TiledMap(10,10);
+        for (int i = 0 ; i < 10; i++){
+            if(i == 2){
+                continue;
+            }
+            for (int j = 0; j < 10; j++){
+                map.makeWalkable(i,j);
+            }
+        }
+        PathFinder finder = new PathFinder(map);
 
         // Execute
         List<PathFinderTile> tiles = finder.shortestPath(1,1,4,4);

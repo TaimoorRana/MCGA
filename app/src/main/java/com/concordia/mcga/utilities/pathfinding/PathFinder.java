@@ -14,10 +14,10 @@ public class PathFinder {
     Set<PathFinderTile> openSet;
     Set<PathFinderTile> closedSet;
 
-    public PathFinder() {
+    public PathFinder(TiledMap map) {
         openSet = new HashSet<>();
         closedSet = new HashSet<>();
-        map = new TiledMap(10); // Example map, 10x10 grid of all valid tiles.
+        this.map = map;
     }
 
     /**
