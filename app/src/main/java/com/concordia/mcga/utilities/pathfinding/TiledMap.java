@@ -8,13 +8,8 @@ public class TiledMap {
     private PathFinderTile endTile;
 
 
-    public TiledMap(int size){
-        allTiles = new PathFinderTile[size][size];
-        for (int i = 0; i < allTiles.length; i++){
-            for (int j = 0; j < allTiles[0].length; j++){
-                allTiles[i][j] = new PathFinderTile(i, j);
-            }
-        }
+    public TiledMap(int sizeX, int sizeY){
+        allTiles = new PathFinderTile[sizeX][sizeY];
     }
 
     public void setStartTile(int x, int y){
@@ -36,6 +31,11 @@ public class TiledMap {
     }
     public void setTile(int x, int y, PathFinderTile tile){
         allTiles[x][y] = tile;
+    }
+    public void makeWalkable(int x, int y){
+        if (allTiles[x][y] == null){
+            allTiles[x][y] = new PathFinderTile(x, y);
+        }
     }
 
     public PathFinderTile getTile(int x, int y){
