@@ -1,12 +1,15 @@
 package com.concordia.mcga.fragments;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.models.Building;
@@ -20,9 +23,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
-
-import org.honorato.multistatetogglebutton.MultiStateToggleButton;
-import org.honorato.multistatetogglebutton.ToggleButton;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener {
 
@@ -47,12 +47,18 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        MultiStateToggleButton button = (MultiStateToggleButton) getView().findViewById(R.id.campusButton);
-        button.setValue(0); // set SGW by default
-        button.setOnValueChangedListener(new ToggleButton.OnValueChangedListener() {
+        Button toggleButton = (Button) getView().findViewById(R.id.campusButton);
+        toggleButton.setBackgroundColor(Color.parseColor("#850f02"));
+        toggleButton.setTextColor(Color.WHITE);
+        toggleButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onValueChanged(int position) {
-                switchCampus(position == 1);
+            public void onClick(View v) {
+                if (currentCampus == Campus.LOYOLA) {
+                    currentCampus = Campus.SGW;
+                } else {
+                    currentCampus = Campus.LOYOLA;
+                }
+                updateCampus();
             }
         });
     }
@@ -71,12 +77,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     public void switchCampus(boolean loyola){
-        if (loyola){
-            currentCampus = Campus.LOYOLA;
-        } else {
-            currentCampus = Campus.SGW;
-        }
-        updateCampus();
     }
     private void addCampusMarkers() {
         map.addMarker(LOYOLA_MARKER);

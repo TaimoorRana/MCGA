@@ -20,7 +20,6 @@
             app:srcCompat="@drawable/ic_search_black_24dp" />
 
         <EditText
-            android:hint="@string/search_hint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white" />
@@ -60,17 +59,15 @@
             android:layout_above="@id/mapCenterButton"
             android:layout_alignParentEnd="true" />
 
-        <org.honorato.multistatetogglebutton.MultiStateToggleButton
+        <ToggleButton
             android:id="@+id/campusButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dip"
-            mstb:values="@array/campuses"
-            mstb:mstbPrimaryColor="@color/colorPrimary"
-            mstb:mstbSecondaryColor="@color/white"/>
-
+            android:textOn="@string/button_SGW"
+            android:textOff="@string/button_loyola" />
     </RelativeLayout>
 </android.support.v7.widget.LinearLayoutCompat>
 
