@@ -1,6 +1,7 @@
 package com.concordia.mcga.fragments;
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -47,6 +48,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         mapFragment.getMapAsync(this);
 
         Button toggleButton = (Button) getView().findViewById(R.id.campusButton);
+        toggleButton.setBackgroundColor(Color.parseColor("#850f02"));
+        toggleButton.setTextColor(Color.WHITE);
         toggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
