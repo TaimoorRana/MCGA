@@ -11,9 +11,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-/**
- * Created by arekm on 2017-02-13.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class IndoorMapFactoryTest {
     @Test

@@ -28,7 +28,7 @@ public class IndoorMapFactory {
                 map.makeWalkable(parseInt(coordinates[0]), parseInt(coordinates[1]));
             }
         } catch (IOException e){
-            System.err.println(e);
+            System.err.println("Something went wrong");
         }
         IndoorMap indoorMap = new IndoorMap();
         indoorMap.setMap(map);

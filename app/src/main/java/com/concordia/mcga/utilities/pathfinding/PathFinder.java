@@ -87,7 +87,7 @@ public class PathFinder {
         }
     }
 
-    private PathFinderTile lowestOpen() throws Exception {
+    private PathFinderTile lowestOpen() {
         PathFinderTile lowest = PathFinderTile.MAX_COST;
         for (PathFinderTile tile : openSet) {
             if (tile.getCost() < lowest.getCost()) {
