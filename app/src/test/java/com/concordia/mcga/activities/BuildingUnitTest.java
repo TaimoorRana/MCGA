@@ -1,15 +1,14 @@
 package com.concordia.mcga.activities;
 
+import static junit.framework.Assert.assertEquals;
+
 import com.concordia.mcga.models.Building;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import static junit.framework.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
 public class BuildingUnitTest {
@@ -38,7 +37,7 @@ public class BuildingUnitTest {
     public void getCenterCoordinatesTest() {
         MarkerOptions markerOptions = new MarkerOptions();
         Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
-        assertEquals(new LatLng(45.495656, -73.574290), testBuilding.getCenterCoordinates());
+        assertEquals(new LatLng(45.495656, -73.574290), testBuilding.getMapCoordinates());
     }
 
     @Test
