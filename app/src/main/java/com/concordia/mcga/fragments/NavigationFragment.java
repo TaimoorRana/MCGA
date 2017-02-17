@@ -4,8 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -22,6 +22,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener {
@@ -76,8 +77,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         updateCampus();
     }
 
-    public void switchCampus(boolean loyola){
-    }
     private void addCampusMarkers() {
         map.addMarker(LOYOLA_MARKER);
         map.addMarker(SGW_MARKER);
