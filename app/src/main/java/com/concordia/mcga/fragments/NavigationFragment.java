@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.helperClasses.Observer;
+import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,14 +27,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener {
+public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject {
 
     private static final MarkerOptions LOYOLA_MARKER = new MarkerOptions().position(Campus.LOYOLA.getMapCoordinates()).title(Campus.LOYOLA.getName());
     private static final MarkerOptions SGW_MARKER = new MarkerOptions().position(Campus.SGW.getMapCoordinates()).title(Campus.SGW.getName());
-    private static final float streetLevelZoom = 15f;
     Campus currentCampus = Campus.SGW;
     GoogleMap map;
-    private ArrayList<Marker> buildingMarkers = new ArrayList<>();
+    private ArrayList<Observer> observerList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,14 +88,19 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         ArrayList<Building> loyBuildings = Campus.LOYOLA.getBuildings();
 
         for (Building building : sgwBuildings) {
-            map.addPolygon(building.getPolygonOverlayOptions());
-            buildingMarkers.add(map.addMarker(building.getMarkerOptions()));
+            createBuildingMarkersAndPolygonOverlay(building);
         }
 
         for (Building building : loyBuildings) {
-            map.addPolygon(building.getPolygonOverlayOptions());
-            buildingMarkers.add(map.addMarker(building.getMarkerOptions()));
+            createBuildingMarkersAndPolygonOverlay(building);
         }
+    }
+
+    private void createBuildingMarkersAndPolygonOverlay(Building building) {
+        register(building);
+        map.addPolygon(building.getPolygonOverlayOptions());
+        Marker marker = map.addMarker(building.getMarkerOptions());
+        building.setMarker(marker);
     }
 
     private void populateCampuses() {
@@ -126,14 +132,27 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
     @Override
     public void onCameraIdle() {
-        if (map.getCameraPosition().zoom >= streetLevelZoom) {
-            for (Marker marker : buildingMarkers) {
-                marker.setVisible(true);
-            }
-        } else {
-            for (Marker marker : buildingMarkers) {
-                marker.setVisible(false);
-            }
+        notifyObservers();
+    }
+
+    @Override
+    public void register(Observer observer) {
+        if (observer != null) {
+            observerList.add(observer);
+        }
+    }
+
+    @Override
+    public void unRegister(Observer observer) {
+        if (observer != null) {
+            observerList.remove(observer);
+        }
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observerList) {
+            observer.update(map.getCameraPosition().zoom);
         }
     }
 }
