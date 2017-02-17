@@ -2,7 +2,9 @@ package com.concordia.mcga.models;
 
 import android.graphics.Color;
 
+import com.concordia.mcga.helperClasses.Observer;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
@@ -10,10 +12,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Building {
+public class Building implements Observer {
     private final static int strokeColor = Color.YELLOW;
     private final static int strokeWidth = 2;
     private final static int fillColor = 0x996d171f;
+    protected Marker marker;
+    private float markerVisibleAtMinimumZoomLevel = 15f;
     private LatLng centerCoordinate;
     private String shortName;
     private String name;
@@ -67,6 +71,20 @@ public class Building {
 
     public MarkerOptions getMarkerOptions() {
         return markerOptions;
+    }
+
+
+    public void setMarker(Marker marker) {
+        this.marker = marker;
+    }
+
+    @Override
+    public void update(float mapZoomLevel) {
+        if (mapZoomLevel >= markerVisibleAtMinimumZoomLevel) {
+            marker.setVisible(true);
+        } else {
+            marker.setVisible(false);
+        }
     }
 
 }
