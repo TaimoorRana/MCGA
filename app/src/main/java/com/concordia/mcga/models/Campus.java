@@ -322,7 +322,7 @@ public class Campus extends POI {
 
         // BB
         MarkerOptions bbMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_bb_building));
-        buildings.add(new Building(new LatLng(45.459753, -73.639166), "BB", "BB", bbMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.459753, -73.639166), "BB", "BB", bbMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.459694, -73.639168),
                         new LatLng(45.459725, -73.639242),
                         new LatLng(45.459815, -73.639167),
@@ -330,7 +330,7 @@ public class Campus extends POI {
 
         // BH
         MarkerOptions bhMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_bh_building));
-        buildings.add(new Building(new LatLng(45.459727, -73.639093), "BH", "BH", bhMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.459727, -73.639093), "BH", "BH", bhMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.459665, -73.639093),
                         new LatLng(45.459694, -73.639166),
                         new LatLng(45.459784, -73.639092),
@@ -373,7 +373,7 @@ public class Campus extends POI {
 
         // SH
         MarkerOptions shMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_sh_building));
-        buildings.add(new Building(new LatLng(45.459370, -73.642453), "Solar House", "SH", shMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.459370, -73.642453), "Solar House", "SH", shMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.459335, -73.642363),
                         new LatLng(45.459341, -73.642547),
                         new LatLng(45.459409, -73.642543),
@@ -427,7 +427,7 @@ public class Campus extends POI {
 
         // TA
         MarkerOptions taMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ta_building));
-        buildings.add(new Building(new LatLng(45.459987, -73.640898), "Terrebonne Building", "TA", taMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.459987, -73.640898), "Terrebonne Building", "TA", taMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.459940, -73.640868),
                         new LatLng(45.459978, -73.640970),
                         new LatLng(45.460033, -73.640929),
@@ -507,7 +507,7 @@ public class Campus extends POI {
                         new LatLng(45.493626, -73.578728)));
         // GA
         MarkerOptions gaMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ga_building));
-        buildings.add(new Building(new LatLng(45.494096, -73.577944), "Grey Nuns Annex", "GA", gaMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.494096, -73.577944), "Grey Nuns Annex", "GA", gaMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.493851, -73.578354),
                         new LatLng(45.494134, -73.578012),
                         new LatLng(45.494119, -73.577986),
@@ -552,7 +552,7 @@ public class Campus extends POI {
 
         // Q
         MarkerOptions qMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_q_building));
-        buildings.add(new Building(new LatLng(45.496611, -73.579110), "Q", "Q", qMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.496611, -73.579110), "Q", "Q", qMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.496553, -73.579120),
                         new LatLng(45.496584, -73.579180),
                         new LatLng(45.496676, -73.579082),
@@ -560,7 +560,7 @@ public class Campus extends POI {
 
         // P
         MarkerOptions pMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_p_building));
-        buildings.add(new Building(new LatLng(45.496653, -73.579176), "P", "P", pMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.496653, -73.579176), "P", "P", pMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.496583, -73.579180),
                         new LatLng(45.496630, -73.579269),
                         new LatLng(45.496722, -73.579173),
@@ -568,7 +568,7 @@ public class Campus extends POI {
 
         // T
         MarkerOptions tMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_t_building));
-        buildings.add(new Building(new LatLng(45.496692, -73.579267), "T", "T", tMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.496692, -73.579267), "T", "T", tMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.496629, -73.579270),
                         new LatLng(45.496668, -73.579345),
                         new LatLng(45.496751, -73.579262),
@@ -576,7 +576,7 @@ public class Campus extends POI {
 
         // RR
         MarkerOptions rrMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_rr_building));
-        buildings.add(new Building(new LatLng(45.496710, -73.579368), "RR", "RR", rrMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.496710, -73.579368), "RR", "RR", rrMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.496612, -73.579401),
                         new LatLng(45.496651, -73.579480),
                         new LatLng(45.496799, -73.579332),
@@ -584,7 +584,7 @@ public class Campus extends POI {
 
         // R
         MarkerOptions rMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_r_building));
-        buildings.add(new Building(new LatLng(45.496775, -73.579412), "R", "R", rMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.496775, -73.579412), "R", "R", rMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.496711, -73.579421),
                         new LatLng(45.496746, -73.579491),
                         new LatLng(45.496838, -73.579399),
@@ -592,7 +592,7 @@ public class Campus extends POI {
 
         // FA
         MarkerOptions faMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_fa_building));
-        buildings.add(new Building(new LatLng(45.496803, -73.579499), "FA", "FA", faMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.496803, -73.579499), "FA", "FA", faMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.496736, -73.579503),
                         new LatLng(45.496775, -73.579585),
                         new LatLng(45.496871, -73.579490),
@@ -600,7 +600,7 @@ public class Campus extends POI {
 
         // EN
         MarkerOptions enMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_en_building));
-        buildings.add(new Building(new LatLng(45.496862, -73.579566), "EN", "EN", enMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.496862, -73.579566), "EN", "EN", enMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.496676, -73.579734),
                         new LatLng(45.496700, -73.579784),
                         new LatLng(45.496931, -73.579553),
@@ -610,7 +610,7 @@ public class Campus extends POI {
 
         // X
         MarkerOptions xMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_x_building));
-        buildings.add(new Building(new LatLng(45.496881, -73.579670), "X", "X", xMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.496881, -73.579670), "X", "X", xMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.496815, -73.579671),
                         new LatLng(45.496857, -73.579757),
                         new LatLng(45.496949, -73.579666),
@@ -618,7 +618,7 @@ public class Campus extends POI {
 
         // Z
         MarkerOptions zMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_z_building));
-        buildings.add(new Building(new LatLng(45.496926, -73.579745), "Z", "Z", zMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.496926, -73.579745), "Z", "Z", zMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.496851, -73.579763),
                         new LatLng(45.496875, -73.579813),
                         new LatLng(45.496897, -73.579790),
@@ -628,7 +628,7 @@ public class Campus extends POI {
 
         // PR
         MarkerOptions prMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_pr_building));
-        buildings.add(new Building(new LatLng(45.496956, -73.579837), "PR", "PR", prMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.496956, -73.579837), "PR", "PR", prMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.496895, -73.579833),
                         new LatLng(45.496934, -73.579914),
                         new LatLng(45.497018, -73.579829),
@@ -636,7 +636,7 @@ public class Campus extends POI {
 
         // V
         MarkerOptions vMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_v_building));
-        buildings.add(new Building(new LatLng(45.497009, -73.579934), "V", "V", vMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.497009, -73.579934), "V", "V", vMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.496927, -73.579921),
                         new LatLng(45.496986, -73.580043),
                         new LatLng(45.497089, -73.579941),
@@ -644,7 +644,7 @@ public class Campus extends POI {
 
         // M
         MarkerOptions mMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_m_building));
-        buildings.add(new Building(new LatLng(45.497356, -73.579772), "M", "M", mMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.497356, -73.579772), "M", "M", mMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.497291, -73.579781),
                         new LatLng(45.497327, -73.579854),
                         new LatLng(45.497427, -73.579755),
@@ -652,7 +652,7 @@ public class Campus extends POI {
 
         // S
         MarkerOptions sMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_s_building));
-        buildings.add(new Building(new LatLng(45.497405, -73.579844), "S", "S", sMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.497405, -73.579844), "S", "S", sMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.497327, -73.579855),
                         new LatLng(45.497367, -73.579937),
                         new LatLng(45.497490, -73.579815),
@@ -662,7 +662,7 @@ public class Campus extends POI {
 
         //CI
         MarkerOptions ciMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_ci_building));
-        buildings.add(new Building(new LatLng(45.497472, -73.579895), "CI", "CI", ciMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.497472, -73.579895), "CI", "CI", ciMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.497368, -73.579937),
                         new LatLng(45.497406, -73.580015),
                         new LatLng(45.497584, -73.579839),
@@ -670,7 +670,7 @@ public class Campus extends POI {
 
         // MU
         MarkerOptions muMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_mu_building));
-        buildings.add(new Building(new LatLng(45.497853, -73.579579), "MU", "MU", muMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.497853, -73.579579), "MU", "MU", muMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.497748, -73.579628),
                         new LatLng(45.497785, -73.579703),
                         new LatLng(45.497963, -73.579537),
@@ -678,7 +678,7 @@ public class Campus extends POI {
 
         // B
         MarkerOptions bMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_b_building));
-        buildings.add(new Building(new LatLng(45.497809, -73.579503), "B", "B", bMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.497809, -73.579503), "B", "B", bMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.497705, -73.579560),
                         new LatLng(45.497740, -73.579636),
                         new LatLng(45.497921, -73.579462),
@@ -686,7 +686,7 @@ public class Campus extends POI {
 
         // K
         MarkerOptions kMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_k_building));
-        buildings.add(new Building(new LatLng(45.497748, -73.579485), "K", "K", kMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.497748, -73.579485), "K", "K", kMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.497599, -73.579573),
                         new LatLng(45.497626, -73.579635),
                         new LatLng(45.497883, -73.579386),
@@ -698,7 +698,7 @@ public class Campus extends POI {
 
         // D
         MarkerOptions dMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_d_building));
-        buildings.add(new Building(new LatLng(45.497776, -73.579325), "D", "D", dMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.497776, -73.579325), "D", "D", dMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.497707, -73.579341),
                         new LatLng(45.497742, -73.579412),
                         new LatLng(45.497849, -73.579312),
@@ -707,7 +707,7 @@ public class Campus extends POI {
 
         // MI
         MarkerOptions miMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_mi_building));
-        buildings.add(new Building(new LatLng(45.497741, -73.579263), "MI", "MI", miMarkerOptions)
+        buildings.add(new SmallBuilding(new LatLng(45.497741, -73.579263), "MI", "MI", miMarkerOptions)
                 .addEdgeCoordinate(new LatLng(45.497623, -73.579354),
                         new LatLng(45.497647, -73.579403),
                         new LatLng(45.497811, -73.579235),
