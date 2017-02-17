@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 
 public class IndoorMapFactory {
     public static IndoorMap getHall4thFloor(Context context) {
-        return getIndoorMap(context, R.raw.hall4);
+        return getIndoorMap(context, R.raw.concordia_floor_map_h4);
     }
 
     @NonNull
