@@ -9,6 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static junit.framework.Assert.assertEquals;
 
 @RunWith(JUnit4.class)
@@ -45,15 +48,21 @@ public class BuildingUnitTest {
     public void addEdgeCoordinateTest() {
         MarkerOptions markerOptions = new MarkerOptions();
         Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
-        Building testBuildingCopy = testBuilding.addEdgeCoordinate(new LatLng(45.495656, -73.574290));
-        assertEquals(testBuilding, testBuildingCopy);
+        List<LatLng> list = new ArrayList<>();
+        LatLng edge = new LatLng(45.495656, -73.574290);
+        list.add(edge);
+        testBuilding.addEdgeCoordinate(list);
+        assertEquals(true, testBuilding.getEdgeCoordinateList().contains(edge));
     }
 
     @Test
     public void getPolygonOverlayOptions() {
         MarkerOptions markerOptions = new MarkerOptions();
         Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
-        testBuilding.addEdgeCoordinate(new LatLng(45.495656, -73.574290));
+        List<LatLng> list = new ArrayList<>();
+        LatLng edge = new LatLng(45.495656, -73.574290);
+        list.add(edge);
+        testBuilding.addEdgeCoordinate(list);
         PolygonOptions polygonOptions = testBuilding.getPolygonOverlayOptions();
         assertEquals(0x996d171f, polygonOptions.getFillColor());
     }
