@@ -9,13 +9,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Building extends POI implements Observer {
     private final static int strokeColor = Color.YELLOW;
     private final static int strokeWidth = 2;
     private final static int fillColor = 0x996d171f;
+    public int resourceImageId;
     protected Marker marker;
     private float markerVisibleAtMinimumZoomLevel = 15f;
     private LatLng centerCoordinate;
@@ -24,12 +24,13 @@ public class Building extends POI implements Observer {
     private List<LatLng> edgeCoordinateList;
     private List<IndoorMap> floorMaps;
 
-    public Building(LatLng centerCoordinates, String name, String shortName, MarkerOptions markerOptions) {
-        super(centerCoordinates, name);
+    public Building(LatLng centerCoordinate, String name, String shortName, MarkerOptions markerOptions) {
+        super(centerCoordinate, name);
         this.shortName = shortName;
-        this.markerOptions = markerOptions.position(centerCoordinates).anchor(0.5f, 0.5f);
+        this.markerOptions = markerOptions.position(centerCoordinate).anchor(0.5f, 0.5f);
         edgeCoordinateList = new ArrayList<>();
         floorMaps = new ArrayList<>();
+        this.centerCoordinate = centerCoordinate;
     }
 
     public List<IndoorMap> getFloorMaps() {
@@ -48,8 +49,8 @@ public class Building extends POI implements Observer {
         this.shortName = shortName;
     }
 
-    public Building addEdgeCoordinate(LatLng... edgeCoordinates) {
-        edgeCoordinateList = Arrays.asList(edgeCoordinates);
+    public Building addEdgeCoordinate(List<LatLng> edgeCoordinates) {
+        edgeCoordinateList = edgeCoordinates;
         return this;
     }
 
@@ -88,6 +89,15 @@ public class Building extends POI implements Observer {
         } else {
             marker.setVisible(false);
         }
+    }
+
+    public List<LatLng> getEdgeCoordinateList() {
+        return edgeCoordinateList;
+    }
+
+    public Building setResourceImageId(int resourceImageId) {
+        this.resourceImageId = resourceImageId;
+        return this;
     }
 
 }

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.helperClasses.Database;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
@@ -87,12 +88,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         ArrayList<Building> sgwBuildings = Campus.SGW.getBuildings();
         ArrayList<Building> loyBuildings = Campus.LOYOLA.getBuildings();
 
+
         for (Building building : sgwBuildings) {
             createBuildingMarkersAndPolygonOverlay(building);
+            Database.insertBuilding(building.getName(), building.getShortName(), building.getMapCoordinates(), building.getEdgeCoordinateList(), building.resourceImageId);
         }
 
         for (Building building : loyBuildings) {
             createBuildingMarkersAndPolygonOverlay(building);
+            Database.insertBuilding(building.getName(), building.getShortName(), building.getMapCoordinates(), building.getEdgeCoordinateList(), building.resourceImageId);
         }
     }
 
@@ -105,7 +109,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
     private void populateCampuses() {
         Campus.SGW.populateCampusWithBuildings();
-        Campus.LOYOLA.populateCampusWithBuildings();
+        // Campus.LOYOLA.populateCampusWithBuildings();
     }
 
     private void applyCustomGoogleMapsStyle() {

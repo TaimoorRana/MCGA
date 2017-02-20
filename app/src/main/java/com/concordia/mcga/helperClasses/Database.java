@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * part of the code take from https://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
+ * Part of the code was taken from https://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
  */
 
 public class Database extends SQLiteOpenHelper {
@@ -37,17 +37,29 @@ public class Database extends SQLiteOpenHelper {
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, 1);
-        //db = this.getWritableDatabase();
+        db = this.getWritableDatabase();
         this.myContext = context;
+        gson = new Gson();
     }
 
-    public static void insertBuilding(String name, String shortName, LatLng centerCoordinate, List<LatLng> edgeCoordinateList) {
+    public static void insertBuilding(String name, String shortName, LatLng centerCoordinate, List<LatLng> edgeCoordinateList, int resource_image_id) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(NAME, name);
         contentValues.put(SHORT_NAME, shortName);
         contentValues.put(CENTER_COORDINATE, gson.toJson(centerCoordinate));
         contentValues.put(EDGE_COORDINATES, gson.toJson(edgeCoordinateList));
+        contentValues.put("resource_image_id", resource_image_id);
         db.insert(BUILDING_TABLE, null, contentValues);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("create table " + BUILDING_TABLE + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, short_name TEXT, center_coordinate TEXT, edge_coordinates TEXT, resource_image_id INTEGER)");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+
     }
 
     /**
@@ -154,13 +166,5 @@ public class Database extends SQLiteOpenHelper {
 
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        //db.execSQL("create table " + BUILDING_TABLE + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, short_name TEXT, center_coordinate TEXT, edge_coordinates TEXT)");
-    }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-
-    }
 }
