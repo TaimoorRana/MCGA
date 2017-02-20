@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Building implements Observer {
+public class Building extends POI implements Observer {
     private final static int strokeColor = Color.YELLOW;
     private final static int strokeWidth = 2;
     private final static int fillColor = 0x996d171f;
@@ -20,29 +20,32 @@ public class Building implements Observer {
     private float markerVisibleAtMinimumZoomLevel = 15f;
     private LatLng centerCoordinate;
     private String shortName;
-    private String name;
     private MarkerOptions markerOptions;
     private List<LatLng> edgeCoordinateList;
+    private List<IndoorMap> floorMaps;
 
     public Building(LatLng centerCoordinates, String name, String shortName, MarkerOptions markerOptions) {
-        this.centerCoordinate = centerCoordinates;
-        this.name = name;
+        super(centerCoordinates, name);
         this.shortName = shortName;
         this.markerOptions = markerOptions.position(centerCoordinates).anchor(0.5f, 0.5f);
         edgeCoordinateList = new ArrayList<>();
+        floorMaps = new ArrayList<>();
     }
 
-    public LatLng getCenterCoordinates(){
-        return centerCoordinate;
+    public List<IndoorMap> getFloorMaps() {
+        return floorMaps;
     }
 
-    public String getName(){
-        return name;
+    public void setFloorMaps(List<IndoorMap> floorMaps) {
+        this.floorMaps = floorMaps;
     }
-
 
     public String getShortName() {
         return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public Building addEdgeCoordinate(LatLng... edgeCoordinates) {

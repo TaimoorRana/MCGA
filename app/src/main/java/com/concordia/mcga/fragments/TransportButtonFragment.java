@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,12 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.R;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
-    private FloatingActionButton transportExpandFAB, walkFAB, bikeFAB, carFAB, publicTransportFAB, shuttleFAB;
+
+    private FloatingActionButton walkFAB;
+    private FloatingActionButton bikeFAB;
+    private FloatingActionButton carFAB;
+    private FloatingActionButton publicTransportFAB;
+    private FloatingActionButton shuttleFAB;
     private TextView walkTextView, bikeTextView, carTextView, publicTransportTextView, shuttleTextView;
     private Animation transport_fab_open, transport_fab_close, transport_textview_open, transport_textview_close;
     private Boolean fabExpanded = false;
@@ -26,7 +30,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.transport_button_fragment, container, false);
         //Initialize FABs
-        transportExpandFAB = (FloatingActionButton) view.findViewById(R.id.transportExpandFAB);
+        FloatingActionButton transportExpandFAB = (FloatingActionButton) view
+                .findViewById(R.id.transportExpandFAB);
         walkFAB = (FloatingActionButton) view.findViewById(R.id.walkFAB);
         bikeFAB = (FloatingActionButton) view.findViewById(R.id.bikeFAB);
         carFAB = (FloatingActionButton) view.findViewById(R.id.carFAB);

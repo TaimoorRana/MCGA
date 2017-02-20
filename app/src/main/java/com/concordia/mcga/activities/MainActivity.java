@@ -7,7 +7,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.concordia.mcga.fragments.NavigationFragment;
@@ -17,9 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity {
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-    private NavigationFragment navigationFragment;
+
     private DrawerLayout drawerLayout;
 
     @Override
@@ -27,18 +24,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        navigationFragment = new NavigationFragment();
+        NavigationFragment navigationFragment = new NavigationFragment();
 
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame, navigationFragment, "MAIN_NAV");
         fragmentTransaction.commit();
 
         initDatabase();
-
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         navigationView.setNavigationItemSelectedListener(
             new NavigationView.OnNavigationItemSelectedListener() {
@@ -79,18 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                toolbar, R.string.open_drawer, R.string.close_drawer) {
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-        };
+                toolbar, R.string.open_drawer, R.string.close_drawer);
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();

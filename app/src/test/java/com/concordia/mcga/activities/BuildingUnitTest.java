@@ -38,7 +38,7 @@ public class BuildingUnitTest {
     public void getCenterCoordinatesTest() {
         MarkerOptions markerOptions = new MarkerOptions();
         Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
-        assertEquals(new LatLng(45.495656, -73.574290), testBuilding.getCenterCoordinates());
+        assertEquals(new LatLng(45.495656, -73.574290), testBuilding.getMapCoordinates());
     }
 
     @Test
