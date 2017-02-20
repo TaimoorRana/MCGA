@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Database db = new Database(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame, navigationFragment, "MAIN_NAV");
         fragmentTransaction.commit();
 
-        //initDatabase();
+        initDatabase();
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         navigationView.setNavigationItemSelectedListener(

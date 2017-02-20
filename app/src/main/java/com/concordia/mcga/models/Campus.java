@@ -35,8 +35,13 @@ public class Campus extends POI {
             }.getType();
             while (res.moveToNext()) {
                 MarkerOptions adMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(Integer.parseInt(res.getString(5))));
-                buildings.add(new Building(gson.fromJson(res.getString(3), LatLng.class), res.getString(1), res.getString(2), adMarkerOptions)
-                        .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(4), listType)));
+                if (res.getInt(6) == 1) {
+                    buildings.add(new SmallBuilding(gson.fromJson(res.getString(3), LatLng.class), res.getString(1), res.getString(2), adMarkerOptions)
+                            .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(4), listType)));
+                } else {
+                    buildings.add(new Building(gson.fromJson(res.getString(3), LatLng.class), res.getString(1), res.getString(2), adMarkerOptions)
+                            .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(4), listType)));
+                }
             }
         } else {
             //populateLOYCampusWithBuildings();

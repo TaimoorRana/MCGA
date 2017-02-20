@@ -29,15 +29,15 @@ public class Database extends SQLiteOpenHelper {
             CENTER_COORDINATE = "center_coordinate",
             EDGE_COORDINATES = "edge_coordinates";
     public static SQLiteDatabase db;
+    //public static SQLiteDatabase db;
     private static Gson gson;
     //The Android's default system path of your application database.
     private static String DATABASE_PATH = "/data/data/com.example.mcga.mcga/databases/";
     private final Context myContext;
-    private SQLiteDatabase myDataBase;
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, 1);
-        db = this.getWritableDatabase();
+        //db = this.getWritableDatabase();
         this.myContext = context;
         gson = new Gson();
     }
@@ -54,7 +54,7 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + BUILDING_TABLE + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, short_name TEXT, center_coordinate TEXT, edge_coordinates TEXT, resource_image_id INTEGER)");
+
     }
 
     @Override
@@ -152,15 +152,15 @@ public class Database extends SQLiteOpenHelper {
 
         //Open the database
         String myPath = DATABASE_PATH + DATABASE_NAME;
-        myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+        db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
 
     }
 
     @Override
     public synchronized void close() {
 
-        if (myDataBase != null)
-            myDataBase.close();
+        if (db != null)
+            db.close();
 
         super.close();
 
