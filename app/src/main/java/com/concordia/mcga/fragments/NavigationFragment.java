@@ -90,12 +90,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         for (Building building : sgwBuildings) {
             createBuildingMarkersAndPolygonOverlay(building);
-            //Database.insertBuilding(building.getName(), building.getShortName(), building.getMapCoordinates(), building.getEdgeCoordinateList(), building.resourceImageId);
         }
 
         for (Building building : loyBuildings) {
             createBuildingMarkersAndPolygonOverlay(building);
-            //Database.insertBuilding(building.getName(), building.getShortName(), building.getMapCoordinates(), building.getEdgeCoordinateList(), building.resourceImageId);
         }
     }
 
@@ -107,8 +105,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     private void populateCampuses() {
-        Campus.SGW.populateCampusWithBuildings();
-        // Campus.LOYOLA.populateCampusWithBuildings();
+        Campus.SGW.populateCampusesWithBuildings();
     }
 
     private void applyCustomGoogleMapsStyle() {
