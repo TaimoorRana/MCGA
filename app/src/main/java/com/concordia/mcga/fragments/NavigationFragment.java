@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
 
 import java.util.ArrayList;
 
@@ -79,8 +81,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     private void addCampusMarkers() {
-        map.addMarker(LOYOLA_MARKER);
-        map.addMarker(SGW_MARKER);
+        //map.addMarker(LOYOLA_MARKER);
+        //map.addMarker(SGW_MARKER);
     }
 
     private void addBuildingMarkers() {
@@ -95,11 +97,25 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         for (Building building : loyBuildings) {
             createBuildingMarkersAndPolygonOverlay(building);
         }
+        map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+            @Override
+            public void onPolygonClick(Polygon polygon) {
+                ((MainActivity) getActivity()).createToast("Building Clicked");
+            }
+        });
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                ((MainActivity) getActivity()).createToast("Building Clicked");
+                return true;
+            }
+        });
     }
 
     private void createBuildingMarkersAndPolygonOverlay(Building building) {
         register(building);
-        map.addPolygon(building.getPolygonOverlayOptions());
+        map.addPolygon(building.getPolygonOverlayOptions()).setClickable(true);
+
         Marker marker = map.addMarker(building.getMarkerOptions());
         building.setMarker(marker);
     }

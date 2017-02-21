@@ -80,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
     }
 
+    public void createToast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
     private void initDatabase() {
         DatabaseHelper.setupDatabase(this);
         DatabaseHelper myDbHelper = DatabaseHelper.getInstance();
