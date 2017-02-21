@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.concordia.mcga.fragments.NavigationFragment;
-import com.concordia.mcga.helperClasses.Database;
+import com.concordia.mcga.helperClasses.DatabaseHelper;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -81,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initDatabase() {
-        Database myDbHelper = new Database(this);
+        DatabaseHelper.setupDatabase(this);
+        DatabaseHelper myDbHelper = DatabaseHelper.getInstance();
         try {
             myDbHelper.createDataBase();
         } catch (IOException ioe) {

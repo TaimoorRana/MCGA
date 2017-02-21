@@ -1,64 +1,50 @@
 package com.concordia.mcga.helperClasses;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.Gson;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
-import java.util.List;
 
 /**
  * Part of the code was taken from https://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
  */
 
-public class Database extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "development.db";
-    private static final String BUILDING_TABLE = "building";
-    private static final String ID = "id",
-            NAME = "name",
-            SHORT_NAME = "short_name",
-            CENTER_COORDINATE = "center_coordinate",
-            EDGE_COORDINATES = "edge_coordinates";
     public static SQLiteDatabase db;
-    //public static SQLiteDatabase db;
-    private static Gson gson;
-    //The Android's default system path of your application database.
-    private static String DATABASE_PATH = "/data/data/com.example.mcga.mcga/databases/";
-    private final Context myContext;
+    //The Android's default system path of our application database.
+    private static String databasePath;
+    private static Context context;
+    private static DatabaseHelper databaseHelper;
 
-    public Database(Context context) {
+
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
-        //db = this.getWritableDatabase();
-        this.myContext = context;
-        gson = new Gson();
+        DatabaseHelper.context = context;
     }
 
-    public static void insertBuilding(String name, String shortName, LatLng centerCoordinate, List<LatLng> edgeCoordinateList, int resource_image_id) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(NAME, name);
-        contentValues.put(SHORT_NAME, shortName);
-        contentValues.put(CENTER_COORDINATE, gson.toJson(centerCoordinate));
-        contentValues.put(EDGE_COORDINATES, gson.toJson(edgeCoordinateList));
-        contentValues.put("resource_image_id", resource_image_id);
-        db.insert(BUILDING_TABLE, null, contentValues);
+    public static void setupDatabase(Context context) {
+        if (db == null) {
+            DatabaseHelper.context = context;
+            databasePath = context.getFilesDir().getPath() + "/../databases/";
+        }
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+    public static DatabaseHelper getInstance() {
+        if (context == null) {
+            return null;
+        }
+        if (db == null) {
+            return databaseHelper = new DatabaseHelper(context);
+        } else {
+            return databaseHelper;
+        }
 
     }
 
@@ -66,28 +52,19 @@ public class Database extends SQLiteOpenHelper {
      * Creates a empty database on the system and rewrites it with your own database.
      */
     public void createDataBase() throws IOException {
-
         boolean dbExist = checkDataBase();
 
-        if (dbExist) {
-            //do nothing - database already exist
-        } else {
-
+        if (!dbExist) {
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
             this.getReadableDatabase();
 
             try {
-
                 copyDataBase();
-
             } catch (IOException e) {
-
                 throw new Error("Error copying database");
-
             }
         }
-
     }
 
     /**
@@ -96,25 +73,17 @@ public class Database extends SQLiteOpenHelper {
      * @return true if it exists, false if it doesn't
      */
     private boolean checkDataBase() {
-
-        SQLiteDatabase checkDB = null;
+        SQLiteDatabase checkDB;
 
         try {
-            String myPath = DATABASE_PATH + DATABASE_NAME;
+            String myPath = databasePath + DATABASE_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-
         } catch (SQLiteException e) {
-
-            //database does't exist yet.
-
+            throw new Error("Could not find " + DATABASE_NAME + " database");
         }
-
         if (checkDB != null) {
-
             checkDB.close();
-
         }
-
         return checkDB != null;
     }
 
@@ -126,10 +95,10 @@ public class Database extends SQLiteOpenHelper {
     private void copyDataBase() throws IOException {
 
         //Open your local db as the input stream
-        InputStream myInput = myContext.getAssets().open(DATABASE_NAME);
+        InputStream myInput = context.getAssets().open(DATABASE_NAME);
 
         // Path to the just created empty db
-        String outFileName = DATABASE_PATH + DATABASE_NAME;
+        String outFileName = databasePath + DATABASE_NAME;
 
         //Open the empty db as the output stream
         OutputStream myOutput = new FileOutputStream(outFileName);
@@ -145,25 +114,29 @@ public class Database extends SQLiteOpenHelper {
         myOutput.flush();
         myOutput.close();
         myInput.close();
-
     }
 
     public void openDataBase() throws SQLException {
-
         //Open the database
-        String myPath = DATABASE_PATH + DATABASE_NAME;
+        String myPath = databasePath + DATABASE_NAME;
         db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-
     }
 
     @Override
     public synchronized void close() {
-
-        if (db != null)
+        if (db != null) {
             db.close();
-
+        }
         super.close();
+    }
 
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
     }
 
 
