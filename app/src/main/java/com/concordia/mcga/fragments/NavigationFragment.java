@@ -74,16 +74,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         applyCustomGoogleMapsStyle();
         populateCampuses();
-        addCampusMarkers();
         addBuildingMarkers();
 
         updateCampus();
     }
 
-    private void addCampusMarkers() {
-        //map.addMarker(LOYOLA_MARKER);
-        //map.addMarker(SGW_MARKER);
-    }
 
     private void addBuildingMarkers() {
         ArrayList<Building> sgwBuildings = Campus.SGW.getBuildings();
@@ -139,8 +134,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             Log.e("Google Map Style", "Can't find style. Error: ", e);
         }
     }
-
-
 
     void updateCampus(){
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), 16));
