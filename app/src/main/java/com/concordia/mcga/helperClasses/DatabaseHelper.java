@@ -29,10 +29,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         DatabaseHelper.context = context;
     }
 
-    public static void setupDatabase(Context context) {
+    public static boolean setupDatabase(Context context) {
         if (db == null) {
             DatabaseHelper.context = context;
             databasePath = context.getFilesDir().getPath() + "/../databases/";
+            return true;
+        } else {
+            return false;
         }
     }
 
