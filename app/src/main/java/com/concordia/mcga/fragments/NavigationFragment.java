@@ -22,6 +22,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener {
@@ -76,8 +77,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         updateCampus();
     }
 
-    public void switchCampus(boolean loyola){
+    public void switchCampus(boolean loyola) {
     }
+
     private void addCampusMarkers() {
         map.addMarker(LOYOLA_MARKER);
         map.addMarker(SGW_MARKER);
@@ -120,8 +122,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
 
-
-    void updateCampus(){
+    void updateCampus() {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), 16));
     }
 

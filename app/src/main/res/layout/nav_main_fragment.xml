@@ -57,7 +57,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/mapCenterButton"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            tools:layout="@layout/transport_button_fragment" />
 
         <ToggleButton
             android:id="@+id/campusButton"
