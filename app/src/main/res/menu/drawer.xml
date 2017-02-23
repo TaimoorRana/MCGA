@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <group
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/next_class"
+            android:checked="true"
+            android:title="@string/next_class_string"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <item
+            android:id="@+id/shuttle_schedule"
+            android:checked="false"
+            android:title="@string/shuttle_schedule_string"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <item
+            android:id="@+id/settings"
+            android:checked="false"
+            android:title="@string/settings_string"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <item
+            android:id="@+id/student_spots"
+            android:checked="false"
+            android:title="@string/student_spots_string"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <item
+            android:id="@+id/about"
+            android:checked="false"
+            android:title="@string/about_string"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </group>
+</menu>
