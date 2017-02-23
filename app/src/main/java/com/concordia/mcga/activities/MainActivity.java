@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.location.Location;
+
 
 import com.concordia.mcga.fragments.NavigationFragment;
 
@@ -74,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
     }
-    LocationResult locationResult = new LocationResult(){
+
+    //Location tracking method
+    /*LocationResult locationResult = new LocationResult(){
         @Override
         public void gotLocation(Location location){
             //Got the location!
@@ -82,4 +86,5 @@ public class MainActivity extends AppCompatActivity {
     };
     MyLocation myLocation = new MyLocation();
     myLocation.getLocation(this, locationResult);
+    */
 }
