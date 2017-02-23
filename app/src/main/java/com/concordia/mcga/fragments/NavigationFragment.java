@@ -128,6 +128,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map = googleMap;
         map.setOnCameraIdleListener(this);
 
+        //Settings
+        map.getUiSettings().setMapToolbarEnabled(false);
+
+        //Map Customization
         applyCustomGoogleMapsStyle();
         populateCampuses();
         addCampusMarkers();
