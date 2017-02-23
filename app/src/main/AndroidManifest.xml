@@ -9,6 +9,9 @@
     -->
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!--Determine user location with mobile data -->
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> <!-- Determine user location with mobile data and/or WiFi -->
+    <uses-feature android:name="android.hardware.location.gps" /> <!--
+                                                                            To be removed if we are targetting Android 5.0 and up
+                                                                                                                                    -->
 
   <application
     android:allowBackup="true"
