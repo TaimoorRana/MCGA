@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -15,21 +16,28 @@
 
         </WebView>
 
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/floorSpinner"
-            android:backgroundTint="@color/white"
-            android:background="@color/white"/>
-
         <Button
-            android:text="Path(H4)"
+            android:text="Path"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/testPathButton"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:elevation="0dp" />
+
+        <ScrollView android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/floorButtonContainer">
+
+            </LinearLayout>
+        </ScrollView>
 
     </RelativeLayout>
 

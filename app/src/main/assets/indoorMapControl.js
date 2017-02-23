@@ -1,4 +1,6 @@
 var map;
+
+var floormapGroup;
 var markerGroup;
 var pathGroup;
 
@@ -6,11 +8,11 @@ function initmap() {
     map = new L.Map('map', {
         crs: L.CRS.Simple,
         minZoom: -1,
+        maxZoom: 1,
         attributionControl: false, //Remove Attribution on bottom right
         zoomControl: false //Remove "+" and "-" button on top left
     });
-
-    loadMapImage('floormaps/H/4.png');
+    floormapGroup = L.layerGroup().addTo(map);
 
     //Listener Registration
     map.on('click', function(ev) {
@@ -19,8 +21,9 @@ function initmap() {
 };
 
 function loadMapImage(path) {
-    console.log("Called: loadMapImage " + path);
     //Indoor Map
+    floormapGroup.clearLayers();
+
     var bounds = [
         [0, 0],
         [1000, 1000]
@@ -28,8 +31,7 @@ function loadMapImage(path) {
     var imageOptions = {
         interactive: true
     };
-    //var image = L.imageOverlay('floormaps/H/4.png', bounds, imageOptions).addTo(map);
-    var image = L.imageOverlay(path, bounds, imageOptions).addTo(map);
+    floormapGroup.addLayer(L.imageOverlay(path, bounds, imageOptions));
     map.fitBounds(bounds);
 };
 
@@ -51,16 +53,10 @@ function generatePath() {
     for (var i = 0; i < points.length; i++) {
         console.log("Adding point: " + JSON.stringify(points[i]));
         markerGroup.addLayer(L.marker(points[i], {
-                                       opacity: 0
-                                   }));
-
-
-        /*L.marker(points[i], {
             opacity: 0
-        }).addTo(map);*/
+        }));
 
         if (!(i == 0)) {
-            console.log("i is: " + i);
             pathGroup.addLayer(L.polyline([points[i - 1], points[i]]));
         }
     }
