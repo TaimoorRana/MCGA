@@ -1,7 +1,10 @@
 package com.concordia.mcga.utilities.pathfinding;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -51,6 +54,41 @@ public class PathFinder {
             current = current.getParent();
         }
         return returnList;
+    }
+
+    public List<PathFinderTile> shortestPathJunctions(int startX, int startY, int destX, int destY) throws Exception {
+        ArrayList<PathFinderTile> pathTiles = new ArrayList<PathFinderTile>(shortestPath(startX, startY, destX, destY));
+        ArrayList<PathFinderTile> pathTilesJunctions = new ArrayList<PathFinderTile>();
+
+        int curX = 0;
+        int curY = 0;
+        for (int i = 0; i < pathTiles.size(); i++) {
+            if (i == 0) {
+                PathFinderTile pft = pathTiles.get(i);
+                pathTilesJunctions.add(pft);
+                curX = pft.getCoordinateX();
+                curY = pft.getCoordinateY();
+            } else {
+                PathFinderTile pft = pathTiles.get(i);
+                if (!(pft.getCoordinateX() == curX && pft.getCoordinateY() != curY) && !(pft.getCoordinateY() == curY && pft.getCoordinateX() != curX)) {
+                    pathTilesJunctions.add(pft);
+                    curX = pft.getCoordinateX();
+                    curY = pft.getCoordinateY();
+                }
+            }
+        }
+
+        return pathTilesJunctions;
+    }
+
+    public static JSONArray toJSONArray(List<PathFinderTile> pathTilesJunctions) {
+        JSONArray pftArray = new JSONArray();
+        Iterator<PathFinderTile> it = pathTilesJunctions.iterator();
+        while (it.hasNext()) {
+            PathFinderTile pft = it.next();
+            pftArray.put(pft.toJSON());
+        }
+        return pftArray;
     }
 
     /**

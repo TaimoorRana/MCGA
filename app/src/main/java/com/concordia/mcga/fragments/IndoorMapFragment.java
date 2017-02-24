@@ -1,5 +1,6 @@
 package com.concordia.mcga.fragments;
 
+import android.graphics.Path;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
@@ -17,6 +18,8 @@ import android.widget.Spinner;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.factories.IndoorMapFactory;
 import com.concordia.mcga.models.IndoorMap;
+import com.concordia.mcga.models.IndoorPOI;
+import com.concordia.mcga.models.POI;
 import com.concordia.mcga.utilities.pathfinding.PathFinder;
 import com.concordia.mcga.utilities.pathfinding.PathFinderTile;
 
@@ -74,53 +77,24 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
         return view;
     }
 
-    public void generatePath() {
+    public void generatePath(IndoorPOI start, IndoorPOI dest) {
         IndoorMap H4 = IndoorMapFactory.getHall4thFloor(getContext());
         PathFinder pf = new PathFinder(H4.getMap());
 
-        List<PathFinderTile> pathTilesList = null;
-        ArrayList<PathFinderTile> pathTiles = null;
-        ArrayList<PathFinderTile> pathTilesJunctions = new ArrayList<PathFinderTile>();
+        ArrayList<PathFinderTile> shortestPath = null;
+        ArrayList<PathFinderTile> pathTilesJunctions = null;
 
         try {
-            //pathTilesList = pf.shortestPath(353, 57, 1120, 594);
-            pathTilesList = pf.shortestPath(353, 57, 1120, 594);
-            pathTiles = new ArrayList<PathFinderTile>(pathTilesList);
+            pathTilesJunctions = (ArrayList<PathFinderTile>) pf.shortestPathJunctions(start.getIndoorCoordinateX(), start.getIndoorCoordinateY(), dest.getIndoorCoordinateX(), dest.getIndoorCoordinateY());
 
-            /*Iterator<PathFinderTile> it = pathTiles.iterator();
-            *//*while(it.hasNext()) {
-                PathFinderTile pft = it.next();
-                Log.d("PFT is: ", pft.toString());
-            }*/
-
-            int curX = 0;
-            int curY = 0;
-            for (int i = 0; i < pathTiles.size(); i++) {
-                if (i == 0) {
-                    PathFinderTile pft = pathTiles.get(i);
-                    pathTilesJunctions.add(pft);
-                    curX = pft.getCoordinateX();
-                    curY = pft.getCoordinateY();
-                } else {
-                    PathFinderTile pft = pathTiles.get(i);
-                    if (!(pft.getCoordinateX() == curX && pft.getCoordinateY() != curY) && !(pft.getCoordinateY() == curY && pft.getCoordinateX() != curX)) {
-                        pathTilesJunctions.add(pft);
-                        curX = pft.getCoordinateX();
-                        curY = pft.getCoordinateY();
-                    }
-                }
+            Iterator<PathFinderTile> it2 = pathTilesJunctions.iterator();
+            while (it2.hasNext()) {
+                PathFinderTile pft2 = it2.next();
+                Log.d("JCT: ", pft2.toString());
             }
-
-            JSONArray pftArray = new JSONArray();
-            Iterator<PathFinderTile> it = pathTilesJunctions.iterator();
-            while (it.hasNext()) {
-                PathFinderTile pft = it.next();
-                pftArray.put(pft.toJSON());
-            }
-            Log.d("PFT Arr: ", pftArray.toString());
 
             if (pageLoaded)
-                leafletView.evaluateJavascript("generateWalkablePath(" + pftArray.toString() + ")", null);
+                leafletView.evaluateJavascript("generateWalkablePath(" + pf.toJSONArray(pathTilesJunctions).toString() + ")", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -161,14 +135,9 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.testPathButton:
-                /*if (pathsDrawn) {
-                    pathsDrawn = false;
-                    leafletView.evaluateJavascript("clearLayers()", null);
-                } else {
-                    pathsDrawn = true;
-                    leafletView.evaluateJavascript("generatePath()", null);
-                }*/
-                generatePath();
+                IndoorPOI H423 = new IndoorPOI(null, "H423", 4, 354,1325);
+                IndoorPOI H436 = new IndoorPOI(null, "H436", 4, 1220,594);
+                generatePath(H423, H436);
                 break;
         }
     }

@@ -19,7 +19,8 @@ public class IndoorMapFactory {
     @NonNull
     private static IndoorMap getIndoorMap(Context context, int rawResourceId) {
         //TiledMap map = new TiledMap(350,317);
-        TiledMap map = new TiledMap(2027,1645);
+        //TiledMap map = new TiledMap(2027,1645);
+        TiledMap map = new TiledMap(2196,1989);
         try {
             BufferedReader reader = new BufferedReader(
                 new InputStreamReader(context.getResources().openRawResource(rawResourceId)));
