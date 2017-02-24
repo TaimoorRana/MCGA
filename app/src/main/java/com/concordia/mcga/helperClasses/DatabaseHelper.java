@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -65,7 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             try {
                 copyDataBase();
             } catch (IOException e) {
-                throw new Error("Error copying database");
+                Log.e("Database", "error copying");
             }
         }
     }
@@ -76,13 +77,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @return true if it exists, false if it doesn't
      */
     private boolean checkDataBase() {
-        SQLiteDatabase checkDB;
+        SQLiteDatabase checkDB = null;
 
         try {
             String myPath = databasePath + DATABASE_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
         } catch (SQLiteException e) {
-            throw new Error("Could not find " + DATABASE_NAME + " database");
+            Log.e("Database", "not found");
         }
         if (checkDB != null) {
             checkDB.close();
