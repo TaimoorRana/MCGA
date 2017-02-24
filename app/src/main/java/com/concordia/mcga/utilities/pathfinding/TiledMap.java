@@ -1,5 +1,7 @@
 package com.concordia.mcga.utilities.pathfinding;
 
+import android.util.Log;
+
 import com.concordia.mcga.utilities.pathfinding.PathFinderTile.Type;
 
 public class TiledMap {
