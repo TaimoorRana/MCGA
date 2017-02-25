@@ -61,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Creates a empty database on the system and rewrites it with your own database.
      */
     public void createDatabase() throws IOException {
-        boolean dbExist = checkDatabase();
+        boolean dbExist = isDBExists();
 
         if (!dbExist) {
             //By calling this method and empty database will be created into the default system path
@@ -81,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return true if it exists, false if it doesn't
      */
-    private boolean checkDatabase() {
+    private boolean isDBExists() {
         SQLiteDatabase checkDB = null;
 
         try {
