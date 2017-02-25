@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.util.Log;
 import android.view.View;
@@ -22,28 +23,84 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener {
 
+    private enum ViewType {
+        INDOOR, OUTDOOR
+    }
+
     private static final MarkerOptions LOYOLA_MARKER = new MarkerOptions().position(Campus.LOYOLA.getMapCoordinates()).title(Campus.LOYOLA.getName());
     private static final MarkerOptions SGW_MARKER = new MarkerOptions().position(Campus.SGW.getMapCoordinates()).title(Campus.SGW.getName());
     private static final float streetLevelZoom = 15f;
-    Campus currentCampus = Campus.SGW;
-    GoogleMap map;
+    private GoogleMap map;
+
+    //State
+    private ViewType viewType;
+    private Campus currentCampus = Campus.SGW;
     private ArrayList<Marker> buildingMarkers = new ArrayList<>();
+
+    //Fragments
+    private LinearLayoutCompat parentLayout;
+    private SupportMapFragment mapFragment;
+    private TransportButtonFragment transportButtonFragment;
+    private IndoorMapFragment indoorMapFragment;
+
+    //View Components
+    private Button campusButton;
+    private Button viewSwitchButton;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.nav_main_fragment, container, false);
+
+        parentLayout = (LinearLayoutCompat) inflater.inflate(R.layout.nav_main_fragment, container, false);
+
+        //Init Fragments
+        transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
+        indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
+
+        //Init View Components
+        campusButton = (Button) parentLayout.findViewById(R.id.campusButton);
+        viewSwitchButton = (Button) parentLayout.findViewById(R.id.viewSwitchButton);
+        viewSwitchButton.setText("GO INDOORS");
+        viewSwitchButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewType == ViewType.OUTDOOR) {
+                    viewType = ViewType.INDOOR;
+                    getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
+                    getChildFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
+                    campusButton.setVisibility(View.GONE);
+                    viewSwitchButton.setText("GO OUTDOORS");
+                } else {
+                    viewType = ViewType.OUTDOOR;
+                    getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
+                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit();
+                    campusButton.setVisibility(View.VISIBLE);
+                    viewSwitchButton.setText("GO INDOORS");
+                }
+            }
+        });
+
+        //Set initial view type
+        viewType = ViewType.OUTDOOR;
+
+        //Hide Indoor Fragment
+        getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
+
+        return parentLayout;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+        mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -61,6 +118,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 updateCampus();
             }
         });
+
+        //Show outdoor map on start
+        getFragmentManager().beginTransaction().show(mapFragment).commit();
     }
 
     @Override
@@ -68,6 +128,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map = googleMap;
         map.setOnCameraIdleListener(this);
 
+        //Settings
+        map.getUiSettings().setMapToolbarEnabled(false);
+
+        //Map Customization
         applyCustomGoogleMapsStyle();
         populateCampuses();
         addCampusMarkers();
@@ -76,8 +140,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         updateCampus();
     }
 
-    public void switchCampus(boolean loyola){
+    public void switchCampus(boolean loyola) {
     }
+
     private void addCampusMarkers() {
         map.addMarker(LOYOLA_MARKER);
         map.addMarker(SGW_MARKER);
@@ -119,9 +184,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
-
-
-    void updateCampus(){
+    void updateCampus() {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), 16));
     }
 
@@ -137,4 +200,5 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             }
         }
     }
+
 }
