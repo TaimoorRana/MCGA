@@ -133,7 +133,7 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
             public void onClick(View v) {
                 if (pageLoaded) {
                     leafletView.evaluateJavascript("clearAllLayers()", null);
-                    leafletView.evaluateJavascript("loadMapImage('floormaps/H/9.png')", null);
+                    leafletView.evaluateJavascript("loadMapImage('floormaps/H/1-2.png')", null);
                 }
             }
         });
@@ -152,8 +152,8 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
             }
         });
 
-        floorButtonContainer.addView(h1);
         floorButtonContainer.addView(h4);
+        floorButtonContainer.addView(h1);
     }
 
     @JavascriptInterface

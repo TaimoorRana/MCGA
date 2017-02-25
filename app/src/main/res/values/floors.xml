@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="h_floors_array">
-        <item>H4</item>
-        <item>H5</item>
-        <item>H9</item>
-    </string-array>
-</resources>
