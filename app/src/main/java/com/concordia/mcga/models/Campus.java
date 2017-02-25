@@ -17,7 +17,7 @@ public class Campus extends POI {
     public static final Campus LOY = new Campus(new LatLng(45.458563, -73.640156), "Loyola Campus", "LOY");
     public static final Campus SGW = new Campus(new LatLng(45.497100, -73.579077), "SGW Campus", "SGW");
     private String shortName;
-    private ArrayList<Building> buildings;
+    private List<Building> buildings;
 
     private Campus(LatLng mapCoordinates, String name, String shortName) {
         super(mapCoordinates, name);
@@ -64,7 +64,7 @@ public class Campus extends POI {
         res.close();
     }
 
-    public ArrayList<Building> getBuildings() {
+    public List<Building> getBuildings() {
         return buildings;
     }
 
