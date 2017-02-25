@@ -50,7 +50,7 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
     //Test POIs for Demo
     IndoorPOI H423 = new IndoorPOI(null, "H423", 4, 353, 1326);
     IndoorPOI H436 = new IndoorPOI(null, "H436", 4, 1220, 594);
-    IndoorPOI H433 = new IndoorPOI(null, "H433", 4, 353, 57);
+    IndoorPOI H433 = new IndoorPOI(null, "H433", 4, 354, 57);
     IndoorPOI H401 = new IndoorPOI(null, "H401", 4, 1972, 1616);
     private ArrayList<IndoorPOI> indoorPoiStack;
 

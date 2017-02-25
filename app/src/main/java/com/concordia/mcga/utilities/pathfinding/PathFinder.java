@@ -24,16 +24,17 @@ public class PathFinder {
     }
 
     /**
-     *  Finds the shortest path between the given x,y coordinates
+     * Finds the shortest path between the given x,y coordinates
+     *
      * @param startX - starting position's x coordinate
      * @param startY - starting position's y coordinate
-     * @param destX - ending position's x coordinate
-     * @param destY - ending position's y coordinate
+     * @param destX  - ending position's x coordinate
+     * @param destY  - ending position's y coordinate
      * @return - Returns a list of the tiles found in the shortest path. Sorted from first to last.
      * @throws Exception - Thrown if there exists no valid path between both points
      */
     public List<PathFinderTile> shortestPath(int startX, int startY, int destX, int destY)
-        throws Exception {
+            throws Exception {
         map.setStartTile(startX, startY);
         map.setEndTile(destX, destY);
         openSet.add(map.getStartTile());
@@ -60,21 +61,17 @@ public class PathFinder {
         ArrayList<PathFinderTile> pathTiles = new ArrayList<PathFinderTile>(shortestPath(startX, startY, destX, destY));
         ArrayList<PathFinderTile> pathTilesJunctions = new ArrayList<PathFinderTile>();
 
-        int curX = 0;
-        int curY = 0;
-        for (int i = 0; i < pathTiles.size(); i++) {
-            if (i == 0) {
-                PathFinderTile pft = pathTiles.get(i);
+        PathFinderTile firstPft = pathTiles.get(0);
+        pathTilesJunctions.add(firstPft);
+        int curX = firstPft.getCoordinateX();
+        int curY = firstPft.getCoordinateY();
+
+        for (int i = 1; i < pathTiles.size(); i++) {
+            PathFinderTile pft = pathTiles.get(i);
+            if (!(pft.getCoordinateX() == curX && pft.getCoordinateY() != curY) && !(pft.getCoordinateY() == curY && pft.getCoordinateX() != curX)) {
                 pathTilesJunctions.add(pft);
                 curX = pft.getCoordinateX();
                 curY = pft.getCoordinateY();
-            } else {
-                PathFinderTile pft = pathTiles.get(i);
-                if (!(pft.getCoordinateX() == curX && pft.getCoordinateY() != curY) && !(pft.getCoordinateY() == curY && pft.getCoordinateX() != curX)) {
-                    pathTilesJunctions.add(pft);
-                    curX = pft.getCoordinateX();
-                    curY = pft.getCoordinateY();
-                }
             }
         }
 
@@ -93,6 +90,7 @@ public class PathFinder {
 
     /**
      * Runs an iteration of the A* algorithm.
+     *
      * @param current - Currently examined tile.
      */
     private void nextIteration(PathFinderTile current) {

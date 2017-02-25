@@ -1,5 +1,7 @@
 package com.concordia.mcga.utilities.pathfinding;
 
+import android.util.Log;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.json.JSONException;
@@ -76,7 +78,7 @@ public class PathFinderTile {
             json.put("lat", this.coordinateY);
             json.put("lng", this.coordinateX);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("PathFinderTile Error", Log.getStackTraceString(e));
         }
         return json;
     }
