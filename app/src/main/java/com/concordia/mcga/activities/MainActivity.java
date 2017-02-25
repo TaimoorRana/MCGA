@@ -7,9 +7,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
+
 import com.concordia.mcga.fragments.NavigationFragment;
+import com.concordia.mcga.helperClasses.DatabaseHelper;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame, navigationFragment, "MAIN_NAV");
         fragmentTransaction.commit();
 
+        initDatabase();
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         navigationView.setNavigationItemSelectedListener(
@@ -70,9 +74,28 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-            toolbar, R.string.open_drawer, R.string.close_drawer);
+                toolbar, R.string.open_drawer, R.string.close_drawer);
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+    }
+
+    public void createToast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void initDatabase() {
+        DatabaseHelper.setupDatabase(this);
+        DatabaseHelper myDbHelper = DatabaseHelper.getInstance();
+        try {
+            myDbHelper.createDatabase();
+        } catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
+        try {
+            myDbHelper.openDatabase();
+        } catch (SQLException sqle) {
+            throw new Error("Unable to open database");
+        }
     }
 }

@@ -11,7 +11,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 
 import com.concordia.mcga.activities.R;
 
@@ -24,7 +23,6 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
     //Components
     private WebView leafletView;
     private LinearLayout floorButtonContainer;
-    private Spinner floorSelectSpinner;
     private Button testPathButton;
 
     //State
