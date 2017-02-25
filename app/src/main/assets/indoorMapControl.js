@@ -1,7 +1,8 @@
 var map;
 
 var floormapGroup;
-var markerGroup;
+var roomMarkerGroup;
+var pathMarkerGroup;
 var pathGroup;
 
 function initmap() {
@@ -12,18 +13,26 @@ function initmap() {
 		attributionControl: false, //Remove Attribution on bottom right
 		zoomControl: false //Remove "+" and "-" button on top left
 	});
+	//Image Groups
 	floormapGroup = L.layerGroup().addTo(map);
 
+	//Path Groups
+	pathGroup = L.layerGroup().addTo(map);
+
+	//Marker Groups
+	roomMarkerGroup = L.layerGroup().addTo(map);
+	pathMarkerGroup = L.layerGroup().addTo(map);
+
 	//Listener Registration
-	map.on('click', function(ev) {
+	/*map.on('click', function(ev) {
 		console.log(JSON.stringify(ev.latlng));
-	});
+	});*/
 };
 
 function loadMapImage(path) {
 	//Indoor Map
 	floormapGroup.clearLayers();
-    //[2026, 1644]
+
 	var bounds = [
 		[0, 0],
 		[1989, 2196]
@@ -36,10 +45,7 @@ function loadMapImage(path) {
 };
 
 function generateWalkablePath(pointArray) {
-	markerGroup = L.layerGroup().addTo(map);
-	pathGroup = L.layerGroup().addTo(map);
-
-    var points = [];
+	var points = [];
 
 	for (var i = 0; i < pointArray.length; i++) {
 		var pointRaw = pointArray[i];
@@ -52,7 +58,7 @@ function generateWalkablePath(pointArray) {
 
 		console.log("Adding point: " + JSON.stringify(point));
 
-		markerGroup.addLayer(L.marker(points[i], {
+		pathMarkerGroup.addLayer(L.marker(points[i], {
 			opacity: 0
 		}));
 
@@ -62,9 +68,50 @@ function generateWalkablePath(pointArray) {
 	}
 };
 
-function clearLayers() {
-	markerGroup.clearLayers();
+function addH4Markers() {
+	var H423 = {
+		'name': 'H423',
+		'coord': L.latLng([670, 348])
+	};
+	var H436 = {
+		'name': 'H436',
+		'coord': L.latLng([1402, 1214])
+	};
+	var H433 = {
+		'name': 'H433',
+		'coord': L.latLng([1929, 353])
+	};
+	var H401 = {
+		'name': 'H401',
+		'coord': L.latLng([387, 1961])
+	};
+
+	var points = [H423, H436, H433, H401];
+
+	for (var i = 0; i < points.length; i++) {
+		var point = points[i];
+		var marker = L.marker(point.coord, {
+			'name': point.name
+		}).on('click', function(ev) {
+			Android.pushRoom(this.options.name);
+		});
+		roomMarkerGroup.addLayer(marker);
+	}
+};
+
+function clearPathLayers() {
 	pathGroup.clearLayers();
+	pathMarkerGroup.clearLayers();
+};
+
+function clearMarkerLayers() {
+	pathMarkerGroup.clearLayers();
+	roomMarkerGroup.clearLayers();
+};
+
+function clearAllLayers() {
+	clearPathLayers();
+	clearMarkerLayers()
 };
 
 $(document).ready(function() {

@@ -17,7 +17,7 @@
         </WebView>
 
         <Button
-            android:text="Path"
+            android:text="Clear Paths"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/testPathButton"
