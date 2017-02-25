@@ -24,18 +24,17 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject {
 
-    private static final MarkerOptions LOYOLA_MARKER = new MarkerOptions().position(Campus.LOYOLA.getMapCoordinates()).title(Campus.LOYOLA.getName());
-    private static final MarkerOptions SGW_MARKER = new MarkerOptions().position(Campus.SGW.getMapCoordinates()).title(Campus.SGW.getName());
+    private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
     GoogleMap map;
-    private ArrayList<Observer> observerList = new ArrayList<>();
+    private List<Observer> observerList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,10 +56,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         toggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentCampus == Campus.LOYOLA) {
+                if (currentCampus == Campus.LOY) {
                     currentCampus = Campus.SGW;
                 } else {
-                    currentCampus = Campus.LOYOLA;
+                    currentCampus = Campus.LOY;
                 }
                 updateCampus();
             }
@@ -73,7 +72,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map.setOnCameraIdleListener(this);
 
         applyCustomGoogleMapsStyle();
-        populateCampuses();
+        Campus.populateCampusesWithBuildings();
         addBuildingMarkers();
 
         updateCampus();
@@ -81,8 +80,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
 
     private void addBuildingMarkers() {
-        ArrayList<Building> sgwBuildings = Campus.SGW.getBuildings();
-        ArrayList<Building> loyBuildings = Campus.LOYOLA.getBuildings();
+        List<Building> sgwBuildings = Campus.SGW.getBuildings();
+        List<Building> loyBuildings = Campus.LOY.getBuildings();
 
 
         for (Building building : sgwBuildings) {
@@ -115,13 +114,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         building.setMarker(marker);
     }
 
-    private void populateCampuses() {
-        Campus.SGW.populateCampusesWithBuildings();
-    }
-
     private void applyCustomGoogleMapsStyle() {
         try {
-            // Customise the styling of the base map using a JSON object defined
+            // Customise the styling of the base map using a JSON object define
             // in a raw resource file.
             boolean success = map.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
@@ -136,7 +131,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     void updateCampus(){
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), 16));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), CAMPUS_DEFAULT_ZOOM_LEVEL));
     }
 
     @Override
