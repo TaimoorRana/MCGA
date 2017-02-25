@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Campus extends POI {
-    public static final Campus LOYOLA = new Campus(new LatLng(45.458563, -73.640156), "Loyola Campus", "LOY");
+    public static final Campus LOY = new Campus(new LatLng(45.458563, -73.640156), "Loyola Campus", "LOY");
     public static final Campus SGW = new Campus(new LatLng(45.497100, -73.579077), "SGW Campus", "SGW");
     private String shortName;
     private ArrayList<Building> buildings;
@@ -25,27 +25,40 @@ public class Campus extends POI {
         buildings = new ArrayList<>();
     }
 
-    public void populateCampusesWithBuildings() {
-        if (DatabaseHelper.getInstance() == null || !buildings.isEmpty())  // if the database has not been initialized || buildings already exists
+    public static void populateCampusesWithBuildings() {
+        if (DatabaseHelper.getInstance() == null || !SGW.buildings.isEmpty() || !LOY.buildings.isEmpty())  // if the database has not been initialized || buildings already exists
         {
             return;
         }
-        int nameColumnIndex = 1, shortNameColumnIndex = 2, centerCoordinateColumnIndex = 3,
-                edgeCoordinatesColumnIndex = 4, resourceImageColumnIndex = 5, isSmallBuildingColumnIndex = 6;
+
+        final int NAME_COLUMN_INDEX = 1, SHORT_NAME_COLUMN_INDEX = 2, CENTER_COORDINATE_COLUMN_INDEX = 3,
+                EDGE_COORDINATES_COLUMN_INDEX = 4, RESOURCE_IMAGE_COLUMN_INDEX = 5, IS_SMALL_BUILDING_COLUMN_INDEX = 6, CAMPUS_COLUMN_INDEX = 7;
 
         Gson gson = new Gson();
-        Cursor res = DatabaseHelper.db.rawQuery("select * from building", null);
+        Cursor res = DatabaseHelper.getDb().rawQuery("select * from building", null);
         Type listType = new TypeToken<List<LatLng>>() {
         }.getType();
+
         while (res.moveToNext()) {
-            MarkerOptions adMarkerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(res.getInt(resourceImageColumnIndex)));
-            if (res.getInt(isSmallBuildingColumnIndex) == 1) // 1 means that it is a small building
-            {
-                buildings.add(new SmallBuilding(gson.fromJson(res.getString(centerCoordinateColumnIndex), LatLng.class), res.getString(nameColumnIndex), res.getString(shortNameColumnIndex), adMarkerOptions)
-                        .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(edgeCoordinatesColumnIndex), listType)));
+            MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(res.getInt(RESOURCE_IMAGE_COLUMN_INDEX)));
+            if (res.getString(CAMPUS_COLUMN_INDEX).equalsIgnoreCase(SGW.getShortName())) {
+                if (res.getInt(IS_SMALL_BUILDING_COLUMN_INDEX) == 1) // 1 means that it is a small building
+                {
+                    SGW.buildings.add(new SmallBuilding(gson.fromJson(res.getString(CENTER_COORDINATE_COLUMN_INDEX), LatLng.class), res.getString(NAME_COLUMN_INDEX), res.getString(SHORT_NAME_COLUMN_INDEX), markerOptions)
+                            .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(EDGE_COORDINATES_COLUMN_INDEX), listType)));
+                } else {
+                    SGW.buildings.add(new Building(gson.fromJson(res.getString(CENTER_COORDINATE_COLUMN_INDEX), LatLng.class), res.getString(NAME_COLUMN_INDEX), res.getString(SHORT_NAME_COLUMN_INDEX), markerOptions)
+                            .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(EDGE_COORDINATES_COLUMN_INDEX), listType)));
+                }
             } else {
-                buildings.add(new Building(gson.fromJson(res.getString(centerCoordinateColumnIndex), LatLng.class), res.getString(nameColumnIndex), res.getString(shortNameColumnIndex), adMarkerOptions)
-                        .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(edgeCoordinatesColumnIndex), listType)));
+                if (res.getInt(IS_SMALL_BUILDING_COLUMN_INDEX) == 1) // 1 means that it is a small building
+                {
+                    LOY.buildings.add(new SmallBuilding(gson.fromJson(res.getString(CENTER_COORDINATE_COLUMN_INDEX), LatLng.class), res.getString(NAME_COLUMN_INDEX), res.getString(SHORT_NAME_COLUMN_INDEX), markerOptions)
+                            .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(EDGE_COORDINATES_COLUMN_INDEX), listType)));
+                } else {
+                    LOY.buildings.add(new Building(gson.fromJson(res.getString(CENTER_COORDINATE_COLUMN_INDEX), LatLng.class), res.getString(NAME_COLUMN_INDEX), res.getString(SHORT_NAME_COLUMN_INDEX), markerOptions)
+                            .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(EDGE_COORDINATES_COLUMN_INDEX), listType)));
+                }
             }
         }
         res.close();
@@ -59,7 +72,4 @@ public class Campus extends POI {
         return shortName;
     }
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
-    }
 }
