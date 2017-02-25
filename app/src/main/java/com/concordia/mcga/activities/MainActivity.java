@@ -88,12 +88,12 @@ public class MainActivity extends AppCompatActivity {
         DatabaseHelper.setupDatabase(this);
         DatabaseHelper myDbHelper = DatabaseHelper.getInstance();
         try {
-            myDbHelper.createDataBase();
+            myDbHelper.createDatabase();
         } catch (IOException ioe) {
             throw new Error("Unable to create database");
         }
         try {
-            myDbHelper.openDataBase();
+            myDbHelper.openDatabase();
         } catch (SQLException sqle) {
             throw new Error("Unable to open database");
         }
