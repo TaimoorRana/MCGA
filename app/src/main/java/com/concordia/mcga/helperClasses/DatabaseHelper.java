@@ -18,7 +18,8 @@ import java.sql.SQLException;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "development.db";
-    public static SQLiteDatabase db;
+    private static SQLiteDatabase db;
+
     //The Android's default system path of our application database.
     private static String databasePath;
     private static Context context;
@@ -52,11 +53,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public static SQLiteDatabase getDb() {
+        return db;
+    }
+
     /**
      * Creates a empty database on the system and rewrites it with your own database.
      */
-    public void createDataBase() throws IOException {
-        boolean dbExist = checkDataBase();
+    public void createDatabase() throws IOException {
+        boolean dbExist = checkDatabase();
 
         if (!dbExist) {
             //By calling this method and empty database will be created into the default system path
@@ -64,7 +69,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             this.getReadableDatabase();
 
             try {
-                copyDataBase();
+                copyDatabase();
             } catch (IOException e) {
                 Log.e("Database", "error copying");
             }
@@ -76,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *
      * @return true if it exists, false if it doesn't
      */
-    private boolean checkDataBase() {
+    private boolean checkDatabase() {
         SQLiteDatabase checkDB = null;
 
         try {
@@ -96,7 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * system folder, from where it can be accessed and handled.
      * This is done by transfering bytestream.
      */
-    private void copyDataBase() throws IOException {
+    private void copyDatabase() throws IOException {
 
         //Open your local db as the input stream
         InputStream myInput = context.getAssets().open(DATABASE_NAME);
@@ -115,12 +120,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         //Close the streams
-        myOutput.flush();
         myOutput.close();
         myInput.close();
     }
 
-    public void openDataBase() throws SQLException {
+    public void openDatabase() throws SQLException {
         //Open the database
         String myPath = databasePath + DATABASE_NAME;
         db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
@@ -134,7 +138,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super.close();
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
     }
@@ -142,6 +145,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
     }
-
 
 }
