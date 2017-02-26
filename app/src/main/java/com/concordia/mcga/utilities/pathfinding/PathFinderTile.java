@@ -9,7 +9,11 @@ import org.json.JSONObject;
 
 public class PathFinderTile {
 
-    enum Type {START, DESTINATION}
+    public static final PathFinderTile MAX_COST = new PathFinderTile(Integer.MIN_VALUE, Integer.MIN_VALUE);
+
+    static {
+        MAX_COST.setDistFromEnd(Integer.MAX_VALUE);
+    }
 
     private Type tileType;
     private int distFromStart;
@@ -18,12 +22,7 @@ public class PathFinderTile {
     private int coordinateY;
     private PathFinderTile parent;
 
-    public static final PathFinderTile MAX_COST = new PathFinderTile(Integer.MIN_VALUE, Integer.MIN_VALUE);
-    static {
-        MAX_COST.setDistFromEnd(Integer.MAX_VALUE);
-    }
-
-    public PathFinderTile(int x, int y){
+    public PathFinderTile(int x, int y) {
         this.coordinateX = x;
         this.coordinateY = y;
     }
@@ -32,7 +31,7 @@ public class PathFinderTile {
         this.tileType = tileType;
     }
 
-    public int getCost(){
+    public int getCost() {
         return distFromEnd + distFromStart;
     }
 
@@ -40,12 +39,12 @@ public class PathFinderTile {
         return distFromStart;
     }
 
-    public int calculateDistFromStart(){
-        return parent.distFromStart + 1;
-    }
-
     public void setDistFromStart(int distFromStart) {
         this.distFromStart = distFromStart;
+    }
+
+    public int calculateDistFromStart() {
+        return parent.distFromStart + 1;
     }
 
     public int getDistFromEnd() {
@@ -86,9 +85,9 @@ public class PathFinderTile {
     @Override
     public String toString() {
         return "PathFinderTile{" +
-            "coordinateX=" + coordinateX +
-            ", coordinateY=" + coordinateY +
-            '}';
+                "coordinateX=" + coordinateX +
+                ", coordinateY=" + coordinateY +
+                '}';
     }
 
     @Override
@@ -104,22 +103,24 @@ public class PathFinderTile {
         PathFinderTile that = (PathFinderTile) o;
 
         return new EqualsBuilder()
-            .append(distFromStart, that.distFromStart)
-            .append(distFromEnd, that.distFromEnd)
-            .append(coordinateX, that.coordinateX)
-            .append(coordinateY, that.coordinateY)
-            .append(tileType, that.tileType)
-            .isEquals();
+                .append(distFromStart, that.distFromStart)
+                .append(distFromEnd, that.distFromEnd)
+                .append(coordinateX, that.coordinateX)
+                .append(coordinateY, that.coordinateY)
+                .append(tileType, that.tileType)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-            .append(tileType)
-            .append(distFromStart)
-            .append(distFromEnd)
-            .append(coordinateX)
-            .append(coordinateY)
-            .toHashCode();
+                .append(tileType)
+                .append(distFromStart)
+                .append(distFromEnd)
+                .append(coordinateX)
+                .append(coordinateY)
+                .toHashCode();
     }
+
+    enum Type {START, DESTINATION}
 }

@@ -1,26 +1,27 @@
 package com.concordia.mcga.utilities.pathfinding;
 
-import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+
+import java.util.List;
 
 @RunWith(JUnit4.class)
 public class PathFinderUnitTest {
     @Test
     public void testShortestPath_validPath() throws Exception {
         // Test Data
-        TiledMap map = new TiledMap(10,10);
-        for (int i = 0 ; i < 10; i++){
-            for (int j = 0; j < 10; j++){
-                map.makeWalkable(i,j);
+        TiledMap map = new TiledMap(10, 10);
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                map.makeWalkable(i, j);
             }
         }
         PathFinder finder = new PathFinder(map);
 
         // Execute
-        List<PathFinderTile> tiles = finder.shortestPath(1,1,4,4);
+        List<PathFinderTile> tiles = finder.shortestPath(1, 1, 4, 4);
 
         // Verify
         Assert.assertEquals(1, tiles.get(0).getCoordinateX());
@@ -42,18 +43,18 @@ public class PathFinderUnitTest {
     @Test(expected = Exception.class)
     public void testShortestPath_invalidPath() throws Exception {
         // Test Data
-        TiledMap map = new TiledMap(10,10);
-        for (int i = 0 ; i < 10; i++){
-            if(i == 2){
+        TiledMap map = new TiledMap(10, 10);
+        for (int i = 0; i < 10; i++) {
+            if (i == 2) {
                 continue;
             }
-            for (int j = 0; j < 10; j++){
-                map.makeWalkable(i,j);
+            for (int j = 0; j < 10; j++) {
+                map.makeWalkable(i, j);
             }
         }
         PathFinder finder = new PathFinder(map);
 
         // Execute
-        List<PathFinderTile> tiles = finder.shortestPath(1,1,4,4);
+        List<PathFinderTile> tiles = finder.shortestPath(1, 1, 4, 4);
     }
 }

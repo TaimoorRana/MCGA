@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+
 import com.concordia.mcga.activities.R;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
@@ -30,7 +31,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         View view = inflater.inflate(R.layout.transport_button_fragment, container, false);
         //Initialize FABs
         FloatingActionButton transportExpandFAB = (FloatingActionButton) view
-            .findViewById(R.id.transportExpandFAB);
+                .findViewById(R.id.transportExpandFAB);
         walkFAB = (FloatingActionButton) view.findViewById(R.id.walkFAB);
         bikeFAB = (FloatingActionButton) view.findViewById(R.id.bikeFAB);
         carFAB = (FloatingActionButton) view.findViewById(R.id.carFAB);
