@@ -1,72 +1,146 @@
+//Leaflet Map Variable
 var map;
 
+//Path and Marker Groups
 var floormapGroup;
-var markerGroup;
+var roomMarkerGroup;
+var pathMarkerGroup;
 var pathGroup;
 
+//Lat and Lng Bounds For Currently Loaded Map
+var curLatBound;
+var curLngBound;
+
 function initmap() {
-    map = new L.Map('map', {
-        crs: L.CRS.Simple,
-        minZoom: -1,
-        maxZoom: 1,
-        attributionControl: false, //Remove Attribution on bottom right
-        zoomControl: false //Remove "+" and "-" button on top left
-    });
-    floormapGroup = L.layerGroup().addTo(map);
+	map = new L.Map('map', {
+		crs: L.CRS.Simple,
+		minZoom: -2,
+		maxZoom: 1,
+		attributionControl: false, //Remove Attribution on bottom right
+		zoomControl: false //Remove "+" and "-" button on top left
+	});
+	//Image Groups
+	floormapGroup = L.layerGroup().addTo(map);
 
-    //Listener Registration
-    map.on('click', function(ev) {
-        console.log(JSON.stringify(ev.latlng));
-    });
+	//Path Groups
+	pathGroup = L.layerGroup().addTo(map);
+
+	//Marker Groups
+	roomMarkerGroup = L.layerGroup().addTo(map);
+	pathMarkerGroup = L.layerGroup().addTo(map);
+
+	//Listener Registration
+	map.on('click', function(ev) {
+		console.log(JSON.stringify(ev.latlng));
+	});
 };
 
-function loadMapImage(path) {
-    //Indoor Map
-    floormapGroup.clearLayers();
+//Map Loaders
+function loadMapImage(path, latBound, lngBound) {
+	//Indoor Map
+	floormapGroup.clearLayers();
 
-    var bounds = [
-        [0, 0],
-        [1000, 1000]
-    ];
-    var imageOptions = {
-        interactive: true
-    };
-    floormapGroup.addLayer(L.imageOverlay(path, bounds, imageOptions));
-    map.fitBounds(bounds);
+	curLatBound = latBound;
+	curLngBound = lngBound;
+
+	var bounds = [
+		[0, 0],
+		[curLatBound, curLngBound]
+	];
+	var imageOptions = {
+		interactive: true
+	};
+	floormapGroup.addLayer(L.imageOverlay(path, bounds, imageOptions));
+	map.fitBounds(bounds);
 };
 
-function generatePath() {
-    markerGroup = L.layerGroup().addTo(map);
-    pathGroup = L.layerGroup().addTo(map);
+function loadMap(mapId) {
+	clearAllLayers();
+	switch (mapId) {
+		case "H1-2":
+			loadMapImage('floormaps/H/1-2.png', 2196, 2000);
+			break;
+		case "H4":
+			loadMapImage('floormaps/H/4.png', 1989, 2196);
+			break;
+	}
+}
 
-    //Test Path
-    var points = [
-        L.latLng([467, 131]),
-        L.latLng([467, 158]),
-        L.latLng([568, 158]),
-        L.latLng([568, 455]),
-        L.latLng([672, 453]),
-        L.latLng([672, 510]),
-        L.latLng([642, 510])
-    ]
+//Path Drawing
+function drawWalkablePath(pointArray) {
+	var points = [];
 
-    for (var i = 0; i < points.length; i++) {
-        console.log("Adding point: " + JSON.stringify(points[i]));
-        markerGroup.addLayer(L.marker(points[i], {
-            opacity: 0
-        }));
+	for (var i = 0; i < pointArray.length; i++) {
+		var pointRaw = pointArray[i];
 
-        if (!(i == 0)) {
-            pathGroup.addLayer(L.polyline([points[i - 1], points[i]]));
-        }
-    }
+        //Convert coordinates so that origin (0,0) is at the bottom left rather than on the top left
+		var pointLat = curLatBound - pointRaw.lat;
+		var pointLng = pointRaw.lng;
+
+		var point = L.latLng([pointLat, pointLng]);
+		points.push(point);
+
+		console.log("Adding point: " + JSON.stringify(point));
+
+		pathMarkerGroup.addLayer(L.marker(points[i], {
+			opacity: 0
+		}));
+
+		if (!(i == 0)) {
+			pathGroup.addLayer(L.polyline([points[i - 1], points[i]]));
+		}
+	}
 };
 
-function clearLayers() {
-    markerGroup.clearLayers();
-    pathGroup.clearLayers();
+//Addition Of Demo Markers
+function addH4Markers() {
+	var H423 = {
+		'name': 'H423',
+		'coord': L.latLng([670, 348])
+	};
+	var H436 = {
+		'name': 'H436',
+		'coord': L.latLng([1402, 1214])
+	};
+	var H433 = {
+		'name': 'H433',
+		'coord': L.latLng([1929, 353])
+	};
+	var H401 = {
+		'name': 'H401',
+		'coord': L.latLng([387, 1961])
+	};
+
+	var points = [H423, H436, H433, H401];
+
+	for (var i = 0; i < points.length; i++) {
+		var point = points[i];
+		var marker = L.marker(point.coord, {
+			'name': point.name
+		}).on('click', function(ev) {
+			Android.pushRoom(this.options.name);
+		});
+		roomMarkerGroup.addLayer(marker);
+	}
 };
 
+//Clearing Functions
+function clearPathLayers() {
+	pathGroup.clearLayers();
+	pathMarkerGroup.clearLayers();
+};
+
+function clearMarkerLayers() {
+	pathMarkerGroup.clearLayers();
+	roomMarkerGroup.clearLayers();
+};
+
+function clearAllLayers() {
+	clearPathLayers();
+	clearMarkerLayers()
+};
+
+//Document Init
 $(document).ready(function() {
-    initmap();
+	initmap();
 });

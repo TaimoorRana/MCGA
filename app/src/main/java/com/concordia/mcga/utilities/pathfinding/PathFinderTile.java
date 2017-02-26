@@ -1,7 +1,11 @@
 package com.concordia.mcga.utilities.pathfinding;
 
+import android.util.Log;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class PathFinderTile {
 
@@ -65,6 +69,17 @@ public class PathFinderTile {
 
     public void setParent(PathFinderTile parent) {
         this.parent = parent;
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("lat", this.coordinateY);
+            json.put("lng", this.coordinateX);
+        } catch (JSONException e) {
+            Log.e("PathFinderTile Error", Log.getStackTraceString(e));
+        }
+        return json;
     }
 
     @Override
