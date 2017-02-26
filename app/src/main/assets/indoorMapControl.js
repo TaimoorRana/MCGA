@@ -1,9 +1,15 @@
+//Leaflet Map Variable
 var map;
 
+//Path and Marker Groups
 var floormapGroup;
 var roomMarkerGroup;
 var pathMarkerGroup;
 var pathGroup;
+
+//Lat and Lng Bounds For Currently Loaded Map
+var curLatBound;
+var curLngBound;
 
 function initmap() {
 	map = new L.Map('map', {
@@ -24,18 +30,22 @@ function initmap() {
 	pathMarkerGroup = L.layerGroup().addTo(map);
 
 	//Listener Registration
-	/*map.on('click', function(ev) {
+	map.on('click', function(ev) {
 		console.log(JSON.stringify(ev.latlng));
-	});*/
+	});
 };
 
-function loadMapImage(path) {
+//Map Loaders
+function loadMapImage(path, latBound, lngBound) {
 	//Indoor Map
 	floormapGroup.clearLayers();
 
+	curLatBound = latBound;
+	curLngBound = lngBound;
+
 	var bounds = [
 		[0, 0],
-		[1989, 2196]
+		[curLatBound, curLngBound]
 	];
 	var imageOptions = {
 		interactive: true
@@ -44,13 +54,27 @@ function loadMapImage(path) {
 	map.fitBounds(bounds);
 };
 
-function generateWalkablePath(pointArray) {
+function loadMap(mapId) {
+	clearAllLayers();
+	switch (mapId) {
+		case "H1-2":
+			loadMapImage('floormaps/H/1-2.png', 2196, 2000);
+			break;
+		case "H4":
+			loadMapImage('floormaps/H/4.png', 1989, 2196);
+			break;
+	}
+}
+
+//Path Drawing
+function drawWalkablePath(pointArray) {
 	var points = [];
 
 	for (var i = 0; i < pointArray.length; i++) {
 		var pointRaw = pointArray[i];
 
-		var pointLat = 1989 - pointRaw.lat;
+        //Convert coordinates so that origin (0,0) is at the bottom left rather than on the top left
+		var pointLat = curLatBound - pointRaw.lat;
 		var pointLng = pointRaw.lng;
 
 		var point = L.latLng([pointLat, pointLng]);
@@ -68,6 +92,7 @@ function generateWalkablePath(pointArray) {
 	}
 };
 
+//Addition Of Demo Markers
 function addH4Markers() {
 	var H423 = {
 		'name': 'H423',
@@ -99,6 +124,7 @@ function addH4Markers() {
 	}
 };
 
+//Clearing Functions
 function clearPathLayers() {
 	pathGroup.clearLayers();
 	pathMarkerGroup.clearLayers();
@@ -114,6 +140,7 @@ function clearAllLayers() {
 	clearMarkerLayers()
 };
 
+//Document Init
 $(document).ready(function() {
 	initmap();
 });

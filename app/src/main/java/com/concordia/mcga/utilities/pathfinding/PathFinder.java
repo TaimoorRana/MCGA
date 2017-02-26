@@ -4,7 +4,6 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -57,6 +56,16 @@ public class PathFinder {
         return returnList;
     }
 
+    /**
+     * Finds the shortest path but only returns points where a direction change occurs. Useful for plotting lines on a map using markers.
+     *
+     * @param startX - starting position's x coordinate
+     * @param startY - starting position's y coordinate
+     * @param destX  - ending position's x coordinate
+     * @param destY  - ending position's y coordinate
+     * @return - Returns a list of the tiles found in the shortest path. Sorted from first to last.
+     * @throws Exception - Thrown if there exists no valid path between both points
+     */
     public List<PathFinderTile> shortestPathJunctions(int startX, int startY, int destX, int destY) throws Exception {
         ArrayList<PathFinderTile> pathTiles = new ArrayList<PathFinderTile>(shortestPath(startX, startY, destX, destY));
         ArrayList<PathFinderTile> pathTilesJunctions = new ArrayList<PathFinderTile>();
@@ -80,9 +89,7 @@ public class PathFinder {
 
     public static JSONArray toJSONArray(List<PathFinderTile> pathTilesJunctions) {
         JSONArray pftArray = new JSONArray();
-        Iterator<PathFinderTile> it = pathTilesJunctions.iterator();
-        while (it.hasNext()) {
-            PathFinderTile pft = it.next();
+        for (PathFinderTile pft : pathTilesJunctions) {
             pftArray.put(pft.toJSON());
         }
         return pftArray;

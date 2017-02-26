@@ -1,6 +1,5 @@
 package com.concordia.mcga.fragments;
 
-import android.graphics.Path;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
@@ -16,22 +15,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.factories.IndoorMapFactory;
 import com.concordia.mcga.models.IndoorMap;
 import com.concordia.mcga.models.IndoorPOI;
-import com.concordia.mcga.models.POI;
 import com.concordia.mcga.utilities.pathfinding.PathFinder;
 import com.concordia.mcga.utilities.pathfinding.PathFinderTile;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-public class IndoorMapFragment extends Fragment implements View.OnClickListener {
+public class IndoorMapFragment extends Fragment {
 
     //Components
     private WebView leafletView;
@@ -76,10 +70,6 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
         //Floor Select Spinner
         floorButtonContainer = (LinearLayout) view.findViewById(R.id.floorButtonContainer);
 
-        //Test Path Button
-        testPathButton = (Button) view.findViewById(R.id.testPathButton);
-        testPathButton.setOnClickListener(this);
-
         //Indoor POI Stack
         indoorPoiStack = new ArrayList<IndoorPOI>();
 
@@ -106,7 +96,7 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
                     }
 
                     if (pageLoaded)
-                        leafletView.evaluateJavascript("generateWalkablePath(" + pf.toJSONArray(pathTilesJunctions).toString() + ")", null);
+                        leafletView.evaluateJavascript("drawWalkablePath(" + pf.toJSONArray(pathTilesJunctions).toString() + ")", null);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -115,8 +105,7 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
     }
 
     public void initializeHBuilding() {
-        //Show Default Floor
-        leafletView.evaluateJavascript("loadMapImage('floormaps/H/4.png')", null);
+        leafletView.evaluateJavascript("loadMap('H4')", null);
         leafletView.evaluateJavascript("addH4Markers()", null);
 
         //Add Floor Buttons
@@ -127,8 +116,7 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onClick(View v) {
                 if (pageLoaded) {
-                    leafletView.evaluateJavascript("clearAllLayers()", null);
-                    leafletView.evaluateJavascript("loadMapImage('floormaps/H/1-2.png')", null);
+                    leafletView.evaluateJavascript("loadMap('H1-2')", null);
                 }
             }
         });
@@ -140,8 +128,7 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onClick(View v) {
                 if (pageLoaded) {
-                    leafletView.evaluateJavascript("clearAllLayers()", null);
-                    leafletView.evaluateJavascript("loadMapImage('floormaps/H/4.png')", null);
+                    leafletView.evaluateJavascript("loadMap('H4')", null);
                     leafletView.evaluateJavascript("addH4Markers()", null);
                 }
             }
@@ -153,47 +140,41 @@ public class IndoorMapFragment extends Fragment implements View.OnClickListener 
 
     @JavascriptInterface
     public void pushRoom(String roomNumber) {
-        Log.d("PushRoom: ", "Called with " + roomNumber);
-        if (indoorPoiStack.size() != 2) {
-            if (indoorPoiStack.size() == 0) {
-                Toast.makeText(getContext(), "Start Room: " + roomNumber, Toast.LENGTH_SHORT).show();
-            } else if (indoorPoiStack.size() == 1) {
-                Toast.makeText(getContext(), "Dest Room: " + roomNumber, Toast.LENGTH_SHORT).show();
-            }
-
-            switch (roomNumber) {
-                case "H423":
-                    indoorPoiStack.add(H423);
-                    break;
-                case "H436":
-                    indoorPoiStack.add(H436);
-                    break;
-                case "H433":
-                    indoorPoiStack.add(H433);
-                    break;
-                case "H401":
-                    indoorPoiStack.add(H401);
-                    break;
-            }
-
-            if (indoorPoiStack.size() == 2) {
-                generatePath(indoorPoiStack.get(0), indoorPoiStack.get(1));
-            }
+        if (indoorPoiStack.size() == 2) {
+            indoorPoiStack.clear();
+            leafletView.post(new Runnable() {
+                @Override
+                public void run() {
+                    leafletView.evaluateJavascript("clearPathLayers()", null);
+                }
+            });
         }
-    }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.testPathButton:
-                indoorPoiStack.clear();
-                leafletView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        leafletView.evaluateJavascript("clearPathLayers()", null);
-                    }
-                });
+        if (indoorPoiStack.size() == 0) {
+            Toast.makeText(getContext(), "Start Room: " + roomNumber, Toast.LENGTH_SHORT).show();
+        } else if (indoorPoiStack.size() == 1) {
+            Toast.makeText(getContext(), "Dest Room: " + roomNumber, Toast.LENGTH_SHORT).show();
+        }
+
+        switch (roomNumber) {
+            case "H423":
+                indoorPoiStack.add(H423);
+                break;
+            case "H436":
+                indoorPoiStack.add(H436);
+                break;
+            case "H433":
+                indoorPoiStack.add(H433);
+                break;
+            case "H401":
+                indoorPoiStack.add(H401);
                 break;
         }
+
+        if (indoorPoiStack.size() == 2) {
+            generatePath(indoorPoiStack.get(0), indoorPoiStack.get(1));
+        }
     }
+
+
 }

@@ -15,14 +15,6 @@
 
         </WebView>
 
-        <Button
-            android:id="@+id/testPathButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerInParent="true"
-            android:elevation="0dp"
-            android:text="Clear Paths"/>
         <ScrollView
             android:layout_width="40dp"
             android:layout_height="wrap_content"

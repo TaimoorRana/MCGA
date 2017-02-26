@@ -15,12 +15,12 @@ import static java.lang.Integer.parseInt;
 
 public class IndoorMapFactory {
     public static IndoorMap getHall4thFloor(Context context) {
-        return getIndoorMap(context, R.raw.concordia_floor_map_h4);
+        return getIndoorMap(context, R.raw.concordia_floor_map_h4, 2196, 1989);
     }
 
     @NonNull
-    private static IndoorMap getIndoorMap(Context context, int rawResourceId) {
-        TiledMap map = new TiledMap(2196,1989);
+    private static IndoorMap getIndoorMap(Context context, int rawResourceId, int imageWidth, int imageHeight) {
+        TiledMap map = new TiledMap(imageWidth,imageHeight);
         try {
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(context.getResources().openRawResource(rawResourceId)));
