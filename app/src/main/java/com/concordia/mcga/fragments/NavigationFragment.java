@@ -1,9 +1,18 @@
 package com.concordia.mcga.fragments;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,11 +22,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.concordia.mcga.activities.MainActivity;
+import com.concordia.mcga.activities.Manifest;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.Location;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -35,6 +47,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
     private GoogleMap map;
+    //private LocationManager gpsmanager;
     private List<Observer> observerList = new ArrayList<>();
     //State
     private ViewType viewType;
@@ -46,6 +59,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     //View Components
     private Button campusButton;
     private Button viewSwitchButton;
+    private Button mapCenterButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +72,24 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
 
         //Init View Components
+        mapCenterButton = (Button) parentLayout.findViewById(R.id.mapCenterButton);
+        mapCenterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*if(!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                    AlertGPS();
+                }*/
+                Log.d("Testing", "Checkpoint 1");
+                if (viewType == ViewType.INDOOR) {
+                    viewType = ViewType.OUTDOOR;
+                    getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
+                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit(); //To be removed after Outside transportation Google API incorporation
+                    campusButton.setVisibility(View.VISIBLE);
+                    viewSwitchButton.setText("GO OUTDOORS");
+                }
+            }
+        });
+
         campusButton = (Button) parentLayout.findViewById(R.id.campusButton);
         viewSwitchButton = (Button) parentLayout.findViewById(R.id.viewSwitchButton);
         viewSwitchButton.setText("GO INDOORS");
@@ -124,12 +156,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
-
+        map.getUiSettings().setAllGesturesEnabled(true);
+        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+        */
         //Map Customization
         applyCustomGoogleMapsStyle();
         Campus.populateCampusesWithBuildings();
         addBuildingMarkers();
-
         updateCampus();
     }
 
@@ -217,5 +252,34 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private enum ViewType {
         INDOOR, OUTDOOR
     }
+
+    /*public static void AlertGPS(final Activity activity) {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                activity);
+        alertDialogBuilder
+                .setMessage("GPS is disabled in your device. Enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Enable GPS",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int id) {
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                activity.startActivity(callGPSSettingIntent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+   */
+
+
 
 }
