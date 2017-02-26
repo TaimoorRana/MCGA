@@ -1,5 +1,7 @@
 package com.concordia.mcga.utilities.pathfinding;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,6 +54,45 @@ public class PathFinder {
             current = current.getParent();
         }
         return returnList;
+    }
+
+    /**
+     * Finds the shortest path but only returns points where a direction change occurs. Useful for plotting lines on a map using markers.
+     *
+     * @param startX - starting position's x coordinate
+     * @param startY - starting position's y coordinate
+     * @param destX  - ending position's x coordinate
+     * @param destY  - ending position's y coordinate
+     * @return - Returns a list of the tiles found in the shortest path. Sorted from first to last.
+     * @throws Exception - Thrown if there exists no valid path between both points
+     */
+    public List<PathFinderTile> shortestPathJunctions(int startX, int startY, int destX, int destY) throws Exception {
+        ArrayList<PathFinderTile> pathTiles = new ArrayList<PathFinderTile>(shortestPath(startX, startY, destX, destY));
+        ArrayList<PathFinderTile> pathTilesJunctions = new ArrayList<PathFinderTile>();
+
+        PathFinderTile firstPft = pathTiles.get(0);
+        pathTilesJunctions.add(firstPft);
+        int curX = firstPft.getCoordinateX();
+        int curY = firstPft.getCoordinateY();
+
+        for (int i = 1; i < pathTiles.size(); i++) {
+            PathFinderTile pft = pathTiles.get(i);
+            if (!(pft.getCoordinateX() == curX && pft.getCoordinateY() != curY) && !(pft.getCoordinateY() == curY && pft.getCoordinateX() != curX)) {
+                pathTilesJunctions.add(pft);
+                curX = pft.getCoordinateX();
+                curY = pft.getCoordinateY();
+            }
+        }
+
+        return pathTilesJunctions;
+    }
+
+    public static JSONArray toJSONArray(List<PathFinderTile> pathTilesJunctions) {
+        JSONArray pftArray = new JSONArray();
+        for (PathFinderTile pft : pathTilesJunctions) {
+            pftArray.put(pft.toJSON());
+        }
+        return pftArray;
     }
 
     /**
