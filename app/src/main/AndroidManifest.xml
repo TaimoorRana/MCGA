@@ -8,7 +8,7 @@
            location permissions for the 'MyLocation' functionality.
       -->
     <permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- I do not know why this fixes my errors tbh -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 

@@ -9,6 +9,8 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -30,6 +32,7 @@ import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Location;
 import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -47,8 +50,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
     private GoogleMap map;
-    //private LocationManager gpsmanager;
+    private LocationManager gpsmanager;
     private List<Observer> observerList = new ArrayList<>();
+    private LocationManager locationManager;
+    private static final long MIN_TIME = 400;
+    private static final float MIN_DISTANCE = 1000;
     //State
     private ViewType viewType;
     //Fragments
@@ -59,7 +65,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     //View Components
     private Button campusButton;
     private Button viewSwitchButton;
-    private Button mapCenterButton;
+    private FloatingActionButton mapCenterButton;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,14 +79,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
 
         //Init View Components
-        mapCenterButton = (Button) parentLayout.findViewById(R.id.mapCenterButton);
+        mapCenterButton = (FloatingActionButton) parentLayout.findViewById(R.id.mapCenterButton);
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 /*if(!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                     AlertGPS();
                 }*/
-                Log.d("Testing", "Checkpoint 1");
+                Log.d("Testing", "Checkpoint 1 - Button initializer");
                 if (viewType == ViewType.INDOOR) {
                     viewType = ViewType.OUTDOOR;
                     getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
@@ -87,6 +94,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO OUTDOORS");
                 }
+                //LocateMe
+                //
             }
         });
 
@@ -157,10 +166,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setAllGesturesEnabled(true);
-        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        Log.d("Test 2", "Checkpoint Manifest check");
+        if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
+            Log.d("Test 2", "Checkpoint Manifest happening");
             map.setMyLocationEnabled(true);
-        */
+            Log.d("Test 2", "Checkpoint Manifest check FINISHED");}
         //Map Customization
         applyCustomGoogleMapsStyle();
         Campus.populateCampusesWithBuildings();
@@ -223,6 +234,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), CAMPUS_DEFAULT_ZOOM_LEVEL));
     }
 
+    /*public void updateOnMe(){
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);    }
+*/
     @Override
     public void onCameraIdle() {
         notifyObservers();
@@ -253,33 +268,41 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         INDOOR, OUTDOOR
     }
 
-    /*public static void AlertGPS(final Activity activity) {
+    /*public void AlertGPS() {
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                activity);
-        alertDialogBuilder
+        AlertDialog.Builder build = new AlertDialog.Builder(
+                getActivity());
+        build
+                .setTitle("GPS Detection Services")
                 .setMessage("GPS is disabled in your device. Enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Enable GPS",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,
-                                                int id) {
-                                Intent callGPSSettingIntent = new Intent(
-                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                activity.startActivity(callGPSSettingIntent);
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(i);
                             }
                         });
-        alertDialogBuilder.setNegativeButton("Cancel",
+        build.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
-        AlertDialog alert = alertDialogBuilder.create();
+        AlertDialog alert = build.create();
         alert.show();
-    }
-   */
+    }*/
+/*
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) { }
 
+    @Override
+    public void onProviderEnabled(String provider) { }
 
-
+    @Override
+    public void onProviderDisabled(String provider) { }
+*/
 }
+
+
+
