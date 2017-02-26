@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
-import android.location.Location;
-
 
 import com.concordia.mcga.fragments.NavigationFragment;
+import com.concordia.mcga.helperClasses.DatabaseHelper;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -31,42 +32,44 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame, navigationFragment, "MAIN_NAV");
         fragmentTransaction.commit();
 
+        initDatabase();
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        if (menuItem.isChecked()) {
-                            menuItem.setChecked(false);
-                        } else {
-                            menuItem.setChecked(true);
-                        }
+            new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    if (menuItem.isChecked()) {
+                        menuItem.setChecked(false);
+                    }
+                    else {
+                        menuItem.setChecked(true);
+                    }
 
-                        drawerLayout.closeDrawers();
+                    drawerLayout.closeDrawers();
 
-                        switch (menuItem.getItemId()) {
-                            case R.id.next_class:
-                                Toast.makeText(getApplicationContext(), "Next Class", Toast.LENGTH_SHORT).show();
-                                return true;
-                            case R.id.shuttle_schedule:
-                                Toast.makeText(getApplicationContext(), "Shuttle Schedule", Toast.LENGTH_SHORT).show();
-                                return true;
-                            case R.id.settings:
-                                Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
-                                return true;
-                            case R.id.student_spots:
-                                Toast.makeText(getApplicationContext(), "Student Spots", Toast.LENGTH_SHORT).show();
-                                return true;
-                            case R.id.about:
-                                Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
-                                return true;
-                            default:
-                                Toast.makeText(getApplicationContext(), "Error - Navigation Drawer", Toast.LENGTH_SHORT).show();
-                                return false;
-                        }
+                    switch (menuItem.getItemId()) {
+                        case R.id.next_class:
+                            Toast.makeText(getApplicationContext(), "Next Class", Toast.LENGTH_SHORT).show();
+                            return true;
+                        case R.id.shuttle_schedule:
+                            Toast.makeText(getApplicationContext(), "Shuttle Schedule", Toast.LENGTH_SHORT).show();
+                            return true;
+                        case R.id.settings:
+                            Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
+                            return true;
+                        case R.id.student_spots:
+                            Toast.makeText(getApplicationContext(), "Student Spots", Toast.LENGTH_SHORT).show();
+                            return true;
+                        case R.id.about:
+                            Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
+                            return true;
+                        default:
+                            Toast.makeText(getApplicationContext(), "Error - Navigation Drawer", Toast.LENGTH_SHORT).show();
+                            return false;
                     }
                 }
+            }
         );
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
@@ -77,14 +80,22 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
     }
 
-    //Location tracking method
-    /*LocationResult locationResult = new LocationResult(){
-        @Override
-        public void gotLocation(Location location){
-            //Got the location!
+    public void createToast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void initDatabase() {
+        DatabaseHelper.setupDatabase(this);
+        DatabaseHelper myDbHelper = DatabaseHelper.getInstance();
+        try {
+            myDbHelper.createDatabase();
+        } catch (IOException ioe) {
+            throw new Error("Unable to create database");
         }
-    };
-    MyLocation myLocation = new MyLocation();
-    myLocation.getLocation(this, locationResult);
-    */
+        try {
+            myDbHelper.openDatabase();
+        } catch (SQLException sqle) {
+            throw new Error("Unable to open database");
+        }
+    }
 }

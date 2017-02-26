@@ -21,16 +21,17 @@ public class PathFinder {
     }
 
     /**
-     *  Finds the shortest path between the given x,y coordinates
+     * Finds the shortest path between the given x,y coordinates
+     *
      * @param startX - starting position's x coordinate
      * @param startY - starting position's y coordinate
-     * @param destX - ending position's x coordinate
-     * @param destY - ending position's y coordinate
+     * @param destX  - ending position's x coordinate
+     * @param destY  - ending position's y coordinate
      * @return - Returns a list of the tiles found in the shortest path. Sorted from first to last.
      * @throws Exception - Thrown if there exists no valid path between both points
      */
     public List<PathFinderTile> shortestPath(int startX, int startY, int destX, int destY)
-        throws Exception {
+            throws Exception {
         map.setStartTile(startX, startY);
         map.setEndTile(destX, destY);
         openSet.add(map.getStartTile());
@@ -55,6 +56,7 @@ public class PathFinder {
 
     /**
      * Runs an iteration of the A* algorithm.
+     *
      * @param current - Currently examined tile.
      */
     private void nextIteration(PathFinderTile current) {

@@ -2,14 +2,18 @@ package com.concordia.mcga.factories;
 
 import android.content.Context;
 import android.content.res.Resources;
+
 import com.concordia.mcga.models.IndoorMap;
-import java.io.ByteArrayInputStream;
-import java.nio.charset.StandardCharsets;
+
 import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 
 @RunWith(MockitoJUnitRunner.class)
 public class IndoorMapFactoryTest {
@@ -22,7 +26,7 @@ public class IndoorMapFactoryTest {
         Resources mockResources = Mockito.mock(Resources.class);
         Mockito.when(context.getResources()).thenReturn(mockResources);
         Mockito.when(mockResources.openRawResource(Mockito.anyInt())).thenReturn(new ByteArrayInputStream("3,4\n4,5".getBytes(
-            StandardCharsets.UTF_8)));
+                StandardCharsets.UTF_8)));
 
         // Execute
         IndoorMap result = IndoorMapFactory.getHall4thFloor(context);
