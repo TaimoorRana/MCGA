@@ -1,4 +1,5 @@
-<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
@@ -8,21 +9,22 @@
     tools:layout="@layout/activity_main">
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/search_edit_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary">
 
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:tint="@color/white"
-            app:srcCompat="@drawable/ic_search_black_24dp" />
-
-        <EditText
+        <android.support.v7.widget.SearchView
+            android:id="@+id/navigationSearch"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white" />
+            android:layout_height="match_parent"
+            android:queryHint="@string/action_search"/>
     </android.support.v7.widget.Toolbar>
+
+    <ExpandableListView
+        android:id="@+id/expandableList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -1,19 +1,25 @@
 package com.concordia.mcga.fragments;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
@@ -30,7 +36,7 @@ import com.google.android.gms.maps.model.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject {
+public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
@@ -46,6 +52,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     //View Components
     private Button campusButton;
     private Button viewSwitchButton;
+    // Search components
+    private SearchView search;
+    private POISearchAdapter poiSearchAdapter;
+    private ExpandableListView searchList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,6 +96,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Hide Indoor Fragment
         getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
 
+        //Search
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        search = (SearchView) parentLayout.findViewById(R.id.navigationSearch);
+        search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        search.setIconifiedByDefault(false);
+        search.setOnQueryTextListener(this);
+        search.setOnCloseListener(this);
+
+        displayList();
         return parentLayout;
     }
 
@@ -212,6 +231,56 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         for (Observer observer : observerList) {
             observer.update(map.getCameraPosition().zoom);
         }
+    }
+
+    // Bug in API, onClose doesn't get called. Use this manually
+    @Override
+    public boolean onClose() {
+        poiSearchAdapter.filterData("", true);
+        search.setQuery("", false);
+        search.clearFocus();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        poiSearchAdapter.filterData(query, false);
+        expandAll();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        poiSearchAdapter.filterData(newText, false);
+        expandAll();
+        return false;
+    }
+
+    private void expandAll() {
+        if (!poiSearchAdapter.getGroupIsEmpty(POISearchAdapter.LOYOLA_INDEX)) {
+            searchList.expandGroup(POISearchAdapter.LOYOLA_INDEX);
+        }
+        if (!poiSearchAdapter.getGroupIsEmpty(POISearchAdapter.SGW_INDEX)) {
+            searchList.expandGroup(POISearchAdapter.SGW_INDEX);
+        }
+    }
+
+    private void displayList() {
+        searchList = (ExpandableListView) parentLayout.findViewById(R.id.expandableList);
+        poiSearchAdapter = new POISearchAdapter(getActivity());
+        searchList.setAdapter(poiSearchAdapter);
+
+        searchList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                Building dest = (Building)poiSearchAdapter.getChild(groupPosition, childPosition);
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(), CAMPUS_DEFAULT_ZOOM_LEVEL));
+                onClose();
+                //Toast.makeText(getActivity(), dest.toString(), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
     }
 
     private enum ViewType {
