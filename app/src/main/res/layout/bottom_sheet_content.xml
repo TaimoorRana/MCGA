@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinatorlayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.concordia.mcga.activities.MainActivity">
+
+    <FrameLayout
+        android:id="@+id/dummy_framelayout_replacing_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"
+        android:fitsSystemWindows="true"/>
+    <!--</FrameLayout>-->
+    <!--<fragment-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:id="@+id/support_map"-->
+    <!--android:name="com.google.android.gms.maps.SupportMapFragment"/>-->
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/merged_appbarlayout"
+        android:layout_width="match_parent"
+        android:layout_height="478dp"
+        android:background="@android:color/transparent"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:tag="modal-appbar"
+        app:layout_behavior="@string/MergedAppBarLayoutBehavior">
+
+
+        <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:background="@android:color/darker_gray"
+        android:paddingTop="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:text="\u003C"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/previousButton" />
+
+                <TextView
+                    android:id="@+id/bottom_sheet_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Title dummy"
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:textAlignment="center"
+                    android:layout_weight="606.34" />
+
+                <Button
+                    android:text="\u003E"
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nextButton" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+        <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="271dp">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="179dp"
+            android:id="@+id/list1"
+            android:drawSelectorOnTop="false"
+            android:textAlignment="center" />
+    </FrameLayout>
+
+    </android.support.design.widget.AppBarLayout>
+</android.support.design.widget.CoordinatorLayout>
