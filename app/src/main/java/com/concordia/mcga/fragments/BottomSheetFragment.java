@@ -41,7 +41,7 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
 
         // Adapter: You need three parameters 'the context, id of the layout (it will be where the data is shown),
         // and the array that contains the data
-        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_item, arrayList);
+        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.list_text, R.id.customListView, arrayList);
         list.setAdapter(adapter);
 
         // Set listeners

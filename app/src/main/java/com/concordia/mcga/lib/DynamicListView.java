@@ -2,6 +2,7 @@ package com.concordia.mcga.lib;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.concordia.mcga.activities.R;
@@ -26,7 +27,7 @@ public class DynamicListView extends ListActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.bottom_sheet_content);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listItems);
+        adapter = new ArrayAdapter<String>(this, R.layout.list_text, R.id.customListView, listItems);
         setListAdapter(adapter);
     }
 }

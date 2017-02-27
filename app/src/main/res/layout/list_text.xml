@@ -12,5 +12,7 @@
         android:textAlignment="center"
         android:textSize="24sp"
         android:paddingTop="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_horizontal_margin" />
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:background="@color/button_secondary_color"
+        android:textColor="@color/black" />
 </LinearLayout>

@@ -26,7 +26,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/merged_appbarlayout"
         android:layout_width="match_parent"
-        android:layout_height="478dp"
+        android:layout_height="672dp"
         android:background="@android:color/transparent"
         android:theme="@style/AppTheme.AppBarOverlay"
         android:tag="modal-appbar"
@@ -79,14 +79,15 @@
 
         <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="271dp">
+        android:layout_height="592dp">
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="179dp"
+            android:layout_height="580dp"
             android:id="@+id/list1"
             android:drawSelectorOnTop="false"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:background="@color/button_secondary_color" />
     </FrameLayout>
 
     </android.support.design.widget.AppBarLayout>
