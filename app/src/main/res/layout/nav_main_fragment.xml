@@ -75,13 +75,21 @@
             android:textOff="@string/button_loyola"
             android:textOn="@string/button_SGW" />
 
-        <Button
-            android:id="@+id/viewSwitchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:text="In/Out" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="258dp"
+            android:layout_below="@+id/campusButton"
+            android:layout_alignParentStart="true">
+
+            <Button
+                android:id="@+id/viewSwitchButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="In/Out"
+                android:layout_above="@+id/transportButton"
+                android:layout_alignParentStart="true" />
+        </RelativeLayout>
 
     </RelativeLayout>
 </android.support.v7.widget.LinearLayoutCompat>

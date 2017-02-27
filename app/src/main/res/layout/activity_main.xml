@@ -24,6 +24,7 @@
         </FrameLayout>
     </LinearLayout>
 
+
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_height="match_parent"
@@ -34,7 +35,6 @@
         app:itemTextColor="@color/black"
         app:headerLayout="@layout/header"
         app:menu="@menu/drawer" />
-
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinatorlayout"
@@ -65,4 +65,5 @@
                 />
         </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
+
 </android.support.v4.widget.DrawerLayout>
