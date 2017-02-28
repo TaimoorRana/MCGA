@@ -12,10 +12,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
 
-/**
- * Part of the code was taken from https://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
- */
 
+//Part of the code was taken from https://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "development.db";
     private static SQLiteDatabase db;
@@ -25,22 +23,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static Context context;
     private static DatabaseHelper databaseHelper;
 
-
+    /**
+     * Create a DatabaseHelper Object
+     * @param context Interface to global information about an application environment.
+     */
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
         DatabaseHelper.context = context;
     }
 
-    public static boolean setupDatabase(Context context) {
+    /**
+     * Initializes values for database creation
+     * @param context Interface to global information about an application environment.
+     */
+    public static void setupDatabase(Context context) {
         if (db == null) {
             DatabaseHelper.context = context;
             databasePath = context.getFilesDir().getPath() + "/../databases/";
-            return true;
-        } else {
-            return false;
         }
     }
 
+    /**
+     * @return A DatabaseHelper object
+     */
     public static DatabaseHelper getInstance() {
         if (context == null) {
             return null;
@@ -53,12 +58,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    /**
+     *
+     * @return The database
+     */
     public static SQLiteDatabase getDb() {
         return db;
     }
 
     /**
-     * Creates a empty database on the system and rewrites it with your own database.
+     * Creates a empty database on the system and rewrites it with our own database.
      */
     public void createDatabase() throws IOException {
         boolean dbExist = isDBExists();
@@ -78,7 +87,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * Check if the database already exist to avoid re-copying the file each time you open the application.
-     *
      * @return true if it exists, false if it doesn't
      */
     private boolean isDBExists() {
@@ -97,7 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Copies your database from your local assets-folder to the just created empty database in the
+     * Copies the database from the local assets-folder to the just created empty database in the
      * system folder, from where it can be accessed and handled.
      * This is done by transfering bytestream.
      */
@@ -124,12 +132,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         myInput.close();
     }
 
+    /**
+     * Open database connection
+     * @throws SQLException if the database cannot be opened
+     */
     public void openDatabase() throws SQLException {
         //Open the database
         String myPath = databasePath + DATABASE_NAME;
         db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     }
 
+    /**
+     * Closes the database
+     */
     @Override
     public synchronized void close() {
         if (db != null) {
