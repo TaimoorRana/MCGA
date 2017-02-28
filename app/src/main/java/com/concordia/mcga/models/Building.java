@@ -27,7 +27,7 @@ public class Building extends POI implements Observer {
     public Building(LatLng centerCoordinate, String name, String shortName, MarkerOptions markerOptions) {
         super(centerCoordinate, name);
         this.shortName = shortName;
-        this.markerOptions = markerOptions.position(cente   rCoordinate).anchor(0.5f, 0.5f);
+        this.markerOptions = markerOptions.position(centerCoordinate).anchor(0.5f, 0.5f);
         edgeCoordinateList = new ArrayList<>();
         floorMaps = new ArrayList<>();
         this.centerCoordinate = centerCoordinate;
