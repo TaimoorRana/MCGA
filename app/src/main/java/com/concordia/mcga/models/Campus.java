@@ -19,12 +19,22 @@ public class Campus extends POI {
     private String shortName;
     private List<Building> buildings;
 
+    /**
+     * Creates a Campus Object
+     * @param mapCoordinates Campus location
+     * @param name Full name
+     * @param shortName Abbreviated Name
+     */
     private Campus(LatLng mapCoordinates, String name, String shortName) {
         super(mapCoordinates, name);
         this.shortName = shortName;
         buildings = new ArrayList<>();
     }
 
+    /**
+     * This methods creates Building and SmallBuilding objects by reading data from the database and add this object
+     * to the appropriate campus
+     */
     public static void populateCampusesWithBuildings() {
         if (DatabaseHelper.getInstance() == null || !SGW.buildings.isEmpty() || !LOY.buildings.isEmpty())  // if the database has not been initialized || buildings already exists
         {
@@ -64,10 +74,17 @@ public class Campus extends POI {
         res.close();
     }
 
+    /**
+     * @return List of buildings in this campus
+     */
     public List<Building> getBuildings() {
         return buildings;
     }
 
+    /**
+     *
+     * @return The abbreviated name of this campus
+     */
     public String getShortName() {
         return shortName;
     }
