@@ -10,10 +10,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class SmallBuilding extends Building {
     private float markerVisibleAtMinimumZoomLevel = 18f;
 
-    public SmallBuilding(LatLng centerCoordinates, String name, String shortName, MarkerOptions markerOptions) {
-        super(centerCoordinates, name, shortName, markerOptions);
+    /**
+     *  returns a Building object
+     * @param centerCoordinate Center of the building
+     * @param name Full name of the building
+     * @param shortName Short name of the building
+     * @param markerOptions Building's icon
+     */
+    public SmallBuilding(LatLng centerCoordinate, String name, String shortName, MarkerOptions markerOptions) {
+        super(centerCoordinate, name, shortName, markerOptions);
     }
 
+    /**
+     * Depending the map's current zoom level, The marker visibility will turn on or off
+     * @param mapZoomLevel map's current zoom level
+     */
     @Override
     public void update(float mapZoomLevel) {
         if (mapZoomLevel >= markerVisibleAtMinimumZoomLevel) {

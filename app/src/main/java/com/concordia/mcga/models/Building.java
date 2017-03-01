@@ -18,42 +18,71 @@ public class Building extends POI implements Observer {
     public int resourceImageId;
     protected Marker marker;
     private float markerVisibleAtMinimumZoomLevel = 15f;
-    private LatLng centerCoordinate;
     private String shortName;
     private MarkerOptions markerOptions;
     private List<LatLng> edgeCoordinateList;
     private List<IndoorMap> floorMaps;
 
+    /**
+     *  returns a Building object
+     * @param centerCoordinate Center of the building
+     * @param name Full name of the building
+     * @param shortName Short name of the building
+     * @param markerOptions Building's icon
+     */
     public Building(LatLng centerCoordinate, String name, String shortName, MarkerOptions markerOptions) {
         super(centerCoordinate, name);
         this.shortName = shortName;
         this.markerOptions = markerOptions.position(centerCoordinate).anchor(0.5f, 0.5f);
         edgeCoordinateList = new ArrayList<>();
         floorMaps = new ArrayList<>();
-        this.centerCoordinate = centerCoordinate;
     }
 
+    /**
+     *
+     * @return List of floor maps for this maps
+     */
     public List<IndoorMap> getFloorMaps() {
         return floorMaps;
     }
 
+    /**
+     *
+     * @param floorMaps Set floor maps for this building
+     */
     public void setFloorMaps(List<IndoorMap> floorMaps) {
         this.floorMaps = floorMaps;
     }
 
+    /**
+     * @return Get building short name
+     */
     public String getShortName() {
         return shortName;
     }
 
+    /**
+     *
+     * @param shortName set building short name
+     */
     public void setShortName(String shortName) {
         this.shortName = shortName;
     }
 
+    /**
+     *
+     * @param edgeCoordinates Edge coordinates of the building
+     * @return the building object
+     */
     public Building addEdgeCoordinate(List<LatLng> edgeCoordinates) {
         edgeCoordinateList = edgeCoordinates;
         return this;
     }
 
+    /**
+     *
+     * @return PolygonOptions object
+     */
     public PolygonOptions getPolygonOverlayOptions(){
 
         if(edgeCoordinateList.isEmpty()){
@@ -73,15 +102,26 @@ public class Building extends POI implements Observer {
         return polygonOptions;
     }
 
+    /**
+     *
+     * @return Return MarkerOptions object used for the building icon
+     */
     public MarkerOptions getMarkerOptions() {
         return markerOptions;
     }
 
-
+    /**
+     *
+     * @param marker set building Marker object
+     */
     public void setMarker(Marker marker) {
         this.marker = marker;
     }
 
+    /**
+     * Depending the map's current zoom level, The marker visibility will turn on or off
+     * @param mapZoomLevel map's current zoom level
+     */
     @Override
     public void update(float mapZoomLevel) {
         if (mapZoomLevel >= markerVisibleAtMinimumZoomLevel) {
@@ -91,13 +131,20 @@ public class Building extends POI implements Observer {
         }
     }
 
+    /**
+     *
+     * @return List of edges of this building
+     */
     public List<LatLng> getEdgeCoordinateList() {
         return edgeCoordinateList;
     }
 
-    public Building setResourceImageId(int resourceImageId) {
+    /**
+     *
+     * @param resourceImageId Icon's resource id
+     */
+    public void setResourceImageId(int resourceImageId) {
         this.resourceImageId = resourceImageId;
-        return this;
     }
 
 }
