@@ -1,28 +1,20 @@
 package com.concordia.mcga.factories;
 
-import android.database.Cursor;
-import android.graphics.Bitmap;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import android.database.Cursor;
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.SmallBuilding;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
-
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.annotation.Implementation;
-import org.robolectric.annotation.Implements;
-import org.robolectric.shadows.ShadowBitmapFactory;
-
-import static org.junit.Assert.*;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, shadows = ShadowBitmapDescriptorFactory.class)
@@ -44,7 +36,7 @@ public class BuildingFactoryTest {
         Mockito.when(res.getInt(BuildingFactory.IS_SMALL_BUILDING_COLUMN_INDEX)).thenReturn(0);
 
         // Execute
-        Building result = new BuildingFactory().createBuilding(res);
+        Building result = BuildingFactory.createBuilding(res);
 
         // Verify
         assertTrue(result instanceof Building);
@@ -69,7 +61,7 @@ public class BuildingFactoryTest {
         Mockito.when(res.getInt(BuildingFactory.IS_SMALL_BUILDING_COLUMN_INDEX)).thenReturn(1);
 
         // Execute
-        Building result = new BuildingFactory().createBuilding(res);
+        Building result = BuildingFactory.createBuilding(res);
 
         // Verify
         assertTrue(result instanceof Building);
