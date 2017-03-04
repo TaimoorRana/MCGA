@@ -1,18 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/customListView"
-        android:layout_weight="0.02"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        android:paddingTop="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_horizontal_margin"
-        android:background="@color/button_secondary_color"
-        android:textColor="@color/black" />
+        android:layout_height="64dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/customListView"
+            android:layout_weight="0.02"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:paddingTop="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            android:background="@color/button_secondary_color"
+            android:textColor="@color/black"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/cast_ic_expanded_controller_stop"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/imageView"
+            android:background="@drawable/cast_ic_mini_controller_mute" />
+    </RelativeLayout>
+
 </LinearLayout>

@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.lib.MySimpleArrayAdapter;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 public class BottomSheetFragment extends Fragment implements View.OnClickListener{
     TextView bottomSheetTextView;
     private ListView list;
+    private MySimpleArrayAdapter simpleAdapter;
     private ArrayAdapter<String> adapter;
     private ArrayList<String> arrayList =  new ArrayList<String>();
     private ArrayList<String> completeDirectionsList = new ArrayList<String>();
@@ -41,17 +43,16 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
 
         // Adapter: You need three parameters 'the context, id of the layout (it will be where the data is shown),
         // and the array that contains the data
-        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.list_text, R.id.customListView, arrayList);
-        list.setAdapter(adapter);
+        String[] values = new String[] { "Android", "iPhone", "WindowsMobile", "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2" };
+        simpleAdapter = new MySimpleArrayAdapter(getActivity().getApplicationContext(), values);
+        //adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.list_text, R.id.customListView, arrayList);
+        //list.setAdapter(adapter);
+        list.setAdapter(simpleAdapter);
 
         // Set listeners
         nextButton.setOnClickListener(this);
         previousButton.setOnClickListener(this);
 
-        addDirection("up");
-        addDirection("down");
-        addDirection("right");
-        addDirection("left");
 
         return view;
     }
