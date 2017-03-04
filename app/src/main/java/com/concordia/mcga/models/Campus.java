@@ -1,16 +1,9 @@
 package com.concordia.mcga.models;
 
 import android.database.Cursor;
-
 import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.helperClasses.DatabaseHelper;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +29,6 @@ public class Campus extends POI {
         }
         final int CAMPUS_COLUMN_INDEX = 7;
         Cursor res = DatabaseHelper.getDb().rawQuery("select * from building", null);
-        Type listType = new TypeToken<List<LatLng>>() {}.getType();
 
         while (res.moveToNext()) {
             if (res.getString(CAMPUS_COLUMN_INDEX).equalsIgnoreCase(SGW.getShortName())) {
