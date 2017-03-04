@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Part of the code was taken from https://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
- */
 
+//Part of the code was taken from https://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "development.db";
@@ -24,12 +22,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private Context context;
     private static DatabaseHelper databaseHelper;
 
-
+    /**
+     * Create a DatabaseHelper Object
+     * @param context Interface to global information about an application environment.
+     */
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
         this.context = context;
     }
 
+    /**
+     * Initializes values for database creation
+     * @param context Interface to global information about an application environment.
+     */
     public static boolean setupDatabase(Context context) {
         if (databaseHelper == null) {
             databasePath = context.getFilesDir().getPath() + "/../databases/";
@@ -40,6 +45,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * @return A DatabaseHelper object
+     */
     public static DatabaseHelper getInstance() throws MCGADatabaseException {
         if (databaseHelper == null) {
             throw new MCGADatabaseException("Please setup the Database first.");
@@ -58,7 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Creates a empty database on the system and rewrites it with your own database.
+     * Creates a empty database on the system and rewrites it with our own database.
      */
     public void createDatabase(boolean force) throws IOException {
         boolean dbExist = isDBExists();
@@ -100,7 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Copies your database from your local assets-folder to the just created empty database in the
+     * Copies the database from the local assets-folder to the just created empty database in the
      * system folder, from where it can be accessed and handled.
      * This is done by transfering bytestream.
      */
