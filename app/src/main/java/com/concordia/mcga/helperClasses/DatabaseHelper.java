@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -68,9 +69,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Creates a empty database on the system and rewrites it with our own database.
      */
-    public void createDatabase(boolean force) throws IOException {
+    public void createDatabase() throws IOException {
         boolean dbExist = isDBExists();
-        if (!dbExist || force) {
+        if (!dbExist || BuildConfig.DEBUG) {
             Log.i(this.getClass().getName(), "Creating Database");
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
