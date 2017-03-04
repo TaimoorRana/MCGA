@@ -14,15 +14,18 @@ import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
 
+import java.util.ArrayList;
+
 public class MySimpleArrayAdapter extends ArrayAdapter<String> {
     private final Context context;
-    private final String[] values;
+    private ArrayList<String> values = new ArrayList<String>();
 
-    public MySimpleArrayAdapter(Context context, String[] values) {
+    public MySimpleArrayAdapter(Context context, ArrayList<String> values) {
         super(context, R.layout.list_text, values);
         this.context = context;
         this.values = values;
     }
+
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -30,15 +33,7 @@ public class MySimpleArrayAdapter extends ArrayAdapter<String> {
         View rowView = inflater.inflate(R.layout.list_text, parent, false);
         TextView textView = (TextView) rowView.findViewById(R.id.customListView);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView);
-        textView.setText(values[position]);
-        String s = values[position];
-        if (s.startsWith("Windows7") || s.startsWith("iPhone")
-                || s.startsWith("Solaris")) {
-            imageView.setImageResource(R.drawable.quantum_ic_bigtop_updates_white_24);
-        } else {
-            imageView.setImageResource(R.drawable.ic_close_dark);
-        }
-        // Change the icon for Windows and iPhone
+        textView.setText(values.get(position));
         return rowView;
     }
 }

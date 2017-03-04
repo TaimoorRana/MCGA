@@ -23,9 +23,9 @@ import java.util.ArrayList;
 public class BottomSheetFragment extends Fragment implements View.OnClickListener{
     TextView bottomSheetTextView;
     private ListView list;
-    private MySimpleArrayAdapter simpleAdapter;
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> arrayList =  new ArrayList<String>();
+    private MySimpleArrayAdapter adapter;
+    private ArrayList<String> displayedDirectionsList =  new ArrayList<String>();
+    private ArrayList<String> values =  new ArrayList<String>();
     private ArrayList<String> completeDirectionsList = new ArrayList<String>();
     private int currentDirection = 0;
     private Button nextButton, previousButton;
@@ -34,25 +34,27 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
         // View Inflater
         View view = inflater.inflate(R.layout.bottom_sheet_content, container, false);
 
+
         // UI Elements
         bottomSheetTextView = (TextView) view.findViewById(R.id.bottom_sheet_title);
         bottomSheetTextView.setText("Directions");
+
         list = (ListView) view.findViewById(R.id.list1);
         nextButton = (Button) view.findViewById(R.id.nextButton);
         previousButton = (Button) view.findViewById(R.id.previousButton);
 
         // Adapter: You need three parameters 'the context, id of the layout (it will be where the data is shown),
         // and the array that contains the data
-        String[] values = new String[] { "Android", "iPhone", "WindowsMobile", "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2" };
-        simpleAdapter = new MySimpleArrayAdapter(getActivity().getApplicationContext(), values);
-        //adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(), R.layout.list_text, R.id.customListView, arrayList);
-        //list.setAdapter(adapter);
-        list.setAdapter(simpleAdapter);
+
+        adapter = new MySimpleArrayAdapter(getActivity().getApplicationContext(), displayedDirectionsList);
+        adapter.notifyDataSetChanged();
+
+        list.setAdapter(adapter);
+        updateDirections();
 
         // Set listeners
         nextButton.setOnClickListener(this);
         previousButton.setOnClickListener(this);
-
 
         return view;
     }
@@ -67,6 +69,7 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
         String direction;
         switch (clickedView.getId()) {
             case R.id.nextButton:
+                adapter.notifyDataSetChanged();
                 nextDirection();
                 break;
 
@@ -122,7 +125,7 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
 
 
     private void nextDirection(){
-        if (arrayList.size() > 0) {
+        if (displayedDirectionsList.size() > 0) {
             currentDirection++;
         }
         updateDirections();
@@ -137,9 +140,9 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
 
     // Updates the current list that the user views
     public void updateDirections(){
-        arrayList.clear();
+        displayedDirectionsList.clear();
         for (int i = currentDirection + 1; i < completeDirectionsList.size(); i++){
-            arrayList.add(completeDirectionsList.get(i));
+            displayedDirectionsList.add(completeDirectionsList.get(i));
         }
         adapter.notifyDataSetChanged();
 
