@@ -1,4 +1,4 @@
-package com.concordia.mcga.lib;
+package com.concordia.mcga.adapters;
 
 /**
  * Created by Charmander on 3/4/2017.

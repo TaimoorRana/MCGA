@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.lib.MySimpleArrayAdapter;
+import com.concordia.mcga.adapters.MySimpleArrayAdapter;
 
 import java.util.ArrayList;
 
