@@ -1,6 +1,7 @@
 package com.concordia.mcga.models;
 
 import android.database.Cursor;
+import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.helperClasses.DatabaseHelper;
 import com.google.android.gms.maps.model.LatLng;
@@ -23,13 +24,17 @@ public class Campus extends POI {
      *  Populates both SGW and Loyola {@link Campus} objects from the data found in the SQLite database.
      */
     public static void populateCampusesWithBuildings() {
-        if (DatabaseHelper.getInstance() == null || !SGW.buildings.isEmpty() || !LOY.buildings.isEmpty())  // if the database has not been initialized || buildings already exists
-        {
-            return;
-        }
         final int CAMPUS_COLUMN_INDEX = 7;
-        Cursor res = DatabaseHelper.getDb().rawQuery("select * from building", null);
-
+        Cursor res;
+        try {
+            if (DatabaseHelper.getInstance() == null || !SGW.buildings.isEmpty() || !LOY.buildings.isEmpty())  // if the database has not been initialized || buildings already exists
+            {
+                return;
+            }
+            res = DatabaseHelper.getInstance().getDb().rawQuery("select * from building", null);
+        } catch (MCGADatabaseException e) {
+            throw new Error("Database not initialized");
+        }
         while (res.moveToNext()) {
             if (res.getString(CAMPUS_COLUMN_INDEX).equalsIgnoreCase(SGW.getShortName())) {
                 SGW.buildings.add(BuildingFactory.createBuilding(res));

@@ -5,65 +5,65 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
+import com.concordia.mcga.exceptions.MCGADatabaseException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.SQLException;
 
 /**
  * Part of the code was taken from https://blog.reigndesign.com/blog/using-your-own-sqlite-database-in-android-applications/
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+
     private static final String DATABASE_NAME = "development.db";
-    private static SQLiteDatabase db;
 
     //The Android's default system path of our application database.
     private static String databasePath;
-    private static Context context;
+    private Context context;
     private static DatabaseHelper databaseHelper;
 
 
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
-        DatabaseHelper.context = context;
+        this.context = context;
     }
 
     public static boolean setupDatabase(Context context) {
-        if (db == null) {
-            DatabaseHelper.context = context;
+        if (databaseHelper == null) {
             databasePath = context.getFilesDir().getPath() + "/../databases/";
+            databaseHelper = new DatabaseHelper(context);
             return true;
         } else {
             return false;
         }
     }
 
-    public static DatabaseHelper getInstance() {
-        if (context == null) {
-            return null;
-        }
-        if (db == null) {
-            return databaseHelper = new DatabaseHelper(context);
+    public static DatabaseHelper getInstance() throws MCGADatabaseException {
+        if (databaseHelper == null) {
+            throw new MCGADatabaseException("Please setup the Database first.");
         } else {
             return databaseHelper;
         }
 
     }
 
-    public static SQLiteDatabase getDb() {
-        return db;
+    /**
+     * @return - an instance of a readable Database <b>DO NOT FORGET to call {@link
+     * SQLiteDatabase#close()}</b> after you are done!
+     */
+    public SQLiteDatabase getDb() {
+        return databaseHelper.getReadableDatabase();
     }
 
     /**
      * Creates a empty database on the system and rewrites it with your own database.
      */
-    public void createDatabase() throws IOException {
+    public void createDatabase(boolean force) throws IOException {
         boolean dbExist = isDBExists();
-
-        if (!dbExist) {
+        if (!dbExist || force) {
+            Log.i(this.getClass().getName(), "Creating Database");
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
             this.getReadableDatabase();
@@ -73,11 +73,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } catch (IOException e) {
                 Log.e("Database", "error copying");
             }
+            this.close();
         }
     }
 
     /**
-     * Check if the database already exist to avoid re-copying the file each time you open the application.
+     * Check if the database already exist to avoid re-copying the file each time you open the
+     * application.
      *
      * @return true if it exists, false if it doesn't
      */
@@ -91,6 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.e("Database", "not found");
         }
         if (checkDB != null) {
+            Log.i(this.getClass().getName(), "Database file found in system.");
             checkDB.close();
         }
         return checkDB != null;
@@ -122,20 +125,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //Close the streams
         myOutput.close();
         myInput.close();
-    }
-
-    public void openDatabase() throws SQLException {
-        //Open the database
-        String myPath = databasePath + DATABASE_NAME;
-        db = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-    }
-
-    @Override
-    public synchronized void close() {
-        if (db != null) {
-            db.close();
-        }
-        super.close();
     }
 
     @Override
