@@ -88,37 +88,37 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             public void onClick(View v) {
                 boolean conditionGPS= false;
                 Log.d("Testing mapCenterButton", "Initializing OnClickListener");
-                if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { //Check if GPS is turned on in the phone
                     Log.d("Testing AlertGPS Launch", "Initializing method");
-                    AlertGPS();
+                    AlertGPS(); //Run GPS activation method
                     Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
                     if(gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
                         conditionGPS=true;
                     }
                 }
                 Log.d("Testing", "Checkpoint 1 - Button initializer");
-                if (viewType == ViewType.INDOOR) {
+                if (viewType == ViewType.INDOOR) { //Move to Outdoor if the user is viewing the indoor
                     viewType = ViewType.OUTDOOR;
                     getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
-                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit(); //To be removed after Outside transportation Google API incorporation
+                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit();
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO OUTDOORS");
                 }
-                if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to a ton of changes depending on how Mark factors the searches
+                if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to change depending on how MCGA-12 goes
                     navigationSearch.setText("");
                 }
-                if(conditionGPS) {
+                if(conditionGPS) { //Verify GPS is on before running location method and implementing the marker
                     locateMe();
                     Log.d("Test 2", "Checkpoint Manifest check");
                 }
-                if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == //Enable the Layer if permission found in Android Manifest
                         PackageManager.PERMISSION_GRANTED) {
                     Log.d("Permission checked", "checkSelfPermission passed with no errors");
-                    map.setMyLocationEnabled(true);
+                    map.setMyLocationEnabled(true); //Enabling the Location layer
                     Log.d("Permission checked", "Location Layer implementation succesful");
                 } else {
                     //Request the Permission
-                    ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{
+                    ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{ //Requesting the permission
                             Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 }
             }
@@ -158,7 +158,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        gpsmanager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+        gpsmanager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE); //Initialization of locationmanager object with the Location_Service
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -287,7 +287,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         INDOOR, OUTDOOR
     }
 
-    public void AlertGPS() {
+    public void AlertGPS() { //This function alerts the user if the GPS functionality of the phone is turned off and prompts the user to turn it on
         Log.e("Testing Alert GPS", "Alert GPS Start");
         AlertDialog.Builder build = new AlertDialog.Builder(
                 mapFragment.getActivity());
