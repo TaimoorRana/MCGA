@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             throw new Error("Database incorrectly initialized");
         }
         try {
-            myDbHelper.createDatabase(true);
+            myDbHelper.createDatabase();
         } catch (IOException ioe) {
             throw new Error("Unable to create database");
         }
