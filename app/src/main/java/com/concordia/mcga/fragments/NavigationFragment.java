@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,7 +34,6 @@ import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
-import com.concordia.mcga.models.Location;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -75,6 +75,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private EditText navigationSearch;
     //GPS attributes
     private LocationManager gpsmanager;
+    private LatLng myPosition;
 
 
     @Override
@@ -360,13 +361,22 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
         String provider = locationManager.getBestProvider(criteria, true);// Getting the name of the best provider
+        if ( ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+
+            ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
+                    2 );
+        }
         Location location = locationManager.getLastKnownLocation(provider); // Missing Permissions - Getting Current Location, problem is public Location class constructor was overridden by Arek and can't take in a String
 
         if (location != null) {
-            // Creating a LatLng object for the current location - Unnecessary due to overridden class
-            //LatLng latLng = new LatLng(latitude, longitude);
-            //myPosition = new LatLng(latitude, longitude);
-            map.addMarker(new MarkerOptions().position(location.getMapCoordinates()).title("You"));
+            // Getting latitude of the current location
+            double latitude = location.getLatitude();
+            // Getting longitude of the current location
+            double longitude = location.getLongitude();
+            // Creating a LatLng object for the current location
+            myPosition = new LatLng(latitude, longitude);
+            //Camera Update method
+            map.addMarker(new MarkerOptions().position(myPosition).title("Start"));
         }
     }
 }
