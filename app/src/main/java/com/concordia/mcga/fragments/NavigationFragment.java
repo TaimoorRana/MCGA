@@ -52,8 +52,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     Campus currentCampus = Campus.SGW;
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
-    private static final long MIN_TIME = 400;
-    private static final float MIN_DISTANCE = 1000;
     //State
     private ViewType viewType;
     //Fragments
@@ -117,9 +115,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     map.setMyLocationEnabled(true); //Enabling the Location layer
                     Log.d("Permission checked", "Location Layer implementation succesful");
                 } else {
-                    //Request the Permission
+                    //Request the Permission from the manifest
                     ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{ //Requesting the permission
-                            Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                            Manifest.permission.ACCESS_FINE_LOCATION}, 1); //Give dummy reference number referring to permission rationale
                 }
             }
         });
@@ -190,9 +188,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
-        map.getUiSettings().setAllGesturesEnabled(true);
-        map.getUiSettings().setMyLocationButtonEnabled(false);
-
+        map.getUiSettings().setAllGesturesEnabled(true); //Enable touchscreen motion array for Google map object
+        map.getUiSettings().setMyLocationButtonEnabled(false);  //Turn off  the built-in GPS locator button
 
         //Map Customization
         applyCustomGoogleMapsStyle();
