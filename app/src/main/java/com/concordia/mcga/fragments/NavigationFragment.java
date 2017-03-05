@@ -86,14 +86,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean conditionGPS= false;
+                boolean conditionGPS = false;
                 Log.d("Testing mapCenterButton", "Initializing OnClickListener");
                 if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { //Check if GPS is turned on in the phone
                     Log.d("Testing AlertGPS Launch", "Initializing method");
                     AlertGPS(); //Run GPS activation method
                     Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
-                    if(gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                        conditionGPS=true;
+                    if (gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        conditionGPS = true;
                     }
                 }
                 Log.d("Testing", "Checkpoint 1 - Button initializer");
@@ -107,7 +107,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to change depending on how MCGA-12 goes
                     navigationSearch.setText("");
                 }
-                if(conditionGPS) { //Verify GPS is on before running location method and implementing the marker
+                if (conditionGPS) { //Verify GPS is on before running location method and implementing the marker
                     locateMe();
                     Log.d("Test 2", "Checkpoint Manifest check");
                 }
@@ -192,7 +192,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setAllGesturesEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
-
 
 
         //Map Customization
@@ -319,9 +318,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE); // Getting LocationManager object from System Service LOCATION_SERVICE
         Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
         String provider = locationManager.getBestProvider(criteria, true);// Getting the name of the best provider
-        if ( ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) { //Checking permission in the manifest
+        if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) { //Checking permission in the manifest
 
-            ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  }, 2 ); //Requesting the permission
+            ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 2); //Requesting the permission
         }
         Location location = locationManager.getLastKnownLocation(provider); // Missing Permissions - Getting Current Location, problem is public Location class constructor was overridden by Arek and can't take in a String
 
