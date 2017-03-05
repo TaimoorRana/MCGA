@@ -1,0 +1,7 @@
+coverage:
+  status:
+    patch:
+      default:
+        targe: auto
+        threshold: null
+        base: auto
