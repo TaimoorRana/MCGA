@@ -114,6 +114,18 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 }
 
                     locateMe();
+                Log.d("Test 2", "Checkpoint Manifest check");
+
+                if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED) {
+                    Log.d("Permission checked", "checkSelfPermission passed with no errors");
+                    map.setMyLocationEnabled(true);
+                    Log.d("Permission checked", "Location Layer implementation succesful");
+                } else {
+                    //Request the Permission
+                    ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                }
 
             }
         });
@@ -186,18 +198,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setAllGesturesEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
-        Log.d("Test 2", "Checkpoint Manifest check");
 
-        if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED) {
-            Log.d("Permission checked", "checkSelfPermission passed with no errors");
-            map.setMyLocationEnabled(true);
-            Log.d("Permission checked", "Location Layer implementation succesful");
-        } else {
-            //Request the Permission
-            ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }
 
 
         //Map Customization
@@ -377,7 +378,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             // Creating a LatLng object for the current location
             myPosition = new LatLng(latitude, longitude);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, CAMPUS_DEFAULT_ZOOM_LEVEL));//Camera Update method
-            map.addMarker(new MarkerOptions().position(myPosition).title("Start"));
+            //map.addMarker(new MarkerOptions().position(myPosition).title("Start"));
         }
     }
 }
