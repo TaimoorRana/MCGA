@@ -75,7 +75,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private EditText navigationSearch;
     //GPS attributes
     private LocationManager gpsmanager;
-    LatLng myPosition;
 
 
     @Override
@@ -195,8 +194,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         } else {
             //Request the Permission
             ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_PERMISSION_ACCESS_FINE_LOCATION);
+                            Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
 
 
