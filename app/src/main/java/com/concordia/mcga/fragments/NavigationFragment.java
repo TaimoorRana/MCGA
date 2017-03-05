@@ -311,12 +311,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
     public void locateMe() {
 
-
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE); // Getting LocationManager object from System Service LOCATION_SERVICE
         Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
         String provider = locationManager.getBestProvider(criteria, true);// Getting the name of the best provider
         if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) { //Checking permission in the manifest
-
             ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 2); //Requesting the permission
         }
         Location location = locationManager.getLastKnownLocation(provider); // Missing Permissions - Getting Current Location, problem is public Location class constructor was overridden by Arek and can't take in a String
