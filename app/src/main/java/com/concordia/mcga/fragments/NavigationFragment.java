@@ -32,17 +32,26 @@ import java.util.List;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject {
 
+    //Enum representing which map view is active
+    private enum ViewType {
+        INDOOR, OUTDOOR
+    }
+
+    //Outdoor Map
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
-    Campus currentCampus = Campus.SGW;
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
+
     //State
     private ViewType viewType;
+    private Campus currentCampus = Campus.SGW;
+
     //Fragments
     private LinearLayoutCompat parentLayout;
     private SupportMapFragment mapFragment;
     private TransportButtonFragment transportButtonFragment;
     private IndoorMapFragment indoorMapFragment;
+
     //View Components
     private Button campusButton;
     private Button viewSwitchButton;
@@ -66,14 +75,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             public void onClick(View v) {
                 if (viewType == ViewType.OUTDOOR) {
                     viewType = ViewType.INDOOR;
-                    getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
-                    getChildFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
+                    showIndoorMap(true);
+                    showOutdoorMap(false);
                     campusButton.setVisibility(View.GONE);
                     viewSwitchButton.setText("GO OUTDOORS");
                 } else {
                     viewType = ViewType.OUTDOOR;
-                    getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
-                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit();
+                    showOutdoorMap(true);
+                    showIndoorMap(false);
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO INDOORS");
                 }
@@ -83,8 +92,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Set initial view type
         viewType = ViewType.OUTDOOR;
 
-        //Hide Indoor Fragment
-        getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
+        //Hide Fragments
+        showIndoorMap(false);
+        showTransportButton(false);
 
         return parentLayout;
     }
@@ -131,6 +141,42 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         addBuildingMarkers();
 
         updateCampus();
+    }
+
+    /**
+     * Shows or hides the indoor map
+     * @param isVisible
+     */
+    public void showIndoorMap(boolean isVisible) {
+        if (isVisible) {
+            getChildFragmentManager().beginTransaction().show(indoorMapFragment).commit();
+        } else {
+            getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
+        }
+    }
+
+    /**
+     * Shows or hides the outdoor map
+     * @param isVisible
+     */
+    public void showOutdoorMap(boolean isVisible) {
+        if (isVisible) {
+            getChildFragmentManager().beginTransaction().show(mapFragment).commit();
+        } else {
+            getChildFragmentManager().beginTransaction().hide(mapFragment).commit();
+        }
+    }
+
+    /**
+     * Shows or hides the transport button
+     * @param isVisible
+     */
+    public void showTransportButton(boolean isVisible) {
+        if (isVisible) {
+            getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit();
+        } else {
+            getChildFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
+        }
     }
 
     private void addBuildingMarkers() {
@@ -212,10 +258,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         for (Observer observer : observerList) {
             observer.update(map.getCameraPosition().zoom);
         }
-    }
-
-    private enum ViewType {
-        INDOOR, OUTDOOR
     }
 
 }
