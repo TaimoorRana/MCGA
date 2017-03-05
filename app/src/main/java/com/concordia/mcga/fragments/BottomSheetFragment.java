@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,13 +20,26 @@ import java.util.ArrayList;
  */
 
 public class BottomSheetFragment extends Fragment implements View.OnClickListener{
+
+    // Layout elements
     TextView bottomSheetTextView;
     private ListView list;
+
+    // Custom ArrayList adapter
     private MySimpleArrayAdapter adapter;
+
+    // Arrays store directions and image information
     private ArrayList<String> displayedDirectionsList =  new ArrayList<String>();
-    private ArrayList<String> values =  new ArrayList<String>();
+    private ArrayList<String> displayedDirectionsImage = new ArrayList<String>();
+
+    // Arrays store directions and images that the user may view
+    private ArrayList<String> completeDirectionsImage = new ArrayList<String>();
     private ArrayList<String> completeDirectionsList = new ArrayList<String>();
+
+    // Counter keeps track of the index of the current direction
     private int currentDirection = 0;
+
+    // simple buttons
     private Button nextButton, previousButton;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,10 +58,19 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
         // Adapter: You need three parameters 'the context, id of the layout (it will be where the data is shown),
         // and the array that contains the data
 
-        adapter = new MySimpleArrayAdapter(getActivity().getApplicationContext(), displayedDirectionsList);
+
+        adapter = new MySimpleArrayAdapter(getActivity().getApplicationContext(), displayedDirectionsList, displayedDirectionsImage);
         adapter.notifyDataSetChanged();
 
+        addDirection("up", "up");
+        addDirection("down", "down");
+        addDirection("up", "up");
+        addDirection("right", "right");
+        addDirection("left", "left");
+        addDirection("This ", "destination");
+
         list.setAdapter(adapter);
+
         updateDirections();
 
         // Set listeners
@@ -92,18 +113,21 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
 
 
     // Add Directions to the list Dynamically
-    public void addDirection(String direction){
+    public void addDirection(String direction, String image){
         completeDirectionsList.add(direction);
+        completeDirectionsImage.add(image);
     }
 
     public void removeDirection(int index){
         completeDirectionsList.remove(index);
+        completeDirectionsImage.remove(index);
     }
 
     // Append a list of directions to the current ones
-    public void addDirectionsList(ArrayList<String> directions){
+    public void addDirectionsList(ArrayList<String> directions, ArrayList<String> image){
         for (int i =0 ; i < directions.size(); i ++){
             completeDirectionsList.add(directions.get(i));
+            completeDirectionsImage.add(image.get(i));
         }
     }
 
@@ -113,6 +137,7 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
 
     // Reset list and puts current index back to 0
     public void clearDirections(){
+        completeDirectionsList.clear();
         completeDirectionsList.clear();
         currentDirection = 0;
         updateDirections();
@@ -141,8 +166,11 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
     // Updates the current list that the user views
     public void updateDirections(){
         displayedDirectionsList.clear();
+        displayedDirectionsImage.clear();
+
         for (int i = currentDirection + 1; i < completeDirectionsList.size(); i++){
             displayedDirectionsList.add(completeDirectionsList.get(i));
+            displayedDirectionsImage.add(completeDirectionsImage.get(i));
         }
         adapter.notifyDataSetChanged();
 

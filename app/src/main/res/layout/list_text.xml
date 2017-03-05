@@ -19,7 +19,7 @@
             android:paddingTop="@dimen/activity_horizontal_margin"
             android:paddingBottom="@dimen/activity_horizontal_margin"
             android:background="@color/button_secondary_color"
-            android:textColor="@color/black"
+            android:textColor="@color/cast_expanded_controller_ad_label_background_color"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true" />
 
@@ -27,10 +27,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/cast_ic_expanded_controller_stop"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
             android:id="@+id/imageView"
-            android:background="@drawable/cast_ic_mini_controller_mute" />
+            android:layout_marginEnd="32dp"
+            android:layout_alignTop="@+id/customListView"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true" />
     </RelativeLayout>
 
 </LinearLayout>

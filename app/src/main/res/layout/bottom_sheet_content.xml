@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="Title dummy"
-                    android:textColor="@android:color/white"
+                    android:textColor="?android:attr/textColorPrimaryNoDisable"
                     android:textSize="24sp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentBottom="true"
@@ -87,7 +87,9 @@
             android:id="@+id/list1"
             android:drawSelectorOnTop="false"
             android:textAlignment="center"
-            android:background="@color/button_secondary_color" />
+            android:background="@color/button_secondary_color"
+            android:divider="@color/cast_expanded_controller_ad_label_background_color"
+            android:dividerHeight="@dimen/button_internal_padding" />
     </FrameLayout>
 
     </android.support.design.widget.AppBarLayout>
