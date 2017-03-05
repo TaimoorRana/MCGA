@@ -96,7 +96,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO OUTDOORS");
                 }
-                //LocateMe
+                //if ()
+
+                    //Clear Text Label - need the id from Mark to avoid conflicts
+
+                //
+
+                //LocateMe method - Got issues with permission handling at runtime
+
                 //
             }
         });
