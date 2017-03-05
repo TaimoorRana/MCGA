@@ -348,6 +348,7 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
         int newTop     = currentTop - dy;
 
         // Force stop at the anchor - do not go from collapsed to expanded in one scroll
+        /*
         if (
                 ( mLastStableState == STATE_COLLAPSED  &&  newTop < mAnchorPoint )  ||
                         ( mLastStableState == STATE_EXPANDED   &&  newTop > mAnchorPoint )
@@ -358,7 +359,7 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
             mNestedScrolled = true;
             return;
         }
-
+        */
         if ( dy > 0 ) { // Upward
             if ( newTop < mMinOffset ) {
                 consumed[1] = currentTop - mMinOffset;
@@ -406,8 +407,8 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
         if ( scrollVelocity > mMinimumVelocity) {
             if ( mLastStableState == STATE_COLLAPSED ) {
                 // Fling from collapsed to anchor
-                top = mAnchorPoint;
-                targetState = STATE_ANCHOR_POINT;
+                top = mMinOffset;
+                targetState = STATE_EXPANDED;
             }
             else
             if ( mLastStableState == STATE_ANCHOR_POINT ) {
@@ -426,8 +427,8 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
             if ( scrollVelocity < -mMinimumVelocity ) {
                 if ( mLastStableState == STATE_EXPANDED ) {
                     // Fling to from expanded to anchor
-                    top = mAnchorPoint;
-                    targetState = STATE_ANCHOR_POINT;
+                    top = mMaxOffset;
+                    targetState = STATE_COLLAPSED;
                 }
                 else
                 if ( mLastStableState == STATE_ANCHOR_POINT ) {
@@ -457,8 +458,8 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
                 }
                 // Snap back to the anchor
                 else {
-                    top = mAnchorPoint;
-                    targetState = STATE_ANCHOR_POINT;
+                    top = mMinOffset;
+                    targetState = STATE_EXPANDED;
                 }
             }
 
@@ -562,6 +563,7 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
                 mState = state;
                 mLastStableState = state;
             }
+
             return;
         }
         V child = mViewRef.get();

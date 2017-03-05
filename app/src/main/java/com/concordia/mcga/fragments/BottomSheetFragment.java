@@ -1,17 +1,22 @@
 package com.concordia.mcga.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.MySimpleArrayAdapter;
+import com.concordia.mcga.lib.BottomSheetBehaviorGoogleMapsLike;
 
 import java.util.ArrayList;
 
@@ -39,8 +44,9 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
     // Counter keeps track of the index of the current direction
     private int currentDirection = 0;
 
+
     // simple buttons
-    private Button nextButton, previousButton;
+    private ImageButton nextButton, previousButton, expandButton;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // View Inflater
@@ -52,12 +58,39 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
         bottomSheetTextView.setText("Directions");
 
         list = (ListView) view.findViewById(R.id.list1);
-        nextButton = (Button) view.findViewById(R.id.nextButton);
-        previousButton = (Button) view.findViewById(R.id.previousButton);
+        nextButton = (ImageButton) view.findViewById(R.id.nextButton);
+        previousButton = (ImageButton) view.findViewById(R.id.previousButton);
+        expandButton = (ImageButton) view.findViewById(R.id.expandButton);
 
         // Adapter: You need three parameters 'the context, id of the layout (it will be where the data is shown),
         // and the array that contains the data
 
+        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
+        View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
+        final BottomSheetBehaviorGoogleMapsLike behavior = BottomSheetBehaviorGoogleMapsLike.from(bottomSheet);
+
+        behavior.addBottomSheetCallback(new BottomSheetBehaviorGoogleMapsLike.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED:
+                        expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
+                        break;
+
+                    case BottomSheetBehaviorGoogleMapsLike.STATE_EXPANDED:
+                        expandButton.setImageResource(R.drawable.ic_expand_more_black_24dp);
+                        break;
+
+
+
+                    default:
+                        break;
+                }
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+            }
+        });
 
         adapter = new MySimpleArrayAdapter(getActivity().getApplicationContext(), displayedDirectionsList, displayedDirectionsImage);
         adapter.notifyDataSetChanged();
@@ -74,11 +107,22 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
         updateDirections();
 
         // Set listeners
+        expandButton.setOnClickListener(this);
         nextButton.setOnClickListener(this);
         previousButton.setOnClickListener(this);
 
+
+        expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
+        behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED);
+
         return view;
     }
+
+    /////////////////////////////////////////////////////////
+    // On touch listener checks if list is expanded or not //
+    /////////////////////////////////////////////////////////
+
+
 
     ///////////////////////////////////////////////////////
     // Button clicks for following or previous directions
@@ -87,7 +131,6 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
 
     // Overloaded method for button clicks
     public void onClick(View clickedView) {
-        String direction;
         switch (clickedView.getId()) {
             case R.id.nextButton:
                 adapter.notifyDataSetChanged();
@@ -197,4 +240,6 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
     public TextView getTextDirections(){
         return bottomSheetTextView;
     }
+
+
 }

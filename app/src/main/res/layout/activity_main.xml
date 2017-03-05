@@ -40,30 +40,18 @@
         android:id="@+id/coordinatorlayout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context=".sample.MainActivity">
 
-        <android.support.v4.widget.NestedScrollView
+        <fragment
+            android:name= "com.concordia.mcga.fragments.BottomSheetFragment"
+            android:id="@+id/fragment12"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
-            android:id="@+id/bottom_sheet"
-            app:layout_behavior="@string/BottomSheetBehaviorGoogleMapsLike"
-            app:anchorPoint="@dimen/anchor_point"
-            app:behavior_hideable="true"
-            android:fitsSystemWindows="true">
+            />
 
-            <fragment
-                android:name= "com.concordia.mcga.fragments.BottomSheetFragment"
-                android:id="@+id/fragment12"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
-        </android.support.v4.widget.NestedScrollView>
     </android.support.design.widget.CoordinatorLayout>
 
 </android.support.v4.widget.DrawerLayout>
