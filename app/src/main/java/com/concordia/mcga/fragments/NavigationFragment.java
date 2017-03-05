@@ -93,11 +93,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean conditionGPS= false;
                 Log.d("Testing mapCenterButton", "Initializing OnClickListener");
                 if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     Log.d("Testing AlertGPS Launch", "Initializing method");
                     AlertGPS();
                     Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
+
                 }
                 Log.d("Testing", "Checkpoint 1 - Button initializer");
                 if (viewType == ViewType.INDOOR) {
@@ -110,9 +112,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to a ton of changes depending on how Mark factors the searches
                     navigationSearch.setText("");
                 }
-                //
-                //LocateMe method - Location class was replaced by Arek
-                //
+
+                    locateMe();
+
             }
         });
 
@@ -171,7 +173,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 updateCampus();
             }
         });
-
         //Show outdoor map on start
         getFragmentManager().beginTransaction().show(mapFragment).commit();
     }
@@ -184,7 +185,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setAllGesturesEnabled(true);
-        map.getUiSettings().setMyLocationButtonEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
         Log.d("Test 2", "Checkpoint Manifest check");
 
         if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
@@ -375,7 +376,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             double longitude = location.getLongitude();
             // Creating a LatLng object for the current location
             myPosition = new LatLng(latitude, longitude);
-            //Camera Update method
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, CAMPUS_DEFAULT_ZOOM_LEVEL));//Camera Update method
             map.addMarker(new MarkerOptions().position(myPosition).title("Start"));
         }
     }
