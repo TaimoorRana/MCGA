@@ -50,9 +50,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
     private GoogleMap map;
-    private LocationManager gpsmanager;
     private List<Observer> observerList = new ArrayList<>();
-    private LocationManager locationManager;
     private static final long MIN_TIME = 400;
     private static final float MIN_DISTANCE = 1000;
     //State
@@ -66,6 +64,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private Button campusButton;
     private Button viewSwitchButton;
     private FloatingActionButton mapCenterButton;
+    //GPS attributes
+    private LocationManager gpsmanager;
 
 
     @Override
@@ -77,15 +77,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Init Fragments
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
         indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
-
         //Init View Components
         mapCenterButton = (FloatingActionButton) parentLayout.findViewById(R.id.mapCenterButton);
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if(!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                Log.d("Testing mapCenterButton","Initializing OnClickListener");
+                if(!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                    Log.d("Testing AlertGPS Launch","Initializing method");
                     AlertGPS();
-                }*/
+                    Log.d("Testing AlertGPS Launch","Finished AlertGPS");
+                }
                 Log.d("Testing", "Checkpoint 1 - Button initializer");
                 if (viewType == ViewType.INDOOR) {
                     viewType = ViewType.OUTDOOR;
@@ -133,6 +135,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        gpsmanager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -166,12 +169,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setAllGesturesEnabled(true);
-        Log.d("Test 2", "Checkpoint Manifest check");
-        if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+        /*Log.d("Test 2", "Checkpoint Manifest check");
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             Log.d("Test 2", "Checkpoint Manifest happening");
             map.setMyLocationEnabled(true);
             Log.d("Test 2", "Checkpoint Manifest check FINISHED");}
+            */
         //Map Customization
         applyCustomGoogleMapsStyle();
         Campus.populateCampusesWithBuildings();
@@ -237,7 +241,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     /*public void updateOnMe(){
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);    }
-*/
+    */
     @Override
     public void onCameraIdle() {
         notifyObservers();
@@ -268,10 +272,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         INDOOR, OUTDOOR
     }
 
-    /*public void AlertGPS() {
-
+    public void AlertGPS() {
+        Log.e("Testing Alert GPS","Alert GPS Start");
         AlertDialog.Builder build = new AlertDialog.Builder(
-                getActivity());
+                mapFragment.getActivity());
+        Log.e("Testing Alert GPS","AlertDialog builder successful");
         build
                 .setTitle("GPS Detection Services")
                 .setMessage("GPS is disabled in your device. Enable it?")
@@ -291,7 +296,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 });
         AlertDialog alert = build.create();
         alert.show();
-    }*/
+    }
 /*
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) { }
