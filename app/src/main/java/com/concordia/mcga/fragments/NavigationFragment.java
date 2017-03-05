@@ -103,9 +103,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     navigationSearch.setText("");
                 }
                 //
-
                 //LocateMe method - Got issues with permission handling at runtime
-
+                if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("Test 2", "Checkpoint Manifest happening");
+                    //map.setMyLocationEnabled(true); Method cannot resolve for permission after Gradle Upgrade
+                    Log.d("Test 2", "Checkpoint Manifest check FINISHED");
+                } else {
+                    //Do Something
+                }
                 //
             }
         });
@@ -179,12 +185,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setAllGesturesEnabled(true);
         Log.d("Test 2", "Checkpoint Manifest check");
-        if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            Log.d("Test 2", "Checkpoint Manifest happening");
-            map.setMyLocationEnabled(true);
-            Log.d("Test 2", "Checkpoint Manifest check FINISHED");
-        }
+
 
         //Map Customization
         applyCustomGoogleMapsStyle();
@@ -317,6 +318,33 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     @Override
     public void onProviderDisabled(String provider) { }
 */
+
+    protected void requestPermission(String permissionType, int
+            requestCode) {
+        int permission = ContextCompat.checkSelfPermission(mapFragment.getActivity(),
+                permissionType);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(mapFragment.getActivity(),
+                    new String[]{permissionType}, requestCode
+            );
+        }
+    }
+
+    //Possibly not needed with API 23 but needed with other APIs
+    /*public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[]
+                                                   grantResults) {
+        switch (requestCode) {
+            case LOCATION_REQUEST_CODE: {
+                if (grantResults.length == 0
+                        || grantResults[0] != PackageManager.PERMISSION_GRANTED)
+                {
+                    Toast.makeText(this, "Unable to show location - permission required", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }*/
 }
 
 
