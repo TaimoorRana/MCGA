@@ -1,6 +1,7 @@
 package com.concordia.mcga.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class POISearchAdapter extends BaseExpandableListAdapter {
     private Context context;
@@ -135,7 +138,15 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
             view = layoutInflater.inflate(R.layout.poi_search_group_row, null);
         }
 
-        TextView campusRow = (TextView) view.findViewById(R.id.campusHeading);
+        CircleImageView campusImage = (CircleImageView) view.findViewById(R.id.groupImage);
+        Campus camp = (Campus)getGroup(i);
+        if (camp == Campus.SGW) {
+            campusImage.setImageResource(R.mipmap.ic_sgw_campus);
+        } else {
+            campusImage.setImageResource(R.mipmap.ic_loy_campus);
+        }
+
+        TextView campusRow = (TextView) view.findViewById(R.id.groupText);
         campusRow.setText(campus.getName());
 
         return view;
@@ -154,7 +165,7 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
             view = layoutInflater.inflate(R.layout.poi_search_child_row, null);
         }
 
-        TextView buildingRow = (TextView) view.findViewById(R.id.buildingRow);
+        TextView buildingRow = (TextView) view.findViewById(R.id.childText);
         buildingRow.setText(building.getName());
 
         return view;

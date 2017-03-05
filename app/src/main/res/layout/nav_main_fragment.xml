@@ -21,11 +21,6 @@
             android:queryHint="@string/action_search"/>
     </android.support.v7.widget.Toolbar>
 
-    <ExpandableListView
-        android:id="@+id/expandableList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

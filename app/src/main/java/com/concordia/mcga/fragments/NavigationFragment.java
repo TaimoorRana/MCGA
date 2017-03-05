@@ -1,5 +1,6 @@
 package com.concordia.mcga.fragments;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,13 +10,15 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
@@ -56,6 +59,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private SearchView search;
     private POISearchAdapter poiSearchAdapter;
     private ExpandableListView searchList;
+    private Dialog searchDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,15 +100,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Hide Indoor Fragment
         getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
 
-        //Search
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        search = (SearchView) parentLayout.findViewById(R.id.navigationSearch);
-        search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        search.setIconifiedByDefault(false);
-        search.setOnQueryTextListener(this);
-        search.setOnCloseListener(this);
+        setupSearchAttributes();
+        setupSearchList();
 
-        displayList();
         return parentLayout;
     }
 
@@ -236,9 +234,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     // Bug in API, onClose doesn't get called. Use this manually
     @Override
     public boolean onClose() {
-        poiSearchAdapter.filterData("");
         search.setQuery("", false);
-        search.clearFocus();
         return false;
     }
 
@@ -257,13 +253,40 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     private void expandAll() {
-        for (int i = 0; i < poiSearchAdapter.getGroupCount(); i++) {
-            searchList.expandGroup(i);
+        if (poiSearchAdapter.getGroupCount() == 0) {
+            search.clearFocus();
+            searchDialog.dismiss();
+        } else {
+            searchDialog.show();
+            for (int i = 0; i < poiSearchAdapter.getGroupCount(); i++) {
+                searchList.expandGroup(i);
+            }
         }
     }
 
-    private void displayList() {
-        searchList = (ExpandableListView) parentLayout.findViewById(R.id.expandableList);
+    private void setupSearchAttributes() {
+        //Search
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        search = (SearchView) parentLayout.findViewById(R.id.navigationSearch);
+        search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        search.setIconifiedByDefault(false);
+        search.setOnQueryTextListener(this);
+        search.setOnCloseListener(this);
+
+
+        //Custom search dialog
+        searchDialog = new Dialog(getActivity());
+        searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        searchDialog.setContentView(R.layout.search_dialog);
+        Window window = searchDialog.getWindow();
+        window.setGravity(Gravity.TOP);
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        window.setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM, WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        window.setLayout(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayoutCompat.LayoutParams.MATCH_PARENT);
+    }
+
+    private void setupSearchList() {
+        searchList = (ExpandableListView) searchDialog.findViewById(R.id.expandableList);
         poiSearchAdapter = new POISearchAdapter(getActivity());
         searchList.setAdapter(poiSearchAdapter);
 
