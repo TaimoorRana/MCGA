@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.Manifest;
@@ -64,6 +65,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private Button campusButton;
     private Button viewSwitchButton;
     private FloatingActionButton mapCenterButton;
+    private EditText navigationSearch;
     //GPS attributes
     private LocationManager gpsmanager;
 
@@ -78,6 +80,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
         indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
         //Init View Components
+        navigationSearch = (EditText) parentLayout.findViewById(R.id.navigationSearch);
         mapCenterButton = (FloatingActionButton) parentLayout.findViewById(R.id.mapCenterButton);
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -96,10 +99,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO OUTDOORS");
                 }
-                //if ()
-
-                    //Clear Text Label - need the id from Mark to avoid conflicts
-
+                if (navigationSearch.getText()!=null) { //Clear Text Label - This is subject to a ton of changes depending on how Mark factors the searches
+                    navigationSearch.setText("");
+                }
                 //
 
                 //LocateMe method - Got issues with permission handling at runtime
