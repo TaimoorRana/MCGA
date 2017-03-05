@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.Criteria;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -32,19 +34,24 @@ import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Location;
-import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
+import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.LOCATION_SERVICE;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject {
 
@@ -68,6 +75,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private EditText navigationSearch;
     //GPS attributes
     private LocationManager gpsmanager;
+    LatLng myPosition;
 
 
     @Override
@@ -85,11 +93,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Testing mapCenterButton","Initializing OnClickListener");
-                if(!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                    Log.d("Testing AlertGPS Launch","Initializing method");
+                Log.d("Testing mapCenterButton", "Initializing OnClickListener");
+                if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    Log.d("Testing AlertGPS Launch", "Initializing method");
                     AlertGPS();
-                    Log.d("Testing AlertGPS Launch","Finished AlertGPS");
+                    Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
                 }
                 Log.d("Testing", "Checkpoint 1 - Button initializer");
                 if (viewType == ViewType.INDOOR) {
@@ -99,19 +107,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO OUTDOORS");
                 }
-                if (navigationSearch.getText()!=null) { //Clear Text Label - This is subject to a ton of changes depending on how Mark factors the searches
+                if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to a ton of changes depending on how Mark factors the searches
                     navigationSearch.setText("");
                 }
                 //
                 //LocateMe method - Got issues with permission handling at runtime
-                if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    Log.d("Test 2", "Checkpoint Manifest happening");
-                    //map.setMyLocationEnabled(true); Method cannot resolve for permission after Gradle Upgrade
-                    Log.d("Test 2", "Checkpoint Manifest check FINISHED");
-                } else {
-                    //Do Something
-                }
                 //
             }
         });
@@ -150,7 +150,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        gpsmanager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
+        gpsmanager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -184,7 +184,20 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setAllGesturesEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(true);
         Log.d("Test 2", "Checkpoint Manifest check");
+
+        if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+            Log.d("Permission checked", "checkSelfPermission passed with no errors");
+            map.setMyLocationEnabled(true);
+            Log.d("Permission checked", "Location Layer implementation succesful");
+        } else {
+            //Request the Permission
+            ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_PERMISSION_ACCESS_FINE_LOCATION);
+        }
 
 
         //Map Customization
@@ -253,6 +266,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME, MIN_DISTANCE, this);    }
     */
+
     @Override
     public void onCameraIdle() {
         notifyObservers();
@@ -284,10 +298,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     public void AlertGPS() {
-        Log.e("Testing Alert GPS","Alert GPS Start");
+        Log.e("Testing Alert GPS", "Alert GPS Start");
         AlertDialog.Builder build = new AlertDialog.Builder(
                 mapFragment.getActivity());
-        Log.e("Testing Alert GPS","AlertDialog builder successful");
+        Log.e("Testing Alert GPS", "AlertDialog builder successful");
         build
                 .setTitle("GPS Detection Services")
                 .setMessage("GPS is disabled in your device. Enable it?")
@@ -319,7 +333,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     public void onProviderDisabled(String provider) { }
 */
 
-    protected void requestPermission(String permissionType, int
+    /*protected void requestPermissions(String permissionType, int
             requestCode) {
         int permission = ContextCompat.checkSelfPermission(mapFragment.getActivity(),
                 permissionType);
@@ -328,23 +342,35 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     new String[]{permissionType}, requestCode
             );
         }
-    }
-
-    //Possibly not needed with API 23 but needed with other APIs
-    /*public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[]
-                                                   grantResults) {
-        switch (requestCode) {
-            case LOCATION_REQUEST_CODE: {
-                if (grantResults.length == 0
-                        || grantResults[0] != PackageManager.PERMISSION_GRANTED)
-                {
-                    Toast.makeText(this, "Unable to show location - permission required", Toast.LENGTH_LONG).show();
-                }
-                return;
-            }
-        }
     }*/
+
+    /*@Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == MY_LOCATION_REQUEST_CODE) {
+            if (permissions.length == 1 &&
+                    permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                map.setMyLocationEnabled(true);
+            } else {
+                // Permission was denied. Display an error message.
+            }
+        }*/
+
+    public void locateMe() {
+
+        // Getting LocationManager object from System Service LOCATION_SERVICE
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
+        String provider = locationManager.getBestProvider(criteria, true);// Getting the name of the best provider
+        Location location = locationManager.getLastKnownLocation(provider); // Missing Permissions - Getting Current Location, problem is public Location class constructor was overridden by Arek and can't take in a String
+
+        if (location != null) {
+            // Creating a LatLng object for the current location - Unnecessary due to overridden class
+            //LatLng latLng = new LatLng(latitude, longitude);
+            //myPosition = new LatLng(latitude, longitude);
+            map.addMarker(new MarkerOptions().position(location.getMapCoordinates()).title("You"));
+        }
+    }
 }
 
 
