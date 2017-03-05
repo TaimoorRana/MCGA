@@ -8,10 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private final long viewTime = 2000;
+    private final long VIEW_TIME = 2000;
 
     /**
-     * Creates the splash screen. Switch to MainActivity after 'viewTime' milliseconds
+     * Creates the splash screen. Switch to MainActivity after 'VIEW_TIME' milliseconds
      * @param savedInstanceState The savedInstanceState is a reference to a Bundle object that is passed into the onCreate method of every Android Activity
      */
     @Override
@@ -23,7 +23,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    sleep(viewTime);
+                    sleep(VIEW_TIME);
                     Intent main = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(main);
                     finish();
