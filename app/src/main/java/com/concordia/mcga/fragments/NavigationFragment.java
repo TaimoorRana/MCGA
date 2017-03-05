@@ -104,8 +104,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         super.onActivityCreated(savedInstanceState);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         Button toggleButton = (Button) getView().findViewById(R.id.campusButton);
@@ -124,7 +123,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         });
 
         //Show outdoor map on start
-        getFragmentManager().beginTransaction().show(mapFragment).commit();
+        showOutdoorMap(true);
     }
 
     @Override
