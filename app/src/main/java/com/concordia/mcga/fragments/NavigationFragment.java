@@ -110,7 +110,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     navigationSearch.setText("");
                 }
                 //
-                //LocateMe method - Got issues with permission handling at runtime
+                //LocateMe method - Location class was replaced by Arek
                 //
             }
         });
