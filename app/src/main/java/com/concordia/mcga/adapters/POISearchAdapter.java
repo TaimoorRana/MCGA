@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
-import com.concordia.mcga.models.POI;
 
 import java.util.ArrayList;
 
@@ -32,14 +31,24 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
-        return 2;
+        boolean sgwClear = getGroupIsEmpty(SGW_INDEX);
+        boolean loyClear = getGroupIsEmpty(LOYOLA_INDEX);
+
+        if (sgwClear && loyClear) {
+            return 0;
+        } else if (sgwClear || loyClear) {
+            return 1;
+        } else {
+            return 2;
+        }
     }
 
     @Override
     public int getChildrenCount(int i) {
-        if (i == SGW_INDEX) {
+        Campus camp = (Campus)getGroup(i);
+        if (camp == Campus.SGW) {
             return sgwFilteredList.size();
-        } else if (i == LOYOLA_INDEX) {
+        } else if (camp == Campus.LOY) {
             return loyolaFilteredList.size();
         } else {
             return 0;
@@ -48,20 +57,40 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getGroup(int i) {
-        if (i == SGW_INDEX) {
-            return Campus.SGW;
-        } else if (i == LOYOLA_INDEX) {
-            return Campus.LOY;
-        } else {
+        boolean sgwClear = getGroupIsEmpty(SGW_INDEX);
+        boolean loyClear = getGroupIsEmpty(LOYOLA_INDEX);
+
+        if (sgwClear && loyClear) {
             return null;
+        } else if (sgwClear) {
+            if (i == 0) {
+                return Campus.LOY;
+            } else {
+                return null;
+            }
+        } else if (loyClear) {
+            if (i == 0) {
+                return Campus.SGW;
+            } else {
+                return null;
+            }
+        } else {
+            if (i == SGW_INDEX) {
+                return Campus.SGW;
+            } else if (i == LOYOLA_INDEX) {
+                return Campus.LOY;
+            } else {
+                return null;
+            }
         }
     }
 
     @Override
     public Object getChild(int i, int i1) {
-        if (i == SGW_INDEX) {
+        Campus camp = (Campus)getGroup(i);
+        if (camp == Campus.SGW) {
             return sgwFilteredList.get(i1);
-        } else if (i == LOYOLA_INDEX) {
+        } else if (camp == Campus.LOY) {
             return loyolaFilteredList.get(i1);
         } else {
             return null;
@@ -136,48 +165,45 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
-    public void filterData(String query, boolean clear) {
+    public void filterData(String query) {
         query = query.toLowerCase();
         sgwFilteredList.clear();
         loyolaFilteredList.clear();
 
-        if (clear == false) {
-            if (query.isEmpty()) {
-                //sgwFilteredList.addAll(Campus.SGW.getBuildings());
-                //loyolaFilteredList.addAll(Campus.LOY.getBuildings());
+        if (query.isEmpty()) {
+            //sgwFilteredList.addAll(Campus.SGW.getBuildings());
+            //loyolaFilteredList.addAll(Campus.LOY.getBuildings());
+        } else {
+            // Temporary buffers. Alternative would be to use synchronize
+            ArrayList<Building> sgwList = new ArrayList<>();
+            ArrayList<Building> loyList = new ArrayList<>();
+
+            for (Building building : Campus.SGW.getBuildings()) {
+                if (building.getName().toLowerCase().contains(query) ||
+                        building.getShortName().toLowerCase().contains(query)) {
+                    sgwList.add(building);
+                }
+            }
+            for (Building building : Campus.LOY.getBuildings()) {
+                if (building.getName().toLowerCase().contains(query) ||
+                        building.getShortName().toLowerCase().contains(query)) {
+                    loyList.add(building);
+                }
+            }
+
+            // We only should check once whether the campus name is a match. Added at end for consistency
+            if (Campus.SGW.getName().toLowerCase().contains(query) ||
+                    Campus.SGW.getShortName().toLowerCase().contains(query)) {
+                sgwFilteredList.addAll(Campus.SGW.getBuildings());
             } else {
-                // Temporary buffers. Alternative would be to use synchronize
-                ArrayList<Building> sgwList = new ArrayList<>();
-                ArrayList<Building> loyList = new ArrayList<>();
+                sgwFilteredList.addAll(sgwList);
+            }
 
-                for (Building building : Campus.SGW.getBuildings()) {
-                    if (building.getName().toLowerCase().contains(query) ||
-                            building.getShortName().toLowerCase().contains(query)) {
-                        sgwList.add(building);
-                    }
-                }
-
-                for (Building building : Campus.LOY.getBuildings()) {
-                    if (building.getName().toLowerCase().contains(query) ||
-                            building.getShortName().toLowerCase().contains(query)) {
-                        loyList.add(building);
-                    }
-                }
-
-                // We only should check once whether the campus name is a match. Added at end for consistency
-                if (Campus.SGW.getName().toLowerCase().contains(query) ||
-                        Campus.SGW.getShortName().toLowerCase().contains(query)) {
-                    sgwFilteredList.addAll(Campus.SGW.getBuildings());
-                } else {
-                    sgwFilteredList.addAll(sgwList);
-                }
-
-                if (Campus.LOY.getName().toLowerCase().contains(query) ||
-                        Campus.LOY.getShortName().toLowerCase().contains(query)) {
-                    loyolaFilteredList.addAll(Campus.LOY.getBuildings());
-                } else {
-                    loyolaFilteredList.addAll(loyList);
-                }
+            if (Campus.LOY.getName().toLowerCase().contains(query) ||
+                    Campus.LOY.getShortName().toLowerCase().contains(query)) {
+                loyolaFilteredList.addAll(Campus.LOY.getBuildings());
+            } else {
+                loyolaFilteredList.addAll(loyList);
             }
         }
 

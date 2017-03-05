@@ -236,7 +236,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     // Bug in API, onClose doesn't get called. Use this manually
     @Override
     public boolean onClose() {
-        poiSearchAdapter.filterData("", true);
+        poiSearchAdapter.filterData("");
         search.setQuery("", false);
         search.clearFocus();
         return false;
@@ -244,24 +244,21 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        poiSearchAdapter.filterData(query, false);
+        poiSearchAdapter.filterData(query);
         expandAll();
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        poiSearchAdapter.filterData(newText, false);
+        poiSearchAdapter.filterData(newText);
         expandAll();
         return false;
     }
 
     private void expandAll() {
-        if (!poiSearchAdapter.getGroupIsEmpty(POISearchAdapter.LOYOLA_INDEX)) {
-            searchList.expandGroup(POISearchAdapter.LOYOLA_INDEX);
-        }
-        if (!poiSearchAdapter.getGroupIsEmpty(POISearchAdapter.SGW_INDEX)) {
-            searchList.expandGroup(POISearchAdapter.SGW_INDEX);
+        for (int i = 0; i < poiSearchAdapter.getGroupCount(); i++) {
+            searchList.expandGroup(i);
         }
     }
 
