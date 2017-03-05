@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.adapters.MySimpleArrayAdapter;
+import com.concordia.mcga.adapters.DirectionsArrayAdapter;
 import com.concordia.mcga.lib.BottomSheetBehaviorGoogleMapsLike;
 
 import java.util.ArrayList;
@@ -22,14 +22,14 @@ import java.util.ArrayList;
  * Created by Charmander on 2/25/2017.
  */
 
-public class BottomSheetFragment extends Fragment implements View.OnClickListener{
+public class BottomSheetDirectionsFragment extends Fragment implements View.OnClickListener{
 
     // Layout elements
     TextView bottomSheetTextView;
     private ListView list;
 
     // Custom ArrayList adapter
-    private MySimpleArrayAdapter adapter;
+    private DirectionsArrayAdapter adapter;
 
     // Arrays store directions and image information
     private ArrayList<String> displayedDirectionsList =  new ArrayList<String>();
@@ -93,7 +93,7 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
             }
         });
 
-        adapter = new MySimpleArrayAdapter(getActivity().getApplicationContext(), displayedDirectionsList, displayedDirectionsImage);
+        adapter = new DirectionsArrayAdapter(getActivity().getApplicationContext(), displayedDirectionsList, displayedDirectionsImage);
         adapter.notifyDataSetChanged();
 
 
@@ -117,7 +117,7 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
 
         ///
 
-        
+
         list.setAdapter(adapter);
 
         updateDirections();

@@ -17,12 +17,12 @@ import com.concordia.mcga.activities.R;
 import java.util.ArrayList;
 
 
-public class MySimpleArrayAdapter extends ArrayAdapter<String> {
+public class DirectionsArrayAdapter extends ArrayAdapter<String> {
     private final Context context;
     private ArrayList<String> directionsText = new ArrayList<String>();
     private ArrayList<String> directionsImage = new ArrayList<String>();
 
-    public MySimpleArrayAdapter(Context context, ArrayList<String> directionsText, ArrayList<String> directionsImage) {
+    public DirectionsArrayAdapter(Context context, ArrayList<String> directionsText, ArrayList<String> directionsImage) {
         super(context, R.layout.list_text, directionsText);
         this.context = context;
         this.directionsText = directionsText;

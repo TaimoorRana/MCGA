@@ -48,7 +48,7 @@
 
 
         <fragment
-            android:name= "com.concordia.mcga.fragments.BottomSheetFragment"
+            android:name= "com.concordia.mcga.fragments.BottomSheetDirectionsFragment"
             android:id="@+id/fragment12"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

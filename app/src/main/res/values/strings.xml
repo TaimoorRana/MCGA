@@ -22,4 +22,5 @@
     <string name="ScrollAwareFABBehavior">com.concordia.mcga.lib.ScrollAwareFABBehavior</string>
     <string name="MergedAppBarLayoutBehavior">com.concordia.mcga.lib.MergedAppBarLayoutBehavior</string>
     <string name="ScrollingAppBarLayoutBehavior">com.concordia.mcga.lib.ScrollingAppBarLayoutBehavior</string>
+    <string name="BottomSheetBuildingInformation">com.concordia.mcga.lib.BottomSheetBuildingInformation</string>
 </resources>
