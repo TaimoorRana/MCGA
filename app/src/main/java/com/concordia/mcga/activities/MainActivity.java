@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.fragments.NavigationFragment;
-import com.concordia.mcga.helperClasses.DatabaseHelper;
+import com.concordia.mcga.helperClasses.DatabaseConnector;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
@@ -83,10 +83,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initDatabase() {
-        DatabaseHelper.setupDatabase(this);
-        DatabaseHelper myDbHelper;
+        DatabaseConnector.setupDatabase(this);
+        DatabaseConnector myDbHelper;
         try {
-            myDbHelper = DatabaseHelper.getInstance();
+            myDbHelper = DatabaseConnector.getInstance();
         } catch (MCGADatabaseException e) {
             throw new Error("Database incorrectly initialized");
         }

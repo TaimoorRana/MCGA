@@ -3,7 +3,7 @@ package com.concordia.mcga.models;
 import android.database.Cursor;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
-import com.concordia.mcga.helperClasses.DatabaseHelper;
+import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +33,11 @@ public class Campus extends POI {
         final int CAMPUS_COLUMN_INDEX = 7;
         Cursor res;
         try {
-            if (DatabaseHelper.getInstance() == null || !SGW.buildings.isEmpty() || !LOY.buildings.isEmpty())  // if the database has not been initialized || buildings already exists
+            if (!SGW.buildings.isEmpty() || !LOY.buildings.isEmpty())  // if the database has not been initialized || buildings already exists
             {
                 return;
             }
-            res = DatabaseHelper.getInstance().getDb().rawQuery("select * from building", null);
+            res = DatabaseConnector.getInstance().getDb().rawQuery("select * from building", null);
         } catch (MCGADatabaseException e) {
             throw new Error("Database not initialized");
         }
