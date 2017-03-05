@@ -178,13 +178,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setAllGesturesEnabled(true);
-        /*Log.d("Test 2", "Checkpoint Manifest check");
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        Log.d("Test 2", "Checkpoint Manifest check");
+        if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             Log.d("Test 2", "Checkpoint Manifest happening");
             map.setMyLocationEnabled(true);
-            Log.d("Test 2", "Checkpoint Manifest check FINISHED");}
-            */
+            Log.d("Test 2", "Checkpoint Manifest check FINISHED");
+        }
+
         //Map Customization
         applyCustomGoogleMapsStyle();
         Campus.populateCampusesWithBuildings();
