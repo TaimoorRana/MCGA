@@ -5,9 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -45,6 +43,9 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
     private int currentDirection = 0;
 
 
+    // Bottomsheet
+    BottomSheetBehaviorGoogleMapsLike behavior;
+
     // simple buttons
     private ImageButton nextButton, previousButton, expandButton;
 
@@ -67,7 +68,7 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
 
         CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
         View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
-        final BottomSheetBehaviorGoogleMapsLike behavior = BottomSheetBehaviorGoogleMapsLike.from(bottomSheet);
+        behavior = BottomSheetBehaviorGoogleMapsLike.from(bottomSheet);
 
         behavior.addBottomSheetCallback(new BottomSheetBehaviorGoogleMapsLike.BottomSheetCallback() {
             @Override
@@ -95,13 +96,28 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
         adapter = new MySimpleArrayAdapter(getActivity().getApplicationContext(), displayedDirectionsList, displayedDirectionsImage);
         adapter.notifyDataSetChanged();
 
-        addDirection("up", "up");
+
+        // ONLY FOR DEMO
+        addDirection("Go Straight For 400m", "up");
         addDirection("down", "down");
         addDirection("up", "up");
-        addDirection("right", "right");
+        addDirection("Turn Right in 50m", "right");
         addDirection("left", "left");
-        addDirection("This ", "destination");
+        addDirection("Go Straight For 400m", "up");
+        addDirection("down", "down");
+        addDirection("up", "up");
+        addDirection("Turn Right in 50m", "right");
+        addDirection("left", "left");
+        addDirection("Go Straight For 400m", "up");
+        addDirection("down", "down");
+        addDirection("up", "up");
+        addDirection("Turn Right in 50m", "right");
+        addDirection("left", "left");
+        addDirection("You Have Arrived ", "destination");
 
+        ///
+
+        
         list.setAdapter(adapter);
 
         updateDirections();
@@ -117,11 +133,6 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
 
         return view;
     }
-
-    /////////////////////////////////////////////////////////
-    // On touch listener checks if list is expanded or not //
-    /////////////////////////////////////////////////////////
-
 
 
     ///////////////////////////////////////////////////////
@@ -139,6 +150,14 @@ public class BottomSheetFragment extends Fragment implements View.OnClickListene
 
             case R.id.previousButton:
                 previousDirection();
+                break;
+
+            case R.id.expandButton:
+                if (behavior.getState() == BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED){
+                    behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_EXPANDED);
+                }else{
+                    behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED);
+                }
                 break;
         }
     }

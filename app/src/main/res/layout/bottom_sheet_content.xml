@@ -11,7 +11,7 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="869dp"
+        android:layout_height="710dp"
         android:orientation="vertical"
         app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
         android:id="@+id/bottom_sheet"
@@ -81,22 +81,26 @@
                 </RelativeLayout>
 
 
-                <FrameLayout
+                <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="592dp">
+                android:layout_height="575dp">
 
-                    <ListView
-                        android:layout_width="match_parent"
-                        android:layout_height="580dp"
-                        android:id="@+id/list1"
-                        android:drawSelectorOnTop="false"
-                        android:textAlignment="center"
-                        android:background="@color/button_secondary_color"
-                        android:divider="@color/cast_expanded_controller_ad_label_background_color"
-                        android:dividerHeight="@dimen/button_internal_padding" />
-                </FrameLayout>
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/list1"
+                    android:drawSelectorOnTop="false"
+                    android:textAlignment="center"
+                    android:background="@color/button_secondary_color"
+                    android:divider="@color/cast_expanded_controller_ad_label_background_color"
+                    android:dividerHeight="@dimen/button_internal_padding" />
+
+
+                </android.support.design.widget.CoordinatorLayout>
+
             </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+
 
     <!--</FrameLayout>-->
     <!--<fragment-->
