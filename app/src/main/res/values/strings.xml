@@ -17,10 +17,9 @@
 
     <string name="action_settings">Settings</string>
     <string name="key_binding_default_toolbar_name">Modal-Toolbar-Title</string>
-    <string name="BackDropBottomSheetBehavior">com.concordia.mcga.lib.BackdropBottomSheetBehavior</string>
-    <string name="BottomSheetBehaviorGoogleMapsLike">com.concordia.mcga.lib.BottomSheetBehaviorGoogleMapsLike</string>
-    <string name="ScrollAwareFABBehavior">com.concordia.mcga.lib.ScrollAwareFABBehavior</string>
-    <string name="MergedAppBarLayoutBehavior">com.concordia.mcga.lib.MergedAppBarLayoutBehavior</string>
-    <string name="ScrollingAppBarLayoutBehavior">com.concordia.mcga.lib.ScrollingAppBarLayoutBehavior</string>
-    <string name="BottomSheetBuildingInfo">com.concordia.mcga.lib.BottomSheetBuildingInfo</string>
+    <string name="BackDropBottomSheetBehavior">com.concordia.mcga.lib.BuildingBackdropBottomSheetBehavior</string>
+    <string name="ScrollAwareFABBehavior">com.concordia.mcga.lib.BuildingScrollAwareFABBehavior</string>
+    <string name="MergedAppBarLayoutBehavior">com.concordia.mcga.lib.BuildingMergedAppBarLayoutBehavior</string>
+    <string name="ScrollingAppBarLayoutBehavior">com.concordia.mcga.lib.BuildingScrollingAppBarLayoutBehavior</string>
+    <string name="BottomSheetBuildingInfo">com.concordia.mcga.lib.BuildingBottomSheetInfo</string>
 </resources>

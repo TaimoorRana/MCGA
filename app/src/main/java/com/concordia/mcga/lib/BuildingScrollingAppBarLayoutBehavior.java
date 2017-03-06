@@ -41,23 +41,23 @@ import java.lang.ref.WeakReference;
 /**
  *
  */
-public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavior {
+public class BuildingScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavior {
 
-    private static final String TAG = ScrollingAppBarLayoutBehavior.class.getSimpleName();
+    private static final String TAG = BuildingScrollingAppBarLayoutBehavior.class.getSimpleName();
 
     private boolean mInit = false;
     private Context mContext;
     private boolean mVisible = true;
     /**
-     * To avoid using multiple "peekheight=" in XML and looking flexibility allowing {@link BottomSheetBuildingInfo#mPeekHeight}
+     * To avoid using multiple "peekheight=" in XML and looking flexibility allowing {@link BuildingBottomSheetInfo#mPeekHeight}
      * get changed dynamically we get the {@link NestedScrollView} that has
-     * "app:layout_behavior=" {@link BottomSheetBuildingInfo} inside the {@link CoordinatorLayout}
+     * "app:layout_behavior=" {@link BuildingBottomSheetInfo} inside the {@link CoordinatorLayout}
      */
-    private WeakReference<BottomSheetBuildingInfo> mBottomSheetBehaviorRef;
+    private WeakReference<BuildingBottomSheetInfo> mBottomSheetBehaviorRef;
 
     private ValueAnimator mAppBarYValueAnimator;
 
-    public ScrollingAppBarLayoutBehavior(Context context, AttributeSet attrs) {
+    public BuildingScrollingAppBarLayoutBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
     }
@@ -66,7 +66,7 @@ public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBeh
     public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
         if (dependency instanceof NestedScrollView) {
             try {
-                BottomSheetBuildingInfo.from(dependency);
+                BuildingBottomSheetInfo.from(dependency);
                 return true;
             }
             catch (IllegalArgumentException e){}
@@ -100,7 +100,7 @@ public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBeh
     private boolean init(CoordinatorLayout parent, View child, View dependency) {
         /**
          * First we need to know if dependency view is upper or lower compared with
-         * {@link BottomSheetBuildingInfo#getPeekHeight()} Y position to know if need to show the AppBar at beginning.
+         * {@link BuildingBottomSheetInfo#getPeekHeight()} Y position to know if need to show the AppBar at beginning.
          */
         getBottomSheetBehavior(parent);
         if (mBottomSheetBehaviorRef == null || mBottomSheetBehaviorRef.get() == null)
@@ -185,8 +185,8 @@ public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBeh
     }
 
     /**
-     * Look into the CoordiantorLayout for the {@link BottomSheetBuildingInfo}
-     * @param coordinatorLayout with app:layout_behavior= {@link BottomSheetBuildingInfo}
+     * Look into the CoordiantorLayout for the {@link BuildingBottomSheetInfo}
+     * @param coordinatorLayout with app:layout_behavior= {@link BuildingBottomSheetInfo}
      */
     private void getBottomSheetBehavior(@NonNull CoordinatorLayout coordinatorLayout) {
 
@@ -196,7 +196,7 @@ public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBeh
             if (child instanceof NestedScrollView) {
 
                 try {
-                    BottomSheetBuildingInfo temp = BottomSheetBuildingInfo.from(child);
+                    BuildingBottomSheetInfo temp = BuildingBottomSheetInfo.from(child);
                     mBottomSheetBehaviorRef = new WeakReference<>(temp);
                     break;
                 }

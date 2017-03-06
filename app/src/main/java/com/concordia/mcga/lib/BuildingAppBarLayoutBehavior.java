@@ -70,11 +70,11 @@ import java.lang.ref.WeakReference;
 
  */
 
-public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavior {
+public class BuildingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavior {
 
 
 
-    private static final String TAG = MergedAppBarLayoutBehavior.class.getSimpleName();
+    private static final String TAG = BuildingAppBarLayoutBehavior.class.getSimpleName();
 
 
 
@@ -90,15 +90,15 @@ public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavi
 
     /**
 
-     * To avoid using multiple "peekheight=" in XML and looking flexibility allowing {@link BottomSheetBuildingInfo#mPeekHeight}
+     * To avoid using multiple "peekheight=" in XML and looking flexibility allowing {@link BuildingBottomSheetInfo#mPeekHeight}
 
      * get changed dynamically we get the {@link NestedScrollView} that has
 
-     * "app:layout_behavior=" {@link BottomSheetBuildingInfo} inside the {@link CoordinatorLayout}
+     * "app:layout_behavior=" {@link BuildingBottomSheetInfo} inside the {@link CoordinatorLayout}
 
      */
 
-    private WeakReference<BottomSheetBuildingInfo> mBottomSheetBehaviorRef;
+    private WeakReference<BuildingBottomSheetInfo> mBottomSheetBehaviorRef;
 
     private float mInitialY;
 
@@ -126,7 +126,7 @@ public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavi
 
 
 
-    public MergedAppBarLayoutBehavior(Context context, AttributeSet attrs) {
+    public BuildingAppBarLayoutBehavior(Context context, AttributeSet attrs) {
 
         super(context, attrs);
 
@@ -144,7 +144,7 @@ public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavi
 
             try {
 
-                BottomSheetBuildingInfo.from(dependency);
+                BuildingBottomSheetInfo.from(dependency);
 
                 return true;
 
@@ -308,9 +308,9 @@ public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavi
 
     /**
 
-     * Look into the CoordiantorLayout for the {@link BottomSheetBuildingInfo}
+     * Look into the CoordiantorLayout for the {@link BuildingBottomSheetInfo}
 
-     * @param coordinatorLayout with app:layout_behavior= {@link BottomSheetBuildingInfo}
+     * @param coordinatorLayout with app:layout_behavior= {@link BuildingBottomSheetInfo}
 
      */
 
@@ -330,7 +330,7 @@ public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavi
 
                 try {
 
-                    BottomSheetBuildingInfo temp = BottomSheetBuildingInfo.from(child);
+                    BuildingBottomSheetInfo temp = BuildingBottomSheetInfo.from(child);
 
                     mBottomSheetBehaviorRef = new WeakReference<>(temp);
 
@@ -776,7 +776,7 @@ public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavi
 
 
 
-    public static <V extends View> MergedAppBarLayoutBehavior from(V view) {
+    public static <V extends View> BuildingAppBarLayoutBehavior from(V view) {
 
         ViewGroup.LayoutParams params = view.getLayoutParams();
 
@@ -790,15 +790,15 @@ public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavi
 
                 .getBehavior();
 
-        if (!(behavior instanceof MergedAppBarLayoutBehavior)) {
+        if (!(behavior instanceof BuildingAppBarLayoutBehavior)) {
 
             throw new IllegalArgumentException("The view is not associated with " +
 
-                    "MergedAppBarLayoutBehavior");
+                    "BuildingAppBarLayoutBehavior");
 
         }
 
-        return (MergedAppBarLayoutBehavior) behavior;
+        return (BuildingAppBarLayoutBehavior) behavior;
 
     }
 

@@ -32,21 +32,21 @@ import java.lang.ref.WeakReference;
  * This class only cares about hide or unhide the FAB because the anchor behavior is something
  * already in FAB.
  */
-public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
+public class BuildingScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 
     /**
      * One of the point used to set hide() or show() in FAB
      */
     private float offset;
     /**
-     * The FAB should be hidden when it reach {@link #offset} or when {@link BottomSheetBuildingInfo}
-     * is visually lower than {@link BottomSheetBuildingInfo#getPeekHeight()}.
+     * The FAB should be hidden when it reach {@link #offset} or when {@link BuildingBottomSheetInfo}
+     * is visually lower than {@link BuildingBottomSheetInfo#getPeekHeight()}.
      * We got a reference to the object to allow change dynamically PeekHeight in BottomSheet and
      * got updated here.
      */
-    private WeakReference<BottomSheetBuildingInfo> mBottomSheetBehaviorRef;
+    private WeakReference<BuildingBottomSheetInfo> mBottomSheetBehaviorRef;
 
-    public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
+    public BuildingScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
         offset = 0;
         mBottomSheetBehaviorRef = null;
@@ -63,7 +63,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     public boolean layoutDependsOn(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
         if (dependency instanceof NestedScrollView) {
             try {
-                BottomSheetBuildingInfo.from(dependency);
+                BuildingBottomSheetInfo.from(dependency);
                 return true;
             }
             catch (IllegalArgumentException e){}
@@ -90,7 +90,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
         else if ((child.getY() + DyFix) >= offset) {
 
             /**
-             * We are calculating every time point in Y where BottomSheet get {@link BottomSheetBuildingInfo#STATE_COLLAPSED}.
+             * We are calculating every time point in Y where BottomSheet get {@link BuildingBottomSheetInfo#STATE_COLLAPSED}.
              * If PeekHeight change dynamically we can reflect the behavior asap.
              */
             if (mBottomSheetBehaviorRef == null || mBottomSheetBehaviorRef.get() == null)
@@ -146,8 +146,8 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     }
 
     /**
-     * Look into the CoordiantorLayout for the {@link BottomSheetBuildingInfo}
-     * @param coordinatorLayout with app:layout_behavior= {@link BottomSheetBuildingInfo}
+     * Look into the CoordiantorLayout for the {@link BuildingBottomSheetInfo}
+     * @param coordinatorLayout with app:layout_behavior= {@link BuildingBottomSheetInfo}
      */
     private void getBottomSheetBehavior(@NonNull CoordinatorLayout coordinatorLayout) {
 
@@ -157,7 +157,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
             if (child instanceof NestedScrollView) {
 
                 try {
-                    BottomSheetBuildingInfo temp = BottomSheetBuildingInfo.from(child);
+                    BuildingBottomSheetInfo temp = BuildingBottomSheetInfo.from(child);
                     mBottomSheetBehaviorRef = new WeakReference<>(temp);
                     break;
                 }

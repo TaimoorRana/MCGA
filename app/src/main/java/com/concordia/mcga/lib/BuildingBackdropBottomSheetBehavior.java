@@ -30,25 +30,25 @@ import java.lang.ref.WeakReference;
  * behaving like parallax effect.
  *
  * The backdrop need to be <bold>into</bold> a CoordinatorLayout and <bold>before</bold>
- * {@link BottomSheetBuildingInfo} in the XML file to get same behavior like Google Maps.
+ * {@link BuildingBottomSheetInfo} in the XML file to get same behavior like Google Maps.
  * It doesn't matter where the backdrop element start in XML, it will be moved following
  * Google Maps's parallax behavior.
  * @param <V>
  */
-public class BackdropBottomSheetBehavior<V extends View> extends CoordinatorLayout.Behavior<V> {
+public class BuildingBackdropBottomSheetBehavior<V extends View> extends CoordinatorLayout.Behavior<V> {
     /**
-     * To avoid using multiple "peekheight=" in XML and looking flexibility allowing {@link BottomSheetBuildingInfo#mPeekHeight}
+     * To avoid using multiple "peekheight=" in XML and looking flexibility allowing {@link BuildingBottomSheetInfo#mPeekHeight}
      * get changed dynamically we get the {@link NestedScrollView} that has
-     * "app:layout_behavior=" {@link BottomSheetBuildingInfo} inside the {@link CoordinatorLayout}
+     * "app:layout_behavior=" {@link BuildingBottomSheetInfo} inside the {@link CoordinatorLayout}
      */
-    private WeakReference<BottomSheetBuildingInfo> mBottomSheetBehaviorRef;
+    private WeakReference<BuildingBottomSheetInfo> mBottomSheetBehaviorRef;
     /**
      * Following {@link #onDependentViewChanged}'s docs mCurrentChildY just save the child Y
      * position.
      */
     private int mCurrentChildY;
 
-    public BackdropBottomSheetBehavior(Context context, AttributeSet attrs) {
+    public BuildingBackdropBottomSheetBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -56,7 +56,7 @@ public class BackdropBottomSheetBehavior<V extends View> extends CoordinatorLayo
     public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
         if (dependency instanceof NestedScrollView) {
             try {
-                BottomSheetBuildingInfo.from(dependency);
+                BuildingBottomSheetInfo.from(dependency);
                 return true;
             }
             catch (IllegalArgumentException e){}
@@ -68,7 +68,7 @@ public class BackdropBottomSheetBehavior<V extends View> extends CoordinatorLayo
     public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
         /**
          * collapsedY and achorPointY are calculated every time looking for
-         * flexibility, in case that dependency's height, child's height or {@link BottomSheetBuildingInfo#getPeekHeight()}'s
+         * flexibility, in case that dependency's height, child's height or {@link BuildingBottomSheetInfo#getPeekHeight()}'s
          * value changes throught the time, I mean, you can have a {@link android.widget.ImageView}
          * using images with different sizes and you don't want to resize them or so
          */
@@ -76,7 +76,7 @@ public class BackdropBottomSheetBehavior<V extends View> extends CoordinatorLayo
             getBottomSheetBehavior(parent);
         /**
          * mCollapsedY: Y position in where backdrop get hidden behind dependency.
-         * {@link BottomSheetBuildingInfo#getPeekHeight()} and collapsedY are the same point on screen.
+         * {@link BuildingBottomSheetInfo#getPeekHeight()} and collapsedY are the same point on screen.
          */
         int collapsedY = dependency.getHeight() - mBottomSheetBehaviorRef.get().getPeekHeight();
         /**
@@ -101,8 +101,8 @@ public class BackdropBottomSheetBehavior<V extends View> extends CoordinatorLayo
     }
 
     /**
-     * Look into the CoordiantorLayout for the {@link BottomSheetBuildingInfo}
-     * @param coordinatorLayout with app:layout_behavior= {@link BottomSheetBuildingInfo}
+     * Look into the CoordiantorLayout for the {@link BuildingBottomSheetInfo}
+     * @param coordinatorLayout with app:layout_behavior= {@link BuildingBottomSheetInfo}
      */
     private void getBottomSheetBehavior(@NonNull CoordinatorLayout coordinatorLayout) {
 
@@ -112,7 +112,7 @@ public class BackdropBottomSheetBehavior<V extends View> extends CoordinatorLayo
             if (child instanceof NestedScrollView) {
 
                 try {
-                    BottomSheetBuildingInfo temp = BottomSheetBuildingInfo.from(child);
+                    BuildingBottomSheetInfo temp = BuildingBottomSheetInfo.from(child);
                     mBottomSheetBehaviorRef = new WeakReference<>(temp);
                     break;
                 }

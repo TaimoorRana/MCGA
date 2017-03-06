@@ -26,7 +26,7 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
     private String[] imageString = new String[4];
 
     public BuildingInformationArrayAdapter(Context context, ArrayList<String> information) {
-        super(context, R.layout.list_text, information);
+        super(context, R.layout.building_info_list, information);
         this.context = context;
         this.information = information;
 
