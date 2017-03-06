@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * Created by Charmander on 3/5/2017.
  */
 
-public class BottomSheetBuildingInfoFragment extends Fragment {
+public class BottomSheetBuildingInfoFragment extends Fragment implements View.OnClickListener{
 
 
     // Bottomsheet
@@ -107,8 +107,22 @@ public class BottomSheetBuildingInfoFragment extends Fragment {
         // Set bottom sheet to collapsed
         expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
         behavior.setState(BottomSheetBuildingInfo.STATE_COLLAPSED);
+        expandButton.setOnClickListener(this);
 
         return view;
+    }
+
+    // Overloaded method for button clicks
+    public void onClick(View clickedView) {
+        switch (clickedView.getId()) {
+            case R.id.expandButton:
+                if (behavior.getState() == BottomSheetBuildingInfo.STATE_COLLAPSED){
+                    behavior.setState(BottomSheetBuildingInfo.STATE_EXPANDED);
+                }else{
+                    behavior.setState(BottomSheetBuildingInfo.STATE_COLLAPSED);
+                }
+                break;
+        }
     }
 
     // Set building info 1 shot easy money
