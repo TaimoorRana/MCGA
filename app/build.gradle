@@ -26,6 +26,13 @@ android {
     lintOptions {
         abortOnError false
     }
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
 }
 
 dependencies {
