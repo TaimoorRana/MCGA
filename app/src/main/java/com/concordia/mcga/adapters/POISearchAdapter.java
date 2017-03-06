@@ -130,13 +130,13 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public long getGroupId(int i) {
-        return i;
+    public long getGroupId(int groupPosition) {
+        return groupPosition;
     }
 
     @Override
-    public long getChildId(int i, int i1) {
-        return i1;
+    public long getChildId(int groupPosition, int childPosition) {
+        return childPosition;
     }
 
     @Override
