@@ -148,7 +148,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private String formatTime(int hours, int minutes) {
         String time = null;
         if (hours > 0) {
-            time =  hours + "h" + " " + minutes + "min";
+            time = hours + "h" + " " + minutes + "min";
         } else if (hours == 0) {
             time = minutes + "min";
         } else if (minutes == 0) {
