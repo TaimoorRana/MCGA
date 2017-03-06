@@ -64,6 +64,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private ExpandableListView searchList;
     private Dialog searchDialog;
 
+    private enum ViewType {
+        INDOOR, OUTDOOR
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -337,9 +341,4 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             }
         });
     }
-
-    private enum ViewType {
-        INDOOR, OUTDOOR
-    }
-
 }

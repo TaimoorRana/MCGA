@@ -1,7 +1,6 @@
 package com.concordia.mcga.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatImageView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -23,10 +23,10 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
     private Context context;
 
     public static final int SGW_INDEX = 0;
-    public static final int LOYOLA_INDEX = 1;
+    public static final int LOY_INDEX = 1;
 
-    private ArrayList<Building> sgwFilteredList;
-    private ArrayList<Building> loyolaFilteredList;
+    private List<Building> sgwFilteredList;
+    private List<Building> loyolaFilteredList;
 
     /**
      * The constructor initializes the empty lists that store the currently queried POIs
@@ -45,29 +45,27 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
      */
     @Override
     public int getGroupCount() {
-        boolean sgwClear = getGroupIsEmpty(SGW_INDEX);
-        boolean loyClear = getGroupIsEmpty(LOYOLA_INDEX);
-
-        if (sgwClear && loyClear) {
-            return 0;
-        } else if (sgwClear || loyClear) {
-            return 1;
-        } else {
-            return 2;
+        int count = 0;
+        if (!getGroupIsEmpty(SGW_INDEX)) {
+            count++;
         }
+        if (!getGroupIsEmpty(LOY_INDEX)) {
+            count++;
+        }
+        return count;
     }
 
     /**
      * This overrides the BaseExpandableList function to get the number of children (POI) entries
-     * @param i Campus index
+     * @param childPosition Campus index
      * @return Number of POIs specific to the passed campus
      */
     @Override
-    public int getChildrenCount(int i) {
-        Campus camp = (Campus)getGroup(i);
-        if (camp == Campus.SGW) {
+    public int getChildrenCount(int childPosition) {
+        Campus campus = (Campus)getGroup(childPosition);
+        if (campus == Campus.SGW) {
             return sgwFilteredList.size();
-        } else if (camp == Campus.LOY) {
+        } else if (campus == Campus.LOY) {
             return loyolaFilteredList.size();
         } else {
             return 0;
@@ -80,32 +78,32 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
      * handles groups and children - it is used internally to get the "group" (campus) based on the
      * number of visible groups, so we have to handle different cases depending on whether the
      * POIs filtered by the query come from a single campus or both of them.
-     * @param i Active campus index
+     * @param groupPosition Active campus index
      * @return The campus specified by the index
      */
     @Override
-    public Object getGroup(int i) {
+    public Object getGroup(int groupPosition) {
         boolean sgwClear = getGroupIsEmpty(SGW_INDEX);
-        boolean loyClear = getGroupIsEmpty(LOYOLA_INDEX);
+        boolean loyClear = getGroupIsEmpty(LOY_INDEX);
 
         if (sgwClear && loyClear) {
             return null;
         } else if (sgwClear) {
-            if (i == 0) {
+            if (groupPosition == 0) {
                 return Campus.LOY;
             } else {
                 return null;
             }
         } else if (loyClear) {
-            if (i == 0) {
+            if (groupPosition == 0) {
                 return Campus.SGW;
             } else {
                 return null;
             }
         } else {
-            if (i == SGW_INDEX) {
+            if (groupPosition == SGW_INDEX) {
                 return Campus.SGW;
-            } else if (i == LOYOLA_INDEX) {
+            } else if (groupPosition == LOY_INDEX) {
                 return Campus.LOY;
             } else {
                 return null;
@@ -115,17 +113,17 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
 
     /**
      * This overrides the BaseExpandableList function to get an actual menu item - in this case, POI
-     * @param i The active campus index (see getGroup)
-     * @param i1 The POI index within the specified campus
+     * @param groupPosition The active campus index (see getGroup)
+     * @param childPosition The POI index within the specified campus
      * @return The POI that exists according to the filtered query
      */
     @Override
-    public Object getChild(int i, int i1) {
-        Campus camp = (Campus)getGroup(i);
-        if (camp == Campus.SGW) {
-            return sgwFilteredList.get(i1);
-        } else if (camp == Campus.LOY) {
-            return loyolaFilteredList.get(i1);
+    public Object getChild(int groupPosition, int childPosition) {
+        Campus campus = (Campus)getGroup(groupPosition);
+        if (campus == Campus.SGW) {
+            return sgwFilteredList.get(childPosition);
+        } else if (campus == Campus.LOY) {
+            return loyolaFilteredList.get(childPosition);
         } else {
             return null;
         }
@@ -154,7 +152,7 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
     public boolean getGroupIsEmpty(int index) {
         if (index == SGW_INDEX) {
             return sgwFilteredList.isEmpty();
-        } else if (index == LOYOLA_INDEX) {
+        } else if (index == LOY_INDEX) {
             return loyolaFilteredList.isEmpty();
         } else {
             return false;
@@ -163,15 +161,15 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
 
     /**
      * Inflates and returns the view associated with the index-specified campus or POI group
-     * @param i Campus/group index
+     * @param groupPosition Campus/group index
      * @param b Whether the group is collapsed or expanded
      * @param view The old view to reuse, if possible
      * @param viewGroup The parent that this view will be attached to
      * @return The inflated POI group view
      */
     @Override
-    public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
-        Campus campus = (Campus)getGroup(i);
+    public View getGroupView(int groupPosition, boolean b, View view, ViewGroup viewGroup) {
+        Campus campus = (Campus)getGroup(groupPosition);
 
         if (campus == null) {
             return null;
@@ -183,7 +181,7 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         }
 
         CircleImageView campusImage = (CircleImageView) view.findViewById(R.id.groupImage);
-        Campus camp = (Campus)getGroup(i);
+        Campus camp = (Campus)getGroup(groupPosition);
         if (camp == Campus.SGW) {
             campusImage.setImageResource(R.mipmap.ic_sgw_campus);
         } else {
@@ -198,16 +196,16 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
 
     /**
      * Inflates and returns the view associated with the POI list item. For now, a building name
-     * @param i The group/campus index
-     * @param i1 The child/POI index
+     * @param groupPosition The group/campus index
+     * @param childPosition The child/POI index
      * @param b Whether the child is the last one in the group
      * @param view Existing view to reuse if possible
      * @param viewGroup The parent group this view will be attached to
      * @return The POI menu item (building name)
      */
     @Override
-    public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-        Building building = (Building)getChild(i, i1);
+    public View getChildView(int groupPosition, int childPosition, boolean b, View view, ViewGroup viewGroup) {
+        Building building = (Building)getChild(groupPosition, childPosition);
 
         if (building == null) {
             return null;
@@ -245,8 +243,8 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
             //loyolaFilteredList.addAll(Campus.LOY.getBuildings());
         } else {
             // Temporary buffers. Alternative would be to use synchronize
-            ArrayList<Building> sgwList = new ArrayList<>();
-            ArrayList<Building> loyList = new ArrayList<>();
+            List<Building> sgwList = new ArrayList<>();
+            List<Building> loyList = new ArrayList<>();
 
             for (Building building : Campus.SGW.getBuildings()) {
                 if (building.getName().toLowerCase().contains(query) ||
