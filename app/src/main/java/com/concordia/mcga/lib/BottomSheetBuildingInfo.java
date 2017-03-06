@@ -591,7 +591,7 @@ public class BottomSheetBuildingInfo<V extends View> extends CoordinatorLayout.B
         }
         else
         if (mHideable && state == STATE_HIDDEN) {
-            top = mParentHeight;
+            top = mMaxOffset;
         } else {
             throw new IllegalArgumentException("Illegal state argument: " + state);
         }
@@ -707,8 +707,8 @@ public class BottomSheetBuildingInfo<V extends View> extends CoordinatorLayout.B
             }
             else
             if ( mHideable  &&  shouldHide(releasedChild, yvel) ) {
-                top = mParentHeight;
-                targetState = STATE_HIDDEN;
+                top = mMaxOffset;
+                targetState = STATE_COLLAPSED;
             }
             else
             if ( yvel == 0.f ) {
