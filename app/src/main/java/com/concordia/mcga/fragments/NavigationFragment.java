@@ -39,6 +39,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 
 import java.util.ArrayList;
@@ -320,12 +321,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         }
 
         Location location = locationManager.getLastKnownLocation(provider); // Missing Permissions - Getting Current Location, problem is public Location class constructor was overridden by Arek and can't take in a String
+        Log.d("LOCATION Latitude: "+location.getLatitude(), "Longitude: "+location.getLongitude());
 
         if (location != null) {
             double latitude = location.getLatitude(); // Getting latitude of the current location
             double longitude = location.getLongitude(); // Getting longitude of the current location
             myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
+            Log.d("Latitude: "+latitude, "Longitude: "+longitude);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, CAMPUS_DEFAULT_ZOOM_LEVEL));//Camera Update method to the position
+            map.addMarker(new MarkerOptions().position(myPosition).title("Start")); //Test if myPosition was fished properly
         }
     }
 }
