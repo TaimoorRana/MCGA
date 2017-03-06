@@ -198,7 +198,7 @@ public class BottomSheetBuildingInfo<V extends View> extends CoordinatorLayout.B
         mParentHeight = parent.getHeight();
 
 
-        mMinOffset = Math.max(650, mParentHeight - child.getHeight());
+        mMinOffset = Math.max(820, mParentHeight - child.getHeight());
 
         mMaxOffset = Math.max(mParentHeight - 230, mMinOffset);
 

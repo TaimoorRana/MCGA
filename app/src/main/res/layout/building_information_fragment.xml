@@ -66,10 +66,9 @@
 
             </LinearLayout>
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <LinearLayout
                 android:orientation="vertical" android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="72dp"
                 android:weightSum="1"
                 android:background="@color/button_secondary_color">
 
@@ -81,7 +80,8 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:weightSum="1">
+                        android:weightSum="1"
+                        android:layout_alignParentBottom="true">
 
                         <ImageView
                             android:layout_width="51dp"
@@ -140,7 +140,8 @@
 
             <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="575dp">
+                android:layout_height="575dp"
+                android:background="@color/button_secondary_color">
 
                 <ListView
                     android:layout_width="match_parent"

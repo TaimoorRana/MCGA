@@ -9,10 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.adapters.BuildingInformationArrayAdapter;
+import com.concordia.mcga.adapters.DirectionsArrayAdapter;
 import com.concordia.mcga.lib.BottomSheetBuildingInfo;
+
+import java.util.ArrayList;
 
 /**
  * Created by Charmander on 3/5/2017.
@@ -22,12 +27,19 @@ public class BottomSheetBuildingInfoFragment extends Fragment {
 
 
     // Bottomsheet
-    BottomSheetBuildingInfo behavior;
+    private BottomSheetBuildingInfo behavior;
 
     // UI elements
-    ImageButton expandButton;
-    TextView bottom_sheet_title, address, closingTime, openingTime;
+    private ImageButton expandButton;
+    private TextView bottom_sheet_title, address, closingTime, openingTime;
 
+    //Array adapter
+    private BuildingInformationArrayAdapter adapter;
+
+    private ArrayList<String> images = new ArrayList<String>();
+    private ArrayList<String> rowImages = new ArrayList<String>();
+
+    private ListView list;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // View Inflater
@@ -43,6 +55,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment {
         address = (TextView) view.findViewById(R.id.address);
         closingTime = (TextView) view.findViewById(R.id.closingTime);
         openingTime = (TextView) view.findViewById(R.id.openingTime);
+        list = (ListView) view.findViewById(R.id.list1);
 
         behavior.addBottomSheetCallback(new BottomSheetBuildingInfo.BottomSheetCallback() {
             @Override
@@ -67,6 +80,28 @@ public class BottomSheetBuildingInfoFragment extends Fragment {
             }
         });
 
+        //List adapter
+        adapter = new BuildingInformationArrayAdapter(getActivity().getApplicationContext(), images);
+        adapter.notifyDataSetChanged();
+        list.setAdapter(adapter);
+
+        //////////////////////////////////////////////////
+        // FOR DEMO
+        addImage("up");
+        addImage("up");
+        addImage("up");
+        addImage("up");
+        addImage("up");
+        addImage("up");
+        addImage("up");
+        addImage("up");
+
+        //
+
+        updateImageRow();
+        //////////////////////////////////////////////////
+
+
         //Set bottomsheet to hidden
         //behavior.setState(BottomSheetBuildingInfo.STATE_HIDDEN);
         // Set bottom sheet to collapsed
@@ -85,13 +120,51 @@ public class BottomSheetBuildingInfoFragment extends Fragment {
     }
 
     public void collapse(){
-
         behavior.setState(BottomSheetBuildingInfo.STATE_COLLAPSED);
     }
 
     public void expand(){
         behavior.setState(BottomSheetBuildingInfo.STATE_EXPANDED);
     }
+
+
+    //Updates a row
+    public void updateImageRow(){
+        String img = "";
+        for (int i = 0; i < rowImages.size(); i++){
+            img += rowImages.get(i);
+
+            if ((i + 1) % 4 ==0){
+                images.add(img);
+                adapter.notifyDataSetChanged();
+                img = "";
+            }
+            else if(i == rowImages.size() - 1){
+                images.add(img);
+                adapter.notifyDataSetChanged();
+                img = "";
+            }
+            else{
+                img += "-";
+            }
+        }
+    }
+
+    public void clear(){
+        images.clear();
+        rowImages.clear();
+        updateImageRow();
+    }
+
+    private void internalClear(){
+        rowImages.clear();
+    }
+
+    public void addImage(String image){
+        rowImages.add(image);
+    }
+
+
 
     private void setBottomSheetTitle(String title){
         bottom_sheet_title.setText(title);

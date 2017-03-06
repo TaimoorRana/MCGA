@@ -44,34 +44,17 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
         imageView[2] = (ImageView) rowView.findViewById(R.id.buildingImage3);
         imageView[3] = (ImageView) rowView.findViewById(R.id.buildingImage4);
 
-        // Set images
-        imageString = information.get(position).split(", ");
+        String[] image = information.get(position).split("-");
 
         try {
-            for (int i = 0 ; i > 4; i ++) {
-                switch (imageString[i]) {
+            for (int i = 0; i < 4; i ++) {
+                switch (image[i]) {
                     case "up":
                         imageView[i].setImageResource(R.drawable.ic_arrow_upward_black_24dp);
                         break;
 
-                    case "down":
-                        imageView[i].setImageResource(R.drawable.ic_arrow_downward_black_24dp);
+                    case "none":
                         break;
-
-                    case "right":
-                        imageView[i].setImageResource(R.drawable.ic_arrow_forward_black_24dp);
-                        break;
-
-                    case "left":
-                        imageView[i].setImageResource(R.drawable.ic_arrow_back_black_24dp);
-                        break;
-
-                    case "destination":
-                        imageView[i].setImageResource(R.drawable.ic_add_location_black_24dp);
-
-                    case "None":
-                        break;
-
                     default:
                         break;
                 }
@@ -80,6 +63,7 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
         catch (Exception e){
 
         }
+
 
         return rowView;
     }
