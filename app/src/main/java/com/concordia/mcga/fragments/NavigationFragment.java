@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -276,11 +278,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-    }
-
     /**
      * Constructor helper function to set up the search functionality of the view
      */
@@ -300,7 +297,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         searchDialog.setCanceledOnTouchOutside(true);
         searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         searchDialog.setContentView(R.layout.search_dialog);
-        Window window = searchDialog.getWindow();
+        final Window window = searchDialog.getWindow();
         window.setGravity(Gravity.TOP);
         window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
@@ -313,11 +310,23 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         window.setLayout(LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
                 LinearLayoutCompat.LayoutParams.MATCH_PARENT);
 
-        // Set dialog window offset and height
-        WindowManager.LayoutParams wmlp = window.getAttributes();
-        wmlp.y = 200;
-        wmlp.height = 450;
-        window.setAttributes(wmlp);
+        parentLayout.getViewTreeObserver().addOnGlobalFocusChangeListener(
+                new ViewTreeObserver.OnGlobalFocusChangeListener() {
+                    @Override
+                    public void onGlobalFocusChanged(View view, View view1) {
+                        // Set dialog window offset and height
+                        WindowManager.LayoutParams wmlp = window.getAttributes();
+                        int xy[] = new int[2];
+                        parentLayout.findViewById(R.id.navigationSearch).getLocationOnScreen(xy);
+                        wmlp.y = xy[1];
+
+                        //Rect r = new Rect();
+                        //parentLayout.getWindowVisibleDisplayFrame(r);
+                        wmlp.height = 450; //(r.bottom - r.top) - xy[1];
+                        window.setAttributes(wmlp);
+                    }
+                }
+        );
     }
 
     /**
