@@ -90,15 +90,15 @@ public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavi
 
     /**
 
-     * To avoid using multiple "peekheight=" in XML and looking flexibility allowing {@link BottomSheetBehaviorGoogleMapsLike#mPeekHeight}
+     * To avoid using multiple "peekheight=" in XML and looking flexibility allowing {@link BottomSheetBuildingInfo#mPeekHeight}
 
      * get changed dynamically we get the {@link NestedScrollView} that has
 
-     * "app:layout_behavior=" {@link BottomSheetBehaviorGoogleMapsLike} inside the {@link CoordinatorLayout}
+     * "app:layout_behavior=" {@link BottomSheetBuildingInfo} inside the {@link CoordinatorLayout}
 
      */
 
-    private WeakReference<BottomSheetBehaviorGoogleMapsLike> mBottomSheetBehaviorRef;
+    private WeakReference<BottomSheetBuildingInfo> mBottomSheetBehaviorRef;
 
     private float mInitialY;
 
@@ -144,7 +144,7 @@ public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavi
 
             try {
 
-                BottomSheetBehaviorGoogleMapsLike.from(dependency);
+                BottomSheetBuildingInfo.from(dependency);
 
                 return true;
 
@@ -308,9 +308,9 @@ public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavi
 
     /**
 
-     * Look into the CoordiantorLayout for the {@link BottomSheetBehaviorGoogleMapsLike}
+     * Look into the CoordiantorLayout for the {@link BottomSheetBuildingInfo}
 
-     * @param coordinatorLayout with app:layout_behavior= {@link BottomSheetBehaviorGoogleMapsLike}
+     * @param coordinatorLayout with app:layout_behavior= {@link BottomSheetBuildingInfo}
 
      */
 
@@ -330,7 +330,7 @@ public class MergedAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBehavi
 
                 try {
 
-                    BottomSheetBehaviorGoogleMapsLike temp = BottomSheetBehaviorGoogleMapsLike.from(child);
+                    BottomSheetBuildingInfo temp = BottomSheetBuildingInfo.from(child);
 
                     mBottomSheetBehaviorRef = new WeakReference<>(temp);
 

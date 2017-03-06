@@ -49,11 +49,11 @@ public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBeh
     private Context mContext;
     private boolean mVisible = true;
     /**
-     * To avoid using multiple "peekheight=" in XML and looking flexibility allowing {@link BottomSheetBehaviorGoogleMapsLike#mPeekHeight}
+     * To avoid using multiple "peekheight=" in XML and looking flexibility allowing {@link BottomSheetBuildingInfo#mPeekHeight}
      * get changed dynamically we get the {@link NestedScrollView} that has
-     * "app:layout_behavior=" {@link BottomSheetBehaviorGoogleMapsLike} inside the {@link CoordinatorLayout}
+     * "app:layout_behavior=" {@link BottomSheetBuildingInfo} inside the {@link CoordinatorLayout}
      */
-    private WeakReference<BottomSheetBehaviorGoogleMapsLike> mBottomSheetBehaviorRef;
+    private WeakReference<BottomSheetBuildingInfo> mBottomSheetBehaviorRef;
 
     private ValueAnimator mAppBarYValueAnimator;
 
@@ -66,7 +66,7 @@ public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBeh
     public boolean layoutDependsOn(CoordinatorLayout parent, View child, View dependency) {
         if (dependency instanceof NestedScrollView) {
             try {
-                BottomSheetBehaviorGoogleMapsLike.from(dependency);
+                BottomSheetBuildingInfo.from(dependency);
                 return true;
             }
             catch (IllegalArgumentException e){}
@@ -100,7 +100,7 @@ public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBeh
     private boolean init(CoordinatorLayout parent, View child, View dependency) {
         /**
          * First we need to know if dependency view is upper or lower compared with
-         * {@link BottomSheetBehaviorGoogleMapsLike#getPeekHeight()} Y position to know if need to show the AppBar at beginning.
+         * {@link BottomSheetBuildingInfo#getPeekHeight()} Y position to know if need to show the AppBar at beginning.
          */
         getBottomSheetBehavior(parent);
         if (mBottomSheetBehaviorRef == null || mBottomSheetBehaviorRef.get() == null)
@@ -185,8 +185,8 @@ public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBeh
     }
 
     /**
-     * Look into the CoordiantorLayout for the {@link BottomSheetBehaviorGoogleMapsLike}
-     * @param coordinatorLayout with app:layout_behavior= {@link BottomSheetBehaviorGoogleMapsLike}
+     * Look into the CoordiantorLayout for the {@link BottomSheetBuildingInfo}
+     * @param coordinatorLayout with app:layout_behavior= {@link BottomSheetBuildingInfo}
      */
     private void getBottomSheetBehavior(@NonNull CoordinatorLayout coordinatorLayout) {
 
@@ -196,7 +196,7 @@ public class ScrollingAppBarLayoutBehavior extends AppBarLayout.ScrollingViewBeh
             if (child instanceof NestedScrollView) {
 
                 try {
-                    BottomSheetBehaviorGoogleMapsLike temp = BottomSheetBehaviorGoogleMapsLike.from(child);
+                    BottomSheetBuildingInfo temp = BottomSheetBuildingInfo.from(child);
                     mBottomSheetBehaviorRef = new WeakReference<>(temp);
                     break;
                 }

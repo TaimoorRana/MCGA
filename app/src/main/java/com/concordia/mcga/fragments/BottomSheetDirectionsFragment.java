@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
-import com.concordia.mcga.lib.BottomSheetBehaviorGoogleMapsLike;
+import com.concordia.mcga.lib.BottomSheetBuildingInfo;
 
 import java.util.ArrayList;
 
@@ -44,7 +44,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
 
     // Bottomsheet
-    BottomSheetBehaviorGoogleMapsLike behavior;
+    BottomSheetBuildingInfo behavior;
 
     // simple buttons
     private ImageButton nextButton, previousButton, expandButton;
@@ -68,17 +68,17 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
         CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
         View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
-        behavior = BottomSheetBehaviorGoogleMapsLike.from(bottomSheet);
+        behavior = BottomSheetBuildingInfo.from(bottomSheet);
 
-        behavior.addBottomSheetCallback(new BottomSheetBehaviorGoogleMapsLike.BottomSheetCallback() {
+        behavior.addBottomSheetCallback(new BottomSheetBuildingInfo.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
-                    case BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED:
+                    case BottomSheetBuildingInfo.STATE_COLLAPSED:
                         expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
                         break;
 
-                    case BottomSheetBehaviorGoogleMapsLike.STATE_EXPANDED:
+                    case BottomSheetBuildingInfo.STATE_EXPANDED:
                         expandButton.setImageResource(R.drawable.ic_expand_more_black_24dp);
                         break;
 
@@ -129,7 +129,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
 
         expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
-        behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED);
+        behavior.setState(BottomSheetBuildingInfo.STATE_COLLAPSED);
 
         return view;
     }
@@ -153,10 +153,10 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
                 break;
 
             case R.id.expandButton:
-                if (behavior.getState() == BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED){
-                    behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_EXPANDED);
+                if (behavior.getState() == BottomSheetBuildingInfo.STATE_COLLAPSED){
+                    behavior.setState(BottomSheetBuildingInfo.STATE_EXPANDED);
                 }else{
-                    behavior.setState(BottomSheetBehaviorGoogleMapsLike.STATE_COLLAPSED);
+                    behavior.setState(BottomSheetBuildingInfo.STATE_COLLAPSED);
                 }
                 break;
         }

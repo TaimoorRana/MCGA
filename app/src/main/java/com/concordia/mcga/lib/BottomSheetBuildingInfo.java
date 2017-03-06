@@ -25,7 +25,7 @@ import java.lang.ref.WeakReference;
 import java.util.Vector;
 
 
-public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends CoordinatorLayout.Behavior<V> {
+public class BottomSheetBuildingInfo<V extends View> extends CoordinatorLayout.Behavior<V> {
 
     /**
      * Callback for monitoring events about bottom sheets.
@@ -116,6 +116,8 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
 
     private int mParentHeight;
 
+    private int customOffSet = -1;
+
     private WeakReference<V> mViewRef;
 
     private WeakReference<View> mNestedScrollingChildRef;
@@ -131,7 +133,7 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
     /**
      * Default constructor for instantiating BottomSheetBehaviors.
      */
-    public BottomSheetBehaviorGoogleMapsLike() { }
+    public BottomSheetBuildingInfo() { }
 
     /**
      * Default constructor for inflating BottomSheetBehaviors from layout.
@@ -139,7 +141,7 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
      * @param context The {@link Context}.
      * @param attrs   The {@link AttributeSet}.
      */
-    public BottomSheetBehaviorGoogleMapsLike(Context context, AttributeSet attrs ) {
+    public BottomSheetBuildingInfo(Context context, AttributeSet attrs ) {
         super( context, attrs );
         TypedArray a = context.obtainStyledAttributes(attrs,
                 android.support.design.R.styleable.BottomSheetBehavior_Layout);
@@ -180,6 +182,8 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
         mLastStableState = mState;
     }
 
+
+
     @Override
     public boolean onLayoutChild(CoordinatorLayout parent, V child, int layoutDirection ) {
         // First let the parent lay it out
@@ -192,8 +196,11 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
         }
         // Offset the bottom sheet
         mParentHeight = parent.getHeight();
-        mMinOffset = Math.max(0, mParentHeight - child.getHeight());
-        mMaxOffset = Math.max(mParentHeight - 300, mMinOffset);
+
+
+        mMinOffset = Math.max(650, mParentHeight - child.getHeight());
+
+        mMaxOffset = Math.max(mParentHeight - 230, mMinOffset);
 
         /**
          * New behavior
@@ -782,6 +789,10 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
         }
     }
 
+    public void setmMinOffset(int offSet){
+        mMinOffset = offSet;
+    }
+
     protected static class SavedState extends View.BaseSavedState {
 
         @State
@@ -819,24 +830,24 @@ public class BottomSheetBehaviorGoogleMapsLike<V extends View> extends Coordinat
     }
 
     /**
-     * A utility function to get the {@link BottomSheetBehaviorGoogleMapsLike} associated with the {@code view}.
+     * A utility function to get the {@link BottomSheetBuildingInfo} associated with the {@code view}.
      *
-     * @param view The {@link View} with {@link BottomSheetBehaviorGoogleMapsLike}.
-     * @return The {@link BottomSheetBehaviorGoogleMapsLike} associated with the {@code view}.
+     * @param view The {@link View} with {@link BottomSheetBuildingInfo}.
+     * @return The {@link BottomSheetBuildingInfo} associated with the {@code view}.
      */
     @SuppressWarnings("unchecked")
-    public static <V extends View> BottomSheetBehaviorGoogleMapsLike<V> from(V view) {
+    public static <V extends View> BottomSheetBuildingInfo<V> from(V view) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         if (!(params instanceof CoordinatorLayout.LayoutParams)) {
             throw new IllegalArgumentException("The view is not a child of CoordinatorLayout");
         }
         CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) params)
                 .getBehavior();
-        if (!(behavior instanceof BottomSheetBehaviorGoogleMapsLike)) {
+        if (!(behavior instanceof BottomSheetBuildingInfo)) {
             throw new IllegalArgumentException(
-                    "The view is not associated with BottomSheetBehaviorGoogleMapsLike");
+                    "The view is not associated with BottomSheetBuildingInfo");
         }
-        return (BottomSheetBehaviorGoogleMapsLike<V>) behavior;
+        return (BottomSheetBuildingInfo<V>) behavior;
     }
 
 }

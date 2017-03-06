@@ -39,12 +39,12 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
      */
     private float offset;
     /**
-     * The FAB should be hidden when it reach {@link #offset} or when {@link BottomSheetBehaviorGoogleMapsLike}
-     * is visually lower than {@link BottomSheetBehaviorGoogleMapsLike#getPeekHeight()}.
+     * The FAB should be hidden when it reach {@link #offset} or when {@link BottomSheetBuildingInfo}
+     * is visually lower than {@link BottomSheetBuildingInfo#getPeekHeight()}.
      * We got a reference to the object to allow change dynamically PeekHeight in BottomSheet and
      * got updated here.
      */
-    private WeakReference<BottomSheetBehaviorGoogleMapsLike> mBottomSheetBehaviorRef;
+    private WeakReference<BottomSheetBuildingInfo> mBottomSheetBehaviorRef;
 
     public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
@@ -63,7 +63,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     public boolean layoutDependsOn(CoordinatorLayout parent, FloatingActionButton child, View dependency) {
         if (dependency instanceof NestedScrollView) {
             try {
-                BottomSheetBehaviorGoogleMapsLike.from(dependency);
+                BottomSheetBuildingInfo.from(dependency);
                 return true;
             }
             catch (IllegalArgumentException e){}
@@ -90,7 +90,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
         else if ((child.getY() + DyFix) >= offset) {
 
             /**
-             * We are calculating every time point in Y where BottomSheet get {@link BottomSheetBehaviorGoogleMapsLike#STATE_COLLAPSED}.
+             * We are calculating every time point in Y where BottomSheet get {@link BottomSheetBuildingInfo#STATE_COLLAPSED}.
              * If PeekHeight change dynamically we can reflect the behavior asap.
              */
             if (mBottomSheetBehaviorRef == null || mBottomSheetBehaviorRef.get() == null)
@@ -146,8 +146,8 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     }
 
     /**
-     * Look into the CoordiantorLayout for the {@link BottomSheetBehaviorGoogleMapsLike}
-     * @param coordinatorLayout with app:layout_behavior= {@link BottomSheetBehaviorGoogleMapsLike}
+     * Look into the CoordiantorLayout for the {@link BottomSheetBuildingInfo}
+     * @param coordinatorLayout with app:layout_behavior= {@link BottomSheetBuildingInfo}
      */
     private void getBottomSheetBehavior(@NonNull CoordinatorLayout coordinatorLayout) {
 
@@ -157,7 +157,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
             if (child instanceof NestedScrollView) {
 
                 try {
-                    BottomSheetBehaviorGoogleMapsLike temp = BottomSheetBehaviorGoogleMapsLike.from(child);
+                    BottomSheetBuildingInfo temp = BottomSheetBuildingInfo.from(child);
                     mBottomSheetBehaviorRef = new WeakReference<>(temp);
                     break;
                 }
