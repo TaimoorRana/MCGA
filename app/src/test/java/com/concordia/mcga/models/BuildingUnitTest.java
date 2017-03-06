@@ -1,18 +1,19 @@
-package com.concordia.mcga.activities;
+package com.concordia.mcga.models;
 
-import com.concordia.mcga.models.Building;
+import static junit.framework.Assert.assertEquals;
+
+import com.concordia.mcga.factories.IndoorMapFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static junit.framework.Assert.assertEquals;
+import org.mockito.Mockito;
 
 @RunWith(JUnit4.class)
 public class BuildingUnitTest {
@@ -65,5 +66,45 @@ public class BuildingUnitTest {
         testBuilding.addEdgeCoordinate(list);
         PolygonOptions polygonOptions = testBuilding.getPolygonOverlayOptions();
         assertEquals(0x996d171f, polygonOptions.getFillColor());
+    }
+
+    @Test
+    public void testGetFloorMap_cached(){
+        // Test data
+        Map<Integer,IndoorMap> maps = new HashMap<>();
+        IndoorMap expectedMap = new IndoorMap();
+        maps.put(1,expectedMap);
+        Building testBuilding = new Building(new LatLng(0,0), "TEST", "TEST", new MarkerOptions());
+        testBuilding.setFloorMaps(maps);
+
+        // Execute
+        IndoorMap result = testBuilding.getFloorMap(1);
+
+        // Verify
+        assertEquals(expectedMap, result);
+    }
+
+    @Test
+    public void testGetFloorMap_notCached(){
+        // Test data
+        Building testBuilding = new Building(new LatLng(0,0), "TEST", "TEST", new MarkerOptions());
+        IndoorMap expectedMap = new IndoorMap();
+        Map<Integer,IndoorMap> maps = new HashMap<>();
+        testBuilding.setFloorMaps(maps);
+        // Mock
+        IndoorMapFactory mockFactory = Mockito.mock(IndoorMapFactory.class);
+        Mockito.when(mockFactory.createIndoorMap(testBuilding, 1)).thenReturn(expectedMap);
+        IndoorMapFactory.setInstance(mockFactory);
+
+        // Pretest asserts
+        assertEquals(0, maps.size());
+
+        // Execute
+        IndoorMap result = testBuilding.getFloorMap(1);
+
+        // Verify
+        assertEquals(expectedMap, result);
+        assertEquals(1, maps.size());
+        Mockito.verify(mockFactory).createIndoorMap(testBuilding, 1);
     }
 }

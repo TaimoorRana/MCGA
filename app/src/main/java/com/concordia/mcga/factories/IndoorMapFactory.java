@@ -1,39 +1,93 @@
 package com.concordia.mcga.factories;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-
-import com.concordia.mcga.activities.R;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import com.concordia.mcga.exceptions.MCGADatabaseException;
+import com.concordia.mcga.helperClasses.DatabaseConnector;
+import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.IndoorMap;
 import com.concordia.mcga.utilities.pathfinding.TiledMap;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import static java.lang.Integer.parseInt;
-
 public class IndoorMapFactory {
-    public static IndoorMap getHall4thFloor(Context context) {
-        return getIndoorMap(context, R.raw.concordia_floor_map_h4, 2196, 1989);
+
+    private final static int X_COORDINATE_INDEX = 2, Y_COORDINATE_INDEX = 3,
+        MAP_HEIGHT_INDEX = 2, MAP_WIDTH_INDEX = 3;
+    private static IndoorMapFactory instance;
+
+    /**
+     * @return The singleton instance of this class
+     */
+    public static IndoorMapFactory getInstance() {
+        if (instance != null) {
+            return instance;
+        }
+        return instance = new IndoorMapFactory();
     }
 
-    @NonNull
-    private static IndoorMap getIndoorMap(Context context, int rawResourceId, int imageWidth, int imageHeight) {
-        TiledMap map = new TiledMap(imageWidth,imageHeight);
+    /**
+     * Used for testing purposes only
+     */
+    public static void setInstance(IndoorMapFactory instance) {
+        IndoorMapFactory.instance = instance;
+    }
+
+    IndoorMapFactory(){}
+
+    /**
+     * @param building - {@link Building} of the desired {@link IndoorMap}
+     * @param floorNumber - floor number of the desired {@link IndoorMap}
+     * @return An {@link IndoorMap} for the given building and floorNumber. Returns <b>null</b> if
+     * the building/floorNumber combination does not exist in the database
+     */
+    public IndoorMap createIndoorMap(Building building, int floorNumber) {
+        SQLiteDatabase db = null;
         try {
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(context.getResources().openRawResource(rawResourceId)));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] coordinates = line.split(",");
-                map.makeWalkable(parseInt(coordinates[0]), parseInt(coordinates[1]));
+            db = DatabaseConnector.getInstance().getDb();
+            TiledMap map = createTiledMap(building, floorNumber, db);
+            insertWalkablePaths(building, floorNumber, db, map);
+            IndoorMap indoorMap = new IndoorMap();
+            indoorMap.setFloorNumber(floorNumber);
+            indoorMap.setMap(map);
+            return indoorMap;
+        } catch (MCGADatabaseException e) {
+            e.printStackTrace();
+        } finally {
+            if (db != null) {
+                db.close();
             }
-        } catch (IOException e) {
-            System.err.println("Something went wrong");
         }
-        IndoorMap indoorMap = new IndoorMap();
-        indoorMap.setMap(map);
-        return indoorMap;
+        return null;
+    }
+
+    void insertWalkablePaths(Building building, int floorNumber, SQLiteDatabase db,
+        TiledMap map) throws MCGADatabaseException {
+        Cursor walkablePathCursor = db
+            .rawQuery(
+                "SELECT building, floor, x_coordinate, y_coordinate FROM walkable_paths WHERE building = ? AND floor = ?",
+                new String[]{building.getShortName(), String.valueOf(floorNumber)});
+
+        while (walkablePathCursor.moveToNext()) {
+            map.makeWalkable(walkablePathCursor.getInt(X_COORDINATE_INDEX),
+                walkablePathCursor.getInt(Y_COORDINATE_INDEX));
+        }
+        walkablePathCursor.close();
+    }
+
+    TiledMap createTiledMap(Building building, int floorNumber, SQLiteDatabase db)
+        throws MCGADatabaseException {
+        Cursor indoorMapCursor = db
+            .rawQuery(
+                "SELECT building, floor, map_height, map_width FROM indoor_maps WHERE building = ? AND floor = ?",
+                new String[]{building.getShortName(), String.valueOf(floorNumber)});
+        TiledMap map;
+        if (indoorMapCursor.moveToNext()) {
+            map = new TiledMap(indoorMapCursor.getInt(MAP_HEIGHT_INDEX),
+                indoorMapCursor.getInt(MAP_WIDTH_INDEX));
+            indoorMapCursor.close();
+        } else {
+            indoorMapCursor.close();
+            throw new MCGADatabaseException("No Floor Record Found");
+        }
+        return map;
     }
 }

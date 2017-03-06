@@ -15,6 +15,7 @@ public class TiledMap {
     public void setStartTile(int x, int y) {
         startTile = getTile(x, y);
         startTile.setTileType(Type.START);
+        startTile.setParent(startTile);
     }
 
     public PathFinderTile getStartTile() {
@@ -34,6 +35,11 @@ public class TiledMap {
         allTiles[x][y] = tile;
     }
 
+    /**
+     * Sets the given X,Y coordinate as walkable
+     * @param x - X coordinate
+     * @param y - Y coordinate
+     */
     public void makeWalkable(int x, int y) {
         if (allTiles[x][y] == null) {
             allTiles[x][y] = new PathFinderTile(x, y);

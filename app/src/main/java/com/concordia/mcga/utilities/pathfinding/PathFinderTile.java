@@ -27,6 +27,10 @@ public class PathFinderTile {
         this.coordinateY = y;
     }
 
+    public Type getTileType() {
+        return tileType;
+    }
+
     public void setTileType(Type tileType) {
         this.tileType = tileType;
     }
@@ -44,7 +48,13 @@ public class PathFinderTile {
     }
 
     public int calculateDistFromStart() {
-        return parent.distFromStart + 1;
+        if (coordinateY == parent.coordinateY && parent.parent.coordinateY == parent.coordinateY){
+            return parent.distFromStart + 1;
+        }
+        if (coordinateX == parent.coordinateX && parent.parent.coordinateX == parent.coordinateX){
+            return parent.distFromStart + 1;
+        }
+        return parent.distFromStart + 2;
     }
 
     public int getDistFromEnd() {
@@ -120,6 +130,10 @@ public class PathFinderTile {
                 .append(coordinateX)
                 .append(coordinateY)
                 .toHashCode();
+    }
+
+    public int calculateDistanceTo(PathFinderTile tile) {
+        return Math.abs(coordinateX - tile.coordinateX) + Math.abs(coordinateY - tile.coordinateY);
     }
 
     enum Type {START, DESTINATION}

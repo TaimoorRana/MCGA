@@ -1,22 +1,24 @@
 package com.concordia.mcga.utilities.pathfinding;
 
-import org.json.JSONArray;
-
+import com.concordia.mcga.exceptions.MCGAPathFindingException;
+import com.concordia.mcga.models.IndoorPOI;
+import com.concordia.mcga.utilities.pathfinding.PathFinderTile.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.json.JSONArray;
 
 /**
  * Pathfinding class, which runs the A* shortest pathfinding algorithm
  */
-public class PathFinder {
+public class SingleMapPathFinder {
 
     TiledMap map;
     Set<PathFinderTile> openSet;
     Set<PathFinderTile> closedSet;
 
-    public PathFinder(TiledMap map) {
+    public SingleMapPathFinder(TiledMap map) {
         openSet = new HashSet<>();
         closedSet = new HashSet<>();
         this.map = map;
@@ -25,23 +27,21 @@ public class PathFinder {
     /**
      * Finds the shortest path between the given x,y coordinates
      *
-     * @param startX - starting position's x coordinate
-     * @param startY - starting position's y coordinate
-     * @param destX  - ending position's x coordinate
-     * @param destY  - ending position's y coordinate
+     * @param start - starting position
+     * @param dest  - ending position
      * @return - Returns a list of the tiles found in the shortest path. Sorted from first to last.
-     * @throws Exception - Thrown if there exists no valid path between both points
+     * @throws MCGAPathFindingException - Thrown if there exists no valid path between both points
      */
-    public List<PathFinderTile> shortestPath(int startX, int startY, int destX, int destY)
-            throws Exception {
-        map.setStartTile(startX, startY);
-        map.setEndTile(destX, destY);
+    public List<PathFinderTile> shortestPath(IndoorPOI start, IndoorPOI dest)
+            throws MCGAPathFindingException {
+        map.setStartTile(start.getIndoorCoordinateX(), start.getIndoorCoordinateY());
+        map.setEndTile(dest.getIndoorCoordinateX(), dest.getIndoorCoordinateY());
         openSet.add(map.getStartTile());
         PathFinderTile current;
         while (true) {
             current = lowestOpen();
             if (current == null) {
-                throw new Exception("No valid path to destination!");
+                throw new MCGAPathFindingException("No valid path to destination!");
             } else if (current.equals(map.getEndTile())) {
                 break;
             }
@@ -49,8 +49,11 @@ public class PathFinder {
         }
         // Current is now the destination tile. Path is available by traversing parents.
         List<PathFinderTile> returnList = new ArrayList<>();
-        while (current != null) {
+        while (true) {
             returnList.add(0, current);
+            if (current.getTileType() == Type.START){
+                break;
+            }
             current = current.getParent();
         }
         return returnList;
@@ -59,15 +62,13 @@ public class PathFinder {
     /**
      * Finds the shortest path but only returns points where a direction change occurs. Useful for plotting lines on a map using markers.
      *
-     * @param startX - starting position's x coordinate
-     * @param startY - starting position's y coordinate
-     * @param destX  - ending position's x coordinate
-     * @param destY  - ending position's y coordinate
+     * @param start - starting position
+     * @param dest  - ending position
      * @return - Returns a list of the tiles found in the shortest path. Sorted from first to last.
-     * @throws Exception - Thrown if there exists no valid path between both points
+     * @throws MCGAPathFindingException - Thrown if there exists no valid path between both points
      */
-    public List<PathFinderTile> shortestPathJunctions(int startX, int startY, int destX, int destY) throws Exception {
-        ArrayList<PathFinderTile> pathTiles = new ArrayList<PathFinderTile>(shortestPath(startX, startY, destX, destY));
+    public List<PathFinderTile> shortestPathJunctions(IndoorPOI start, IndoorPOI dest) throws MCGAPathFindingException {
+        ArrayList<PathFinderTile> pathTiles = new ArrayList<PathFinderTile>(shortestPath(start, dest));
         ArrayList<PathFinderTile> pathTilesJunctions = new ArrayList<PathFinderTile>();
 
         PathFinderTile firstPft = pathTiles.get(0);
@@ -113,6 +114,9 @@ public class PathFinder {
         for (PathFinderTile tile : adjacentTiles) {
             if (tile == null) {
                 continue;
+            }
+            if (tile.getDistFromEnd() == 0){
+                tile.setDistFromEnd(tile.calculateDistanceTo(map.getEndTile()));
             }
             if (!closedSet.contains(tile)) {
                 if (openSet.contains(tile)) {

@@ -14,14 +14,15 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.factories.IndoorMapFactory;
+import com.concordia.mcga.exceptions.MCGAPathFindingException;
+import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.IndoorMap;
 import com.concordia.mcga.models.IndoorPOI;
-import com.concordia.mcga.utilities.pathfinding.PathFinder;
+import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
 import com.concordia.mcga.utilities.pathfinding.PathFinderTile;
-
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -80,14 +81,14 @@ public class IndoorMapFragment extends Fragment {
         leafletView.post(new Runnable() {
             @Override
             public void run() {
-                IndoorMap H4 = IndoorMapFactory.getHall4thFloor(getContext());
-                PathFinder pf = new PathFinder(H4.getMap());
+                Building hall = new Building(new LatLng(0,0), "Hall", "H", new MarkerOptions());
+                IndoorMap H4 = hall.getFloorMap(4);
+                SingleMapPathFinder pf = new SingleMapPathFinder(H4.getMap());
 
-                ArrayList<PathFinderTile> shortestPath = null;
                 ArrayList<PathFinderTile> pathTilesJunctions = null;
 
                 try {
-                    pathTilesJunctions = (ArrayList<PathFinderTile>) pf.shortestPathJunctions(start.getIndoorCoordinateX(), start.getIndoorCoordinateY(), dest.getIndoorCoordinateX(), dest.getIndoorCoordinateY());
+                    pathTilesJunctions = (ArrayList<PathFinderTile>) pf.shortestPathJunctions(start, dest);
 
                     Iterator<PathFinderTile> it2 = pathTilesJunctions.iterator();
                     while (it2.hasNext()) {
@@ -97,7 +98,7 @@ public class IndoorMapFragment extends Fragment {
 
                     if (pageLoaded)
                         leafletView.evaluateJavascript("drawWalkablePath(" + pf.toJSONArray(pathTilesJunctions).toString() + ")", null);
-                } catch (Exception e) {
+                } catch (MCGAPathFindingException e) {
                     e.printStackTrace();
                 }
             }
