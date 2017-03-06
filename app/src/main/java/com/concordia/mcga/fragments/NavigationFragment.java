@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
@@ -53,8 +54,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private TransportButtonFragment transportButtonFragment;
     private IndoorMapFragment indoorMapFragment;
     //View Components
+    private View rootView;
     private Button campusButton;
     private Button viewSwitchButton;
+
     // Search components
     private SearchView search;
     private POISearchAdapter poiSearchAdapter;
@@ -66,6 +69,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                              Bundle savedInstanceState) {
 
         parentLayout = (LinearLayoutCompat) inflater.inflate(R.layout.nav_main_fragment, container, false);
+        rootView = parentLayout.findViewById(R.id.navigationMain);
 
         //Init Fragments
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
@@ -235,6 +239,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     @Override
     public boolean onClose() {
         search.setQuery("", false);
+        search.clearFocus();
+        rootView.requestFocus();
         return false;
     }
 
@@ -257,7 +263,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
      */
     private void expandAll() {
         if (poiSearchAdapter.getGroupCount() == 0) {
-            search.clearFocus();
             searchDialog.dismiss();
         } else {
             searchDialog.show();
@@ -265,6 +270,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 searchList.expandGroup(i);
             }
         }
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
 
     /**
@@ -298,6 +308,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         window.setLayout(LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
                 LinearLayoutCompat.LayoutParams.MATCH_PARENT);
+
+        // Set dialog window offset and height
+        WindowManager.LayoutParams wmlp = window.getAttributes();
+        wmlp.y = 200;
+        wmlp.height = 450;
+        window.setAttributes(wmlp);
     }
 
     /**
