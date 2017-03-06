@@ -1,16 +1,16 @@
 package com.concordia.mcga.activities;
-import android.os.Build;
 import android.view.View;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 
-@Config(constants = BuildConfig.class, sdk = Build.VERSION_CODES.LOLLIPOP)
+@Config(constants = BuildConfig.class, sdk = 22)
 @RunWith(RobolectricTestRunner.class)
 public class SplashActivityTest {
 
