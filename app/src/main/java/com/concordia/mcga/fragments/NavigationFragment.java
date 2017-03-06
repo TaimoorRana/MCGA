@@ -39,7 +39,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 
 import java.util.ArrayList;
@@ -85,41 +84,39 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean conditionGPS = false;
                 Log.d("Testing mapCenterButton", "Initializing OnClickListener");
-                if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) { //Check if GPS is turned on in the phone
+                if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     Log.d("Testing AlertGPS Launch", "Initializing method");
-                    AlertGPS(); //Run GPS activation method
+                    AlertGPS();
                     Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
-                    if (gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                        conditionGPS = true;
-                    }
+
                 }
                 Log.d("Testing", "Checkpoint 1 - Button initializer");
-                if (viewType == ViewType.INDOOR) { //Move to Outdoor if the user is viewing the indoor
+                if (viewType == ViewType.INDOOR) {
                     viewType = ViewType.OUTDOOR;
                     getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
-                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit();
+                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit(); //To be removed after Outside transportation Google API incorporation
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO OUTDOORS");
                 }
-                if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to change depending on how MCGA-12 goes
+                if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to a ton of changes depending on how MCGA-12 goes
                     navigationSearch.setText("");
                 }
-                if (conditionGPS) { //Verify GPS is on before running location method and implementing the marker
-                    locateMe();
-                    Log.d("Test 2", "Checkpoint Manifest check");
-                }
-                if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == //Enable the Layer if permission found in Android Manifest
+
+                Log.d("Test 2", "Checkpoint Manifest check");
+                if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                         PackageManager.PERMISSION_GRANTED) {
                     Log.d("Permission checked", "checkSelfPermission passed with no errors");
-                    map.setMyLocationEnabled(true); //Enabling the Location layer
-                    Log.d("Permission checked", "Location Layer implementation succesful");
+                    map.setMyLocationEnabled(true);
+                    Log.d("Permission checked", "Location Layer implementation successful");
                 } else {
-                    //Request the Permission from the manifest
-                    ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{ //Requesting the permission
-                            Manifest.permission.ACCESS_FINE_LOCATION}, 1); //Give dummy reference number referring to permission rationale
+                    //Request the Permission
+                    ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 }
+
+                locateMe();
+
             }
         });
 
@@ -157,7 +154,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        gpsmanager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE); //Initialization of locationmanager object with the Location_Service
+        gpsmanager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -189,8 +186,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
-        map.getUiSettings().setAllGesturesEnabled(true); //Enable touchscreen motion array for Google map object
-        map.getUiSettings().setMyLocationButtonEnabled(false);  //Turn off  the built-in GPS locator button
+        map.getUiSettings().setAllGesturesEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
 
         //Map Customization
         applyCustomGoogleMapsStyle();
@@ -202,7 +199,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private void addBuildingMarkers() {
         List<Building> sgwBuildings = Campus.SGW.getBuildings();
         List<Building> loyBuildings = Campus.LOY.getBuildings();
-
 
         for (Building building : sgwBuildings) {
             createBuildingMarkersAndPolygonOverlay(building);
@@ -229,7 +225,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private void createBuildingMarkersAndPolygonOverlay(Building building) {
         register(building);
         map.addPolygon(building.getPolygonOverlayOptions()).setClickable(true);
-
         Marker marker = map.addMarker(building.getMarkerOptions());
         building.setMarker(marker);
     }
@@ -241,7 +236,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             boolean success = map.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                             getActivity(), R.raw.style_json));
-
             if (!success) {
                 Log.e("Google Map Style", "Style parsing failed.");
             }
@@ -284,7 +278,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         INDOOR, OUTDOOR
     }
 
-    public void AlertGPS() { //This function alerts the user if the GPS functionality of the phone is turned off and prompts the user to turn it on
+    public void AlertGPS() { //GPS detection method
         Log.e("Testing Alert GPS", "Alert GPS Start");
         AlertDialog.Builder build = new AlertDialog.Builder(
                 mapFragment.getActivity());
@@ -315,24 +309,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE); // Getting LocationManager object from System Service LOCATION_SERVICE
         Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
         String provider = locationManager.getBestProvider(criteria, true);// Getting the name of the best provider
-
-        if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) { //Checking permission in the manifest
-            ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 2); //Requesting the permission
+        if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 2);
         }
-
-        Location location = locationManager.getLastKnownLocation(provider); // Missing Permissions - Getting Current Location, problem is public Location class constructor was overridden by Arek and can't take in a String
-        Log.d("LOCATION Latitude: "+location.getLatitude(), "Longitude: "+location.getLongitude());
+        Location location = locationManager.getLastKnownLocation(provider);
 
         if (location != null) {
-            double latitude = location.getLatitude(); // Getting latitude of the current location
+
+            double latitude = location.getLatitude(); //Getting latitude of the current location
             double longitude = location.getLongitude(); // Getting longitude of the current location
             myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
-            Log.d("Latitude: "+latitude, "Longitude: "+longitude);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, CAMPUS_DEFAULT_ZOOM_LEVEL));//Camera Update method to the position
-            map.addMarker(new MarkerOptions().position(myPosition).title("Start")); //Test if myPosition was fished properly
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, CAMPUS_DEFAULT_ZOOM_LEVEL));//Camera Update method
         }
     }
 }
-
-
-

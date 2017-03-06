@@ -7,7 +7,7 @@
            Google Maps Android API v2, but you must specify either coarse or fine
            location permissions for the 'MyLocation' functionality.
       -->
-    <permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- I do not know why this fixes my errors tbh -->
+    <permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- Despite this going against the usual documentation, "permission" is how to get it read during runtime -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
