@@ -8,12 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
-
+import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.fragments.NavigationFragment;
-import com.concordia.mcga.helperClasses.DatabaseHelper;
-
+import com.concordia.mcga.helperClasses.DatabaseConnector;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -85,17 +83,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initDatabase() {
-        DatabaseHelper.setupDatabase(this);
-        DatabaseHelper myDbHelper = DatabaseHelper.getInstance();
+        DatabaseConnector.setupDatabase(this);
+        DatabaseConnector myDbHelper;
+        try {
+            myDbHelper = DatabaseConnector.getInstance();
+        } catch (MCGADatabaseException e) {
+            throw new Error("Database incorrectly initialized");
+        }
         try {
             myDbHelper.createDatabase();
         } catch (IOException ioe) {
             throw new Error("Unable to create database");
-        }
-        try {
-            myDbHelper.openDatabase();
-        } catch (SQLException sqle) {
-            throw new Error("Unable to open database");
         }
     }
 }
