@@ -1,6 +1,7 @@
 package com.concordia.mcga.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -217,6 +218,8 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         }
 
         TextView buildingRow = (TextView) view.findViewById(R.id.childText);
+        int backgroundColor = (childPosition % 2) == 0 ? Color.WHITE : Color.LTGRAY;
+        view.setBackgroundColor(backgroundColor);
         buildingRow.setText(building.getName());
 
         return view;

@@ -310,19 +310,19 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         window.setLayout(LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
                 LinearLayoutCompat.LayoutParams.MATCH_PARENT);
 
-        parentLayout.getViewTreeObserver().addOnGlobalFocusChangeListener(
-                new ViewTreeObserver.OnGlobalFocusChangeListener() {
+        parentLayout.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
-                    public void onGlobalFocusChanged(View view, View view1) {
+                    public void onGlobalLayout() {
                         // Set dialog window offset and height
                         WindowManager.LayoutParams wmlp = window.getAttributes();
                         int xy[] = new int[2];
                         parentLayout.findViewById(R.id.navigationSearch).getLocationOnScreen(xy);
-                        wmlp.y = xy[1];
+                        wmlp.y = xy[1] + 20;
 
-                        //Rect r = new Rect();
-                        //parentLayout.getWindowVisibleDisplayFrame(r);
-                        wmlp.height = 450; //(r.bottom - r.top) - xy[1];
+                        Rect r = new Rect();
+                        parentLayout.getWindowVisibleDisplayFrame(r);
+                        wmlp.height = (r.bottom - r.top) - wmlp.y;
                         window.setAttributes(wmlp);
                     }
                 }
