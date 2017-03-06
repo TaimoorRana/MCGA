@@ -12,14 +12,14 @@
         android:id="@+id/search_edit_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary" >
 
         <android.support.v7.widget.SearchView
             android:id="@+id/navigationSearch"
+            android:icon="@android:drawable/ic_menu_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:queryHint="@string/action_search"/>
-    </android.support.v7.widget.Toolbar>
+            android:layout_height="match_parent" />
+        </android.support.v7.widget.Toolbar>
 
     <RelativeLayout
         android:layout_width="match_parent"

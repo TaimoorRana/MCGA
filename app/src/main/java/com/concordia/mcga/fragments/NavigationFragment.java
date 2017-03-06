@@ -252,6 +252,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         return false;
     }
 
+    /**
+     * Expands all the view result groups (showing the POIs under the campus search results)
+     */
     private void expandAll() {
         if (poiSearchAdapter.getGroupCount() == 0) {
             search.clearFocus();
@@ -264,9 +267,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
+    /**
+     * Constructor helper function to set up the search functionality of the view
+     */
     private void setupSearchAttributes() {
         //Search
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(
+                Context.SEARCH_SERVICE);
         search = (SearchView) parentLayout.findViewById(R.id.navigationSearch);
         search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         search.setIconifiedByDefault(false);
@@ -276,15 +283,26 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         //Custom search dialog
         searchDialog = new Dialog(getActivity());
+        searchDialog.setCanceledOnTouchOutside(true);
         searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         searchDialog.setContentView(R.layout.search_dialog);
         Window window = searchDialog.getWindow();
         window.setGravity(Gravity.TOP);
-        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        window.setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM, WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        window.setLayout(LinearLayoutCompat.LayoutParams.WRAP_CONTENT, LinearLayoutCompat.LayoutParams.MATCH_PARENT);
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+        window.setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        window.setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
+                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        window.setLayout(LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
+                LinearLayoutCompat.LayoutParams.MATCH_PARENT);
     }
 
+    /**
+     * Constructor helper function to set up the list and listener for the navigation search
+     */
     private void setupSearchList() {
         searchList = (ExpandableListView) searchDialog.findViewById(R.id.expandableList);
         poiSearchAdapter = new POISearchAdapter(getActivity());
@@ -295,7 +313,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Building dest = (Building)poiSearchAdapter.getChild(groupPosition, childPosition);
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(), CAMPUS_DEFAULT_ZOOM_LEVEL));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(),
+                        CAMPUS_DEFAULT_ZOOM_LEVEL));
                 onClose();
                 //Toast.makeText(getActivity(), dest.toString(), Toast.LENGTH_SHORT).show();
                 return true;

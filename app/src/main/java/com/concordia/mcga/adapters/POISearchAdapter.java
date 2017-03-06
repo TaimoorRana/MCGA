@@ -16,6 +16,9 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * This adapter searches through both campuses to find POIs (for now, buildings) that match a query.
+ */
 public class POISearchAdapter extends BaseExpandableListAdapter {
     private Context context;
 
@@ -25,6 +28,10 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
     private ArrayList<Building> sgwFilteredList;
     private ArrayList<Building> loyolaFilteredList;
 
+    /**
+     * The constructor initializes the empty lists that store the currently queried POIs
+     * @param context View context to search
+     */
     public POISearchAdapter(Context context) {
         this.context = context;
 
@@ -32,6 +39,10 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         this.loyolaFilteredList = new ArrayList<>();
     }
 
+    /**
+     * Evaluates the number of campuses active based on the current queried POIs
+     * @return The number of active campuses
+     */
     @Override
     public int getGroupCount() {
         boolean sgwClear = getGroupIsEmpty(SGW_INDEX);
@@ -46,6 +57,11 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    /**
+     * This overrides the BaseExpandableList function to get the number of children (POI) entries
+     * @param i Campus index
+     * @return Number of POIs specific to the passed campus
+     */
     @Override
     public int getChildrenCount(int i) {
         Campus camp = (Campus)getGroup(i);
@@ -58,6 +74,15 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    /**
+     * This overrides the BaseExpandableList function to get the campus specified by an index.
+     * This function is written specifically to address the quirks in the way BaseExpandableList
+     * handles groups and children - it is used internally to get the "group" (campus) based on the
+     * number of visible groups, so we have to handle different cases depending on whether the
+     * POIs filtered by the query come from a single campus or both of them.
+     * @param i Active campus index
+     * @return The campus specified by the index
+     */
     @Override
     public Object getGroup(int i) {
         boolean sgwClear = getGroupIsEmpty(SGW_INDEX);
@@ -88,6 +113,12 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    /**
+     * This overrides the BaseExpandableList function to get an actual menu item - in this case, POI
+     * @param i The active campus index (see getGroup)
+     * @param i1 The POI index within the specified campus
+     * @return The POI that exists according to the filtered query
+     */
     @Override
     public Object getChild(int i, int i1) {
         Campus camp = (Campus)getGroup(i);
@@ -115,6 +146,11 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
+    /**
+     * Helper function to determine whether a given filtered POI list (from the query) is empty
+     * @param index The campus to query
+     * @return True if the query-filtered campus list is empty, false if it has items
+     */
     public boolean getGroupIsEmpty(int index) {
         if (index == SGW_INDEX) {
             return sgwFilteredList.isEmpty();
@@ -125,6 +161,14 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    /**
+     * Inflates and returns the view associated with the index-specified campus or POI group
+     * @param i Campus/group index
+     * @param b Whether the group is collapsed or expanded
+     * @param view The old view to reuse, if possible
+     * @param viewGroup The parent that this view will be attached to
+     * @return The inflated POI group view
+     */
     @Override
     public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
         Campus campus = (Campus)getGroup(i);
@@ -152,6 +196,15 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         return view;
     }
 
+    /**
+     * Inflates and returns the view associated with the POI list item. For now, a building name
+     * @param i The group/campus index
+     * @param i1 The child/POI index
+     * @param b Whether the child is the last one in the group
+     * @param view Existing view to reuse if possible
+     * @param viewGroup The parent group this view will be attached to
+     * @return The POI menu item (building name)
+     */
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         Building building = (Building)getChild(i, i1);
@@ -176,6 +229,12 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
+    /**
+     * This is the actual filter to select the POIs specified by the passed string.
+     * The POIs that are determined to meet the query criteria are included in the filtered lists
+     * (see constructor.)
+     * @param query The string query to match POIs against
+     */
     public void filterData(String query) {
         query = query.toLowerCase();
         sgwFilteredList.clear();
