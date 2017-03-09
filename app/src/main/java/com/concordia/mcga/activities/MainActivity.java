@@ -12,7 +12,6 @@ import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import java.io.IOException;
-import java.sql.Time;
 
 public class MainActivity extends AppCompatActivity {
 
