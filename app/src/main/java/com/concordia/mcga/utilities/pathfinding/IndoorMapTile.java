@@ -7,9 +7,9 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PathFinderTile {
+public class IndoorMapTile {
 
-    public static final PathFinderTile MAX_COST = new PathFinderTile(Integer.MIN_VALUE, Integer.MIN_VALUE);
+    public static final IndoorMapTile MAX_COST = new IndoorMapTile(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
     static {
         MAX_COST.setDistFromEnd(Integer.MAX_VALUE);
@@ -20,9 +20,9 @@ public class PathFinderTile {
     private int distFromEnd;
     private int coordinateX;
     private int coordinateY;
-    private PathFinderTile parent;
+    private IndoorMapTile parent;
 
-    public PathFinderTile(int x, int y) {
+    public IndoorMapTile(int x, int y) {
         this.coordinateX = x;
         this.coordinateY = y;
     }
@@ -73,11 +73,11 @@ public class PathFinderTile {
         return coordinateY;
     }
 
-    public PathFinderTile getParent() {
+    public IndoorMapTile getParent() {
         return parent;
     }
 
-    public void setParent(PathFinderTile parent) {
+    public void setParent(IndoorMapTile parent) {
         this.parent = parent;
     }
 
@@ -87,14 +87,14 @@ public class PathFinderTile {
             json.put("lat", this.coordinateY);
             json.put("lng", this.coordinateX);
         } catch (JSONException e) {
-            Log.e("PathFinderTile Error", Log.getStackTraceString(e));
+            Log.e("IndoorMapTile Error", Log.getStackTraceString(e));
         }
         return json;
     }
 
     @Override
     public String toString() {
-        return "PathFinderTile{" +
+        return "IndoorMapTile{" +
                 "coordinateX=" + coordinateX +
                 ", coordinateY=" + coordinateY +
                 '}';
@@ -110,7 +110,7 @@ public class PathFinderTile {
             return false;
         }
 
-        PathFinderTile that = (PathFinderTile) o;
+        IndoorMapTile that = (IndoorMapTile) o;
 
         return new EqualsBuilder()
                 .append(distFromStart, that.distFromStart)
@@ -132,7 +132,7 @@ public class PathFinderTile {
                 .toHashCode();
     }
 
-    public int calculateDistanceTo(PathFinderTile tile) {
+    public int calculateDistanceTo(IndoorMapTile tile) {
         return Math.abs(coordinateX - tile.coordinateX) + Math.abs(coordinateY - tile.coordinateY);
     }
 

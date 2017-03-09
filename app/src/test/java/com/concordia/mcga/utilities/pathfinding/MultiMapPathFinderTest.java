@@ -37,13 +37,13 @@ public class MultiMapPathFinderTest {
         start.setIndoorMap(map);
         dest.setIndoorMap(map);
 
-        Map<IndoorMap, List<PathFinderTile>> expectedMap = new LinkedHashMap<>();
+        Map<IndoorMap, List<IndoorMapTile>> expectedMap = new LinkedHashMap<>();
 
         // Mock
         Mockito.doReturn(expectedMap).when(spyPathFinder).sameFloorNavigation(start, dest);
 
         // Execute
-        Map<IndoorMap, List<PathFinderTile>> result = spyPathFinder
+        Map<IndoorMap, List<IndoorMapTile>> result = spyPathFinder
             .shortestPath(start, dest);
 
         // Verify
@@ -62,13 +62,13 @@ public class MultiMapPathFinderTest {
         start.setIndoorMap(map1);
         dest.setIndoorMap(map2);
 
-        Map<IndoorMap, List<PathFinderTile>> expectedMap = new LinkedHashMap<>();
+        Map<IndoorMap, List<IndoorMapTile>> expectedMap = new LinkedHashMap<>();
 
         // Mock
         Mockito.doReturn(expectedMap).when(spyPathFinder).sameBuildingNavigation(start, dest);
 
         // Execute
-        Map<IndoorMap, List<PathFinderTile>> result = spyPathFinder
+        Map<IndoorMap, List<IndoorMapTile>> result = spyPathFinder
             .shortestPath(start, dest);
 
         // Verify
@@ -88,13 +88,13 @@ public class MultiMapPathFinderTest {
         start.setIndoorMap(map1);
         dest.setIndoorMap(map2);
 
-        Map<IndoorMap, List<PathFinderTile>> expectedMap = new LinkedHashMap<>();
+        Map<IndoorMap, List<IndoorMapTile>> expectedMap = new LinkedHashMap<>();
 
         // Mock
         Mockito.doReturn(expectedMap).when(spyPathFinder).differentBuildingNavigation(start, dest);
 
         // Execute
-        Map<IndoorMap, List<PathFinderTile>> result = spyPathFinder
+        Map<IndoorMap, List<IndoorMapTile>> result = spyPathFinder
             .shortestPath(start, dest);
 
         // Verify
@@ -108,7 +108,7 @@ public class MultiMapPathFinderTest {
         IndoorPOI start = new IndoorPOI(new LatLng(0,0), "TEST", 1, 2, 2);
         IndoorPOI dest = new IndoorPOI(new LatLng(0,0), "DEST", 2, 3, 3);
 
-        Map<IndoorMap, List<PathFinderTile>> expectedMap = new LinkedHashMap<>();
+        Map<IndoorMap, List<IndoorMapTile>> expectedMap = new LinkedHashMap<>();
         ConnectedPOI connectedPOI = Mockito.mock(ConnectedPOI.class);
 
         // Mock
@@ -116,7 +116,7 @@ public class MultiMapPathFinderTest {
         Mockito.doReturn(connectedPOI).when(spyPathFinder).getClosestConnectedPOI(start,dest);
 
         // Execute
-        Map<IndoorMap, List<PathFinderTile>> result = spyPathFinder
+        Map<IndoorMap, List<IndoorMapTile>> result = spyPathFinder
             .sameBuildingNavigation(start, dest);
 
         // Verify
@@ -139,10 +139,10 @@ public class MultiMapPathFinderTest {
         destMap.setFloorNumber(4);
         dest.setIndoorMap(destMap);
 
-        List<PathFinderTile> expectedStartList = new ArrayList<>();
-        expectedStartList.add(new PathFinderTile(1,1));
-        List<PathFinderTile> expectedDestList = new ArrayList<>();
-        expectedDestList.add(new PathFinderTile(1,2));
+        List<IndoorMapTile> expectedStartList = new ArrayList<>();
+        expectedStartList.add(new IndoorMapTile(1,1));
+        List<IndoorMapTile> expectedDestList = new ArrayList<>();
+        expectedDestList.add(new IndoorMapTile(1,2));
 
         // Mock
         Mockito.doReturn(expectedStartList).when(spyPathFinder).getDirectionList(start, intermediatePOI);
@@ -150,13 +150,13 @@ public class MultiMapPathFinderTest {
         Mockito.when(connectedPOI.getFloorPOI(Mockito.anyInt())).thenReturn(intermediatePOI);
 
         // Execute
-        Map<IndoorMap, List<PathFinderTile>> result = spyPathFinder.createPath(start, dest, connectedPOI);
+        Map<IndoorMap, List<IndoorMapTile>> result = spyPathFinder.createPath(start, dest, connectedPOI);
 
         // Verify
         Mockito.verify(spyPathFinder).getDirectionList(start, intermediatePOI);
         Mockito.verify(spyPathFinder).getDirectionList(intermediatePOI, dest);
         Assert.assertEquals(2, result.size());
-        Iterator<Map.Entry<IndoorMap, List<PathFinderTile>>> iterator = result.entrySet().iterator();
+        Iterator<Map.Entry<IndoorMap, List<IndoorMapTile>>> iterator = result.entrySet().iterator();
         Assert.assertEquals(expectedStartList, iterator.next().getValue());
         Assert.assertEquals(expectedDestList, iterator.next().getValue());
     }

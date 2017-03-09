@@ -1,15 +1,15 @@
 package com.concordia.mcga.utilities.pathfinding;
 
-import com.concordia.mcga.utilities.pathfinding.PathFinderTile.Type;
+import com.concordia.mcga.utilities.pathfinding.IndoorMapTile.Type;
 
 public class TiledMap {
-    private PathFinderTile[][] allTiles;
-    private PathFinderTile startTile;
-    private PathFinderTile endTile;
+    private IndoorMapTile[][] allTiles;
+    private IndoorMapTile startTile;
+    private IndoorMapTile endTile;
 
 
     public TiledMap(int sizeX, int sizeY) {
-        allTiles = new PathFinderTile[sizeX][sizeY];
+        allTiles = new IndoorMapTile[sizeX][sizeY];
     }
 
     public void setStartTile(int x, int y) {
@@ -18,7 +18,7 @@ public class TiledMap {
         startTile.setParent(startTile);
     }
 
-    public PathFinderTile getStartTile() {
+    public IndoorMapTile getStartTile() {
         return startTile;
     }
 
@@ -27,11 +27,11 @@ public class TiledMap {
         endTile.setTileType(Type.DESTINATION);
     }
 
-    public PathFinderTile getEndTile() {
+    public IndoorMapTile getEndTile() {
         return endTile;
     }
 
-    public void setTile(int x, int y, PathFinderTile tile) {
+    public void setTile(int x, int y, IndoorMapTile tile) {
         allTiles[x][y] = tile;
     }
 
@@ -42,11 +42,11 @@ public class TiledMap {
      */
     public void makeWalkable(int x, int y) {
         if (allTiles[x][y] == null) {
-            allTiles[x][y] = new PathFinderTile(x, y);
+            allTiles[x][y] = new IndoorMapTile(x, y);
         }
     }
 
-    public PathFinderTile getTile(int x, int y) {
+    public IndoorMapTile getTile(int x, int y) {
         if (x < 0 || x >= allTiles.length ||
                 y < 0 || y >= allTiles[0].length) {
             return null;

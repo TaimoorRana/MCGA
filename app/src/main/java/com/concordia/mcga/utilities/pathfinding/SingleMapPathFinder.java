@@ -2,12 +2,14 @@ package com.concordia.mcga.utilities.pathfinding;
 
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.IndoorPOI;
-import com.concordia.mcga.utilities.pathfinding.PathFinderTile.Type;
+import com.concordia.mcga.utilities.pathfinding.IndoorMapTile.Type;
+
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.json.JSONArray;
 
 /**
  * Pathfinding class, which runs the A* shortest pathfinding algorithm
@@ -15,8 +17,8 @@ import org.json.JSONArray;
 public class SingleMapPathFinder {
 
     TiledMap map;
-    Set<PathFinderTile> openSet;
-    Set<PathFinderTile> closedSet;
+    Set<IndoorMapTile> openSet;
+    Set<IndoorMapTile> closedSet;
 
     public SingleMapPathFinder(TiledMap map) {
         openSet = new HashSet<>();
@@ -32,12 +34,12 @@ public class SingleMapPathFinder {
      * @return - Returns a list of the tiles found in the shortest path. Sorted from first to last.
      * @throws MCGAPathFindingException - Thrown if there exists no valid path between both points
      */
-    public List<PathFinderTile> shortestPath(IndoorPOI start, IndoorPOI dest)
+    List<IndoorMapTile> shortestPath(IndoorPOI start, IndoorPOI dest)
             throws MCGAPathFindingException {
         map.setStartTile(start.getIndoorCoordinateX(), start.getIndoorCoordinateY());
         map.setEndTile(dest.getIndoorCoordinateX(), dest.getIndoorCoordinateY());
         openSet.add(map.getStartTile());
-        PathFinderTile current;
+        IndoorMapTile current;
         while (true) {
             current = lowestOpen();
             if (current == null) {
@@ -48,7 +50,7 @@ public class SingleMapPathFinder {
             nextIteration(current);
         }
         // Current is now the destination tile. Path is available by traversing parents.
-        List<PathFinderTile> returnList = new ArrayList<>();
+        List<IndoorMapTile> returnList = new ArrayList<>();
         while (true) {
             returnList.add(0, current);
             if (current.getTileType() == Type.START){
@@ -67,17 +69,17 @@ public class SingleMapPathFinder {
      * @return - Returns a list of the tiles found in the shortest path. Sorted from first to last.
      * @throws MCGAPathFindingException - Thrown if there exists no valid path between both points
      */
-    public List<PathFinderTile> shortestPathJunctions(IndoorPOI start, IndoorPOI dest) throws MCGAPathFindingException {
-        ArrayList<PathFinderTile> pathTiles = new ArrayList<PathFinderTile>(shortestPath(start, dest));
-        ArrayList<PathFinderTile> pathTilesJunctions = new ArrayList<PathFinderTile>();
+    public List<IndoorMapTile> shortestPathJunctions(IndoorPOI start, IndoorPOI dest) throws MCGAPathFindingException {
+        ArrayList<IndoorMapTile> pathTiles = new ArrayList<IndoorMapTile>(shortestPath(start, dest));
+        ArrayList<IndoorMapTile> pathTilesJunctions = new ArrayList<IndoorMapTile>();
 
-        PathFinderTile firstPft = pathTiles.get(0);
+        IndoorMapTile firstPft = pathTiles.get(0);
         pathTilesJunctions.add(firstPft);
         int curX = firstPft.getCoordinateX();
         int curY = firstPft.getCoordinateY();
 
         for (int i = 1; i < pathTiles.size(); i++) {
-            PathFinderTile pft = pathTiles.get(i);
+            IndoorMapTile pft = pathTiles.get(i);
             if (!(pft.getCoordinateX() == curX && pft.getCoordinateY() != curY) && !(pft.getCoordinateY() == curY && pft.getCoordinateX() != curX)) {
                 pathTilesJunctions.add(pft);
                 curX = pft.getCoordinateX();
@@ -88,9 +90,9 @@ public class SingleMapPathFinder {
         return pathTilesJunctions;
     }
 
-    public static JSONArray toJSONArray(List<PathFinderTile> pathTilesJunctions) {
+    public static JSONArray toJSONArray(List<IndoorMapTile> pathTilesJunctions) {
         JSONArray pftArray = new JSONArray();
-        for (PathFinderTile pft : pathTilesJunctions) {
+        for (IndoorMapTile pft : pathTilesJunctions) {
             pftArray.put(pft.toJSON());
         }
         return pftArray;
@@ -101,17 +103,17 @@ public class SingleMapPathFinder {
      *
      * @param current - Currently examined tile.
      */
-    private void nextIteration(PathFinderTile current) {
+    private void nextIteration(IndoorMapTile current) {
         openSet.remove(current);
         closedSet.add(current);
 
-        PathFinderTile[] adjacentTiles = new PathFinderTile[4];
+        IndoorMapTile[] adjacentTiles = new IndoorMapTile[4];
         adjacentTiles[0] = map.getTile(current.getCoordinateX() + 1, current.getCoordinateY());
         adjacentTiles[1] = map.getTile(current.getCoordinateX() - 1, current.getCoordinateY());
         adjacentTiles[2] = map.getTile(current.getCoordinateX(), current.getCoordinateY() - 1);
         adjacentTiles[3] = map.getTile(current.getCoordinateX(), current.getCoordinateY() + 1);
 
-        for (PathFinderTile tile : adjacentTiles) {
+        for (IndoorMapTile tile : adjacentTiles) {
             if (tile == null) {
                 continue;
             }
@@ -134,14 +136,14 @@ public class SingleMapPathFinder {
         }
     }
 
-    private PathFinderTile lowestOpen() {
-        PathFinderTile lowest = PathFinderTile.MAX_COST;
-        for (PathFinderTile tile : openSet) {
+    private IndoorMapTile lowestOpen() {
+        IndoorMapTile lowest = IndoorMapTile.MAX_COST;
+        for (IndoorMapTile tile : openSet) {
             if (tile.getCost() < lowest.getCost()) {
                 lowest = tile;
             }
         }
-        if (lowest.equals(PathFinderTile.MAX_COST)) {
+        if (lowest.equals(IndoorMapTile.MAX_COST)) {
             return null;
         }
         return lowest;

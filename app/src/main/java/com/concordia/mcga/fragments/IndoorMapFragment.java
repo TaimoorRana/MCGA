@@ -19,8 +19,8 @@ import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.IndoorMap;
 import com.concordia.mcga.models.IndoorPOI;
+import com.concordia.mcga.utilities.pathfinding.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
-import com.concordia.mcga.utilities.pathfinding.PathFinderTile;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
@@ -85,14 +85,14 @@ public class IndoorMapFragment extends Fragment {
                 IndoorMap H4 = hall.getFloorMap(4);
                 SingleMapPathFinder pf = new SingleMapPathFinder(H4.getMap());
 
-                ArrayList<PathFinderTile> pathTilesJunctions = null;
+                ArrayList<IndoorMapTile> pathTilesJunctions = null;
 
                 try {
-                    pathTilesJunctions = (ArrayList<PathFinderTile>) pf.shortestPathJunctions(start, dest);
+                    pathTilesJunctions = (ArrayList<IndoorMapTile>) pf.shortestPathJunctions(start, dest);
 
-                    Iterator<PathFinderTile> it2 = pathTilesJunctions.iterator();
+                    Iterator<IndoorMapTile> it2 = pathTilesJunctions.iterator();
                     while (it2.hasNext()) {
-                        PathFinderTile pft2 = it2.next();
+                        IndoorMapTile pft2 = it2.next();
                         Log.d("JCT: ", pft2.toString());
                     }
 

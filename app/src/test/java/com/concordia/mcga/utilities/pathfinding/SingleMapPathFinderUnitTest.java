@@ -25,7 +25,7 @@ public class SingleMapPathFinderUnitTest {
         SingleMapPathFinder finder = new SingleMapPathFinder(map);
 
         // Execute
-        List<PathFinderTile> tiles = finder.shortestPath(start, dest);
+        List<IndoorMapTile> tiles = finder.shortestPath(start, dest);
 
         // Verify
         Assert.assertEquals(1, tiles.get(0).getCoordinateY());
@@ -61,6 +61,6 @@ public class SingleMapPathFinderUnitTest {
         SingleMapPathFinder finder = new SingleMapPathFinder(map);
 
         // Execute
-        List<PathFinderTile> tiles = finder.shortestPath(start, dest);
+        List<IndoorMapTile> tiles = finder.shortestPath(start, dest);
     }
 }

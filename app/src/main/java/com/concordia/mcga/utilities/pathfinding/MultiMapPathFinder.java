@@ -32,7 +32,7 @@ public class MultiMapPathFinder {
      * @throws MCGAPathFindingException - thrown when there is no valid path between the start and
      *                                    destination
      */
-    public Map<IndoorMap, List<PathFinderTile>> shortestPath(IndoorPOI start, IndoorPOI dest)
+    public Map<IndoorMap, List<IndoorMapTile>> shortestPath(IndoorPOI start, IndoorPOI dest)
         throws MCGAPathFindingException {
         if (start.getIndoorMap().equals(dest.getIndoorMap())) {
             return sameFloorNavigation(start, dest);
@@ -59,10 +59,10 @@ public class MultiMapPathFinder {
      *                                    destination
      */
     @NonNull
-    Map<IndoorMap, List<PathFinderTile>> sameFloorNavigation(IndoorPOI start,
-        IndoorPOI dest) throws MCGAPathFindingException {
-        List<PathFinderTile> pathList = getDirectionList(start, dest);
-        LinkedHashMap<IndoorMap, List<PathFinderTile>> returnMap = new LinkedHashMap<>();
+    Map<IndoorMap, List<IndoorMapTile>> sameFloorNavigation(IndoorPOI start,
+                                                            IndoorPOI dest) throws MCGAPathFindingException {
+        List<IndoorMapTile> pathList = getDirectionList(start, dest);
+        LinkedHashMap<IndoorMap, List<IndoorMapTile>> returnMap = new LinkedHashMap<>();
         returnMap.put(start.getIndoorMap(), pathList);
         return returnMap;
     }
@@ -70,8 +70,8 @@ public class MultiMapPathFinder {
     /**
      * TODO
      */
-    Map<IndoorMap, List<PathFinderTile>> differentBuildingNavigation(IndoorPOI start,
-        IndoorPOI dest) {
+    Map<IndoorMap, List<IndoorMapTile>> differentBuildingNavigation(IndoorPOI start,
+                                                                    IndoorPOI dest) {
         return null;
     }
 
@@ -90,8 +90,8 @@ public class MultiMapPathFinder {
      * @throws MCGAPathFindingException - thrown when there is no valid path between the start and
      *                                    destination
      */
-    Map<IndoorMap, List<PathFinderTile>> sameBuildingNavigation(IndoorPOI start,
-        IndoorPOI dest) throws MCGAPathFindingException {
+    Map<IndoorMap, List<IndoorMapTile>> sameBuildingNavigation(IndoorPOI start,
+                                                               IndoorPOI dest) throws MCGAPathFindingException {
         ConnectedPOI connectedPOI = getClosestConnectedPOI(start, dest);
         return createPath(start, dest, connectedPOI);
     }
@@ -156,12 +156,12 @@ public class MultiMapPathFinder {
      * connectedPOI, or destination and connectedPOI
      */
     @NonNull
-    Map<IndoorMap, List<PathFinderTile>> createPath(IndoorPOI start, IndoorPOI dest,
-        ConnectedPOI connectedPOI) throws MCGAPathFindingException {
-        Map<IndoorMap, List<PathFinderTile>> returnMap = new LinkedHashMap<>();
+    Map<IndoorMap, List<IndoorMapTile>> createPath(IndoorPOI start, IndoorPOI dest,
+                                                   ConnectedPOI connectedPOI) throws MCGAPathFindingException {
+        Map<IndoorMap, List<IndoorMapTile>> returnMap = new LinkedHashMap<>();
 
-        List<PathFinderTile> startFloorList = getDirectionList(start, connectedPOI.getFloorPOI(start.getFloorNumber()));
-        List<PathFinderTile> destFloorList = getDirectionList(connectedPOI.getFloorPOI(dest.getFloorNumber()), dest);
+        List<IndoorMapTile> startFloorList = getDirectionList(start, connectedPOI.getFloorPOI(start.getFloorNumber()));
+        List<IndoorMapTile> destFloorList = getDirectionList(connectedPOI.getFloorPOI(dest.getFloorNumber()), dest);
         returnMap.put(start.getIndoorMap(), startFloorList);
         returnMap.put(dest.getIndoorMap(), destFloorList);
 
@@ -175,7 +175,7 @@ public class MultiMapPathFinder {
      * @throws MCGAPathFindingException - thrown when there is no valid path between the start and
      * destination
      */
-    List<PathFinderTile> getDirectionList(IndoorPOI start, IndoorPOI dest) throws MCGAPathFindingException {
+    List<IndoorMapTile> getDirectionList(IndoorPOI start, IndoorPOI dest) throws MCGAPathFindingException {
         return new SingleMapPathFinder(start.getIndoorMap().getMap())
                 .shortestPath(start, dest);
     }
