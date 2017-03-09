@@ -22,7 +22,7 @@ public class Building extends POI implements Observer {
     private String shortName;
     private MarkerOptions markerOptions;
     private List<LatLng> edgeCoordinateList;
-    private Map<Integer, IndoorMap> floorMaps;
+    private Map<Integer, Floor> floorMaps;
 
     /**
      *  returns a Building object
@@ -43,8 +43,8 @@ public class Building extends POI implements Observer {
      *
      * @return Floor maps for the given floor Number
      */
-    public IndoorMap getFloorMap(int floorNumber) {
-        IndoorMap returnMap = floorMaps.get(floorNumber);
+    public Floor getFloorMap(int floorNumber) {
+        Floor returnMap = floorMaps.get(floorNumber);
         if (returnMap == null){
             returnMap = IndoorMapFactory.getInstance().createIndoorMap(this, floorNumber);
             floorMaps.put(floorNumber, returnMap);
@@ -56,7 +56,7 @@ public class Building extends POI implements Observer {
      * Setter for floorMaps
      * @param floorMaps
      */
-    public void setFloorMaps(Map<Integer, IndoorMap> floorMaps) {
+    public void setFloorMaps(Map<Integer, Floor> floorMaps) {
         this.floorMaps = floorMaps;
     }
 

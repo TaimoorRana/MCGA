@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
-import com.concordia.mcga.models.IndoorMap;
+import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.utilities.pathfinding.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
@@ -38,10 +38,10 @@ public class IndoorMapFragment extends Fragment {
     private boolean pathsDrawn = false;
 
     //Test POIs for Demo
-    IndoorPOI H423 = new IndoorPOI(null, "H423", 4, 353, 1326);
-    IndoorPOI H436 = new IndoorPOI(null, "H436", 4, 1220, 594);
-    IndoorPOI H433 = new IndoorPOI(null, "H433", 4, 354, 57);
-    IndoorPOI H401 = new IndoorPOI(null, "H401", 4, 1972, 1616);
+    IndoorPOI H423 = new IndoorPOI(null, "H423", new IndoorMapTile(353, 1326));
+    IndoorPOI H436 = new IndoorPOI(null, "H436", new IndoorMapTile(1220, 594));
+    IndoorPOI H433 = new IndoorPOI(null, "H433", new IndoorMapTile(354, 57));
+    IndoorPOI H401 = new IndoorPOI(null, "H401", new IndoorMapTile(1972, 1616));
     private ArrayList<IndoorPOI> indoorPoiStack;
 
     @Override
@@ -82,13 +82,13 @@ public class IndoorMapFragment extends Fragment {
             @Override
             public void run() {
                 Building hall = new Building(new LatLng(0,0), "Hall", "H", new MarkerOptions());
-                IndoorMap H4 = hall.getFloorMap(4);
+                Floor H4 = hall.getFloorMap(4);
                 SingleMapPathFinder pf = new SingleMapPathFinder(H4.getMap());
 
                 ArrayList<IndoorMapTile> pathTilesJunctions = null;
 
                 try {
-                    pathTilesJunctions = (ArrayList<IndoorMapTile>) pf.shortestPathJunctions(start, dest);
+                    pathTilesJunctions = (ArrayList<IndoorMapTile>) pf.shortestPathJunctions(start.getTile(), dest.getTile());
 
                     Iterator<IndoorMapTile> it2 = pathTilesJunctions.iterator();
                     while (it2.hasNext()) {

@@ -4,97 +4,102 @@ package com.concordia.mcga.utilities.pathfinding;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.ConnectedPOI;
-import com.concordia.mcga.models.IndoorMap;
+import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorPOI;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 @RunWith(MockitoJUnitRunner.class)
 public class MultiMapPathFinderTest {
+
     @Spy
     private MultiMapPathFinder spyPathFinder;
 
     @Test
     public void testShortestPath_sameFloorPOIs() throws MCGAPathFindingException {
         // Test Data
-        IndoorPOI start = new IndoorPOI(new LatLng(0,0), "START", 4, 1, 1);
-        IndoorPOI dest = new IndoorPOI(new LatLng(0,0), "DEST", 4, 3, 3);
-        IndoorMap map = new IndoorMap();
-        start.setIndoorMap(map);
-        dest.setIndoorMap(map);
-
-        Map<IndoorMap, List<IndoorMapTile>> expectedMap = new LinkedHashMap<>();
+        IndoorMapTile startTile = new IndoorMapTile(1, 2);
+        IndoorMapTile destTile = new IndoorMapTile(1, 2);
+        Floor floor = new Floor();
+        IndoorPOI start = new IndoorPOI(new LatLng(0, 0), "START", startTile);
+        start.setFloor(floor);
+        IndoorPOI dest = new IndoorPOI(new LatLng(0, 0), "DEST", destTile);
+        dest.setFloor(floor);
+        floor.setBuilding(new Building(new LatLng(0, 0), "BLG", "blg", new MarkerOptions()));
+        Map<Floor, List<IndoorMapTile>> expectedMap = new LinkedHashMap<>();
 
         // Mock
-        Mockito.doReturn(expectedMap).when(spyPathFinder).sameFloorNavigation(start, dest);
+        Mockito.doReturn(expectedMap).when(spyPathFinder)
+            .sameFloorNavigation(floor, startTile, destTile);
 
         // Execute
-        Map<IndoorMap, List<IndoorMapTile>> result = spyPathFinder
+        Map<Floor, List<IndoorMapTile>> result = spyPathFinder
             .shortestPath(start, dest);
 
         // Verify
         Assert.assertEquals(expectedMap, result);
-        Mockito.verify(spyPathFinder).sameFloorNavigation(start, dest);
+        Mockito.verify(spyPathFinder).sameFloorNavigation(floor, startTile, destTile);
     }
 
     @Test
     public void testShortestPath_sameBuildingPOIs() throws MCGAPathFindingException {
         // Test Data
-        IndoorPOI start = new IndoorPOI(new LatLng(0,0), "START", 5, 1, 1);
-        IndoorPOI dest = new IndoorPOI(new LatLng(0,0), "DEST", 4, 3, 3);
-        Building building = new Building(new LatLng(0,0), "TEST", "TEST", new MarkerOptions());
-        IndoorMap map1 = new IndoorMap(building, 4);
-        IndoorMap map2 = new IndoorMap(building, 5);
-        start.setIndoorMap(map1);
-        dest.setIndoorMap(map2);
+        IndoorMapTile startTile = new IndoorMapTile(1, 1);
+        IndoorMapTile destTile = new IndoorMapTile(3, 3);
+        IndoorPOI start = new IndoorPOI(new LatLng(0, 0), "START", startTile);
+        IndoorPOI dest = new IndoorPOI(new LatLng(0, 0), "DEST", destTile);
+        Building building = new Building(new LatLng(0, 0), "TEST", "TEST", new MarkerOptions());
+        Floor map1 = new Floor(building, 4);
+        Floor map2 = new Floor(building, 5);
+        start.setFloor(map1);
+        dest.setFloor(map2);
 
-        Map<IndoorMap, List<IndoorMapTile>> expectedMap = new LinkedHashMap<>();
+        Map<Floor, List<IndoorMapTile>> expectedMap = new LinkedHashMap<>();
 
         // Mock
-        Mockito.doReturn(expectedMap).when(spyPathFinder).sameBuildingNavigation(start, dest);
+        Mockito.doReturn(expectedMap).when(spyPathFinder)
+            .sameBuildingNavigation(map1, startTile, map2, destTile);
 
         // Execute
-        Map<IndoorMap, List<IndoorMapTile>> result = spyPathFinder
+        Map<Floor, List<IndoorMapTile>> result = spyPathFinder
             .shortestPath(start, dest);
 
         // Verify
         Assert.assertEquals(expectedMap, result);
-        Mockito.verify(spyPathFinder).sameBuildingNavigation(start, dest);
+        Mockito.verify(spyPathFinder).sameBuildingNavigation(map1, startTile, map2, destTile);
     }
 
     @Test
     public void testShortestPath_differentBuildingPOIs() throws MCGAPathFindingException {
         // Test Data
-        IndoorPOI start = new IndoorPOI(new LatLng(0,0), "START", 5, 1, 1);
-        IndoorPOI dest = new IndoorPOI(new LatLng(0,0), "DEST", 4, 3, 3);
-        Building building1 = new Building(new LatLng(0,0), "TEST", "TEST", new MarkerOptions());
-        Building building2 = new Building(new LatLng(1,0), "TEST", "TEST", new MarkerOptions());
-        IndoorMap map1 = new IndoorMap(building1, 4);
-        IndoorMap map2 = new IndoorMap(building2, 5);
-        start.setIndoorMap(map1);
-        dest.setIndoorMap(map2);
+        IndoorMapTile startTile = new IndoorMapTile(1, 1);
+        IndoorMapTile destTile = new IndoorMapTile(3, 3);
+        IndoorPOI start = new IndoorPOI(new LatLng(0, 0), "START", startTile);
+        IndoorPOI dest = new IndoorPOI(new LatLng(0, 0), "DEST", destTile);
+        Building building1 = new Building(new LatLng(0, 0), "TEST", "TEST", new MarkerOptions());
+        Building building2 = new Building(new LatLng(1, 0), "TEST", "TEST", new MarkerOptions());
+        Floor map1 = new Floor(building1, 4);
+        Floor map2 = new Floor(building2, 5);
+        start.setFloor(map1);
+        dest.setFloor(map2);
 
-        Map<IndoorMap, List<IndoorMapTile>> expectedMap = new LinkedHashMap<>();
+        Map<Floor, List<IndoorMapTile>> expectedMap = new LinkedHashMap<>();
 
         // Mock
         Mockito.doReturn(expectedMap).when(spyPathFinder).differentBuildingNavigation(start, dest);
 
         // Execute
-        Map<IndoorMap, List<IndoorMapTile>> result = spyPathFinder
+        Map<Floor, List<IndoorMapTile>> result = spyPathFinder
             .shortestPath(start, dest);
 
         // Verify
@@ -105,59 +110,34 @@ public class MultiMapPathFinderTest {
     @Test
     public void testSameBuildingNavigation() throws MCGAPathFindingException {
         // Test data
-        IndoorPOI start = new IndoorPOI(new LatLng(0,0), "TEST", 1, 2, 2);
-        IndoorPOI dest = new IndoorPOI(new LatLng(0,0), "DEST", 2, 3, 3);
+        IndoorMapTile startTile = new IndoorMapTile(1, 1);
+        IndoorMapTile destTile = new IndoorMapTile(3, 3);
+        Building building1 = new Building(new LatLng(0, 0), "TEST", "TEST", new MarkerOptions());
+        Floor map1 = new Floor(building1, 4);
+        Floor map2 = new Floor(building1, 5);
 
-        Map<IndoorMap, List<IndoorMapTile>> expectedMap = new LinkedHashMap<>();
         ConnectedPOI connectedPOI = Mockito.mock(ConnectedPOI.class);
+        IndoorPOI intermediatePOI = new IndoorPOI(new LatLng(0, 0), "NAME",
+            new IndoorMapTile(1, 1));
+        List<IndoorMapTile> expectedList = new ArrayList<>();
+        expectedList.add(new IndoorMapTile(1,1));
 
         // Mock
-        Mockito.doReturn(expectedMap).when(spyPathFinder).createPath(start, dest, connectedPOI);
-        Mockito.doReturn(connectedPOI).when(spyPathFinder).getClosestConnectedPOI(start,dest);
-
-        // Execute
-        Map<IndoorMap, List<IndoorMapTile>> result = spyPathFinder
-            .sameBuildingNavigation(start, dest);
-
-        // Verify
-        Assert.assertEquals(expectedMap, result);
-        Mockito.verify(spyPathFinder).createPath(start, dest, connectedPOI);
-        Mockito.verify(spyPathFinder).getClosestConnectedPOI(start,dest);
-    }
-
-    @Test
-    public void testCreatePath() throws MCGAPathFindingException {
-        // Test Data
-        ConnectedPOI connectedPOI = Mockito.mock(ConnectedPOI.class);
-        IndoorPOI intermediatePOI = new IndoorPOI(new LatLng(0,0), "INTERMEDIATE", 2, 3, 3);
-        IndoorPOI start = new IndoorPOI(new LatLng(0,0), "START", 2, 2, 2);
-        IndoorMap startMap = new IndoorMap();
-        startMap.setFloorNumber(3);
-        start.setIndoorMap(startMap);
-        IndoorPOI dest = new IndoorPOI(new LatLng(0,0), "DEST", 2, 1, 1);
-        IndoorMap destMap = new IndoorMap();
-        destMap.setFloorNumber(4);
-        dest.setIndoorMap(destMap);
-
-        List<IndoorMapTile> expectedStartList = new ArrayList<>();
-        expectedStartList.add(new IndoorMapTile(1,1));
-        List<IndoorMapTile> expectedDestList = new ArrayList<>();
-        expectedDestList.add(new IndoorMapTile(1,2));
-
-        // Mock
-        Mockito.doReturn(expectedStartList).when(spyPathFinder).getDirectionList(start, intermediatePOI);
-        Mockito.doReturn(expectedDestList).when(spyPathFinder).getDirectionList(intermediatePOI, dest);
+        Mockito.doReturn(connectedPOI).when(spyPathFinder)
+            .getClosestConnectedPOI(map1, startTile, map2, destTile);
         Mockito.when(connectedPOI.getFloorPOI(Mockito.anyInt())).thenReturn(intermediatePOI);
+        Mockito.doReturn(expectedList).when(spyPathFinder)
+            .getDirectionList(Mockito.any(TiledMap.class), Mockito.any(IndoorMapTile.class),
+                Mockito.any(IndoorMapTile.class));
 
         // Execute
-        Map<IndoorMap, List<IndoorMapTile>> result = spyPathFinder.createPath(start, dest, connectedPOI);
+        Map<Floor, List<IndoorMapTile>> result = spyPathFinder
+            .sameBuildingNavigation(map1, startTile, map2, destTile);
 
         // Verify
-        Mockito.verify(spyPathFinder).getDirectionList(start, intermediatePOI);
-        Mockito.verify(spyPathFinder).getDirectionList(intermediatePOI, dest);
         Assert.assertEquals(2, result.size());
-        Iterator<Map.Entry<IndoorMap, List<IndoorMapTile>>> iterator = result.entrySet().iterator();
-        Assert.assertEquals(expectedStartList, iterator.next().getValue());
-        Assert.assertEquals(expectedDestList, iterator.next().getValue());
+        Mockito.verify(spyPathFinder).getClosestConnectedPOI(map1, startTile, map2, destTile);
+        Mockito.verify(spyPathFinder, Mockito.times(2)).getDirectionList(Mockito.any(TiledMap.class), Mockito.any(IndoorMapTile.class),
+            Mockito.any(IndoorMapTile.class));
     }
 }

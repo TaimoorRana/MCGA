@@ -1,24 +1,25 @@
 package com.concordia.mcga.utilities.pathfinding;
 
-import com.concordia.mcga.utilities.pathfinding.IndoorMapTile.Type;
+import com.concordia.mcga.utilities.pathfinding.PathFinderTile.Type;
 
 public class TiledMap {
-    private IndoorMapTile[][] allTiles;
-    private IndoorMapTile startTile;
-    private IndoorMapTile endTile;
+    private PathFinderTile[][] allTiles;
+    private PathFinderTile startTile;
+    private PathFinderTile endTile;
 
 
     public TiledMap(int sizeX, int sizeY) {
-        allTiles = new IndoorMapTile[sizeX][sizeY];
+        allTiles = new PathFinderTile[sizeX][sizeY];
     }
 
     public void setStartTile(int x, int y) {
         startTile = getTile(x, y);
         startTile.setTileType(Type.START);
+        startTile.setDistFromStart(0);
         startTile.setParent(startTile);
     }
 
-    public IndoorMapTile getStartTile() {
+    public PathFinderTile getStartTile() {
         return startTile;
     }
 
@@ -27,26 +28,23 @@ public class TiledMap {
         endTile.setTileType(Type.DESTINATION);
     }
 
-    public IndoorMapTile getEndTile() {
+    public PathFinderTile getEndTile() {
         return endTile;
     }
 
-    public void setTile(int x, int y, IndoorMapTile tile) {
+    public void setTile(int x, int y, PathFinderTile tile) {
         allTiles[x][y] = tile;
     }
 
     /**
      * Sets the given X,Y coordinate as walkable
-     * @param x - X coordinate
-     * @param y - Y coordinate
+     * @param indoorMapTile -
      */
-    public void makeWalkable(int x, int y) {
-        if (allTiles[x][y] == null) {
-            allTiles[x][y] = new IndoorMapTile(x, y);
-        }
+    public void makeWalkable(IndoorMapTile indoorMapTile) {
+        allTiles[indoorMapTile.getCoordinateX()][indoorMapTile.getCoordinateY()] = new PathFinderTile(indoorMapTile);
     }
 
-    public IndoorMapTile getTile(int x, int y) {
+    public PathFinderTile getTile(int x, int y) {
         if (x < 0 || x >= allTiles.length ||
                 y < 0 || y >= allTiles[0].length) {
             return null;

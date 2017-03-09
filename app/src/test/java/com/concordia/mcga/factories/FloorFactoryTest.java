@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.models.Building;
+import com.concordia.mcga.utilities.pathfinding.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.TiledMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -14,7 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class IndoorMapFactoryTest {
+public class FloorFactoryTest {
     @Test
     public void testGetInstance_noInstance() throws Exception {
         // Test Data
@@ -60,7 +61,7 @@ public class IndoorMapFactoryTest {
         instance.insertWalkablePaths(testBuilding, 4, mockDB, mockMap);
 
         // Verify
-        Mockito.verify(mockMap, Mockito.times(0)).makeWalkable(expectedX, expectedY);
+        Mockito.verify(mockMap, Mockito.times(0)).makeWalkable(new IndoorMapTile(expectedX, expectedY));
         Mockito.verify(expectedCursor).close();
     }
 
@@ -87,7 +88,7 @@ public class IndoorMapFactoryTest {
         instance.insertWalkablePaths(testBuilding, 4, mockDB, mockMap);
 
         // Verify
-        Mockito.verify(mockMap).makeWalkable(expectedX, expectedY);
+        Mockito.verify(mockMap).makeWalkable(new IndoorMapTile(expectedX, expectedY));
         Mockito.verify(expectedCursor).close();
     }
 

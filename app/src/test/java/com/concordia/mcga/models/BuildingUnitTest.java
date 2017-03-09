@@ -71,14 +71,14 @@ public class BuildingUnitTest {
     @Test
     public void testGetFloorMap_cached(){
         // Test data
-        Map<Integer,IndoorMap> maps = new HashMap<>();
-        IndoorMap expectedMap = new IndoorMap();
+        Map<Integer,Floor> maps = new HashMap<>();
+        Floor expectedMap = new Floor();
         maps.put(1,expectedMap);
         Building testBuilding = new Building(new LatLng(0,0), "TEST", "TEST", new MarkerOptions());
         testBuilding.setFloorMaps(maps);
 
         // Execute
-        IndoorMap result = testBuilding.getFloorMap(1);
+        Floor result = testBuilding.getFloorMap(1);
 
         // Verify
         assertEquals(expectedMap, result);
@@ -88,8 +88,8 @@ public class BuildingUnitTest {
     public void testGetFloorMap_notCached(){
         // Test data
         Building testBuilding = new Building(new LatLng(0,0), "TEST", "TEST", new MarkerOptions());
-        IndoorMap expectedMap = new IndoorMap();
-        Map<Integer,IndoorMap> maps = new HashMap<>();
+        Floor expectedMap = new Floor();
+        Map<Integer,Floor> maps = new HashMap<>();
         testBuilding.setFloorMaps(maps);
         // Mock
         IndoorMapFactory mockFactory = Mockito.mock(IndoorMapFactory.class);
@@ -100,7 +100,7 @@ public class BuildingUnitTest {
         assertEquals(0, maps.size());
 
         // Execute
-        IndoorMap result = testBuilding.getFloorMap(1);
+        Floor result = testBuilding.getFloorMap(1);
 
         // Verify
         assertEquals(expectedMap, result);

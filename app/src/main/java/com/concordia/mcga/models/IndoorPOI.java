@@ -1,62 +1,34 @@
 package com.concordia.mcga.models;
 
-import com.concordia.mcga.exceptions.MCGADifferentFloorException;
+import com.concordia.mcga.utilities.pathfinding.IndoorMapTile;
 import com.google.android.gms.maps.model.LatLng;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class IndoorPOI extends POI {
-    private IndoorMap indoorMap;
-    private int floorNumber;
-    private int indoorCoordinateX;
-    private int indoorCoordinateY;
+    private Floor floor;
+    private IndoorMapTile tile;
 
-    public IndoorPOI(LatLng mapCoordinates, String name,
-        int floorNumber, int indoorCoordinateX, int indoorCoordinateY) {
+    public IndoorPOI(LatLng mapCoordinates, String name, IndoorMapTile tile) {
         super(mapCoordinates, name);
-        this.floorNumber = floorNumber;
-        this.indoorCoordinateX = indoorCoordinateX;
-        this.indoorCoordinateY = indoorCoordinateY;
+        this.tile = tile;
     }
 
-    public int getFloorNumber() {
-        return floorNumber;
+    public IndoorMapTile getTile() {
+        return tile;
     }
 
-    public void setFloorNumber(int floorNumber) {
-        this.floorNumber = floorNumber;
+    public void setTile(IndoorMapTile tile) {
+        this.tile = tile;
     }
 
-    public int getIndoorCoordinateX() {
-        return indoorCoordinateX;
+    public Floor getFloor() {
+        return floor;
     }
 
-    public void setIndoorCoordinateX(int indoorCoordinateX) {
-        this.indoorCoordinateX = indoorCoordinateX;
-    }
-
-    public int getIndoorCoordinateY() {
-        return indoorCoordinateY;
-    }
-
-    public void setIndoorCoordinateY(int indoorCoordinateY) {
-        this.indoorCoordinateY = indoorCoordinateY;
-    }
-
-    public IndoorMap getIndoorMap() {
-        return indoorMap;
-    }
-
-    public void setIndoorMap(IndoorMap indoorMap) {
-        this.indoorMap = indoorMap;
-    }
-
-    public int calculateDistanceTo(IndoorPOI poi) throws MCGADifferentFloorException{
-        if (!poi.getIndoorMap().equals(indoorMap)){
-            throw new MCGADifferentFloorException("POIs are on different floors. Cannot calculate the distance.");
-        }
-        return Math.abs(indoorCoordinateX - poi.indoorCoordinateX) + Math.abs(indoorCoordinateY - poi.indoorCoordinateY);
+    public void setFloor(Floor floor) {
+        this.floor = floor;
     }
 
     @Override
@@ -73,10 +45,8 @@ public class IndoorPOI extends POI {
 
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
-            .append(floorNumber, indoorPOI.floorNumber)
-            .append(indoorCoordinateX, indoorPOI.indoorCoordinateX)
-            .append(indoorCoordinateY, indoorPOI.indoorCoordinateY)
-            .append(indoorMap, indoorPOI.indoorMap)
+            .append(floor, indoorPOI.floor)
+            .append(tile, indoorPOI.tile)
             .isEquals();
     }
 
@@ -84,19 +54,17 @@ public class IndoorPOI extends POI {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
             .appendSuper(super.hashCode())
-            .append(indoorMap)
-            .append(floorNumber)
-            .append(indoorCoordinateX)
-            .append(indoorCoordinateY)
+            .append(floor)
+            .append(tile)
             .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-            .append("floorNumber", floorNumber)
-            .append("indoorCoordinateX", indoorCoordinateX)
-            .append("indoorCoordinateY", indoorCoordinateY)
+            .append("floor", floor)
+            .append("tile", tile)
             .toString();
     }
+
 }

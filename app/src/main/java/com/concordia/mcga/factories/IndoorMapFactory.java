@@ -5,7 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.models.Building;
-import com.concordia.mcga.models.IndoorMap;
+import com.concordia.mcga.models.Floor;
+import com.concordia.mcga.utilities.pathfinding.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.TiledMap;
 
 public class IndoorMapFactory {
@@ -34,21 +35,21 @@ public class IndoorMapFactory {
     IndoorMapFactory(){}
 
     /**
-     * @param building - {@link Building} of the desired {@link IndoorMap}
-     * @param floorNumber - floor number of the desired {@link IndoorMap}
-     * @return An {@link IndoorMap} for the given building and floorNumber. Returns <b>null</b> if
+     * @param building - {@link Building} of the desired {@link Floor}
+     * @param floorNumber - floor number of the desired {@link Floor}
+     * @return An {@link Floor} for the given building and floorNumber. Returns <b>null</b> if
      * the building/floorNumber combination does not exist in the database
      */
-    public IndoorMap createIndoorMap(Building building, int floorNumber) {
+    public Floor createIndoorMap(Building building, int floorNumber) {
         SQLiteDatabase db = null;
         try {
             db = DatabaseConnector.getInstance().getDb();
             TiledMap map = createTiledMap(building, floorNumber, db);
             insertWalkablePaths(building, floorNumber, db, map);
-            IndoorMap indoorMap = new IndoorMap();
-            indoorMap.setFloorNumber(floorNumber);
-            indoorMap.setMap(map);
-            return indoorMap;
+            Floor floor = new Floor();
+            floor.setFloorNumber(floorNumber);
+            floor.setMap(map);
+            return floor;
         } catch (MCGADatabaseException e) {
             e.printStackTrace();
         } finally {
@@ -67,8 +68,8 @@ public class IndoorMapFactory {
                 new String[]{building.getShortName(), String.valueOf(floorNumber)});
 
         while (walkablePathCursor.moveToNext()) {
-            map.makeWalkable(walkablePathCursor.getInt(X_COORDINATE_INDEX),
-                walkablePathCursor.getInt(Y_COORDINATE_INDEX));
+            map.makeWalkable(new IndoorMapTile(walkablePathCursor.getInt(X_COORDINATE_INDEX),
+                walkablePathCursor.getInt(Y_COORDINATE_INDEX)));
         }
         walkablePathCursor.close();
     }
@@ -81,8 +82,8 @@ public class IndoorMapFactory {
                 new String[]{building.getShortName(), String.valueOf(floorNumber)});
         TiledMap map;
         if (indoorMapCursor.moveToNext()) {
-            map = new TiledMap(indoorMapCursor.getInt(MAP_HEIGHT_INDEX),
-                indoorMapCursor.getInt(MAP_WIDTH_INDEX));
+            map = new TiledMap(indoorMapCursor.getInt(MAP_WIDTH_INDEX),
+                indoorMapCursor.getInt(MAP_HEIGHT_INDEX));
             indoorMapCursor.close();
         } else {
             indoorMapCursor.close();

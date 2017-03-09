@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class IndoorMap {
+public class Floor {
     private Building building;
     private TiledMap map;
     private int floorNumber;
@@ -14,9 +14,9 @@ public class IndoorMap {
     private List<Staircase> staircases;
     private List<Escalator> escalators;
 
-    public IndoorMap(){}
+    public Floor(){}
 
-    public IndoorMap(Building building, int floorNumber) {
+    public Floor(Building building, int floorNumber) {
         this.building = building;
         this.floorNumber = floorNumber;
     }
@@ -75,11 +75,11 @@ public class IndoorMap {
             return false;
         }
 
-        IndoorMap indoorMap = (IndoorMap) o;
+        Floor floor = (Floor) o;
 
         return new EqualsBuilder()
-            .append(floorNumber, indoorMap.floorNumber)
-            .append(building, indoorMap.building)
+            .append(floorNumber, floor.floorNumber)
+            .append(building, floor.building)
             .isEquals();
     }
 

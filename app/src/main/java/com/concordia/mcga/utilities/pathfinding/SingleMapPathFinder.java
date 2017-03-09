@@ -1,15 +1,13 @@
 package com.concordia.mcga.utilities.pathfinding;
 
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
-import com.concordia.mcga.models.IndoorPOI;
-import com.concordia.mcga.utilities.pathfinding.IndoorMapTile.Type;
-
-import org.json.JSONArray;
-
+import com.concordia.mcga.utilities.pathfinding.PathFinderTile.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+import org.json.JSONArray;
 
 /**
  * Pathfinding class, which runs the A* shortest pathfinding algorithm
@@ -17,12 +15,13 @@ import java.util.Set;
 public class SingleMapPathFinder {
 
     TiledMap map;
-    Set<IndoorMapTile> openSet;
-    Set<IndoorMapTile> closedSet;
+    TreeSet<PathFinderTile> openSet;
+    Set<PathFinderTile> closedSet;
 
     public SingleMapPathFinder(TiledMap map) {
-        openSet = new HashSet<>();
+        openSet = new TreeSet<>();
         closedSet = new HashSet<>();
+        // TODO deep clone map.
         this.map = map;
     }
 
@@ -34,17 +33,18 @@ public class SingleMapPathFinder {
      * @return - Returns a list of the tiles found in the shortest path. Sorted from first to last.
      * @throws MCGAPathFindingException - Thrown if there exists no valid path between both points
      */
-    List<IndoorMapTile> shortestPath(IndoorPOI start, IndoorPOI dest)
+    List<IndoorMapTile> shortestPath(IndoorMapTile start, IndoorMapTile dest)
             throws MCGAPathFindingException {
-        map.setStartTile(start.getIndoorCoordinateX(), start.getIndoorCoordinateY());
-        map.setEndTile(dest.getIndoorCoordinateX(), dest.getIndoorCoordinateY());
+        map.setStartTile(start.getCoordinateX(), start.getCoordinateY());
+        map.setEndTile(dest.getCoordinateX(), dest.getCoordinateY());
         openSet.add(map.getStartTile());
-        IndoorMapTile current;
+        PathFinderTile current;
         while (true) {
-            current = lowestOpen();
-            if (current == null) {
+            if (openSet.isEmpty()) {
                 throw new MCGAPathFindingException("No valid path to destination!");
-            } else if (current.equals(map.getEndTile())) {
+            }
+            current = openSet.first();
+            if (current.equals(map.getEndTile())) {
                 break;
             }
             nextIteration(current);
@@ -52,7 +52,7 @@ public class SingleMapPathFinder {
         // Current is now the destination tile. Path is available by traversing parents.
         List<IndoorMapTile> returnList = new ArrayList<>();
         while (true) {
-            returnList.add(0, current);
+            returnList.add(0, current.getIndoorMapTile());
             if (current.getTileType() == Type.START){
                 break;
             }
@@ -69,7 +69,7 @@ public class SingleMapPathFinder {
      * @return - Returns a list of the tiles found in the shortest path. Sorted from first to last.
      * @throws MCGAPathFindingException - Thrown if there exists no valid path between both points
      */
-    public List<IndoorMapTile> shortestPathJunctions(IndoorPOI start, IndoorPOI dest) throws MCGAPathFindingException {
+    public List<IndoorMapTile> shortestPathJunctions(IndoorMapTile start, IndoorMapTile dest) throws MCGAPathFindingException {
         ArrayList<IndoorMapTile> pathTiles = new ArrayList<IndoorMapTile>(shortestPath(start, dest));
         ArrayList<IndoorMapTile> pathTilesJunctions = new ArrayList<IndoorMapTile>();
 
@@ -103,26 +103,26 @@ public class SingleMapPathFinder {
      *
      * @param current - Currently examined tile.
      */
-    private void nextIteration(IndoorMapTile current) {
+    private void nextIteration(PathFinderTile current) {
         openSet.remove(current);
         closedSet.add(current);
 
-        IndoorMapTile[] adjacentTiles = new IndoorMapTile[4];
-        adjacentTiles[0] = map.getTile(current.getCoordinateX() + 1, current.getCoordinateY());
-        adjacentTiles[1] = map.getTile(current.getCoordinateX() - 1, current.getCoordinateY());
-        adjacentTiles[2] = map.getTile(current.getCoordinateX(), current.getCoordinateY() - 1);
-        adjacentTiles[3] = map.getTile(current.getCoordinateX(), current.getCoordinateY() + 1);
+        PathFinderTile[] adjacentTiles = new PathFinderTile[4];
+        adjacentTiles[0] = map.getTile(current.getIndoorMapTile().getCoordinateX() + 1, current.getIndoorMapTile().getCoordinateY());
+        adjacentTiles[1] = map.getTile(current.getIndoorMapTile().getCoordinateX() - 1, current.getIndoorMapTile().getCoordinateY());
+        adjacentTiles[2] = map.getTile(current.getIndoorMapTile().getCoordinateX(), current.getIndoorMapTile().getCoordinateY() - 1);
+        adjacentTiles[3] = map.getTile(current.getIndoorMapTile().getCoordinateX(), current.getIndoorMapTile().getCoordinateY() + 1);
 
-        for (IndoorMapTile tile : adjacentTiles) {
+        for (PathFinderTile tile : adjacentTiles) {
             if (tile == null) {
                 continue;
             }
-            if (tile.getDistFromEnd() == 0){
+            if (tile.getDistFromEnd() == 0 && tile.getTileType() != Type.DESTINATION){
                 tile.setDistFromEnd(tile.calculateDistanceTo(map.getEndTile()));
             }
             if (!closedSet.contains(tile)) {
                 if (openSet.contains(tile)) {
-                    int newDist = tile.calculateDistFromStart();
+                    int newDist = current.calculateDistFromStart() + 1;
                     if (newDist < tile.getDistFromStart()) {
                         tile.setDistFromStart(newDist);
                         tile.setParent(current);
@@ -134,18 +134,5 @@ public class SingleMapPathFinder {
                 }
             }
         }
-    }
-
-    private IndoorMapTile lowestOpen() {
-        IndoorMapTile lowest = IndoorMapTile.MAX_COST;
-        for (IndoorMapTile tile : openSet) {
-            if (tile.getCost() < lowest.getCost()) {
-                lowest = tile;
-            }
-        }
-        if (lowest.equals(IndoorMapTile.MAX_COST)) {
-            return null;
-        }
-        return lowest;
     }
 }
