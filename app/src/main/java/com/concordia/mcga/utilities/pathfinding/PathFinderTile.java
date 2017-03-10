@@ -2,6 +2,11 @@ package com.concordia.mcga.utilities.pathfinding;
 
 import android.support.annotation.NonNull;
 
+/**
+ * Object acts as a wrapper for {@link IndoorMapTile}. Holds
+ * additional information about the tiles that are specifically used
+ * by the pathfinder algorithms
+ */
 public class PathFinderTile implements Comparable<PathFinderTile> {
 
     enum Type {START, DESTINATION}
@@ -60,23 +65,17 @@ public class PathFinderTile implements Comparable<PathFinderTile> {
         this.parent = parent;
     }
 
+    /**
+     * @param tile tile to calculate the distance to
+     * @return the units of distance between both tiles. Units are in X or Y direction.
+     *         Does not take diagonal distance.
+     */
     public int calculateDistanceTo(PathFinderTile tile) {
         return Math.abs(indoorMapTile.getCoordinateX() - tile.indoorMapTile.getCoordinateX()) + Math
             .abs(indoorMapTile.getCoordinateY() - tile.indoorMapTile.getCoordinateY());
     }
 
     public int calculateDistFromStart() {
-//        if (indoorMapTile.getCoordinateY() == parent.indoorMapTile.getCoordinateY() &&
-//            parent.parent.indoorMapTile.getCoordinateY() == parent.indoorMapTile.getCoordinateY()
-//            ) {
-//            return parent.distFromStart + 1;
-//        }
-//        if (indoorMapTile.getCoordinateX() == parent.indoorMapTile.getCoordinateX()
-//            && parent.parent.indoorMapTile.getCoordinateX() == parent.indoorMapTile
-//            .getCoordinateX()) {
-//            return parent.distFromStart + 1;
-//        }
-//        return parent.distFromStart + 2;
         return parent.distFromStart + 1;
     }
 

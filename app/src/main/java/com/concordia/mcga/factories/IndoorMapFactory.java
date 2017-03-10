@@ -60,6 +60,15 @@ public class IndoorMapFactory {
         return null;
     }
 
+    /**
+     * Inserts all valid walkable paths from the database into the given <b>map</b>
+     *     {@link TiledMap} instance.
+     * @param building Building where the map is located in
+     * @param floorNumber floorNumber that the map is representing
+     * @param db DB object
+     * @param map object to modify with walkable paths
+     * @throws MCGADatabaseException
+     */
     void insertWalkablePaths(Building building, int floorNumber, SQLiteDatabase db,
         TiledMap map) throws MCGADatabaseException {
         Cursor walkablePathCursor = db
@@ -74,6 +83,15 @@ public class IndoorMapFactory {
         walkablePathCursor.close();
     }
 
+    /**
+     * Creates a TiledMap instance of the appropriate size, according to the size stored in the
+     * database.
+     * @param building the building where the map is located
+     * @param floorNumber the floor number
+     * @param db Database object
+     * @return TiledMap of the appropriate size
+     * @throws MCGADatabaseException
+     */
     TiledMap createTiledMap(Building building, int floorNumber, SQLiteDatabase db)
         throws MCGADatabaseException {
         Cursor indoorMapCursor = db
