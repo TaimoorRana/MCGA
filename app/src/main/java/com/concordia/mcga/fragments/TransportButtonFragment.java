@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.models.ShuttleTimes;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
 
@@ -64,7 +65,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         setBikeTime(1, 0);
         setCarTime(0, 30);
         setPublicTransportTime(0, 45);
-        setShuttleTime(0, 30);
+        setShuttleTime(0, ShuttleTimes.getNumberOfMinutesToNextShuttleFromCurrentTime());
 
         return view;
     }
