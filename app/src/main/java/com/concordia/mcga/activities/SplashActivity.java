@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 public class SplashActivity extends AppCompatActivity {
 
     /**
-     * Creates the splash screen. Switch to MainActivity after 'VIEW_TIME' milliseconds
+     * Creates the splash screen.
      * @param savedInstanceState The savedInstanceState is a reference to a Bundle object that is passed into the onCreate method of every Android Activity
      */
     @Override
