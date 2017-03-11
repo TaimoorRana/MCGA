@@ -29,6 +29,8 @@ public class OutdoorDirection implements DirectionCallback {
     private Leg leg;
     private GoogleMap map;
     private Context context;
+    private final int pathWidth = 5;
+    private final int pathColor = Color.BLUE;
 
 
 
@@ -42,7 +44,7 @@ public class OutdoorDirection implements DirectionCallback {
             Route route = direction.getRouteList().get(0);
             leg = route.getLegList().get(0);
             ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
-            polyline = map.addPolyline(DirectionConverter.createPolyline(context, directionPositionList, 5, Color.BLUE));
+            polyline = map.addPolyline(DirectionConverter.createPolyline(context, directionPositionList, pathWidth, pathColor));
             getDistance();
             getDuration();
         }
@@ -50,7 +52,6 @@ public class OutdoorDirection implements DirectionCallback {
 
     @Override
     public void onDirectionFailure(Throwable t) {
-
     }
 
 
@@ -157,5 +158,14 @@ public class OutdoorDirection implements DirectionCallback {
         polyline.remove();
         originMarker.remove();
         destinationMarker.remove();
+    }
+
+    @Override
+    public String toString() {
+        return "OutdoorDirection{" +
+                "origin=" + origin +
+                ", destination=" + destination +
+                ", transportMode='" + transportMode + '\'' +
+                '}';
     }
 }
