@@ -80,7 +80,7 @@ public class OutdoorDirection implements DirectionCallback {
     /**
      * Makes a https request to get a direction from origin to destination with a specified transport mode.
      */
-    public void getDirection () {
+    public void requestDirection() {
 
         GoogleDirection.withServerKey(serverKey)
                 .from(origin)

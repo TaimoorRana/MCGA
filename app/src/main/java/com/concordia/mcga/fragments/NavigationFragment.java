@@ -144,7 +144,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     outdoorDirection.setOrigin(latLng);
                 }else if(outdoorDirection.getDestination() == null){
                     outdoorDirection.setDestination(latLng);
-                    outdoorDirection.getDirection();
+                    outdoorDirection.requestDirection();
                 }
                 else{
                     outdoorDirection.deleteDirection();
