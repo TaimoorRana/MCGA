@@ -14,7 +14,13 @@ import android.widget.Button;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.TransitMode;
+import com.akexorcist.googledirection.constant.TransportMode;
+import com.akexorcist.googledirection.constant.Unit;
 import com.akexorcist.googledirection.model.Direction;
+import com.akexorcist.googledirection.model.Info;
+import com.akexorcist.googledirection.model.Leg;
+import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
@@ -59,6 +65,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     Polyline polyline;
 
     Marker originMarker, destinationMarker;
+
+    Leg leg;
 
     private enum ViewType {
         INDOOR, OUTDOOR
@@ -150,7 +158,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     origin = latLng;
                 }else if(destination == null){
                     destination = latLng;
-                    getDirection(origin,destination);
+                    getDirection(origin,destination,TransportMode.WALKING);
                 }
                 else{
                     origin = null;
@@ -256,9 +264,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         if (direction.isOK()) {
             originMarker = map.addMarker(new MarkerOptions().position(origin));
             destinationMarker = map.addMarker(new MarkerOptions().position(destination));
-
-            ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
+            Route route = direction.getRouteList().get(0);
+            leg = route.getLegList().get(0);
+            ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
             polyline = map.addPolyline(DirectionConverter.createPolyline(getActivity(), directionPositionList, 5, Color.BLUE));
+            getDistance();
+            getDuration();
         }
     }
 
@@ -268,12 +279,26 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
 
-    public void getDirection (LatLng origin, LatLng destination) {
+    public void getDirection (LatLng origin, LatLng destination, String transportMode) {
 
         GoogleDirection.withServerKey(serverKey)
                 .from(origin)
                 .to(destination)
+                .transportMode(transportMode)
+                .unit(Unit.METRIC)
                 .execute(this);
     }
+
+    public String getDistance(){
+        ((MainActivity) getActivity()).createToast(leg.getDistance().getText());
+        return leg.getDistance().getText();
+    }
+
+    public String getDuration(){
+        ((MainActivity) getActivity()).createToast(leg.getDuration().getText());
+        return leg.getDuration().getText();
+    }
+
+
 
 }
