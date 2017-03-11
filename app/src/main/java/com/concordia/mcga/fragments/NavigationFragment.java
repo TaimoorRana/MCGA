@@ -12,18 +12,10 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.akexorcist.googledirection.DirectionCallback;
-import com.akexorcist.googledirection.GoogleDirection;
-import com.akexorcist.googledirection.constant.TransitMode;
 import com.akexorcist.googledirection.constant.TransportMode;
-import com.akexorcist.googledirection.constant.Unit;
-import com.akexorcist.googledirection.model.Direction;
-import com.akexorcist.googledirection.model.Info;
-import com.akexorcist.googledirection.model.Leg;
-import com.akexorcist.googledirection.model.Route;
-import com.akexorcist.googledirection.util.DirectionConverter;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.helperClasses.OutdoorDirection;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
@@ -36,14 +28,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, DirectionCallback, Subject {
+public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject {
 
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
@@ -60,13 +50,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private Button campusButton;
     private Button viewSwitchButton;
 
-    LatLng origin, destination;
-    String serverKey = "AIzaSyBQrTXiam-OzDCfSgEct6FyOQWlDWFXp6Q";
-    Polyline polyline;
-
-    Marker originMarker, destinationMarker;
-
-    Leg leg;
 
     private enum ViewType {
         INDOOR, OUTDOOR
@@ -151,21 +134,21 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map.getUiSettings().setMapToolbarEnabled(false);
 
         map.setIndoorEnabled(false);
+        final OutdoorDirection outdoorDirection = new OutdoorDirection();
+        outdoorDirection.setContext(getActivity());
+        outdoorDirection.setMap(map);
+        outdoorDirection.setTransportMode(TransportMode.WALKING);
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if(origin == null){
-                    origin = latLng;
-                }else if(destination == null){
-                    destination = latLng;
-                    getDirection(origin,destination,TransportMode.WALKING);
+                if(outdoorDirection.getOrigin() == null){
+                    outdoorDirection.setOrigin(latLng);
+                }else if(outdoorDirection.getDestination() == null){
+                    outdoorDirection.setDestination(latLng);
+                    outdoorDirection.getDirection();
                 }
                 else{
-                    origin = null;
-                    destination = null;
-                    polyline.remove();
-                    originMarker.remove();
-                    destinationMarker.remove();
+                    outdoorDirection.deleteDirection();
                 }
             }
         });
@@ -259,45 +242,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
-    @Override
-    public void onDirectionSuccess(Direction direction, String rawBody) {
-        if (direction.isOK()) {
-            originMarker = map.addMarker(new MarkerOptions().position(origin));
-            destinationMarker = map.addMarker(new MarkerOptions().position(destination));
-            Route route = direction.getRouteList().get(0);
-            leg = route.getLegList().get(0);
-            ArrayList<LatLng> directionPositionList = leg.getDirectionPoint();
-            polyline = map.addPolyline(DirectionConverter.createPolyline(getActivity(), directionPositionList, 5, Color.BLUE));
-            getDistance();
-            getDuration();
-        }
-    }
-
-    @Override
-    public void onDirectionFailure(Throwable t) {
-
-    }
-
-
-    public void getDirection (LatLng origin, LatLng destination, String transportMode) {
-
-        GoogleDirection.withServerKey(serverKey)
-                .from(origin)
-                .to(destination)
-                .transportMode(transportMode)
-                .unit(Unit.METRIC)
-                .execute(this);
-    }
-
-    public String getDistance(){
-        ((MainActivity) getActivity()).createToast(leg.getDistance().getText());
-        return leg.getDistance().getText();
-    }
-
-    public String getDuration(){
-        ((MainActivity) getActivity()).createToast(leg.getDuration().getText());
-        return leg.getDuration().getText();
-    }
 
 
 
