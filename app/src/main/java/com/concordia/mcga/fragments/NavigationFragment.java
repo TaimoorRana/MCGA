@@ -12,10 +12,18 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.model.Direction;
+import com.akexorcist.googledirection.model.Leg;
+import com.akexorcist.googledirection.model.Route;
+import com.akexorcist.googledirection.model.Step;
+import com.akexorcist.googledirection.util.DirectionConverter;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
+import com.concordia.mcga.helperClasses.MCGADirection;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,14 +31,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject {
+public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, DirectionCallback, Subject {
 
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
@@ -46,6 +56,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     //View Components
     private Button campusButton;
     private Button viewSwitchButton;
+
+    LatLng origin = new LatLng(45.497289, -73.578932);
+    LatLng destination = new LatLng(45.495241, -73.578925);
+    String serverKey = "AIzaSyBQrTXiam-OzDCfSgEct6FyOQWlDWFXp6Q";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -158,6 +172,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 return true;
             }
         });
+
+        MCGADirection direction= new MCGADirection();
+        getDirection();
     }
 
     private void createBuildingMarkersAndPolygonOverlay(Building building) {
@@ -214,8 +231,33 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
+    @Override
+    public void onDirectionSuccess(Direction direction, String rawBody) {
+        if (direction.isOK()) {
+            map.addMarker(new MarkerOptions().position(origin));
+            map.addMarker(new MarkerOptions().position(destination));
+
+            ArrayList<LatLng> directionPositionList = direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint();
+            map.addPolyline(DirectionConverter.createPolyline(getActivity(), directionPositionList, 5, Color.RED));
+        }
+    }
+
+    @Override
+    public void onDirectionFailure(Throwable t) {
+
+    }
+
     private enum ViewType {
         INDOOR, OUTDOOR
+    }
+
+    public void getDirection () {
+
+
+        GoogleDirection.withServerKey(serverKey)
+                .from(origin)
+                .to(destination)
+                .execute(this);
     }
 
 }
