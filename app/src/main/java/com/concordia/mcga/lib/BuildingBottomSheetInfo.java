@@ -12,6 +12,7 @@ import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -130,6 +131,8 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
 
     private boolean mTouchingScrollingChild;
 
+
+
     /**
      * Default constructor for instantiating BottomSheetBehaviors.
      */
@@ -197,10 +200,8 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         // Offset the bottom sheet
         mParentHeight = parent.getHeight();
 
-
-        mMinOffset = Math.max(820, mParentHeight - child.getHeight());
-
-        mMaxOffset = Math.max(mParentHeight - 230, mMinOffset);
+        mMinOffset = mParentHeight - child.getHeight() / 2;
+        mMaxOffset = mParentHeight - parent.getHeight() / 8;
 
         /**
          * New behavior
@@ -665,7 +666,7 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         return null;
     }
 
-    private final ViewDragHelper.Callback mDragCallback = new ViewDragHelper.Callback() {
+    public final ViewDragHelper.Callback mDragCallback = new ViewDragHelper.Callback() {
 
         @Override
         public boolean tryCaptureView(View child, int pointerId ) {
