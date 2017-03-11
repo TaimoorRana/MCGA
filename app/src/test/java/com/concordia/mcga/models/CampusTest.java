@@ -1,75 +1,33 @@
-package com.concordia.mcga.activities;
+package com.concordia.mcga.models;
 
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.concordia.mcga.models.Building;
-import com.concordia.mcga.models.Campus;
 import com.google.android.gms.dynamic.zzd;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.internal.zzf;
 import com.google.android.gms.maps.model.internal.zzg;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mock;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
+/**
+ * Created by taimoorrana on 2017-03-10.
+ */
+
 @RunWith(JUnit4.class)
-public class BuildingUnitTest {
-    @Mock
-    Marker marker;
+public class CampusTest {
 
     MarkerOptions markerOptions = new MarkerOptions();
     Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
-    @Test
-    public void getNameTest() {
-        assertEquals("Hall", testBuilding.getName());
-    }
-
-    @Test
-    public void getShortNameTest() {
-        assertEquals("H", testBuilding.getShortName());
-    }
-
-    @Test
-    public void getMarkerOptionsTest() {
-        assertEquals(markerOptions, testBuilding.getMarkerOptions());
-    }
-
-    @Test
-    public void getCenterCoordinatesTest() {
-        assertEquals(new LatLng(45.495656, -73.574290), testBuilding.getMapCoordinates());
-    }
-
-    @Test
-    public void addEdgeCoordinateTest() {
-        List<LatLng> list = new ArrayList<>();
-        LatLng edge = new LatLng(45.495656, -73.574290);
-        list.add(edge);
-        testBuilding.addEdgeCoordinate(list);
-        assertEquals(true, testBuilding.getEdgeCoordinateList().contains(edge));
-    }
-
-    @Test
-    public void getPolygonOverlayOptions() {
-        List<LatLng> list = new ArrayList<>();
-        LatLng edge = new LatLng(45.495656, -73.574290);
-        list.add(edge);
-        testBuilding.addEdgeCoordinate(list);
-        PolygonOptions polygonOptions = testBuilding.getPolygonOverlayOptions();
-        assertEquals(0x996d171f, polygonOptions.getFillColor());
-    }
 
     @Test
     public void getBuildingWithMarkerTest(){
@@ -642,6 +600,4 @@ public class BuildingUnitTest {
         Building result = Campus.SGW.getBuilding(polygon);
         assertNotNull(result);
     }
-
-
 }
