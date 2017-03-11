@@ -9,6 +9,8 @@ import com.concordia.mcga.utilities.pathfinding.TiledMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import junit.framework.Assert;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -16,6 +18,20 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FloorFactoryTest {
+
+    private IndoorMapFactory instance;
+    private String name;
+    private String shortName;
+    private Building testBuilding;
+
+    @Before
+    public void setUp() {
+        instance = new IndoorMapFactory();
+        name = "TEST_NAME";
+        shortName = "SHORT_NAME";
+        testBuilding = new Building(new LatLng(0,0), name, shortName, new MarkerOptions());
+    }
+
     @Test
     public void testGetInstance_noInstance() throws Exception {
         // Test Data
@@ -39,13 +55,7 @@ public class FloorFactoryTest {
     }
 
     @Test
-    public void testCreateWalkablePaths_pathsDoNotExist() throws Exception {
-        // Test Data
-        IndoorMapFactory instance = new IndoorMapFactory();
-        String name = "TEST_NAME";
-        String shortName = "SHORT_NAME";
-        Building testBuilding = new Building(new LatLng(0,0),name, shortName, new MarkerOptions());
-
+    public void testCreateWalkablePaths_pathsDoNotExist() throws MCGADatabaseException {
         // Mocking
         SQLiteDatabase mockDB = Mockito.mock(SQLiteDatabase.class);
         TiledMap mockMap = Mockito.mock(TiledMap.class);
@@ -66,13 +76,7 @@ public class FloorFactoryTest {
     }
 
     @Test
-    public void testCreateWalkablePaths_pathsExist() throws Exception {
-        // Test Data
-        IndoorMapFactory instance = new IndoorMapFactory();
-        String name = "TEST_NAME";
-        String shortName = "SHORT_NAME";
-        Building testBuilding = new Building(new LatLng(0,0),name, shortName, new MarkerOptions());
-
+    public void testCreateWalkablePaths_pathsExist() throws MCGADatabaseException {
         // Mocking
         SQLiteDatabase mockDB = Mockito.mock(SQLiteDatabase.class);
         TiledMap mockMap = Mockito.mock(TiledMap.class);
@@ -93,13 +97,7 @@ public class FloorFactoryTest {
     }
 
     @Test
-    public void testGetTiledMap_mapExists() throws Exception {
-        // Test Data
-        IndoorMapFactory instance = new IndoorMapFactory();
-        String name = "TEST_NAME";
-        String shortName = "SHORT_NAME";
-        Building testBuilding = new Building(new LatLng(0,0),name, shortName, new MarkerOptions());
-
+    public void testGetTiledMap_mapExists() throws MCGADatabaseException {
         // Mocking
         SQLiteDatabase mockDB = Mockito.mock(SQLiteDatabase.class);
         TiledMap mockMap = Mockito.mock(TiledMap.class);
@@ -120,13 +118,7 @@ public class FloorFactoryTest {
     }
 
     @Test
-    public void testGetTiledMap_mapDoesNotExist() throws Exception {
-        // Test Data
-        IndoorMapFactory instance = new IndoorMapFactory();
-        String name = "TEST_NAME";
-        String shortName = "SHORT_NAME";
-        Building testBuilding = new Building(new LatLng(0,0),name, shortName, new MarkerOptions());
-
+    public void testGetTiledMap_mapDoesNotExist() {
         // Mocking
         SQLiteDatabase mockDB = Mockito.mock(SQLiteDatabase.class);
         Cursor expectedCursor = Mockito.mock(Cursor.class);

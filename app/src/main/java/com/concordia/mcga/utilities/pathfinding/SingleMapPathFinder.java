@@ -2,12 +2,14 @@ package com.concordia.mcga.utilities.pathfinding;
 
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.utilities.pathfinding.PathFinderTile.Type;
+
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import org.json.JSONArray;
 
 /**
  * Pathfinding class, which runs the A* shortest pathfinding algorithm
@@ -70,8 +72,8 @@ public class SingleMapPathFinder {
      * @throws MCGAPathFindingException - Thrown if there exists no valid path between both points
      */
     public List<IndoorMapTile> shortestPathJunctions(IndoorMapTile start, IndoorMapTile dest) throws MCGAPathFindingException {
-        ArrayList<IndoorMapTile> pathTiles = new ArrayList<IndoorMapTile>(shortestPath(start, dest));
-        ArrayList<IndoorMapTile> pathTilesJunctions = new ArrayList<IndoorMapTile>();
+        List<IndoorMapTile> pathTiles = new ArrayList<IndoorMapTile>(shortestPath(start, dest));
+        List<IndoorMapTile> pathTilesJunctions = new ArrayList<IndoorMapTile>();
 
         IndoorMapTile firstPft = pathTiles.get(0);
         pathTilesJunctions.add(firstPft);
