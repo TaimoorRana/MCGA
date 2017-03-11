@@ -1,5 +1,6 @@
 package com.concordia.mcga.models;
 
+import com.concordia.mcga.utilities.pathfinding.IndoorMapTile;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -8,9 +9,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class Room extends IndoorPOI {
     private int roomNumber;
 
-    public Room(LatLng mapCoordinates, String name, int floorNumber,
-        int indoorCoordinateX, int indoorCoordinateY, int roomNumber) {
-        super(mapCoordinates, name, floorNumber, indoorCoordinateX, indoorCoordinateY);
+    public Room(LatLng mapCoordinates, String name, IndoorMapTile tile, int roomNumber) {
+        super(mapCoordinates, name, tile);
         this.roomNumber = roomNumber;
     }
 
