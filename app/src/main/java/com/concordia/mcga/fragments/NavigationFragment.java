@@ -15,8 +15,8 @@ import android.widget.Button;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.helperClasses.OutdoorDirection;
 import com.concordia.mcga.helperClasses.Observer;
+import com.concordia.mcga.helperClasses.OutdoorDirection;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
@@ -49,11 +49,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     //View Components
     private Button campusButton;
     private Button viewSwitchButton;
-
-
-    private enum ViewType {
-        INDOOR, OUTDOOR
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,10 +129,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map.getUiSettings().setMapToolbarEnabled(false);
 
         map.setIndoorEnabled(false);
+
+        /*
+         * For Demo outdoor direction only
+         */
         final OutdoorDirection outdoorDirection = new OutdoorDirection();
         outdoorDirection.setContext(getActivity());
         outdoorDirection.setMap(map);
-        outdoorDirection.setTransportMode(TransportMode.WALKING);
+        outdoorDirection.setTransportMode(TransportMode.TRANSIT);
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -152,6 +151,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 }
             }
         });
+
+        /*
+         * For Demo outdoor direction only
+         */
+
         //Map Customization
         applyCustomGoogleMapsStyle();
         Campus.populateCampusesWithBuildings();
@@ -240,6 +244,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         for (Observer observer : observerList) {
             observer.update(map.getCameraPosition().zoom);
         }
+    }
+
+    private enum ViewType {
+        INDOOR, OUTDOOR
     }
 
 

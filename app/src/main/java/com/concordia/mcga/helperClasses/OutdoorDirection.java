@@ -26,9 +26,9 @@ public class OutdoorDirection implements DirectionCallback {
 
     private final String serverKey = "AIzaSyBQrTXiam-OzDCfSgEct6FyOQWlDWFXp6Q";
     private final int transitPathWidth = 5;
-    private final int transitPathColor = 0x80ed1026;
+    private final int transitPathColor = 0x80ed1026; // transparent red
     private final int walkingPathWidth = 3;
-    private final int walkingPathColor = 0x801767e8;
+    private final int walkingPathColor = 0x801767e8; // transparent blue
     private LatLng origin, destination;
     private List<Polyline> polylines;
     private List<Step> steps;
@@ -43,7 +43,15 @@ public class OutdoorDirection implements DirectionCallback {
         polylines = new ArrayList<>();
         steps = new ArrayList<>();
         instructions = new ArrayList<>();
+        transportMode = TransportMode.TRANSIT; // default transport mode
     }
+
+    /**
+     * Upon successful response from Google Direction Server, Create a path between the origin and destion
+     *
+     * @param direction raw directions in JSON format are wrapped with the Direction class for ease of use
+     * @param rawBody   raw directions in JSON format
+     */
     @Override
     public void onDirectionSuccess(Direction direction, String rawBody) {
         if (direction.isOK()) {
@@ -69,13 +77,15 @@ public class OutdoorDirection implements DirectionCallback {
     public void onDirectionFailure(Throwable t) {
     }
 
-
+    /**
+     * Makes a https request to get a direction from origin to destination with a specified transport mode.
+     */
     public void getDirection () {
 
         GoogleDirection.withServerKey(serverKey)
                 .from(origin)
                 .to(destination)
-                .transportMode(TransportMode.TRANSIT)
+                .transportMode(transportMode)
                 .unit(Unit.METRIC)
                 .execute(this);
     }
@@ -114,7 +124,9 @@ public class OutdoorDirection implements DirectionCallback {
         return serverKey;
     }
 
-
+    /**
+     * @return Polylines that are drawn on the map
+     */
     public List<Polyline> getPolylines() {
         return polylines;
     }
@@ -179,6 +191,10 @@ public class OutdoorDirection implements DirectionCallback {
         this.steps = steps;
     }
 
+    /**
+     * Deletes Markers and polylines.
+     * sets origin and destionation to null
+     */
     public void deleteDirection(){
         origin = null;
         destination = null;
@@ -189,6 +205,9 @@ public class OutdoorDirection implements DirectionCallback {
         destinationMarker.remove();
     }
 
+    /**
+     * @return list of instructions to get from origin to destination
+     */
     public List<String> getInstructions() {
         instructions.clear();
         for (Step step : steps) {
