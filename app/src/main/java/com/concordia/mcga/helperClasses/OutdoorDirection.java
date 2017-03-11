@@ -24,13 +24,15 @@ import java.util.List;
 
 public class OutdoorDirection implements DirectionCallback {
 
+    private final String serverKey = "AIzaSyBQrTXiam-OzDCfSgEct6FyOQWlDWFXp6Q";
     private final int transitPathWidth = 5;
     private final int transitPathColor = 0x80ed1026;
     private final int walkingPathWidth = 3;
     private final int walkingPathColor = 0x801767e8;
     private LatLng origin, destination;
-    private String serverKey = "AIzaSyBQrTXiam-OzDCfSgEct6FyOQWlDWFXp6Q";
     private List<Polyline> polylines;
+    private List<Step> steps;
+    private List<String> instructions;
     private Marker originMarker, destinationMarker;
     private Leg leg;
     private GoogleMap map;
@@ -39,6 +41,8 @@ public class OutdoorDirection implements DirectionCallback {
 
     public OutdoorDirection() {
         polylines = new ArrayList<>();
+        steps = new ArrayList<>();
+        instructions = new ArrayList<>();
     }
     @Override
     public void onDirectionSuccess(Direction direction, String rawBody) {
@@ -47,13 +51,17 @@ public class OutdoorDirection implements DirectionCallback {
             destinationMarker = map.addMarker(new MarkerOptions().position(destination));
             Route route = direction.getRouteList().get(0);
             leg = route.getLegList().get(0);
-            List<Step> stepList = leg.getStepList();
-            ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline(context, stepList, transitPathWidth, transitPathColor, walkingPathWidth, walkingPathColor);
+            steps = leg.getStepList();
+            ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline(
+                    context,
+                    steps,
+                    transitPathWidth,
+                    transitPathColor,
+                    walkingPathWidth,
+                    walkingPathColor);
             for (PolylineOptions polylineOption : polylineOptionList) {
                 polylines.add(map.addPolyline(polylineOption));
             }
-            getDistance();
-            getDuration();
         }
     }
 
@@ -72,10 +80,16 @@ public class OutdoorDirection implements DirectionCallback {
                 .execute(this);
     }
 
+    /**
+     * @return Route total distance in "x KM" format
+     */
     public String getDistance(){
         return leg.getDistance().getText();
     }
 
+    /**
+     * @return Route total duration in "x hours y min" format
+     */
     public String getDuration(){
         return leg.getDuration().getText();
     }
@@ -100,12 +114,13 @@ public class OutdoorDirection implements DirectionCallback {
         return serverKey;
     }
 
-    public void setServerKey(String serverKey) {
-        this.serverKey = serverKey;
-    }
 
     public List<Polyline> getPolylines() {
         return polylines;
+    }
+
+    public void setPolylines(List<Polyline> polylines) {
+        this.polylines = polylines;
     }
 
     public Marker getOriginMarker() {
@@ -148,10 +163,6 @@ public class OutdoorDirection implements DirectionCallback {
         this.context = context;
     }
 
-    public void setPolyline(List<Polyline> polylines) {
-        this.polylines = polylines;
-    }
-
     public String getTransportMode() {
         return transportMode;
     }
@@ -160,16 +171,33 @@ public class OutdoorDirection implements DirectionCallback {
         this.transportMode = transportMode;
     }
 
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
+    }
+
     public void deleteDirection(){
         origin = null;
         destination = null;
-        for (Polyline polyline : polylines
-                ) {
+        for (Polyline polyline : polylines) {
             polyline.remove();
         }
         originMarker.remove();
         destinationMarker.remove();
     }
+
+    public List<String> getInstructions() {
+        instructions.clear();
+        for (Step step : steps) {
+            instructions.add(step.getHtmlInstruction());
+        }
+        return instructions;
+    }
+
+
 
     @Override
     public String toString() {
