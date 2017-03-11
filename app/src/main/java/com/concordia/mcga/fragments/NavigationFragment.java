@@ -128,14 +128,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Map Customization
         applyCustomGoogleMapsStyle();
         Campus.populateCampusesWithBuildings();
-        addBuildingMarkers();
+        addBuildingMarkersAndPolygons();
 
         updateCampus();
     }
 
-    private void addBuildingMarkers() {
-        List<Building> sgwBuildings = Campus.SGW.getBuildings();
-        List<Building> loyBuildings = Campus.LOY.getBuildings();
+    /**
+     * add markers and polygons overlay for each building
+     */
+    private void addBuildingMarkersAndPolygons() {
+        final List<Building> sgwBuildings = Campus.SGW.getBuildings();
+        final List<Building> loyBuildings = Campus.LOY.getBuildings();
 
 
         for (Building building : sgwBuildings) {
@@ -148,26 +151,52 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
-                ((MainActivity) getActivity()).createToast("Building Clicked");
+                /**
+                 * ONLY FOR DEMO PURPOSES
+                 */
+                Building building = Campus.SGW.getBuilding(polygon);
+                if(building == null){
+                    building = Campus.LOY.getBuilding(polygon);
+                }
+                ((MainActivity) getActivity()).createToast(building.getShortName());
+
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                ((MainActivity) getActivity()).createToast("Building Clicked");
+                /**
+                 * ONLY FOR DEMO PURPOSES
+                 */
+                Building building = Campus.SGW.getBuilding(marker);
+                if(building == null){
+                    building = Campus.LOY.getBuilding(marker);
+                }
+                ((MainActivity) getActivity()).createToast(building.getShortName());
                 return true;
             }
         });
     }
 
+    /**
+     * Create markers and polygons overlay for each building
+     */
     private void createBuildingMarkersAndPolygonOverlay(Building building) {
         register(building);
-        map.addPolygon(building.getPolygonOverlayOptions()).setClickable(true);
+
+        Polygon polygon = map.addPolygon(building.getPolygonOverlayOptions());
+        polygon.setClickable(true);
+        building.setPolygon(polygon);
 
         Marker marker = map.addMarker(building.getMarkerOptions());
+        marker.setTitle(building.getShortName());
         building.setMarker(marker);
     }
 
+
+    /**
+     * Applying custom google map style in order to get rid of unwanted POI and other information that is not useful to our application
+     */
     private void applyCustomGoogleMapsStyle() {
         try {
             // Customise the styling of the base map using a JSON object define
@@ -184,10 +213,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
+    /**
+     * Applying custom google map style in order to get rid of unwanted POI and other information that is not useful to our application
+     */
     void updateCampus() {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), CAMPUS_DEFAULT_ZOOM_LEVEL));
     }
 
+    /**
+     * When the camera idles, notify the observers
+     */
     @Override
     public void onCameraIdle() {
         notifyObservers();

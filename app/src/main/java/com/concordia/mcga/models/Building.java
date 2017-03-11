@@ -6,6 +6,7 @@ import com.concordia.mcga.helperClasses.Observer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.ArrayList;
@@ -16,12 +17,13 @@ public class Building extends POI implements Observer {
     private final static int strokeWidth = 2;
     private final static int fillColor = 0x996d171f;
     public int resourceImageId;
-    protected Marker marker;
+    Marker marker;
     private float markerVisibleAtMinimumZoomLevel = 15f;
     private String shortName;
     private MarkerOptions markerOptions;
     private List<LatLng> edgeCoordinateList;
     private List<IndoorMap> floorMaps;
+    private Polygon polygon;
 
     /**
      *  returns a Building object
@@ -145,6 +147,18 @@ public class Building extends POI implements Observer {
      */
     public void setResourceImageId(int resourceImageId) {
         this.resourceImageId = resourceImageId;
+    }
+
+    public void setPolygon(Polygon polygon){
+        this.polygon = polygon;
+    }
+
+    public Polygon getPolygon(){
+        return polygon;
+    }
+
+    public Marker getMarker(){
+        return marker;
     }
 
 }
