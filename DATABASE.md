@@ -8,5 +8,5 @@ Some changes involve adding/removing/modifying data from the database. For these
 - Save the database file.
 - Export the database to SQL
   - In the menu: File -> Export... -> Database to SQL File...
-  - Save under 'development.db.sql'
+  - Save under 'app/src/main/assets/development.db.sql'
 - Make sure to commit the 'development.db.sql' file to our repository
