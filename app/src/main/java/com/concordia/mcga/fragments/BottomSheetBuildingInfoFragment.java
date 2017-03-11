@@ -49,6 +49,8 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
 
         behavior = BuildingBottomSheetInfo.from(bottomSheet);
+        behavior.setmType("building_information");
+        behavior.setState(BuildingBottomSheetInfo.STATE_COLLAPSED);
         expandButton = (ImageButton) view.findViewById(R.id.expandButton);
         bottom_sheet_title =  (TextView) view.findViewById(R.id.bottom_sheet_title);
         address = (TextView) view.findViewById(R.id.address);
@@ -105,7 +107,6 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         //behavior.setState(BuildingBottomSheetInfo.STATE_HIDDEN);
         // Set bottom sheet to collapsed
         expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
-        behavior.setState(BuildingBottomSheetInfo.STATE_COLLAPSED);
         expandButton.setOnClickListener(this);
 
         return view;

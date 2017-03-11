@@ -131,6 +131,8 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
 
     private boolean mTouchingScrollingChild;
 
+    private String mType = null;
+
 
 
     /**
@@ -185,7 +187,9 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         mLastStableState = mState;
     }
 
-
+    public void setmType(String type){
+        mType = type;
+    }
 
     @Override
     public boolean onLayoutChild(CoordinatorLayout parent, V child, int layoutDirection ) {
@@ -200,8 +204,18 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         // Offset the bottom sheet
         mParentHeight = parent.getHeight();
 
-        mMinOffset = mParentHeight - child.getHeight() / 2;
-        mMaxOffset = mParentHeight - parent.getHeight() / 8;
+        if (mType == "building_navigation") {
+            mMinOffset = mParentHeight - child.getHeight() / 2 - child.getHeight() / 5 - child.getHeight() / 10;
+            mMaxOffset = mParentHeight - parent.getHeight() / 8;
+        }
+        else if(mType == "building_information"){
+            mMinOffset = mParentHeight - child.getHeight() / 2;
+            mMaxOffset = mParentHeight - parent.getHeight() / 8;
+        }
+        else {
+            mMinOffset = mParentHeight - child.getHeight() / 2;
+            mMaxOffset = mParentHeight - parent.getHeight() / 4;
+        }
 
         /**
          * New behavior
