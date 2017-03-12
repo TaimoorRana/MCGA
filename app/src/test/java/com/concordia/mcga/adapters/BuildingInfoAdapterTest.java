@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import static android.support.v7.appcompat.R.styleable.View;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.robolectric.util.FragmentTestUtil.startFragment;
@@ -66,6 +67,12 @@ public class BuildingInfoAdapterTest {
         adapter.notifyDataSetChanged();
         ArrayList<String> dummyArray = adapter.getInformation();
         assertTrue(dummyArray.get(0).equals("up"));
+    }
+
+    @Test
+    public void GetView_IsNotNull_True(){
+        View view = adapter.getView(0, null, null);
+        assertNull(view);
     }
 
 }

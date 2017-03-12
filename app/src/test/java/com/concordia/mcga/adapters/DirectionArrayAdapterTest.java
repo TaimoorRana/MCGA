@@ -1,6 +1,7 @@
 package com.concordia.mcga.adapters;
 
 import android.content.Context;
+import android.view.View;
 
 import com.concordia.mcga.activities.BuildConfig;
 
@@ -14,6 +15,7 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 /**
@@ -21,6 +23,7 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class,sdk = 21)
+
 public class DirectionArrayAdapterTest {
     // Array Adapter
     private DirectionsArrayAdapter adapter = null;
@@ -36,7 +39,13 @@ public class DirectionArrayAdapterTest {
     }
 
     @Test
-    public void Adapter_IsNotNull_True(){
+    public void Adapter_IsNull_True(){
         assertNotNull(adapter);
+    }
+
+    @Test
+    public void GetView_IsNotNull_True(){
+        View view = adapter.getView(0, null, null);
+        assertNull(view);
     }
 }
