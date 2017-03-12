@@ -31,12 +31,12 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
 
 
     // Bottomsheet
-    private BuildingBottomSheetInfo behavior;
+    private BuildingBottomSheetInfo behavior = null;
 
     // UI elements
-    private ImageButton expandButton;
-    private TextView bottom_sheet_title, address, closingTime, openingTime;
-    private ListView list;
+    private ImageButton expandButton = null;
+    private TextView bottom_sheet_title = null, address = null, closingTime = null, openingTime = null;
+    private ListView list = null;
 
     // Array adapter
     private BuildingInformationArrayAdapter adapter;
@@ -44,11 +44,11 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
     private ArrayList<String> rowImages = new ArrayList<String>();
 
     // Main view
-    private View view;
+    private View view = null;
 
     // Bottom sheet view
-    private CoordinatorLayout coordinatorLayout;
-    private View bottomSheet;
+    private CoordinatorLayout coordinatorLayout = null;
+    private View bottomSheet = null;
 
 
 

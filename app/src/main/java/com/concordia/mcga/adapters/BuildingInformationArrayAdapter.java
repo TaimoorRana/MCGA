@@ -19,12 +19,27 @@ import java.util.ArrayList;
  */
 
 public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
+
+    ////////////////////////////////////////////////////////////
+    // INSTANCE VARIABLES
+    ////////////////////////////////////////////////////////////
+
     private final Context context;
     private ArrayList<String> information = new ArrayList<String>();
     private int index = 0;
     private ImageView imageView[] = new ImageView[4];
     private String[] imageString = new String[4];
 
+
+    ////////////////////////////////////////////////////////////
+    // CLASS METHODS
+    ////////////////////////////////////////////////////////////
+
+    /**
+     * Constructor
+     * @param context
+     * @param information
+     */
     public BuildingInformationArrayAdapter(Context context, ArrayList<String> information) {
         super(context, R.layout.building_info_list, information);
         this.context = context;
@@ -32,6 +47,13 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
 
     }
 
+    /**
+     * Override getView in the array adapter to allow us to add images to a row
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Inflate Layout + get view
