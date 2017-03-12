@@ -42,6 +42,10 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     // Counter keeps track of the index of the current direction
     private int currentDirection = 0;
 
+    // View
+    View view;
+    View bottomSheet;
+    CoordinatorLayout coordinatorLayout;
 
     // Bottomsheet
     BuildingBottomSheetInfo behavior;
@@ -49,27 +53,57 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     // simple buttons
     private ImageButton nextButton, previousButton, expandButton;
 
+
+
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // View Inflater
-        View view = inflater.inflate(R.layout.bottom_sheet_content, container, false);
+        view = inflater.inflate(R.layout.bottom_sheet_content, container, false);
+        setupUiElements();
+        setupBottomSheetView();
+        setupBottomSheetBehavior();
+        overrideBottomSheetCallBack();
+        setupAdapter();
+        setupButtonListeners();
 
+        return view;
+    }
 
+    private void setupButtonListeners(){
+        // Set listeners
+        expandButton.setOnClickListener(this);
+        nextButton.setOnClickListener(this);
+        previousButton.setOnClickListener(this);
+        expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
+    }
+
+    private void setupBottomSheetBehavior(){
+        behavior = BuildingBottomSheetInfo.from(bottomSheet);
+        behavior.setmType("building_navigation");
+        behavior.setState(BuildingBottomSheetInfo.STATE_COLLAPSED);
+    }
+
+    private void setupBottomSheetView(){
+        coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
+        bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
+    }
+
+    private void setupAdapter(){
+        adapter = new DirectionsArrayAdapter(getActivity().getApplicationContext(), displayedDirectionsList, displayedDirectionsImage);
+        adapter.notifyDataSetChanged();
+        list.setAdapter(adapter);
+    }
+
+    private void setupUiElements(){
         // UI Elements
         bottomSheetTextView = (TextView) view.findViewById(R.id.bottom_sheet_title);
         bottomSheetTextView.setText("Directions");
-
         list = (ListView) view.findViewById(R.id.list1);
         nextButton = (ImageButton) view.findViewById(R.id.nextButton);
         previousButton = (ImageButton) view.findViewById(R.id.previousButton);
         expandButton = (ImageButton) view.findViewById(R.id.expandButton);
+    }
 
-        // Adapter: You need three parameters 'the context, id of the layout (it will be where the data is shown),
-        // and the array that contains the data
-
-        CoordinatorLayout coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
-        View bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
-        behavior = BuildingBottomSheetInfo.from(bottomSheet);
-
+    private void overrideBottomSheetCallBack(){
         behavior.addBottomSheetCallback(new BuildingBottomSheetInfo.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -91,57 +125,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
             }
         });
 
-        adapter = new DirectionsArrayAdapter(getActivity().getApplicationContext(), displayedDirectionsList, displayedDirectionsImage);
-        adapter.notifyDataSetChanged();
-
-
-        // ONLY FOR DEMO
-        addDirection("Go Straight For 400m", "up");
-        addDirection("down", "down");
-        addDirection("up", "up");
-        addDirection("Turn Right in 50m", "right");
-        addDirection("left", "left");
-        addDirection("Go Straight For 400m", "up");
-        addDirection("down", "down");
-        addDirection("up", "up");
-        addDirection("Turn Right in 50m", "right");
-        addDirection("left", "left");
-        addDirection("Turn Right in 50m", "right");
-        addDirection("left", "left");
-        addDirection("Go Straight For 400m", "up");
-        addDirection("down", "down");
-        addDirection("up", "up");
-        addDirection("Turn Right in 50m", "right");
-        addDirection("left", "left");
-        addDirection("Turn Right in 50m", "right");
-        addDirection("left", "left");
-        addDirection("Go Straight For 400m", "up");
-        addDirection("down", "down");
-        addDirection("up", "up");
-        addDirection("Turn Right in 50m", "right");
-        addDirection("left", "left");
-        addDirection("You Have Arrived ", "destination");
-
-        ///
-
-        
-        list.setAdapter(adapter);
-
-        updateDirections();
-
-        // Set listeners
-        expandButton.setOnClickListener(this);
-        nextButton.setOnClickListener(this);
-        previousButton.setOnClickListener(this);
-
-
-        expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
-        behavior.setState(BuildingBottomSheetInfo.STATE_COLLAPSED);
-
-        return view;
     }
-
-
     ///////////////////////////////////////////////////////
     // Button clicks for following or previous directions
     ///////////////////////////////////////////////////////
@@ -267,5 +251,71 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         return bottomSheetTextView;
     }
 
+
+    ////////////////////////////////////
+    // AUTO-GENERATE GETTERS
+    ////////////////////////////////////
+    
+    public TextView getBottomSheetTextView() {
+        return bottomSheetTextView;
+    }
+
+    public ListView getList() {
+        return list;
+    }
+
+    public DirectionsArrayAdapter getAdapter() {
+        return adapter;
+    }
+
+    public ArrayList<String> getDisplayedDirectionsList() {
+        return displayedDirectionsList;
+    }
+
+    public ArrayList<String> getDisplayedDirectionsImage() {
+        return displayedDirectionsImage;
+    }
+
+    public ArrayList<String> getCompleteDirectionsImage() {
+        return completeDirectionsImage;
+    }
+
+    public ArrayList<String> getCompleteDirectionsList() {
+        return completeDirectionsList;
+    }
+
+    public int getCurrentDirection() {
+        return currentDirection;
+    }
+
+    @Nullable
+    @Override
+    public View getView() {
+        return view;
+    }
+
+    public View getBottomSheet() {
+        return bottomSheet;
+    }
+
+    public CoordinatorLayout getCoordinatorLayout() {
+        return coordinatorLayout;
+    }
+
+    public BuildingBottomSheetInfo getBehavior() {
+        return behavior;
+    }
+
+    public ImageButton getNextButton() {
+        return nextButton;
+    }
+
+    public ImageButton getPreviousButton() {
+        return previousButton;
+    }
+
+    public ImageButton getExpandButton() {
+        return expandButton;
+    }
 
 }
