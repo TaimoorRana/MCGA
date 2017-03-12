@@ -47,19 +47,24 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
 
     }
 
+
     /**
      * Override getView in the array adapter to allow us to add images to a row
      * @param position
      * @param convertView
      * @param parent
-     * @return
+     * @return view
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Inflate Layout + get view
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.building_info_list, parent, false);
+        updateRow(position, rowView);
+        return rowView;
+    }
 
+    private void updateRow(int position, View rowView){
         // Get Ids of layout
         imageView[0] = (ImageView) rowView.findViewById(R.id.buildingImage1);
         imageView[1] = (ImageView) rowView.findViewById(R.id.buildingImage2);
@@ -85,8 +90,5 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
         catch (Exception e){
 
         }
-
-
-        return rowView;
     }
 }
