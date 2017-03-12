@@ -216,18 +216,6 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         completeDirectionsImage.remove(index);
     }
 
-    /**
-     * Append directions to the list
-     * @param directions
-     * @param image
-     */
-    public void addDirectionsList(ArrayList<String> directions, ArrayList<String> image){
-        for (int i =0 ; i < directions.size(); i ++){
-            completeDirectionsList.add(directions.get(i));
-            completeDirectionsImage.add(image.get(i));
-        }
-    }
-
     /////////////////
     // Clearing list
     /////////////////
@@ -237,12 +225,37 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      */
     public void clearDirections(){
         completeDirectionsList.clear();
-        completeDirectionsList.clear();
+        completeDirectionsImage.clear();
         currentDirection = 0;
         updateDirections();
     }
 
 
+    /**
+     * Forces the Bottom Sheet to collapse
+     */
+    public void collapse(){
+        behavior.setState(BuildingBottomSheetInfo.STATE_COLLAPSED);
+    }
+
+    /**
+     * Forces the Bottom Sheet to expand
+     */
+    public void expand(){
+        behavior.setState(BuildingBottomSheetInfo.STATE_EXPANDED);
+    }
+
+
+    /**
+     * Obtains the state of the Bottom Sheet
+     * 4 is expanded
+     * 5 is collapsed
+     * Others states should not exist
+     * @return
+     */
+    public int getState(){
+        return behavior.getState();
+    }
     ///////////////////////////////////////////////////////////////////
     // Updating current directions. Can be the previous or next one
     ///////////////////////////////////////////////////////////////////

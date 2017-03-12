@@ -22,7 +22,11 @@ import org.robolectric.util.ActivityController;
 
 import java.util.ArrayList;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
 import static org.robolectric.util.FragmentTestUtil.startFragment;
 
 /**
@@ -166,4 +170,179 @@ public class DirectionsTest {
         assertNotNull(expandButton);
     }
 
+    //State Expanded = 4
+    // State collapsed = 5
+    @Test
+    public void ClickBottomSheetButton_ExpandsWhenCollapsed_True(){
+        myFragment.collapse();
+        expandButton.performClick();
+        assertEquals(myFragment.getState(), 4);
+    }
+
+    @Test
+    public void ClickBottomSheetButton_CollapseWhenExpanded_True(){
+        myFragment.expand();
+        expandButton.performClick();
+        assertEquals(myFragment.getState(), 5);
+    }
+
+    @Test
+    public void ClickBottomSheetButton_ExpandsWhenExpanded_False(){
+        myFragment.expand();
+        expandButton.performClick();
+        assertNotEquals(myFragment.getState(), 4);
+    }
+
+    @Test
+    public void ClickBottomSheetButton_CollapseWhenCollapsed_False(){
+        myFragment.collapse();
+        expandButton.performClick();
+        assertNotEquals(myFragment.getState(), 5);
+    }
+
+    @Test
+    public void ClickNextDirectionButton_ShowsNextDirectionWhenAvailable_True(){
+        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Down", "down");
+        myFragment.updateDirections();
+
+        int index = myFragment.getCurrentDirection();
+        ArrayList<String> direction = myFragment.getCompleteDirectionsList();
+
+        assertTrue(direction.get(index).equals("Up"));
+
+        nextButton.performClick();
+        index = myFragment.getCurrentDirection();
+        assertTrue(direction.get(index).equals("Down"));
+    }
+
+    @Test
+    public void ClickNextDirectionButton_ShowNextDirectionWhenNotAvailable_False(){
+        myFragment.addDirection("Up", "up");
+        myFragment.updateDirections();
+
+        int index = myFragment.getCurrentDirection();
+        ArrayList<String> direction = myFragment.getCompleteDirectionsList();
+
+        assertTrue(direction.get(index).equals("Up"));
+
+        nextButton.performClick();
+        int index1 = myFragment.getCurrentDirection();
+        assertEquals(index, index1);
+    }
+
+    @Test
+    public void ClickPreviousDirectionButton_ShowsPreviuousDirectionWhenAvailable_True(){
+        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Down", "down");
+        myFragment.updateDirections();
+        ArrayList<String> direction = myFragment.getCompleteDirectionsList();
+        nextButton.performClick();
+        int index = myFragment.getCurrentDirection();
+        assertTrue(index == 1);
+        previousButton.performClick();
+        index = myFragment.getCurrentDirection();
+        assertTrue(index == 0);
+    }
+
+    @Test
+    public void ClickPreviousDirectionButton_ShowPreviousDirectionWhenNotAvailable_False(){
+        myFragment.addDirection("Up", "up");
+        myFragment.updateDirections();
+        int index = myFragment.getCurrentDirection();
+        ArrayList<String> direction = myFragment.getCompleteDirectionsList();
+        previousButton.performClick();
+        int index1 = myFragment.getCurrentDirection();
+        assertEquals(index, index1);
+    }
+
+    @Test
+    public void AddDirection_AddsDirectionToList_True(){
+        myFragment.addDirection("Up", "up");
+        myFragment.updateDirections();
+        int index = myFragment.getCurrentDirection();
+        ArrayList<String> array = myFragment.getCompleteDirectionsList();
+        assertTrue(array.get(index).equals("Up"));
+
+        myFragment.addDirection("Left", "left");
+        myFragment.updateDirections();
+        assertTrue(array.get(index + 1).equals("Left"));
+    }
+
+    @Test
+    public void RemoveDirection_RemovesDirectionAtIndex_True(){
+        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Left", "left");
+        myFragment.updateDirections();
+
+        int index = myFragment.getCurrentDirection();
+        ArrayList<String> array = myFragment.getCompleteDirectionsList();
+        assertTrue(array.get(index).equals("Up"));
+
+        myFragment.removeDirection(0);
+        myFragment.updateDirections();
+
+        assertTrue(array.get(index).equals("Left"));
+    }
+
+    @Test
+    public void ClearDirections_SetsArrayToSize0_True(){
+        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Left", "left");
+        myFragment.updateDirections();
+
+        ArrayList<String> array = myFragment.getCompleteDirectionsList();
+        ArrayList<String> array2 = myFragment.getCompleteDirectionsImage();
+        assertTrue(array.size() > 0);
+        assertTrue(array2.size() > 0);
+
+        myFragment.clearDirections();
+
+        assertTrue(array.size() == 0);
+        assertTrue(array2.size() == 0);
+        assertTrue(myFragment.getCurrentDirection() == 0);
+    }
+
+    @Test
+    public void UpdateDirections_AddingDirectionsWithoutUpdating_False(){
+        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Up", "up");
+        ArrayList<String> array = myFragment.getDisplayedDirectionsList();
+        assertFalse(array.size() > 0);
+    }
+
+    @Test
+    public void UpdateDirections_AddingDirectionsWithUpdating_True(){
+        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Up", "up");
+        myFragment.updateDirections();
+        ArrayList<String> array = myFragment.getDisplayedDirectionsList();
+        assertTrue(array.size() > 0);
+    }
+
+    @Test
+    public void UpdateDirections_RemovingDirectionsWithoutUpdating_False(){
+        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Up", "up");
+        myFragment.updateDirections();
+        ArrayList<String> array = myFragment.getDisplayedDirectionsList();
+        assertTrue(array.size() > 0);
+
+        myFragment.removeDirection(0);
+        assertFalse(array.size() == 0);
+    }
+
+    @Test
+    public void UpdateDirections_RemovingDirectionsWithUpdating_True(){
+        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Up", "up");
+        myFragment.updateDirections();
+        ArrayList<String> array = myFragment.getDisplayedDirectionsList();
+        assertTrue(array.size() > 0);
+
+        myFragment.removeDirection(0);
+        myFragment.updateDirections();
+
+        assertTrue(array.size() == 0);
+    }
 }
