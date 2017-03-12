@@ -197,7 +197,13 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         behavior.setState(BuildingBottomSheetInfo.STATE_EXPANDED);
     }
 
-
+    /**
+     * Obtains the state of the Bottom Sheet
+     * 4 is expanded
+     * 5 is collapsed
+     * Others states should not exist
+     * @return
+     */
     public int getState(){
         return behavior.getState();
     }
@@ -283,56 +289,108 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
     // GETTERS
     ////////////////////////////////////
 
+    /***
+     * @return Bottom Sheet Behavior
+     */
     public BuildingBottomSheetInfo getBehavior() {
         return behavior;
     }
 
+    /**
+     *
+     * @return The View of the layout inflater
+     */
     public View getBottomSheet() {
         return bottomSheet;
     }
+
+    /**
+     *
+     * @return Expand button
+     */
 
     public ImageButton getExpandButton() {
         return expandButton;
     }
 
+    /**
+     *
+     * @return Bottom Sheet Title
+     */
     public TextView getBottom_sheet_title() {
         return bottom_sheet_title;
     }
 
+    /**
+     *
+     * @return Address
+     */
     public TextView getAddress() {
         return address;
     }
 
+    /**
+     *
+     * @return Closing Time
+     */
     public TextView getClosingTime() {
         return closingTime;
     }
 
+    /**
+     *
+     * @return Opening Time
+     */
     public TextView getOpeningTime() {
         return openingTime;
     }
 
+    /**
+     *
+     * @return List
+     */
     public ListView getList() {
         return list;
     }
 
+    /**
+     *
+     * @return ArrayList Adapter
+     */
     public BuildingInformationArrayAdapter getAdapter() {
         return adapter;
     }
 
+    /**
+     *
+     * @return Array List
+     */
     public ArrayList<String> getImages() {
         return images;
     }
 
+    /**
+     *
+     * @return ArrayList
+     */
     public ArrayList<String> getRowImages() {
         return rowImages;
     }
 
+    /**
+     *
+     * @return View
+     */
     @Nullable
     @Override
     public View getView() {
         return view;
     }
 
+    /**
+     *
+     * @return Coordinator Layout
+     */
     public CoordinatorLayout getCoordinatorLayout() {
         return coordinatorLayout;
     }
