@@ -2,6 +2,10 @@ package com.concordia.mcga.utilities.pathfinding;
 
 import android.support.annotation.NonNull;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Object acts as a wrapper for {@link IndoorMapTile}. Holds
  * additional information about the tiles that are specifically used
@@ -90,5 +94,37 @@ public class PathFinderTile implements Comparable<PathFinderTile> {
     @Override
     public int compareTo(@NonNull PathFinderTile o) {
         return this.getCost() - o.getCost();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PathFinderTile that = (PathFinderTile) o;
+
+        return new EqualsBuilder()
+                .append(indoorMapTile, that.indoorMapTile)
+                .append(tileType, that.tileType)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+                .append(indoorMapTile)
+                .append(tileType)
+                .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("indoorMapTile", indoorMapTile)
+                .append("tileType", tileType)
+                .append("distFromStart", distFromStart)
+                .append("distFromEnd", distFromEnd)
+                .toString();
     }
 }
