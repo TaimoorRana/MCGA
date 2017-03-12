@@ -17,38 +17,31 @@ import org.mockito.Mockito;
 
 @RunWith(JUnit4.class)
 public class BuildingUnitTest {
+    MarkerOptions markerOptions = new MarkerOptions();
+    Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
+
     @Test
     public void getNameTest() {
-        MarkerOptions markerOptions = new MarkerOptions();
-        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         assertEquals("Hall", testBuilding.getName());
     }
 
     @Test
     public void getShortNameTest() {
-        MarkerOptions markerOptions = new MarkerOptions();
-        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         assertEquals("H", testBuilding.getShortName());
     }
 
     @Test
     public void getMarkerOptionsTest() {
-        MarkerOptions markerOptions = new MarkerOptions();
-        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         assertEquals(markerOptions, testBuilding.getMarkerOptions());
     }
 
     @Test
     public void getCenterCoordinatesTest() {
-        MarkerOptions markerOptions = new MarkerOptions();
-        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         assertEquals(new LatLng(45.495656, -73.574290), testBuilding.getMapCoordinates());
     }
 
     @Test
     public void addEdgeCoordinateTest() {
-        MarkerOptions markerOptions = new MarkerOptions();
-        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         List<LatLng> list = new ArrayList<>();
         LatLng edge = new LatLng(45.495656, -73.574290);
         list.add(edge);
@@ -58,8 +51,6 @@ public class BuildingUnitTest {
 
     @Test
     public void getPolygonOverlayOptions() {
-        MarkerOptions markerOptions = new MarkerOptions();
-        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         List<LatLng> list = new ArrayList<>();
         LatLng edge = new LatLng(45.495656, -73.574290);
         list.add(edge);
@@ -107,4 +98,10 @@ public class BuildingUnitTest {
         assertEquals(1, maps.size());
         Mockito.verify(mockFactory).createIndoorMap(testBuilding, 1);
     }
+
+    @Test
+    public void setShortNameTest(){
+       testBuilding.setShortName("test");
+       assertEquals("test",testBuilding.getShortName());
+  }
 }
