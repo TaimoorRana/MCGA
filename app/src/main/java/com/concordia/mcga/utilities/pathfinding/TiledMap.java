@@ -93,7 +93,7 @@ public class TiledMap {
      */
     PathFinderTile findBreadthFirstSearch(int coordinateX, int coordinateY) throws MCGAPathFindingException {
         int delta = 1;
-        int limit = Math.max(allTiles.length, allTiles[0].length);
+        final int limit = Math.max(allTiles.length, allTiles[0].length);
         while (delta < limit) {
             PathFinderTile tile = getTile(coordinateX + delta, coordinateY);
             if (tile != null) {
