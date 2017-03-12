@@ -54,7 +54,14 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     private ImageButton nextButton, previousButton, expandButton;
 
 
-
+    /**
+     * On create view override
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return layout inflater view
+     */
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // View Inflater
         view = inflater.inflate(R.layout.bottom_sheet_content, container, false);
@@ -68,6 +75,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         return view;
     }
 
+    /**
+     * Instantiate click listeners
+     */
     private void setupButtonListeners(){
         // Set listeners
         expandButton.setOnClickListener(this);
@@ -76,23 +86,35 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
     }
 
+    /**
+     * Instantiate bottomsheet behaviors
+     */
     private void setupBottomSheetBehavior(){
         behavior = BuildingBottomSheetInfo.from(bottomSheet);
         behavior.setmType("building_navigation");
         behavior.setState(BuildingBottomSheetInfo.STATE_COLLAPSED);
     }
 
+    /**
+     * Instantiate the Bottom Sheet Views
+     */
     private void setupBottomSheetView(){
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorlayout);
         bottomSheet = coordinatorLayout.findViewById(R.id.bottom_sheet);
     }
 
+    /**
+     * Instantiate ArrayList Adapter
+     */
     private void setupAdapter(){
         adapter = new DirectionsArrayAdapter(getActivity().getApplicationContext(), displayedDirectionsList, displayedDirectionsImage);
         adapter.notifyDataSetChanged();
         list.setAdapter(adapter);
     }
 
+    /**
+     * Instantiate UI elements
+     */
     private void setupUiElements(){
         // UI Elements
         bottomSheetTextView = (TextView) view.findViewById(R.id.bottom_sheet_title);
@@ -103,6 +125,10 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         expandButton = (ImageButton) view.findViewById(R.id.expandButton);
     }
 
+    /**
+     * Override bottomsheetcallback
+     * added different behaviors on state changes
+     */
     private void overrideBottomSheetCallBack(){
         behavior.addBottomSheetCallback(new BuildingBottomSheetInfo.BottomSheetCallback() {
             @Override
@@ -126,12 +152,18 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         });
 
     }
+
+
     ///////////////////////////////////////////////////////
     // Button clicks for following or previous directions
     ///////////////////////////////////////////////////////
 
 
-    // Overloaded method for button clicks
+    /**
+     * Override on click method
+     * @param clickedView
+     */
+    @Override
     public void onClick(View clickedView) {
         switch (clickedView.getId()) {
             case R.id.nextButton:
@@ -165,18 +197,30 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     ///////////////////////////////////////
 
 
-    // Add Directions to the list Dynamically
+    /**
+     * Add Directions to the list Dynamically
+     * @param direction
+     * @param image
+     */
     public void addDirection(String direction, String image){
         completeDirectionsList.add(direction);
         completeDirectionsImage.add(image);
     }
 
+    /**
+     * Remove directions from list
+     * @param index
+     */
     public void removeDirection(int index){
         completeDirectionsList.remove(index);
         completeDirectionsImage.remove(index);
     }
 
-    // Append a list of directions to the current ones
+    /**
+     * Append directions to the list
+     * @param directions
+     * @param image
+     */
     public void addDirectionsList(ArrayList<String> directions, ArrayList<String> image){
         for (int i =0 ; i < directions.size(); i ++){
             completeDirectionsList.add(directions.get(i));
@@ -188,7 +232,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     // Clearing list
     /////////////////
 
-    // Reset list and puts current index back to 0
+    /**
+     * Clear List of directions and resets index back to 0
+     */
     public void clearDirections(){
         completeDirectionsList.clear();
         completeDirectionsList.clear();
@@ -201,7 +247,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     // Updating current directions. Can be the previous or next one
     ///////////////////////////////////////////////////////////////////
 
-
+    /**
+     * Display the next direction
+     */
     private void nextDirection(){
         if (displayedDirectionsList.size() > 0) {
             currentDirection++;
@@ -209,6 +257,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         updateDirections();
     }
 
+    /**
+     * display the previous direction
+     */
     private void previousDirection(){
         if (currentDirection > 0) {
             currentDirection--;
@@ -216,7 +267,10 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         updateDirections();
     }
 
-    // Updates the current list that the user views
+
+    /**
+     * Updates the list view through the adapter pattern
+     */
     public void updateDirections(){
         displayedDirectionsList.clear();
         displayedDirectionsImage.clear();
@@ -242,11 +296,18 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     ////////////////////////////////////
 
 
-    // Set current direction that user may view
+    /**
+     * Set current direction that user may view
+     * @param direction
+     */
     public void setTextDirections(String direction){
         bottomSheetTextView.setText(direction);
     }
 
+    
+    /**
+     * @return TextView
+     */
     public TextView getTextDirections(){
         return bottomSheetTextView;
     }
@@ -255,7 +316,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     ////////////////////////////////////
     // AUTO-GENERATE GETTERS
     ////////////////////////////////////
-    
+
     public TextView getBottomSheetTextView() {
         return bottomSheetTextView;
     }
