@@ -37,8 +37,11 @@ public class SingleMapPathFinder {
      */
     List<IndoorMapTile> shortestPath(IndoorMapTile start, IndoorMapTile dest)
             throws MCGAPathFindingException {
-        map.setStartTile(start.getCoordinateX(), start.getCoordinateY());
-        map.setEndTile(dest.getCoordinateX(), dest.getCoordinateY());
+        IndoorMapTile walkableStart = map.closestWalkable(start).getIndoorMapTile();
+        IndoorMapTile walkableDest = map.closestWalkable(dest).getIndoorMapTile();
+
+        map.setStartTile(walkableStart.getCoordinateX(), walkableStart.getCoordinateY());
+        map.setEndTile(walkableDest.getCoordinateX(), walkableDest.getCoordinateY());
         openSet.add(map.getStartTile());
         PathFinderTile current;
         while (true) {
