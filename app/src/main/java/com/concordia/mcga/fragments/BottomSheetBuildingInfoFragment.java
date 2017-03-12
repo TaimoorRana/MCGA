@@ -198,6 +198,10 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
     }
 
 
+    public int getState(){
+        return behavior.getState();
+    }
+
     /**
      * Updates the row of images associate to the building information. Works
      * similarly to a unit of Work
@@ -232,12 +236,6 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         updateImageRow();
     }
 
-    /**
-     * Clears all images associated to a row
-     */
-    private void internalClear(){
-        rowImages.clear();
-    }
 
     /**
      * Adds an image to the array
@@ -278,5 +276,64 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
      */
     private void setOpeningTime(String time){
         openingTime.setText("Opening Hours: " + time);
+    }
+
+
+    ////////////////////////////////////
+    // GETTERS
+    ////////////////////////////////////
+
+    public BuildingBottomSheetInfo getBehavior() {
+        return behavior;
+    }
+
+    public View getBottomSheet() {
+        return bottomSheet;
+    }
+
+    public ImageButton getExpandButton() {
+        return expandButton;
+    }
+
+    public TextView getBottom_sheet_title() {
+        return bottom_sheet_title;
+    }
+
+    public TextView getAddress() {
+        return address;
+    }
+
+    public TextView getClosingTime() {
+        return closingTime;
+    }
+
+    public TextView getOpeningTime() {
+        return openingTime;
+    }
+
+    public ListView getList() {
+        return list;
+    }
+
+    public BuildingInformationArrayAdapter getAdapter() {
+        return adapter;
+    }
+
+    public ArrayList<String> getImages() {
+        return images;
+    }
+
+    public ArrayList<String> getRowImages() {
+        return rowImages;
+    }
+
+    @Nullable
+    @Override
+    public View getView() {
+        return view;
+    }
+
+    public CoordinatorLayout getCoordinatorLayout() {
+        return coordinatorLayout;
     }
 }
