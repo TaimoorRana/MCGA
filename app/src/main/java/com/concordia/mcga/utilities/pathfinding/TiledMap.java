@@ -56,10 +56,22 @@ public class TiledMap {
         allTiles[indoorMapTile.getCoordinateX()][indoorMapTile.getCoordinateY()] = new PathFinderTile(indoorMapTile);
     }
 
+    /**
+     * @param indoorMapTile an {@link IndoorMapTile}
+     * @return whether the given {@link IndoorMapTile} object is a valid walkable path or not
+     */
     public boolean isWalkable(IndoorMapTile indoorMapTile) {
         return getTile(indoorMapTile.getCoordinateX(), indoorMapTile.getCoordinateY()) != null;
     }
 
+    /**
+     * @param indoorMapTile {@link IndoorMapTile} to use for the breadth first search algorithm
+     * @return The closest PathFinderTile to the current given coordinates. If the current coordinates
+     *         are walkable, then it returns them. Else, it looks at tiles that are directly above,
+     *         below, to the left and to the right. Does not look at tiles that are diagonal to
+     *         the given coordinates.
+     * @throws MCGAPathFindingException Thrown when no valid coordinate can be found.
+     */
     public PathFinderTile closestWalkable(IndoorMapTile indoorMapTile) throws MCGAPathFindingException {
         int coordinateX = indoorMapTile.getCoordinateX();
         int coordinateY = indoorMapTile.getCoordinateY();
