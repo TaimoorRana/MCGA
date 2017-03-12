@@ -19,6 +19,8 @@ import com.concordia.mcga.lib.BuildingBottomSheetInfo;
 
 import java.util.ArrayList;
 
+import static android.support.design.R.styleable.CoordinatorLayout;
+
 /**
  * Created by Charmander on 3/5/2017.
  */

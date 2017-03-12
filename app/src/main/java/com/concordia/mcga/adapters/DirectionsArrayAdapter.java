@@ -22,6 +22,12 @@ public class DirectionsArrayAdapter extends ArrayAdapter<String> {
     private ArrayList<String> directionsText = new ArrayList<String>();
     private ArrayList<String> directionsImage = new ArrayList<String>();
 
+    /**
+     * Constructor
+     * @param context
+     * @param directionsText
+     * @param directionsImage
+     */
     public DirectionsArrayAdapter(Context context, ArrayList<String> directionsText, ArrayList<String> directionsImage) {
         super(context, R.layout.list_text, directionsText);
         this.context = context;
@@ -30,6 +36,13 @@ public class DirectionsArrayAdapter extends ArrayAdapter<String> {
     }
 
 
+    /**
+     * Override getView
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Inflate Layout + get view

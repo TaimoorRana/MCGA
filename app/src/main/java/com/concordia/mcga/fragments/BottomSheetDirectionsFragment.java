@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class BottomSheetDirectionsFragment extends Fragment implements View.OnClickListener{
 
     // Layout elements
-    TextView bottomSheetTextView;
+    private TextView bottomSheetTextView;
     private ListView list;
 
     // Custom ArrayList adapter
@@ -43,12 +43,12 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     private int currentDirection = 0;
 
     // View
-    View view;
-    View bottomSheet;
-    CoordinatorLayout coordinatorLayout;
+    private View view;
+    private View bottomSheet;
+    private CoordinatorLayout coordinatorLayout;
 
     // Bottomsheet
-    BuildingBottomSheetInfo behavior;
+    private BuildingBottomSheetInfo behavior;
 
     // simple buttons
     private ImageButton nextButton, previousButton, expandButton;
@@ -317,64 +317,123 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     // AUTO-GENERATE GETTERS
     ////////////////////////////////////
 
+    /**
+     *
+     * @return TextView of Bottomsheet
+     */
     public TextView getBottomSheetTextView() {
         return bottomSheetTextView;
     }
 
+    /**
+     *
+     * @return List
+     */
     public ListView getList() {
         return list;
     }
 
+    /**
+     *
+     * @return ArrayList Adapter
+     */
     public DirectionsArrayAdapter getAdapter() {
         return adapter;
     }
 
+    /**
+     * @return  ArrayList of displayed directions
+     */
     public ArrayList<String> getDisplayedDirectionsList() {
         return displayedDirectionsList;
     }
 
+    /**
+     *
+     * @return ArrayList of images that are displayed
+     */
     public ArrayList<String> getDisplayedDirectionsImage() {
         return displayedDirectionsImage;
     }
 
+    /**
+     *
+     * @return ArrayList of complete images
+     */
     public ArrayList<String> getCompleteDirectionsImage() {
         return completeDirectionsImage;
     }
 
+    /**
+     *
+     * @return ArrayList of complete directions
+     */
     public ArrayList<String> getCompleteDirectionsList() {
         return completeDirectionsList;
     }
 
+    /**
+     *
+     * @return Returns current direction index
+     */
     public int getCurrentDirection() {
         return currentDirection;
     }
 
+    /**
+     *
+     * @return View
+     */
     @Nullable
     @Override
     public View getView() {
         return view;
     }
 
+    /**
+     *
+     * @return BottomSheet view
+     */
     public View getBottomSheet() {
         return bottomSheet;
     }
 
+    /**
+     *
+     * @return Coordinator layout
+     */
     public CoordinatorLayout getCoordinatorLayout() {
         return coordinatorLayout;
     }
 
+    /**
+     *
+     * @return BottomSheet Behavior
+     */
     public BuildingBottomSheetInfo getBehavior() {
         return behavior;
     }
 
+    /**
+     *
+     * @return Image Button
+     */
     public ImageButton getNextButton() {
         return nextButton;
     }
 
+    /**
+     *
+     * @return Image Button
+     */
     public ImageButton getPreviousButton() {
         return previousButton;
     }
 
+    /**
+     *
+     * @return Image Button
+     */
     public ImageButton getExpandButton() {
         return expandButton;
     }
