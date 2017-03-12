@@ -1,56 +1,54 @@
 package com.concordia.mcga.models;
 
-import android.os.IBinder;
-import android.os.RemoteException;
+import static junit.framework.Assert.assertEquals;
 
-import com.concordia.mcga.models.Building;
-import com.concordia.mcga.models.Campus;
-import com.google.android.gms.dynamic.zzd;
+import com.concordia.mcga.factories.IndoorMapFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.android.gms.maps.model.internal.zzf;
-import com.google.android.gms.maps.model.internal.zzg;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.Mock;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import org.mockito.Mockito;
 
 @RunWith(JUnit4.class)
 public class BuildingUnitTest {
-    MarkerOptions markerOptions = new MarkerOptions();
-    Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
     @Test
     public void getNameTest() {
+        MarkerOptions markerOptions = new MarkerOptions();
+        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         assertEquals("Hall", testBuilding.getName());
     }
 
     @Test
     public void getShortNameTest() {
+        MarkerOptions markerOptions = new MarkerOptions();
+        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         assertEquals("H", testBuilding.getShortName());
     }
 
     @Test
     public void getMarkerOptionsTest() {
+        MarkerOptions markerOptions = new MarkerOptions();
+        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         assertEquals(markerOptions, testBuilding.getMarkerOptions());
     }
 
     @Test
     public void getCenterCoordinatesTest() {
+        MarkerOptions markerOptions = new MarkerOptions();
+        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         assertEquals(new LatLng(45.495656, -73.574290), testBuilding.getMapCoordinates());
     }
 
     @Test
     public void addEdgeCoordinateTest() {
+        MarkerOptions markerOptions = new MarkerOptions();
+        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         List<LatLng> list = new ArrayList<>();
         LatLng edge = new LatLng(45.495656, -73.574290);
         list.add(edge);
@@ -60,6 +58,8 @@ public class BuildingUnitTest {
 
     @Test
     public void getPolygonOverlayOptions() {
+        MarkerOptions markerOptions = new MarkerOptions();
+        Building testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
         List<LatLng> list = new ArrayList<>();
         LatLng edge = new LatLng(45.495656, -73.574290);
         list.add(edge);
@@ -69,576 +69,42 @@ public class BuildingUnitTest {
     }
 
     @Test
-    public void getBuildingWithMarkerTest(){
-        zzf z1 = new zzf() {
-            @Override
-            public void remove() throws RemoteException {
-
-            }
-
-            @Override
-            public String getId() throws RemoteException {
-                return "someID";
-            }
-
-            @Override
-            public void setPosition(LatLng latLng) throws RemoteException {
-
-            }
-
-            @Override
-            public LatLng getPosition() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public void setTitle(String s) throws RemoteException {
-
-            }
-
-            @Override
-            public String getTitle() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public void setSnippet(String s) throws RemoteException {
-
-            }
-
-            @Override
-            public String getSnippet() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public void setDraggable(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isDraggable() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public void showInfoWindow() throws RemoteException {
-
-            }
-
-            @Override
-            public void hideInfoWindow() throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isInfoWindowShown() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public void setVisible(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isVisible() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public boolean zzj(zzf zzf) throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public int hashCodeRemote() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void zzal(zzd zzd) throws RemoteException {
-
-            }
-
-            @Override
-            public void setAnchor(float v, float v1) throws RemoteException {
-
-            }
-
-            @Override
-            public void setFlat(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isFlat() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public void setRotation(float v) throws RemoteException {
-
-            }
-
-            @Override
-            public float getRotation() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setInfoWindowAnchor(float v, float v1) throws RemoteException {
-
-            }
-
-            @Override
-            public void setAlpha(float v) throws RemoteException {
-
-            }
-
-            @Override
-            public float getAlpha() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setZIndex(float v) throws RemoteException {
-
-            }
-
-            @Override
-            public float getZIndex() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void zzam(zzd zzd) throws RemoteException {
-
-            }
-
-            @Override
-            public zzd zzbsn() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public IBinder asBinder() {
-                return null;
-            }
-        };
-        zzg z2 = new zzg() {
-            @Override
-            public void remove() throws RemoteException {
-
-            }
-
-            @Override
-            public String getId() throws RemoteException {
-                return "someID";
-            }
-
-            @Override
-            public void setPoints(List<LatLng> list) throws RemoteException {
-
-            }
-
-            @Override
-            public List<LatLng> getPoints() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public void setHoles(List list) throws RemoteException {
-
-            }
-
-            @Override
-            public List getHoles() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public void setStrokeWidth(float v) throws RemoteException {
-
-            }
-
-            @Override
-            public float getStrokeWidth() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setStrokeColor(int i) throws RemoteException {
-
-            }
-
-            @Override
-            public int getStrokeColor() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setFillColor(int i) throws RemoteException {
-
-            }
-
-            @Override
-            public int getFillColor() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setZIndex(float v) throws RemoteException {
-
-            }
-
-            @Override
-            public float getZIndex() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setVisible(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isVisible() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public void setGeodesic(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isGeodesic() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public boolean zzb(zzg zzg) throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public int hashCodeRemote() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setClickable(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isClickable() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public IBinder asBinder() {
-                return null;
-            }
-        };
-        testBuilding.setShortName("H");
-        Marker marker = new Marker(z1);
-        Polygon polygon = new Polygon(z2);
-
-        testBuilding.setMarker(marker);
-        testBuilding.setPolygon(polygon);
-        Campus.SGW.addBuilding(testBuilding);
-
-        Building result = Campus.SGW.getBuilding(marker);
-        assertNotNull(result);
+    public void testGetFloorMap_cached(){
+        // Test data
+        Map<Integer,Floor> maps = new HashMap<>();
+        Floor expectedMap = new Floor();
+        maps.put(1,expectedMap);
+        Building testBuilding = new Building(new LatLng(0,0), "TEST", "TEST", new MarkerOptions());
+        testBuilding.setFloorMaps(maps);
+
+        // Execute
+        Floor result = testBuilding.getFloorMap(1);
+
+        // Verify
+        assertEquals(expectedMap, result);
     }
 
     @Test
-    public void getBuildingWithPolygonTest(){
-        zzf z1 = new zzf() {
-            @Override
-            public void remove() throws RemoteException {
-
-            }
-
-            @Override
-            public String getId() throws RemoteException {
-                return "someID";
-            }
-
-            @Override
-            public void setPosition(LatLng latLng) throws RemoteException {
-
-            }
-
-            @Override
-            public LatLng getPosition() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public void setTitle(String s) throws RemoteException {
-
-            }
-
-            @Override
-            public String getTitle() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public void setSnippet(String s) throws RemoteException {
-
-            }
-
-            @Override
-            public String getSnippet() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public void setDraggable(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isDraggable() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public void showInfoWindow() throws RemoteException {
-
-            }
-
-            @Override
-            public void hideInfoWindow() throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isInfoWindowShown() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public void setVisible(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isVisible() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public boolean zzj(zzf zzf) throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public int hashCodeRemote() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void zzal(zzd zzd) throws RemoteException {
-
-            }
-
-            @Override
-            public void setAnchor(float v, float v1) throws RemoteException {
-
-            }
-
-            @Override
-            public void setFlat(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isFlat() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public void setRotation(float v) throws RemoteException {
-
-            }
-
-            @Override
-            public float getRotation() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setInfoWindowAnchor(float v, float v1) throws RemoteException {
-
-            }
-
-            @Override
-            public void setAlpha(float v) throws RemoteException {
-
-            }
-
-            @Override
-            public float getAlpha() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setZIndex(float v) throws RemoteException {
-
-            }
-
-            @Override
-            public float getZIndex() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void zzam(zzd zzd) throws RemoteException {
-
-            }
-
-            @Override
-            public zzd zzbsn() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public IBinder asBinder() {
-                return null;
-            }
-        };
-        zzg z2 = new zzg() {
-            @Override
-            public void remove() throws RemoteException {
-
-            }
-
-            @Override
-            public String getId() throws RemoteException {
-                return "someID";
-            }
-
-            @Override
-            public void setPoints(List<LatLng> list) throws RemoteException {
-
-            }
-
-            @Override
-            public List<LatLng> getPoints() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public void setHoles(List list) throws RemoteException {
-
-            }
-
-            @Override
-            public List getHoles() throws RemoteException {
-                return null;
-            }
-
-            @Override
-            public void setStrokeWidth(float v) throws RemoteException {
-
-            }
-
-            @Override
-            public float getStrokeWidth() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setStrokeColor(int i) throws RemoteException {
-
-            }
-
-            @Override
-            public int getStrokeColor() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setFillColor(int i) throws RemoteException {
-
-            }
-
-            @Override
-            public int getFillColor() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setZIndex(float v) throws RemoteException {
-
-            }
-
-            @Override
-            public float getZIndex() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setVisible(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isVisible() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public void setGeodesic(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isGeodesic() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public boolean zzb(zzg zzg) throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public int hashCodeRemote() throws RemoteException {
-                return 0;
-            }
-
-            @Override
-            public void setClickable(boolean b) throws RemoteException {
-
-            }
-
-            @Override
-            public boolean isClickable() throws RemoteException {
-                return false;
-            }
-
-            @Override
-            public IBinder asBinder() {
-                return null;
-            }
-        };
-        testBuilding.setShortName("H");
-        Marker marker = new Marker(z1);
-        Polygon polygon = new Polygon(z2);
-
-        testBuilding.setMarker(marker);
-        testBuilding.setPolygon(polygon);
-        Campus.SGW.addBuilding(testBuilding);
-
-        Building result = Campus.SGW.getBuilding(polygon);
-        assertNotNull(result);
+    public void testGetFloorMap_notCached(){
+        // Test data
+        Building testBuilding = new Building(new LatLng(0,0), "TEST", "TEST", new MarkerOptions());
+        Floor expectedMap = new Floor();
+        Map<Integer,Floor> maps = new HashMap<>();
+        testBuilding.setFloorMaps(maps);
+        // Mock
+        IndoorMapFactory mockFactory = Mockito.mock(IndoorMapFactory.class);
+        Mockito.when(mockFactory.createIndoorMap(testBuilding, 1)).thenReturn(expectedMap);
+        IndoorMapFactory.setInstance(mockFactory);
+
+        // Pretest asserts
+        assertEquals(0, maps.size());
+
+        // Execute
+        Floor result = testBuilding.getFloorMap(1);
+
+        // Verify
+        assertEquals(expectedMap, result);
+        assertEquals(1, maps.size());
+        Mockito.verify(mockFactory).createIndoorMap(testBuilding, 1);
     }
-
-
 }
