@@ -49,7 +49,7 @@
 
         <fragment
             android:name= "com.concordia.mcga.fragments.BottomSheetBuildingInfoFragment"
-            android:id="@+id/fragment12"
+            android:id="@+id/buildingInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
