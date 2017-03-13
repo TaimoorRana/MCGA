@@ -1,5 +1,6 @@
 package com.concordia.mcga.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -7,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -25,7 +27,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.concordia.mcga.activities.MainActivity;
-import com.concordia.mcga.activities.Manifest;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
@@ -65,9 +66,24 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private FloatingActionButton mapCenterButton;
     private EditText navigationSearch;
     //GPS attributes
-    private LocationManager gpsmanager;
-    private LatLng myPosition;
+    private LocationManager gpsmanager; //LocationManager instance to check gps activity
+    private LatLng myPosition; //Creating LatLng to store current position
+    Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
 
+
+
+    LocationListener gpsListen = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            //Method called when new location is found by the network
+
+            Log.d("Message: ","Location changed," + location.getLatitude()+ "," + location.getLongitude()+".");
+        }
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+        public void onProviderEnabled(String provider) {
+        }
+        public void onProviderDisabled(String provider) {}
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,22 +113,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
                     getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit(); //To be removed after Outside transportation Google API incorporation
                     campusButton.setVisibility(View.VISIBLE);
-                    viewSwitchButton.setText("GO OUTDOORS");
+                    viewSwitchButton.setText("GO INDOORS");
                 }
                 if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to a ton of changes depending on how MCGA-12 goes
                     navigationSearch.setText("");
-                }
-
-                Log.d("Test 2", "Checkpoint Manifest check");
-                if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-                        PackageManager.PERMISSION_GRANTED) {
-                    Log.d("Permission checked", "checkSelfPermission passed with no errors");
-                    map.setMyLocationEnabled(true);
-                    Log.d("Permission checked", "Location Layer implementation successful");
-                } else {
-                    //Request the Permission
-                    ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 }
 
                 locateMe();
@@ -342,21 +346,24 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     public void locateMe() {
-
-        LocationManager locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE); // Getting LocationManager object from System Service LOCATION_SERVICE
-        Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
-        String provider = locationManager.getBestProvider(criteria, true);// Getting the name of the best provider
         if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 2);
+            ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
-        Location location = locationManager.getLastKnownLocation(provider);
-
-        if (location != null) {
-
-            double latitude = location.getLatitude(); //Getting latitude of the current location
-            double longitude = location.getLongitude(); // Getting longitude of the current location
-            myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, CAMPUS_DEFAULT_ZOOM_LEVEL));//Camera Update method
+        else {
+            gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 0, gpsListen); //Enable Network Provider updates
+            gpsmanager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, gpsListen); //Enable GPS Provider updates - Both can be enabled on one instance of a location manager, this helps the getBestProvider be selected.
+            gpsmanager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE); // Getting LocationManager object from System Service LOCATION_SERVICE
+            String provider = gpsmanager.getBestProvider(criteria, true);// Getting the name of the best provider
+            //Remember last known location in case of GPS instability
+            map.setMyLocationEnabled(true);
+            Location location = gpsmanager.getLastKnownLocation(provider);
+            if (location != null) {
+                double latitude = location.getLatitude(); //Getting latitude of the current location
+                double longitude = location.getLongitude(); // Getting longitude of the current location
+                myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, CAMPUS_DEFAULT_ZOOM_LEVEL));//Camera Update method
+            }
         }
+
     }
 }
