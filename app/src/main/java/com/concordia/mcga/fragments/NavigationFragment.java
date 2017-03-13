@@ -51,6 +51,23 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
+    Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
+    LocationListener gpsListen = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            //Method called when new location is found by the network
+
+            Log.d("Message: ", "Location changed," + location.getLatitude() + "," + location.getLongitude() + ".");
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+    };
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
     //State
@@ -68,22 +85,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     //GPS attributes
     private LocationManager gpsmanager; //LocationManager instance to check gps activity
     private LatLng myPosition; //Creating LatLng to store current position
-    Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
-
-
-
-    LocationListener gpsListen = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            //Method called when new location is found by the network
-
-            Log.d("Message: ","Location changed," + location.getLatitude()+ "," + location.getLongitude()+".");
-        }
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-        public void onProviderEnabled(String provider) {
-        }
-        public void onProviderDisabled(String provider) {}
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -222,7 +223,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                  * ONLY FOR DEMO PURPOSES
                  */
                 Building building = Campus.SGW.getBuilding(polygon);
-                if(building == null){
+                if (building == null) {
                     building = Campus.LOY.getBuilding(polygon);
                 }
                 ((MainActivity) getActivity()).createToast(building.getShortName());
@@ -236,7 +237,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                  * ONLY FOR DEMO PURPOSES
                  */
                 Building building = Campus.SGW.getBuilding(marker);
-                if(building == null){
+                if (building == null) {
                     building = Campus.LOY.getBuilding(marker);
                 }
                 ((MainActivity) getActivity()).createToast(building.getShortName());
@@ -315,10 +316,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
-    private enum ViewType {
-        INDOOR, OUTDOOR
-    }
-
     public void AlertGPS() { //GPS detection method
         Log.e("Testing Alert GPS", "Alert GPS Start");
         AlertDialog.Builder build = new AlertDialog.Builder(
@@ -348,8 +345,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     public void locateMe() {
         if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        }
-        else {
+        } else {
             gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 0, gpsListen); //Enable Network Provider updates
             gpsmanager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, gpsListen); //Enable GPS Provider updates - Both can be enabled on one instance of a location manager, this helps the getBestProvider be selected.
             gpsmanager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE); // Getting LocationManager object from System Service LOCATION_SERVICE
@@ -365,5 +361,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             }
         }
 
+    }
+
+    private enum ViewType {
+        INDOOR, OUTDOOR
     }
 }
