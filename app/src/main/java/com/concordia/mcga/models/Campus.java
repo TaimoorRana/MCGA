@@ -5,6 +5,9 @@ import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polygon;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +67,35 @@ public class Campus extends POI {
      */
     public String getShortName() {
         return shortName;
+    }
+
+    /**
+     * @param polygon polygon object to search for
+     * @return return the building which contains this polygon
+     */
+    public Building getBuilding(Polygon polygon){
+        for (Building building : buildings) {
+            if(building.getPolygon().getId().equalsIgnoreCase(polygon.getId()))
+                return building;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param marker marker object to search for
+     * @return return the building which contains this marker
+     */
+    public Building getBuilding(Marker marker){
+        for (Building building : buildings) {
+            if(building.getMarker().getId().equalsIgnoreCase(marker.getId()))
+                return building;
+        }
+        return null;
+    }
+
+    public void addBuilding(Building building){
+        buildings.add(building);
     }
 
 }
