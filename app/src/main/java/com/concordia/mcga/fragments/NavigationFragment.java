@@ -346,8 +346,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else {
-            gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 3000, 0, gpsListen); //Enable Network Provider updates
-            gpsmanager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, gpsListen); //Enable GPS Provider updates - Both can be enabled on one instance of a location manager, this helps the getBestProvider be selected.
+            gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1500, 2, gpsListen); //Enable Network Provider updates
+            gpsmanager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, gpsListen); //Enable GPS Provider updates - Both can be enabled on one instance of a location manager, this helps the getBestProvider be selected.
             gpsmanager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE); // Getting LocationManager object from System Service LOCATION_SERVICE
             String provider = gpsmanager.getBestProvider(criteria, true);// Getting the name of the best provider
             //Remember last known location in case of GPS instability
