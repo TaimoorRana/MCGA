@@ -39,14 +39,14 @@ public class SearchClearButtonTest {
         ViewInteraction searchAutoComplete = onView(
                 allOf(withId(R.id.search_src_text),
                         withParent(allOf(withId(R.id.search_plate),
-                                withParent(withId(R.id.search_edit_frame)))),
+                                withParent(withId(R.id.nav_main_toolbar)))),
                         isDisplayed()));
         searchAutoComplete.perform(click());
 
         ViewInteraction searchAutoComplete2 = onView(
                 allOf(withId(R.id.search_src_text),
                         withParent(allOf(withId(R.id.search_plate),
-                                withParent(withId(R.id.search_edit_frame)))),
+                                withParent(withId(R.id.nav_main_toolbar)))),
                         isDisplayed()));
         searchAutoComplete2.perform(replaceText("hall"), closeSoftKeyboard());
 
@@ -55,7 +55,7 @@ public class SearchClearButtonTest {
                         childAtPosition(
                                 allOf(withId(R.id.search_plate),
                                         childAtPosition(
-                                                withId(R.id.search_edit_frame),
+                                                withId(R.id.nav_main_toolbar),
                                                 1)),
                                 1),
                         isDisplayed()));

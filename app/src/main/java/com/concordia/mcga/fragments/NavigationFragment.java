@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -19,7 +20,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
@@ -30,6 +30,7 @@ import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.POI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -66,6 +67,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private ExpandableListView searchList;
     private Dialog searchDialog;
 
+    private POI location;
+    private POI destination;
+    private SearchState appSearchStatus;
+
+    private enum SearchState {
+        NONE, LOCATION, DESTINATION, LOCATION_DESTINATION
+    }
     private enum ViewType {
         INDOOR, OUTDOOR
     }
@@ -106,6 +114,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         //Set initial view type
         viewType = ViewType.OUTDOOR;
+
+        // Display no location/destination by default
+        appSearchStatus = SearchState.NONE;
+        updateSearchUI(appSearchStatus);
 
         //Hide Indoor Fragment
         getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
@@ -265,6 +277,45 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     /**
+     * Updates the UI elements associated with the search state.
+     * If no location or destination has been selected, hide the elements.
+     * If a location has been specified, hide the destination element but update the location label.
+     * If a destination has been specified, hide the location element but update destination label.
+     * If both have been specified, show everything and update both labels.
+     */
+    private void updateSearchUI(SearchState searchState) {
+        LinearLayoutCompat locationLayout = (LinearLayoutCompat)
+                getView().findViewById(R.id.search_location);
+        LinearLayoutCompat destinationLayout = (LinearLayoutCompat)
+                getView().findViewById(R.id.search_location);
+
+        if (location != null) {
+            AppCompatTextView locationText = (AppCompatTextView)
+                    getView().findViewById(R.id.search_location_text);
+            locationText.setText(location.getName());
+        }
+        if (destination != null) {
+            AppCompatTextView destinationText = (AppCompatTextView)
+                    getView().findViewById(R.id.search_destination_text);
+            destinationText.setText(destination.getName());
+        }
+
+        if (searchState == SearchState.NONE) {
+            locationLayout.setVisibility(View.GONE);
+            destinationLayout.setVerticalGravity(View.GONE);
+        } else if (searchState == SearchState.LOCATION) {
+            locationLayout.setVisibility(View.VISIBLE);
+            destinationLayout.setVerticalGravity(View.GONE);
+        } else if (searchState == SearchState.DESTINATION) {
+            locationLayout.setVisibility(View.GONE);
+            destinationLayout.setVerticalGravity(View.VISIBLE);
+        } else { // searchState == SearchState.LOCATION_DESTINATION
+            locationLayout.setVisibility(View.VISIBLE);
+            destinationLayout.setVerticalGravity(View.VISIBLE);
+        }
+    }
+
+    /**
      * Expands all the view result groups (showing the POIs under the campus search results)
      */
     private void expandAll() {
@@ -285,12 +336,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Search
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(
                 Context.SEARCH_SERVICE);
-        search = (SearchView) parentLayout.findViewById(R.id.navigationSearch);
+        search = (SearchView) parentLayout.findViewById(R.id.navigation_search);
         search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
         search.setIconifiedByDefault(false);
         search.setOnQueryTextListener(this);
         search.setOnCloseListener(this);
-
+        search.setQueryHint("Enter destination");
 
         //Custom search dialog
         searchDialog = new Dialog(getActivity());
@@ -317,7 +368,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                         // Set dialog window offset and height
                         WindowManager.LayoutParams wmlp = window.getAttributes();
                         int xy[] = new int[2];
-                        parentLayout.findViewById(R.id.navigationSearch).getLocationOnScreen(xy);
+                        parentLayout.findViewById(R.id.navigation_search).getLocationOnScreen(xy);
                         wmlp.y = xy[1] + 20;
 
                         Rect r = new Rect();
