@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.SearchView;
@@ -58,8 +59,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private IndoorMapFragment indoorMapFragment;
     //View Components
     private View rootView;
+    private View toolbarView;
     private Button campusButton;
     private Button viewSwitchButton;
+    private AppCompatImageButton locationCancelButton;
+    private AppCompatImageButton destinationCancelButton;
 
     // Search components
     private SearchView search;
@@ -67,9 +71,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private ExpandableListView searchList;
     private Dialog searchDialog;
 
-    private POI location;
-    private POI destination;
-    private SearchState appSearchStatus;
+    private Building location;
+    private Building destination;
+    private SearchState searchState;
 
     private enum SearchState {
         NONE, LOCATION, DESTINATION, LOCATION_DESTINATION
@@ -84,6 +88,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         parentLayout = (LinearLayoutCompat) inflater.inflate(R.layout.nav_main_fragment, container, false);
         rootView = parentLayout.findViewById(R.id.navigationMain);
+        toolbarView = parentLayout.findViewById(R.id.nav_toolbar);
 
         //Init Fragments
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
@@ -112,18 +117,45 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             }
         });
 
-        //Set initial view type
-        viewType = ViewType.OUTDOOR;
-
-        // Display no location/destination by default
-        appSearchStatus = SearchState.NONE;
-        updateSearchUI(appSearchStatus);
+        locationCancelButton = (AppCompatImageButton)toolbarView.findViewById(R.id.search_location_button);
+        locationCancelButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                location = null;
+                if (destination == null) {
+                    searchState = SearchState.NONE;
+                } else {
+                    searchState = SearchState.DESTINATION;
+                }
+                updateSearchUI();
+            }
+        });
+        destinationCancelButton = (AppCompatImageButton)toolbarView.findViewById(R.id.search_destination_button);
+        destinationCancelButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                destination = null;
+                if (location == null) {
+                    searchState = SearchState.NONE;
+                } else {
+                    searchState = SearchState.LOCATION;
+                }
+                updateSearchUI();
+            }
+        });
 
         //Hide Indoor Fragment
         getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
 
         setupSearchAttributes();
         setupSearchList();
+
+        //Set initial view type
+        viewType = ViewType.OUTDOOR;
+
+        // Display no location/destination by default
+        searchState = SearchState.NONE;
+        updateSearchUI();
 
         return parentLayout;
     }
@@ -283,35 +315,39 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
      * If a destination has been specified, hide the location element but update destination label.
      * If both have been specified, show everything and update both labels.
      */
-    private void updateSearchUI(SearchState searchState) {
+    private void updateSearchUI() {
         LinearLayoutCompat locationLayout = (LinearLayoutCompat)
-                getView().findViewById(R.id.search_location);
+                toolbarView.findViewById(R.id.search_location);
         LinearLayoutCompat destinationLayout = (LinearLayoutCompat)
-                getView().findViewById(R.id.search_location);
+                toolbarView.findViewById(R.id.search_destination);
 
         if (location != null) {
             AppCompatTextView locationText = (AppCompatTextView)
-                    getView().findViewById(R.id.search_location_text);
-            locationText.setText(location.getName());
+                    toolbarView.findViewById(R.id.search_location_text);
+            locationText.setText(location.getShortName());
         }
         if (destination != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
-                    getView().findViewById(R.id.search_destination_text);
-            destinationText.setText(destination.getName());
+                    toolbarView.findViewById(R.id.search_destination_text);
+            destinationText.setText(destination.getShortName());
         }
 
         if (searchState == SearchState.NONE) {
             locationLayout.setVisibility(View.GONE);
-            destinationLayout.setVerticalGravity(View.GONE);
+            destinationLayout.setVisibility(View.GONE);
+            search.setQueryHint("Enter location...");
         } else if (searchState == SearchState.LOCATION) {
             locationLayout.setVisibility(View.VISIBLE);
-            destinationLayout.setVerticalGravity(View.GONE);
+            destinationLayout.setVisibility(View.GONE);
+            search.setQueryHint("Enter destination...");
         } else if (searchState == SearchState.DESTINATION) {
             locationLayout.setVisibility(View.GONE);
-            destinationLayout.setVerticalGravity(View.VISIBLE);
+            destinationLayout.setVisibility(View.VISIBLE);
+            search.setQueryHint("Enter location...");
         } else { // searchState == SearchState.LOCATION_DESTINATION
             locationLayout.setVisibility(View.VISIBLE);
-            destinationLayout.setVerticalGravity(View.VISIBLE);
+            destinationLayout.setVisibility(View.VISIBLE);
+            search.setQueryHint("Search...");
         }
     }
 
@@ -395,8 +431,22 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 Building dest = (Building)poiSearchAdapter.getChild(groupPosition, childPosition);
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(),
                         CAMPUS_DEFAULT_ZOOM_LEVEL));
+
+                if (searchState == SearchState.NONE) {
+                    location = dest;
+                    searchState = SearchState.LOCATION;
+                } else if (searchState == SearchState.DESTINATION) {
+                    location = dest;
+                    searchState = SearchState.LOCATION_DESTINATION;
+                } else if (searchState == SearchState.LOCATION) {
+                    destination = dest;
+                    searchState = SearchState.LOCATION_DESTINATION;
+                } else { // if searchState == SearchState.LOCATION_DESTINATION
+                    // do nothing
+                }
+
+                updateSearchUI();
                 onClose();
-                //Toast.makeText(getActivity(), dest.toString(), Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
