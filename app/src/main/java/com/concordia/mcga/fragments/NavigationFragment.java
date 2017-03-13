@@ -1,5 +1,7 @@
 package com.concordia.mcga.fragments;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -33,7 +35,7 @@ import java.util.List;
 public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject {
 
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
-    Campus currentCampus = Campus.SGW;
+    private MainActivity activity;
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
     //State
@@ -104,10 +106,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         toggleButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentCampus == Campus.LOY) {
-                    currentCampus = Campus.SGW;
+                if ( activity.getCurrentCampus()
+                        == Campus.LOY) {
+                    activity.setCurrentCampus(Campus.SGW);
                 } else {
-                    currentCampus = Campus.LOY;
+                    activity.setCurrentCampus(Campus.LOY);
                 }
                 updateCampus();
             }
@@ -115,6 +118,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         //Show outdoor map on start
         getFragmentManager().beginTransaction().show(mapFragment).commit();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+            activity = (MainActivity) context;
     }
 
     @Override
@@ -185,7 +194,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     void updateCampus() {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), CAMPUS_DEFAULT_ZOOM_LEVEL));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(activity.getCurrentCampus().getMapCoordinates(), CAMPUS_DEFAULT_ZOOM_LEVEL));
     }
 
     @Override

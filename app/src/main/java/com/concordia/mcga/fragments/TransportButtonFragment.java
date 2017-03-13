@@ -1,9 +1,12 @@
 package com.concordia.mcga.fragments;
 
+import android.content.Context;
+import android.icu.text.DateFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +14,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.models.ShuttleTimes;
+import com.concordia.mcga.models.Campus;
+
+import java.util.Date;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
 
@@ -24,6 +30,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private TextView walkTextView, bikeTextView, carTextView, publicTransportTextView, shuttleTextView;
     private Animation transport_fab_open, transport_fab_close, transport_textview_open, transport_textview_close;
     private Boolean fabExpanded = false;
+    private MainActivity activity;
 
 
     @Nullable
@@ -61,14 +68,20 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         shuttleFAB.setOnClickListener(this);
 
         //Some test values
-        setWalkTime(1, 30);
-        setBikeTime(1, 0);
-        setCarTime(0, 30);
-        setPublicTransportTime(0, 45);
-        setShuttleTime(0, ShuttleTimes.getNumberOfMinutesToNextShuttleFromCurrentTime());
-
+        setWalkTime(30);
+        setBikeTime(10);
+        setCarTime(30);
+        setPublicTransportTime(45);
+        setShuttleTime(getNumberOfMinutesToNextShuttleFromCurrentTime(activity.getCurrentCampus()));
         return view;
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (MainActivity) context;
+    }
+
 
     @Override
     public void onClick(View clickedView) {
@@ -146,6 +159,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         transportExpandFAB.clearColorFilter();
     }
 
+    /* Helpers */
     private String formatTime(int hours, int minutes) {
         String time = null;
         if (hours > 0) {
@@ -158,24 +172,67 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         return time;
     }
 
-    public void setWalkTime(int hours, int minutes) {
-        walkTextView.setText(formatTime(hours, minutes));
+    public static int getNumberOfMinutesToNextShuttleFromCurrentTime(Campus c)
+    {
+        /* Fancy pseudo-code */
+        //read present time from Android app
+        //read appropriate time from SQL database
+        //return the number of minutes
+
+        int dayOfWeek = Integer.parseInt((DateFormat.getPatternInstance("ee")).format(new Date()));
+        Log.d("Current day",String.valueOf(dayOfWeek));
+        Log.d("Campus is", c.getName());
+
+        if(c == Campus.LOY)
+            return 67;
+        else
+            return 18;
     }
 
-    public void setBikeTime(int hours, int minutes) {
-        bikeTextView.setText(formatTime(hours, minutes));
+    /**
+     * Private method to convert from minutes to hours, minutes
+     * @param minutes
+     * @return
+     */
+    private int[] convertMinutesToHoursMinutes(int minutes){
+        int[] hoursMinutes = new int[2];
+
+        if(minutes <= 0)
+            return hoursMinutes;
+
+        if (minutes < 60) {
+            hoursMinutes[1] = minutes;
+        }
+        else {
+            hoursMinutes[0] = minutes / 60;
+            hoursMinutes[1] = minutes-(hoursMinutes[0] * 60);
+        }
+            return hoursMinutes;
     }
 
-    public void setCarTime(int hours, int minutes) {
-        carTextView.setText(formatTime(hours, minutes));
+    public void setWalkTime(int minutes) {
+        int[] hoursMinutes = convertMinutesToHoursMinutes(minutes);
+        walkTextView.setText(formatTime(hoursMinutes[0], hoursMinutes[1]));
     }
 
-    public void setPublicTransportTime(int hours, int minutes) {
-        publicTransportTextView.setText(formatTime(hours, minutes));
+    public void setBikeTime(int minutes) {
+        int[] hoursMinutes = convertMinutesToHoursMinutes(minutes);
+        bikeTextView.setText(formatTime(hoursMinutes[0], hoursMinutes[1]));
     }
 
-    public void setShuttleTime(int hours, int minutes) {
-        shuttleTextView.setText(formatTime(hours, minutes));
+    public void setCarTime(int minutes) {
+        int[] hoursMinutes = convertMinutesToHoursMinutes(minutes);
+        carTextView.setText(formatTime(hoursMinutes[0], hoursMinutes[1]));
+    }
+
+    public void setPublicTransportTime(int minutes) {
+        int[] hoursMinutes = convertMinutesToHoursMinutes(minutes);
+        publicTransportTextView.setText(formatTime(hoursMinutes[0], hoursMinutes[1]));
+    }
+
+    public void setShuttleTime(int minutes) {
+        int[] hoursMinutes = convertMinutesToHoursMinutes(minutes);
+        shuttleTextView.setText(formatTime(hoursMinutes[0], hoursMinutes[1]));
     }
 
 
