@@ -243,6 +243,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
      * Applying custom google map style in order to get rid of unwanted POI and other information that is not useful to our application
      */
     private void applyCustomGoogleMapsStyle() {
+        map.setIndoorEnabled(false);
         try {
             // Customise the styling of the base map using a JSON object define
             // in a raw resource file.

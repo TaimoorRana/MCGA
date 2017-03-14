@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Campus extends POI {
-    public static final Campus LOY = new Campus(new LatLng(45.458563, -73.640156), "Loyola Campus", "LOY");
-    public static final Campus SGW = new Campus(new LatLng(45.497100, -73.579077), "SGW Campus", "SGW");
+    public static final Campus LOY = new Campus(new LatLng(45.458265, -73.639071), "Loyola Campus", "LOY");
+    public static final Campus SGW = new Campus(new LatLng(45.495203, -73.576981), "SGW Campus", "SGW");
     private String shortName;
     private List<Building> buildings;
 
