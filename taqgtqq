@@ -1,0 +1,1575 @@
+[33mcommit f4e2a35891bca925df97a45d9caf01a76fc07503[m
+Merge: 5b94abc 4132bdd
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Mon Mar 13 18:36:18 2017 -0400
+
+    Merged with master
+
+[33mcommit 4132bdd9a2727241e1a52bfd59dc40b7d00c94f1[m
+Merge: ad64cf4 556261d
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Mon Mar 13 12:47:57 2017 -0400
+
+    Merge pull request #27 from Taimoorrana1/MCGA-8
+    
+    Mcga 8
+
+[33mcommit ad64cf462cb9e2f787670818d43a1bfa30257b09[m
+Merge: 3aa5fcf eac503d
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Mon Mar 13 12:09:28 2017 -0400
+
+    Merge pull request #17 from Taimoorrana1/MCGA-115
+    
+    Mcga 115
+
+[33mcommit 3aa5fcf2053896bf3c76c86b90afcd42e078fce6[m
+Merge: bc5ddc6 7693c53
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Mar 13 08:09:15 2017 -0400
+
+    Merge pull request #31 from Taimoorrana1/MCGA-128
+    
+    Annotated H1 and H2 with walkable paths. Redid H4 Paths.
+
+[33mcommit 7693c530fbb9b04790db9af83cbf37b6ee089c45[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sun Mar 12 19:42:31 2017 -0400
+
+    Annotated H1 and H2 with walkable paths. Redid H4 Paths.
+    
+    - Regenerated SQL dump.
+    - Added H1-2 psd png files.
+    - Added closest walkablepath code to singlemapfinder.
+    
+    MCGA-128
+
+[33mcommit 556261db3fb7f52d784bfad98380d22dbd3c8d27[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Mar 12 17:56:23 2017 -0400
+
+    added and updated test
+
+[33mcommit bc5ddc697cfff1c3ee3328aef7c3586350101e73[m
+Merge: 677ed3b 35d329b
+Author: Adrianna Diaz <adriannadiaz@users.noreply.github.com>
+Date:   Sun Mar 12 17:36:37 2017 -0400
+
+    Merge pull request #29 from Taimoorrana1/MCGA-127
+    
+    Added Capability to find nearest walkable path to a point.
+
+[33mcommit f870d14bc6cecfc7466d05a4b5c48ef4315d4a9e[m
+Merge: 5432227 677ed3b
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Mar 12 17:25:01 2017 -0400
+
+    merged master
+
+[33mcommit 35d329b84e309ae816d0c068d4e46c2af3f5c5cb[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sun Mar 12 17:08:42 2017 -0400
+
+    made variable final
+
+[33mcommit 70426c0cf4652159f70c37cce517c87c10603e87[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sun Mar 12 03:34:10 2017 -0400
+
+    added Javadoc for implemented methods
+
+[33mcommit 16253c7ef4645804b2e40bb314e651a26c2ef19a[m
+Merge: 4205bee 677ed3b
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Sun Mar 12 03:27:25 2017 -0400
+
+    Merge branch 'master' into MCGA-127
+
+[33mcommit 677ed3bf0637d3ac9657633fc3794186d37e2082[m
+Merge: 696794b f819126
+Author: Adrianna Diaz <adriannadiaz@users.noreply.github.com>
+Date:   Sat Mar 11 18:35:55 2017 -0500
+
+    Merge pull request #28 from Taimoorrana1/databaseInstruction
+    
+    added database instructions
+
+[33mcommit 4205beedad79a714f326f34f91d530e9f776755b[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sat Mar 11 17:10:04 2017 -0500
+
+    Added Capability to find nearest walkable path to a point.
+    
+    - TiledMap can now return the nearest walkable path
+    - Uses breadth first search to do so
+    - Added toString for debugging purposes
+
+[33mcommit f81912619578ee508ca1bd456afda403c41d912c[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Sat Mar 11 16:02:00 2017 -0500
+
+    Update DATABASE.md
+
+[33mcommit 4ecc13c03a7c246883f586ef297ebf7617e66c02[m
+Merge: ef2bc47 696794b
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Sat Mar 11 15:58:39 2017 -0500
+
+    Merge branch 'master' into databaseInstruction
+
+[33mcommit 696794bf748e4f6a726133ce8eca4f7bc8733b49[m
+Merge: 6ff353d 706fe9e
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Sat Mar 11 15:58:19 2017 -0500
+
+    Merge pull request #24 from Taimoorrana1/MCGA-105
+    
+    Mcga 105
+
+[33mcommit ef2bc47394c39b723e41a38fbb629bd68f93117c[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sat Mar 11 15:18:17 2017 -0500
+
+    added database instructions
+
+[33mcommit 706fe9e748e634f49b869d39009f1b475a98ea9a[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sat Mar 11 15:17:31 2017 -0500
+
+    added sql file for database
+
+[33mcommit 2c6146fb807f642309f21a039672ee4ea39f988b[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sat Mar 11 15:04:30 2017 -0500
+
+    Refactored unit tests. Loossened static type of variables
+
+[33mcommit 54322276d0eff0c19fcfd3eed89cd8254a9df2c5[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Fri Mar 10 20:41:51 2017 -0500
+
+    added CampusTest Class
+
+[33mcommit cf4ab90f267e72478f6d9b3437835d6fc964e0df[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Fri Mar 10 20:21:59 2017 -0500
+
+    removed unused imports
+
+[33mcommit c9a904372892e4343457c587e96d1e657b7278e7[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Fri Mar 10 20:18:00 2017 -0500
+
+    added a test
+
+[33mcommit c1abbe1bf105939b5c887ff60ed30b384c33807f[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Fri Mar 10 20:03:18 2017 -0500
+
+    Building object can now be found by clicking on the building
+
+[33mcommit eac503de0b26435bbd83bbeb2351f6bbaa1e5c59[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Fri Mar 10 16:21:59 2017 -0500
+
+    recommiting just to rerun codecov report
+
+[33mcommit 02dda24a6d0c15743ffdfb0a2f9781f71fbd649b[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Fri Mar 10 11:17:28 2017 -0500
+
+    added Javadoc for undocumented Methods. Removed unused IndoorPOIFactory
+
+[33mcommit 01c41233f41c5f5548374238ef9cff1c7dd8230e[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Mar 9 19:59:36 2017 -0500
+
+    MCGA-115 Locked App rotation
+
+[33mcommit bec26cf48f3bf71dd02d208e589898838fac12f8[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Mar 9 19:56:52 2017 -0500
+
+    MCGA-115 Added splash screen test
+
+[33mcommit d0854a14b76addf21e7ac5795dd204bdf7328241[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Mar 9 19:56:25 2017 -0500
+
+    MCGA-115 Layout not needed
+
+[33mcommit 4f7d0838914ca968f732fd136f8af097c71bf4ad[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Mar 9 19:15:54 2017 -0500
+
+    SplashActivityTest not needed with new implementation
+
+[33mcommit c89bb959de0b28038acc27e407c8f834f37e4ca1[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Mar 9 19:13:00 2017 -0500
+
+    added splash screen logo
+
+[33mcommit 2da3ea4935398165bc66da67f1032f88c5bd3dd7[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Mar 9 19:10:27 2017 -0500
+
+    MCGA-115 Reimplementation of the splash screen.
+    Splash screen will only be seen if main activity is not created
+
+[33mcommit 4ba78a611db9d77a8eb76649b3e7ab2eb5007a2a[m
+Merge: b1bc700 6ff353d
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Mar 9 11:29:34 2017 -0500
+
+    Merge branch 'master' of https://github.com/Taimoorrana1/MCGA into MCGA-115
+
+[33mcommit da5f2b15894c8311671ca1f9a0eefcb674654197[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Thu Mar 9 00:11:33 2017 -0500
+
+    Performed Refactoring to accomodate MultiMapPathfinding.
+    
+    - IndoorMap is now renamed as Floor.
+    - X,Y coordinates are now in their own objecy: indoorMapTile
+    - PathFinderTile is used to hold Pathfinding-algorithm logic, unique to
+      each tile.
+    - Refactored tests so that they pass.
+    
+    MCGA-105
+
+[33mcommit 5b83dce3f347d4d203aad907f6fcb910ab928284[m
+Merge: 0964925 6ff353d
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Wed Mar 8 20:02:19 2017 -0500
+
+    Merge branch 'master' into MCGA-105
+
+[33mcommit 0964925912b7b68b2b5071606a4ea96ff3842158[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Wed Mar 8 19:43:28 2017 -0500
+
+     Renamed PathfinderTile -> IndoorMapTIle
+
+[33mcommit aa9f09ff47fa0953ac96946e90b6049c8ce3309d[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Wed Mar 8 19:39:16 2017 -0500
+
+    Refactored and added Unit tests to MultiMapPathFinder.
+    
+    - Refactored createPath to simplify testing
+    - Added Unit test for create path method
+    
+    MCGA-105
+
+[33mcommit 6ff353d067142b771f673fed72c3afca91438e80[m
+Merge: 1c5a3b9 f15ecc9
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Mar 6 18:22:27 2017 -0500
+
+    Merge pull request #23 from Taimoorrana1/updateGradleVersion
+    
+    update gradle version to latest
+
+[33mcommit f15ecc9928128e4e214699f8b451ca620dafb092[m
+Merge: 0818dcd 1c5a3b9
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Mar 6 15:48:16 2017 -0500
+
+    Merge branch 'master' into updateGradleVersion
+
+[33mcommit 1c5a3b9c3dbb3ba6f658337625230efdb11633b0[m
+Merge: 78d4c49 f38376d
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Mar 6 13:21:50 2017 -0500
+
+    Merge pull request #22 from Taimoorrana1/includeRobolectricInJacoco
+    
+    added test option to include Robolectric tests in jacoco coverage report
+
+[33mcommit 0818dcdaf07699ceef6acca81463703034a211ef[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Mon Mar 6 12:39:56 2017 -0500
+
+    update gradle version to latest
+
+[33mcommit f38376d591399b0b71fcba1558948cac48eda405[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Mon Mar 6 12:38:06 2017 -0500
+
+    added test option to include Robolectric tests in jacoco coverage report
+
+[33mcommit 78d4c4902cfe66ba46ec1fbb08215934a9b9cb61[m
+Merge: 4a34db1 9f69931
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Mon Mar 6 12:16:38 2017 -0500
+
+    Merge pull request #21 from Taimoorrana1/updateCoverage
+    
+    Update build.gradle
+
+[33mcommit 9f6993132a80fd8ad1c97b01c970f4558945a692[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Mar 6 10:24:02 2017 -0500
+
+    Update build.gradle
+
+[33mcommit c3d1ab25c7ae512d093f251636e63446665c3fd2[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sun Mar 5 23:52:02 2017 -0500
+
+    Started work on Multi-floor navigation.
+    
+    - Refactored Walkable paths data from a file to the SQLite db
+    - Added MultiMapPathfinder for navigation between different floors of the
+      same building.
+    - Added ConnectedPOIs such as elevators staircases and escalators.
+    - Added custom exceptions to the application.
+    - Added Unit tests for the MultiMapPathFinder
+    - Fixed a bug with the SingleMapPathfinder
+    
+    MCGA-105
+
+[33mcommit b1bc700b8b9981751efaeea8d96d0f696ce07192[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Mar 5 20:40:58 2017 -0500
+
+    MCGA-115
+    
+    Trying to fix travis error about JacocoTestReport
+    Updated SplashActivityTest test
+
+[33mcommit c89c5cd02117468e640e21be867e6909d614968d[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Mar 5 19:50:45 2017 -0500
+
+    Fixing Travis complaint about jacocoTestReport
+
+[33mcommit 6f9c78430a56e2c73ddaf1e12e788681ebf5df40[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Mar 5 19:08:59 2017 -0500
+
+    Fixing Travis complaint about jacocoTestReport
+
+[33mcommit 353f56adac48ecab3e73b8f2c9fe18477062ba2f[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Mar 5 18:47:59 2017 -0500
+
+    Fixing Travis complaint about jacocoTestReport
+
+[33mcommit 5b94abc59202c99d1962ffc040293c2de846d7d5[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Sun Mar 5 18:30:03 2017 -0500
+
+    refactoringTransportButton
+    -Changed an instance where the outdoor map fragment was being made visible the old way
+
+[33mcommit 28be54059c1349da3f50197c1ead0693b5977b64[m
+Merge: ced2fd5 4a34db1
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Mar 5 18:29:25 2017 -0500
+
+    merged with master
+
+[33mcommit db06370e3e6ebc87733cd9a5cabef4401554c727[m
+Merge: ff16988 4a34db1
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Sun Mar 5 18:22:02 2017 -0500
+
+    Merge branch 'master' of https://github.com/Taimoorrana1/MCGA into refactoringTransportButton
+
+[33mcommit ff169880d99e9cf01f829487811859992372d787[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Sun Mar 5 18:21:47 2017 -0500
+
+    refactoringTransportButton -Transport button now shows an X icon when expanded
+    -Transport button now automatically closes when a transport mode is selected
+    -Added TransportType enum that can be publically accessed, returning which transport method is selected
+    -Added javadocs to transport button fragment public methods
+    -Hid transport button by default in NavigationFragment
+    -Added public show methods to NavigationFragment to make swapping fragments easier
+
+[33mcommit ced2fd5320704d90c82154f0942dccba8b2e5e39[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Mar 5 18:21:36 2017 -0500
+
+    added a loading component to splash screen
+
+[33mcommit 4a34db17bd6705ebaf6a0a20304c90cf2bc4bb53[m
+Merge: 9cc7660 f54965e
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Sun Mar 5 17:53:30 2017 -0500
+
+    Merge pull request #15 from Taimoorrana1/buildingFactoryRefactor
+    
+    Refactored building creation logic to the BuildingFactory.
+
+[33mcommit 9235dcab639d2d74999fb5ab421bc5c88b39b3ce[m
+Merge: 1762fe9 4a34db1
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sun Mar 5 17:53:29 2017 -0500
+
+    Merge branch 'master' of github.com:Taimoorrana1/MCGA
+
+[33mcommit 1762fe9f1b9003dd22c76dd9662426f448ce8128[m
+Merge: 9cc7660 f54965e
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sun Mar 5 17:44:04 2017 -0500
+
+    Merge branch 'buildingFactoryRefactor'
+
+[33mcommit f54965eedc848da17a5814b9c8aa42c5b1f590f1[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sun Mar 5 17:07:59 2017 -0500
+
+    Renamed DatabaseHelper -> DatabaseConnector
+
+[33mcommit ea4ca0e133cf98d25b359c303bdca0e5bf244a2e[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Mar 5 16:22:19 2017 -0500
+
+    added robolectric test for splashscreen
+
+[33mcommit d63f20be0a438e5cd5bd1f4f4b8fb8d5ca05abdf[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Mar 5 14:20:59 2017 -0500
+
+    MCGA-115 minor Refactor
+
+[33mcommit d65573e7e9b036748f22a4de12650c44656e79dd[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Mar 5 14:11:07 2017 -0500
+
+    added a splash screen and a new logo
+
+[33mcommit 89dab7066ce9d2db432082d706732caf2eae7e7d[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Sun Mar 5 00:51:38 2017 -0500
+
+    removed existance boolean variable
+
+[33mcommit f72abd278fa6a8e9e24e66490b953d08e126a006[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Mar 4 23:05:14 2017 -0500
+
+    MCGA Logo with white background added
+
+[33mcommit 18abbc1484252ec7b9c150b50008124f8d3bfbb3[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Mar 4 22:34:31 2017 -0500
+
+    MCGA Logo added
+
+[33mcommit a1e240ffa6cc875c82fe0491eb96b1b98db79353[m
+Author: Adrianna Diaz <adriannadiaz@Adriannas-MacBook-Pro-2014.local>
+Date:   Sat Mar 4 20:01:40 2017 -0500
+
+    OMG I managed to put a typo in codecov.yml
+
+[33mcommit 91d0b314a2301bf7a814e00b92f9ac8b6b2c1c0c[m
+Merge: e7c5847 14c843a
+Author: Adrianna Diaz <adriannadiaz@Adriannas-MacBook-Pro-2014.local>
+Date:   Sat Mar 4 19:44:19 2017 -0500
+
+    Merge branch 'buildingFactoryRefactor' of https://github.com/Taimoorrana1/MCGA into buildingFactoryRefactor
+
+[33mcommit e7c584713a26c0e8263cc01528a076cdef92c0a6[m
+Author: Adrianna Diaz <adriannadiaz@Adriannas-MacBook-Pro-2014.local>
+Date:   Sat Mar 4 19:42:59 2017 -0500
+
+    Added an additional rule for codecov, codecov patch, to not break everytime there is a new file added
+
+[33mcommit 14c843aaf1b93f8d956c1fac018a01be5136f68f[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sat Mar 4 17:26:08 2017 -0500
+
+    Replaced boolean refresh flag with BuildConfig property check.
+
+[33mcommit a1a67333a79517f182ef2aef60a693a004bdf354[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sat Mar 4 14:40:54 2017 -0500
+
+    ; troubles
+
+[33mcommit ca0f66098751e1c693ca3444dd64ef3efa3b6f8d[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sat Mar 4 14:38:33 2017 -0500
+
+    fixed failing test
+
+[33mcommit 88fd47b02589643bbd546cebf8d0593b42523ea1[m
+Merge: d595028 9cc7660
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sat Mar 4 13:40:41 2017 -0500
+
+    Merge remote-tracking branch 'origin/master' into buildingFactoryRefactor
+
+[33mcommit d595028c496a4d9dfd07c173f386ab5a2ff1417a[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sat Mar 4 13:36:24 2017 -0500
+
+    Refactored DatabaseHelper to remove several static attributes.
+    
+    - Added Custom Database Exception.
+    - Removed various unused variables.
+    - Removed unnecessary method calls.
+
+[33mcommit 86b31a0daaceb0185ae57a4701e26d995202d357[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sat Mar 4 12:27:06 2017 -0500
+
+    fixed type cast bug for latlng
+
+[33mcommit 3709d7f243ae02b868028a7476cab562285ab93d[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Fri Mar 3 00:55:16 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit e369d1d77b7b612dcc3a77cf67a474f0bb35a7fc[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Fri Mar 3 00:48:42 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit c09a6d64623665011f0a1e79066a5880f43702b6[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Fri Mar 3 00:26:05 2017 -0500
+
+    trying travis stuff
+
+[33mcommit fb001a210c7b24ccb463d19817b1800631904055[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Thu Mar 2 18:17:17 2017 -0500
+
+    Update build.gradle
+
+[33mcommit 6421f74a0b2724a56dd13cef8064b6869cecb717[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Thu Mar 2 17:47:28 2017 -0500
+
+    Update build.gradle
+
+[33mcommit b93531777b2b7fc4b1f35a5a189878232474fbd5[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Thu Mar 2 17:46:48 2017 -0500
+
+    Update build.gradle
+
+[33mcommit 5b0a082dcff0a6df9dfa6055ee3408479a9fdd7e[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Thu Mar 2 17:46:29 2017 -0500
+
+    revert gradle build
+
+[33mcommit e343d860a2a936914cd9a7d4ac43e851afa22d58[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Thu Mar 2 09:23:06 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit 9cc7660ce2ef8ac7f5f7743f800e721a627dfeec[m
+Merge: d869ba8 883a145
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Wed Mar 1 16:49:29 2017 -0500
+
+    Merge pull request #16 from Taimoorrana1/MCGA-8
+    
+    Mcga 8
+
+[33mcommit b7e9bc2e326247acf5f87be5f523ef4c41ade18b[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Wed Mar 1 13:39:49 2017 -0500
+
+    Fixed Jacoco in project.
+    
+    - Fixed Jacoco so that it combines instrumented and unit tests.
+    - Created new gradle task jacocoTestReport, generates report under
+      app/build/reports/jacoco/jacocoTestReport/html.
+
+[33mcommit 883a1455df5ec20419ab874a1aeb75399331b13d[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Wed Mar 1 11:30:13 2017 -0500
+
+    Added javadoc comment for Building object
+    Minor refactoring
+
+[33mcommit 4f61c4c630aa488129ca584a339c9e5621b00c2c[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Tue Feb 28 18:28:08 2017 -0500
+
+    fixed typo
+
+[33mcommit 5e48d8399f9787ba15592a2dd164a04ac20f2432[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Tue Feb 28 18:10:15 2017 -0500
+
+    Refactored building creation logic to the BuildingFactory.
+    
+    - Added Robolectric to enable testing BuildingFactory.
+    - Wrote Unit tests for the BuildingFactory.
+    - Added Shadow version of BitmapDescriptorFactory.
+
+[33mcommit f638076375d521d58396802815ec96775c4fa59f[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Tue Feb 28 17:40:41 2017 -0500
+
+    Add javadoc comment
+
+[33mcommit efab366ce59251d40e36d2b52a174c2f84d1b970[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Tue Feb 28 17:39:48 2017 -0500
+
+    Add javadoc comment
+
+[33mcommit d869ba801923cd57f902debbaf9c097157fb8222[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Tue Feb 28 15:59:41 2017 -0500
+
+    Adding Jacoco To Travis
+
+[33mcommit c37a76a20337f6466cc9ff42b67e0206aa1bafca[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Tue Feb 28 15:56:42 2017 -0500
+
+    Added Jacoco Test Coverage Reporting plugin
+
+[33mcommit 44a4cd028a062b8fc91e32bc8e4d10ed3d730531[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Feb 27 18:10:17 2017 -0500
+
+    Update README.md
+
+[33mcommit 44877c4749fc47345dbce0d12ac8af8aff0a3e2f[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Feb 27 18:08:15 2017 -0500
+
+    Create README.md
+
+[33mcommit 619dbeb4184be679723023ad51a2e60e349a5bec[m
+Merge: 9ebb6ba c8bd21e
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Sun Feb 26 17:00:16 2017 -0500
+
+    Merge pull request #14 from Taimoorrana1/MCGA-109
+    
+    MCGA-109
+
+[33mcommit c8bd21e8d8508a35db449a3b6e5bb535b8ea4daf[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Sun Feb 26 16:37:32 2017 -0500
+
+    MCGA-109 -Removed useless commented code
+    -Changes constants to variables in indoorMapControl to be more meaningful
+    -Added loadMap to indoorMapControl to make loading floor maps easier
+    -Changed IndoorMapFactory to set image dimensions when getting a floor map
+    -Removed Clear Paths button from indoor map, to generate a path simply click two markers
+    -Ran a package import optimization on src folder, removing unused imports
+
+[33mcommit 90e838dea0152118a3674347dd6552c733c25670[m
+Merge: 32c8c48 9ebb6ba
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Sun Feb 26 15:59:56 2017 -0500
+
+    MCGA-109 fixed conflicts with master
+
+[33mcommit 9ebb6ba51e0bc05d46778751d3c1254fc36f9b5f[m
+Merge: 8bb9399 f01dd0f
+Author: Adrianna Diaz <adriannadiaz@users.noreply.github.com>
+Date:   Sat Feb 25 17:56:58 2017 -0500
+
+    Merge pull request #11 from Taimoorrana1/MCGA-8
+    
+    MCGA-8 Fixed client’s issue: Small building name should only show up at a higher zoom and Implemented sqlite
+
+[33mcommit f01dd0f48277b2481e9dafb94005317ee86bb9b5[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 25 17:28:23 2017 -0500
+
+    MCGA-8 Renamed Method
+
+[33mcommit f8a419ac758511d76e5ecb14f1f6dc948b5ce315[m
+Merge: 76a11eb 8bb9399
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 25 13:45:51 2017 -0500
+
+    MCGA-8 merged with master
+
+[33mcommit 76a11eb1a8a7b96435673f33cb1c6ca2e922c90e[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 25 13:25:05 2017 -0500
+
+    MCGA-8 Hid list implementation
+
+[33mcommit 3352476e6b5917afbec0b14e78c3d0ed36295f02[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 25 13:19:41 2017 -0500
+
+    MCGA-8 Tagged HA, MT and CL building as small buildings
+    
+    - Building now belong to their appropriate campus
+
+[33mcommit 85969f8c9cb2293b743db0fcd8923f17eadce32d[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 25 13:17:36 2017 -0500
+
+    MCGA-8 Minor updates to MainActivity
+
+[33mcommit 19924ab8b10ab90ddafa99fb075d2dcb0b054130[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 25 13:16:44 2017 -0500
+
+    MCGA-8 Minor updates to NavigationFragments
+
+[33mcommit 2336afdf65eb027e57b01c99a3805acf575df4e3[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 25 13:15:20 2017 -0500
+
+    MCGA-8 db public access has change to private and public getter method is implemented instead
+
+[33mcommit 32c8c48c109d4d4b2f9c7f644bd1ce1f598093ea[m
+Merge: 93d7ceb 4a85aca
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Sat Feb 25 02:08:50 2017 -0500
+
+    MCGA-109 -Merged with master
+
+[33mcommit 93d7cebcb0ee6f6e28bca16bcfbc376b6e5402bc[m
+Merge: b117196 8bb9399
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Sat Feb 25 02:08:01 2017 -0500
+
+    MCGA-109 -Merged with master
+
+[33mcommit 4a85aca0a67862c4654bac3c77ffe58176ac6840[m
+Merge: b117196 8bb9399
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Sat Feb 25 00:47:26 2017 -0500
+
+    Merge branch 'master' into MCGA-109
+
+[33mcommit 8bb93999477eefd1fb27270070747318d590303a[m
+Merge: 8a6e990 6dde492
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Sat Feb 25 00:26:54 2017 -0500
+
+    Merge pull request #12 from Taimoorrana1/MCGA-104
+    
+    MCGA-104
+
+[33mcommit b1171961942411eb359859cb6489e2a5f3282f44[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Fri Feb 24 23:34:06 2017 -0500
+
+    MCGA-109 -Removed a redundant floormap file used in development
+
+[33mcommit 7a472bdbdc931d7b4e525bcecf17b6f0d6bf6aee[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Fri Feb 24 23:17:05 2017 -0500
+
+    MCGA-109 -Changed style xml to use defined color constants
+    -Removed redundant index check in PathFinder shortestPathJunction loop
+    -Refactored PathFinderTile to use Log.e to print stack traces
+
+[33mcommit 6dde4922390a13a88adb0625b6a97ca9e4727516[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Fri Feb 24 20:31:41 2017 -0500
+
+    MCGA-104 -First and second floor button now load proper floor map
+    -Changed floor button order, higher floors now appear first
+
+[33mcommit bf7e0a24a55e7e6eb648ff7d6c49de9f1647118d[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Fri Feb 24 20:20:17 2017 -0500
+
+    MCGA-109 -Added 4 classrooms as markers to demonstrate path generation, click any two markers to have a path created between them
+    -Added button in indoor map fragment to clear paths
+
+[33mcommit 1efc2f3b042a37804fd7bef849ebe2cf011c663d[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Fri Feb 24 18:19:39 2017 -0500
+
+    MCGA-109 -Path generation and path drawing works as intended for H4
+    -Added toJSONArray method to PathFinder that turns a List of PathFinderTiles to a Json Array of objects understood by the js path drawing code
+    -Refactored generatePath to work with IndoorPOI
+
+[33mcommit 8a6e9908092b256bd3fc43274e092603eb47b70d[m
+Merge: 00a3623 924b59a
+Author: Adrianna Diaz <adriannadiaz@users.noreply.github.com>
+Date:   Fri Feb 24 17:23:22 2017 -0500
+
+    Merge pull request #13 from Taimoorrana1/MCGA-60-Tweak
+    
+    MCGA-60 - Navigation Drawer Tweak
+
+[33mcommit f839b678a47cab03df0c707456a9def0f31b8f2a[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Fri Feb 24 17:21:12 2017 -0500
+
+    MCGA-8 Updated map style to get rid of "Place Norman-Bethune"
+
+[33mcommit 2003cfd4b16fa364e96b886611d6de0b3685253c[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Fri Feb 24 17:04:49 2017 -0500
+
+    MCGA-109 -Fixed IndoorMapFactory initializing an array too small to parse the concordia h4 map file
+    -Added toJSON method to PathFinder Tile
+    -Added generateWalkablePath method to indoorMapControl which takes an array of JSON PathFinderTile objects
+    -Indoor map can now draw algorithmically generated walkable paths, however there is still a bug wherein they are offset by some amount
+
+[33mcommit a4c9c4c3e547180ac9e20d64dbd21b697f4804f8[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Fri Feb 24 16:49:23 2017 -0500
+
+    MCGA-8 Not throwing exception anymore as it was leading to errors
+
+[33mcommit 924b59a0a0374e8f27fde6792b2f75bf896d03ab[m
+Author: Mark Snidal <mark.snidal@gmail.com>
+Date:   Fri Feb 24 14:54:13 2017 -0500
+
+    MCGA-60 - Navigation Drawer Tweak
+    
+    Changed navigation drawer hamburger icon to white
+
+[33mcommit 23403ff5ef9265f0631da6f45b581b3729ab4e7a[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Thu Feb 23 15:43:46 2017 -0500
+
+    MCGA-104 -Disabled google maps toolbar
+
+[33mcommit 1cb49a493445c47e0ffeb3a6b901aeebabff0245[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Wed Feb 22 21:56:30 2017 -0500
+
+    MCGA-104 -Improved map loading speed substantially
+    -Added buttons for floor switching
+
+[33mcommit 95d7cc2ba9bcd620a148309e5571cefffb0fad65[m
+Merge: 8a9c75a 00a3623
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Wed Feb 22 20:06:33 2017 -0500
+
+    MCGA-104 -Merged main
+    -NavigationFragment now contains outdoor and indoor fragments
+
+[33mcommit 8ac8c230cd5586aa22173e54d108eae289c3483a[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Tue Feb 21 13:45:39 2017 -0500
+
+    MCGA-8 Removed campus markers as requested by the client.
+
+[33mcommit 25310773b951c06ad30f25d85b9d36f0944a023e[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Mon Feb 20 22:30:59 2017 -0500
+
+    MCGA-8 Building are now clickable
+
+[33mcommit c08d8ced6c2cd7ccb77f2789c62d61e3adb6633d[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Mon Feb 20 21:17:49 2017 -0500
+
+    MCGA-8 Added DatabaseHelper Class test
+
+[33mcommit cf0dc71ac03a1f2db824ad178ee4a41d6008df71[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Mon Feb 20 21:01:32 2017 -0500
+
+    MCGA-8 refactored Campus class
+
+[33mcommit fa75ad271436536a17f902910a2334f496502925[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Mon Feb 20 21:00:41 2017 -0500
+
+    MCGA-8 refactored Database class
+
+[33mcommit c9b1be3f95c12ed6cc7464ce2ae275bc2362bfe1[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Mon Feb 20 15:23:45 2017 -0500
+
+    MCGA-8 Small building discriminator was added to the building table.
+    
+    Small building marker now only shows up at higher zoom level.
+
+[33mcommit c9baa63bc25e9b80a853b0ca1e1db67d88b54fb6[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Mon Feb 20 12:42:06 2017 -0500
+
+    MCGA-8 Updated Building unit tests
+
+[33mcommit 32faa3e5763dc354cbf41073f8a25c7ceacdf97d[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Mon Feb 20 01:14:47 2017 -0500
+
+    MCGA-8 Reading Building data from database
+
+[33mcommit 2c9a1b74661f65885cb3d5fcf372053421ac00f6[m
+Merge: 0fafaf1 00a3623
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Feb 19 20:08:21 2017 -0500
+
+    merged with master
+
+[33mcommit 0fafaf144eac2b38d7e56861361c88e415f2534f[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Feb 19 19:45:36 2017 -0500
+
+    MCGA-8 Added GSON to help with the Database
+
+[33mcommit 39959fb77437e5e7ca6bd58e745e7f7ed8b19050[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Feb 19 19:42:26 2017 -0500
+
+    MCGA-8 Initializing Database
+
+[33mcommit 51ecc7298786b99926030a9d991faca7e161ee7e[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Feb 19 19:38:18 2017 -0500
+
+    MCGA-8 Added sqlite
+    
+    Created table for buildings
+
+[33mcommit 00a3623dc52b5cd3ea5fb8151eea24e2b052260d[m
+Merge: 9f0bd2e 91a9e40
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Sat Feb 18 15:19:13 2017 -0500
+
+    Merge pull request #9 from Taimoorrana1/MCGA-100-101
+    
+    Mcga 100-101
+
+[33mcommit e2c74d749ef4d86442036b2f62196443a8797a39[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Feb 16 23:37:16 2017 -0500
+
+    MCGA-8 Created SmallBuilding class because its marker visibility level is different then the Building class
+
+[33mcommit 0aba25078f5dce4bd33043d50994c265082eeab7[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Feb 16 23:35:47 2017 -0500
+
+    MCGA-8 Applied Observer Pattern
+
+[33mcommit 30f0ab8bf3631591332c8cafd0a19c6ab09f75ac[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Feb 16 23:35:12 2017 -0500
+
+    MCGA-8 Applied Observer Pattern
+
+[33mcommit 1aef49a9b8c18ea0c8c0c5aa2e0daede8e1d112c[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Feb 16 23:34:38 2017 -0500
+
+    MCGA-8 Small buildings are now created with SmallBuilding class instead of Building class
+
+[33mcommit bb18b59bc86451a2d3493d6bdaa26ec8f46184ae[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Feb 16 23:23:12 2017 -0500
+
+    MCGA-8 Added HelperClasses Package
+    Added Observer Pattern Classes
+
+[33mcommit 91a9e4065f58266d7ba4033c3d55351251cd3f6b[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Thu Feb 16 22:23:08 2017 -0500
+
+    Delete Concordia-Floor-Map-H4.txt
+
+[33mcommit 91d886b7ad7d205244e1c6a6a5bebbe9f55eab29[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Thu Feb 16 22:19:33 2017 -0500
+
+    Added pathfinding map utilities.
+    
+    - Wrote a python script that converts black walkable paths on a white
+      background to pixel value file.
+    - Resized walkable path file to fit with display library's sizing.
+    - Added PNG showing paths vs map.
+
+[33mcommit d493535ffbd0527bf7331ca9f2d1d8afe7d82417[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Thu Feb 16 21:40:06 2017 -0500
+
+    MCGA-8 Removed Unused and Empty method
+
+[33mcommit ab26880d93aa7ea5fecad61cbeb0722d0d9ba1f5[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Wed Feb 15 20:46:49 2017 -0500
+
+    fixed failing test due to refactor
+
+[33mcommit 9de509258604e8340f3dd1d6e719ee9636c54393[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Wed Feb 15 20:28:58 2017 -0500
+
+    fixed linting issues, added relation between building and indoor maps
+
+[33mcommit 9f0bd2eca297c823dd94d90406c7e6164db8b3c8[m
+Merge: 27e19b6 97469dc
+Author: Mark Snidal <mark.snidal@gmail.com>
+Date:   Tue Feb 14 15:16:39 2017 -0500
+
+    Merge pull request #10 from Taimoorrana1/MCGA-9
+    
+    MCGA-9 extension
+
+[33mcommit 97469dc801b4013172c043581d3ee321daf8e77e[m
+Author: Mark Snidal <mark.snidal@gmail.com>
+Date:   Tue Feb 14 14:26:10 2017 -0500
+
+    MCGA-9
+    
+    Tweaked button style to meet consistency with app
+
+[33mcommit 0afd9aa13e9f7d3581b78ea404eb9ed8f2b9243e[m
+Author: Mark Snidal <mark.snidal@gmail.com>
+Date:   Tue Feb 14 14:05:12 2017 -0500
+
+    MCGA-9
+    
+    Reverted to a campus switch button internal to the fragment
+
+[33mcommit 04a702f2e908eebbfa68d719dc18253cb54a41e0[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Mon Feb 13 22:20:57 2017 -0500
+
+    Fixed unit test for the IndoorMapFactory.
+
+[33mcommit bdd372276090f9928e78b1f4c2a083ddb02ae4f3[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Mon Feb 13 22:06:33 2017 -0500
+
+    Added navigable paths for hall 4th floor.
+    
+    - Refactored TiledMap to accomodate various sizes.
+    - Added IndoorMapFactory for different floors.
+
+[33mcommit 22e8d7449df132f5acf9ed34c7a2af30604a6d12[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Fri Feb 10 23:29:49 2017 -0500
+
+    Refactored pathfinding code.
+    
+    - Added additional pathfinding unit test.
+    
+    MCGA-100
+
+[33mcommit a8eacaa023535e92d4d13e6584de0637415dc42a[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Fri Feb 10 00:26:43 2017 -0500
+
+    Added pathfinding to the Application.
+    
+    - Added the A* algorithm for pathfinding to the application.
+    - Added TiledMaps to the application, which will have to be tied with
+      indoormaps somehow.
+    
+    MCGA-100
+
+[33mcommit 27e19b6bc5a106e5eff677af10f4fd15bff281da[m
+Merge: 540bd33 6c19bde
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Mon Feb 13 18:46:24 2017 -0500
+
+    Merge pull request #7 from Taimoorrana1/MCGA-60
+    
+    MCGA-60
+
+[33mcommit 6c19bde140e65191949cfc5000042f47334e7258[m
+Merge: 4890bb3 540bd33
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Mon Feb 13 18:26:50 2017 -0500
+
+    MCGA-60 Merged Master in MCGA-60
+
+[33mcommit 540bd336c4bb97e8584c7d230e6635eadd8725e2[m
+Merge: 2642f9d d86dbad
+Author: Mark Snidal <mark.snidal@gmail.com>
+Date:   Mon Feb 13 17:36:41 2017 -0500
+
+    Merge pull request #8 from Taimoorrana1/MCGA-8
+    
+    MCGA-8 As a student, I would like to see shapes for the buildings, so that they are easily distinguished
+
+[33mcommit 4890bb37ab8d126a4f6c72cad6db51b8ae03e0e9[m
+Author: Mark Snidal <mark.snidal@gmail.com>
+Date:   Mon Feb 13 15:54:04 2017 -0500
+
+    MCGA-60
+    
+    Fixed some XML errors throughout and set lint errors to non-fatal
+
+[33mcommit d86dbad656e0e712e5526f6d61a11cdb2233dedd[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Feb 12 23:43:48 2017 -0500
+
+    MCGA-8 Renamed Attribute
+
+[33mcommit 25d3359cff938af42a0ac9b25654eb552994f416[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Feb 12 23:39:33 2017 -0500
+
+    MCGA-8 Added Test Cases for Building Class
+
+[33mcommit 195d47e43ee1851dec5400d14644b78cfabf3f3c[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Feb 12 23:02:41 2017 -0500
+
+    MCGA-8 SGW Campus complete
+
+[33mcommit ee18061d8bd5b38cfff188dcbd96aaf4bedb3e1b[m
+Author: Mark Snidal <mark.snidal@gmail.com>
+Date:   Sun Feb 12 22:33:27 2017 -0500
+
+    MCGA-60
+    
+    Added backstack functionality to home fragment, and removed button from side menu. Replaced button with placeholder for next class - this needs to be made into a fragment of its own for the next-class user story.
+
+[33mcommit 1c8162c32988416eba18be1a375922b7ce37d2f6[m
+Author: Mark Snidal <mark.snidal@gmail.com>
+Date:   Sun Feb 12 21:24:38 2017 -0500
+
+    MCGA-60
+    
+    Modified campus button to meet client requirements
+
+[33mcommit 5e0797a550cd7d2034fc5139278ed52501a1abca[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Feb 12 21:15:39 2017 -0500
+
+    -Made building marker smaller
+    -Completed Loyala Campus Markers
+    
+    MCGA-8
+
+[33mcommit 8a9c75ac8917a5a202b56bf9989294e260917785[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Sun Feb 12 20:32:23 2017 -0500
+
+    MCGA-104 -Added IndoorMapFragment that manages a WebView that allows indoor maps to be displayed
+    -Added a spinner to IndoorMapFragment that allows floors to be changed for demonstration
+    -Added a button to IndoorMapFragment that draws a path on a floor for demonstration
+    -Refactored MapsActivity to be able to control buttons and swap out fragments in order to change from outdoor view to indoor view
+    -Added view switch button to MapsActivity in order to switch to indoor view for demonstration
+
+[33mcommit 219b9fa05111c364fc75213302bc07c27dfbf716[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Feb 12 18:32:47 2017 -0500
+
+    Building markers are now removed if the users zoom out too much
+    
+    MCGA-8
+
+[33mcommit d96171b7a34fbf9063b6ccfa3e271a725e545dd4[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Feb 12 17:47:52 2017 -0500
+
+    Made Marker icons smaller
+    
+    MCGA-8
+
+[33mcommit d94d6d10e8e203806cb134066e75b894dbda2250[m
+Author: Mark Snidal <mark.snidal@gmail.com>
+Date:   Sun Feb 12 17:19:08 2017 -0500
+
+    MCGA-60
+    
+    Fixed XML file wrongly placed in debug folder
+
+[33mcommit 3ce119243e7292cf93cf4f0e1a78a95cadbb8780[m
+Author: Mark Snidal <mark.snidal@gmail.com>
+Date:   Sun Feb 12 16:54:17 2017 -0500
+
+    Reorganized some code and set navigation view by default
+
+[33mcommit ac598553e1a8dad431368a7febb0d59fe7cdecbf[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sun Feb 12 13:17:32 2017 -0500
+
+    Added a style to our Google Maps in order to remove unwanted POI provided by Google Maps by default
+    
+    MCGA-102
+
+[33mcommit 1d43d820fd8792568f6da666eda77cb5d8593fa2[m
+Author: Mark Snidal <mark.snidal@gmail.com>
+Date:   Sat Feb 11 23:29:12 2017 -0500
+
+    Drawer menu structure
+    
+    Fragmentization of main activity, refactoring layout to separate files.
+    Added side drawer
+
+[33mcommit 5c6a55cf5ee16f06ef9f8da48fdff1d996648e66[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 11 22:13:48 2017 -0500
+
+    Added FC,PT,SC,VE and VL Building markers with GroundOverlay
+    
+    MCGA-8
+
+[33mcommit cc0d4c2d61c28152936048f90f657fd442c765e6[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 11 21:29:16 2017 -0500
+
+    Added AD,CC,CJ,GE,PC,PS,PY,RA,RF and SP Building markers with GroundOverlay
+    
+    MCGA-8
+
+[33mcommit ae9362ef409ea687b8d56b45768e10ed2448693f[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 11 17:38:11 2017 -0500
+
+    Added FB,FG,GA,GN and MT Building markers with GroundOverlay
+    
+    MCGA-8
+
+[33mcommit f32d6a736ad690a7fdcab3a494c8ae74725f6c4a[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 11 14:59:19 2017 -0500
+
+    Added H,LB,GM,JM and EV markers with GroundOverlay
+    
+    MCGA-8
+
+[33mcommit 64b97046128b6a5551b98fbf3fb09c267da496ef[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 11 13:00:08 2017 -0500
+
+    Changed abbreviatedName to shortName in order to stay consistent with Campus class attribute names
+
+[33mcommit ee868e11070aa4a1920d4b997e18e9fd3272045b[m
+Author: taimoorrana <taimoorrana1@gmail.com>
+Date:   Sat Feb 11 00:27:35 2017 -0500
+
+    Added  a Building class
+    
+    It knows the following:
+    
+    -it's center coordinate
+    -it's abbreviated name EX: H building
+    -it's name EX: Hall building
+    -it's physical boundaries (coordinates)
+    -it can setup PolygonOptions object attributes so it can be viewed on the map
+    
+    MCGA-8
+
+[33mcommit 2642f9d864d3671b0479c345a74dc4e029aa3a08[m
+Merge: 59e4732 597672f
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Tue Feb 7 11:08:55 2017 -0500
+
+    Merge pull request #5 from Taimoorrana1/dev
+    
+    Merging dev to master
+
+[33mcommit 597672f8fed47ae8a50c5c89dc4947867448d753[m
+Merge: 9bd5535 1d10ac2
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Sun Feb 5 22:46:22 2017 -0500
+
+    Merge pull request #4 from Taimoorrana1/MCGA-61
+    
+    Added expandable transportation button fragment for transportation ty…
+
+[33mcommit 1d10ac2e177cea8c1042a1edb8a9b7405480847b[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Sun Feb 5 21:34:16 2017 -0500
+
+    MCGA-61 Deleted unit test until I figure out how to mock android objects with lifecycles
+
+[33mcommit c8933c74fb6f52ae049c4c797d4d12b3c9410e79[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Sun Feb 5 21:32:26 2017 -0500
+
+    MCGA-61 Reduced child icon sizes to fit on smaller screens
+
+[33mcommit c9b04d08818bd812d1addc7a090d0d5cc61f8713[m
+Author: Vynny <sylvain.czyzewski@gmail.com>
+Date:   Sun Feb 5 18:40:16 2017 -0500
+
+    Added expandable transportation button fragment for transportation type selection.
+    
+    -Added transport_button_fragment to activity_maps
+    -Added TransportButtonFragment class which includes all logic for the transport button
+    -Added new material icons to drawable to represent transport types
+    -Added Concordia stingers mipmap
+    -Added animation files for expanding transport buttons and associated text views
+    -Downgraded google play services version to 9.6.0 in gradle to fix emulator errors
+    
+    MCGA-61
+
+[33mcommit 9bd5535602d88fe30bcc2ad40e3ea0d06b2aa2cb[m
+Merge: 59e4732 59c3f6a
+Author: Adrianna Diaz <adriannadiaz@users.noreply.github.com>
+Date:   Sun Feb 5 11:14:08 2017 -0500
+
+    Merge pull request #3 from Taimoorrana1/MCGA-9
+    
+    MCGA-9 Added button to switch between campuses.
+
+[33mcommit 59c3f6ad3d5c6b8ebafb474ec1e151bfc72f5419[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Sat Feb 4 14:40:56 2017 -0500
+
+    MCGA-9 Added button to switch between campuses.
+    
+    - Updated constructors for various domain objects to enforce attribute
+      creation.
+    - Added campus button to the maps activity.
+    - Added Mockito library (recommended Android mock library) for unit tests.
+    - Wrote unit tests for campus switching.
+
+[33mcommit 59e473231c7928cbdcc721b282272ddcd3420444[m
+Merge: 207550d d0e4b0c
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Thu Feb 2 23:29:23 2017 -0500
+
+    Merge pull request #2 from Taimoorrana1/arek
+    
+    Implemented the initial view & added a few Domain objects.
+
+[33mcommit d0e4b0cda281e18c7714942458284e2d091389d7[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Thu Feb 2 22:25:32 2017 -0500
+
+    Update build.gradle
+
+[33mcommit a7b103e2e6ccfd6317b43d1c0ff82bec7b7f3e57[m
+Author: Arek Mano <manoukian.arek@gmail.com>
+Date:   Thu Feb 2 22:16:18 2017 -0500
+
+    Implemented the initial view & added a few Domain objects.
+    
+    - Added various models.
+    - Added a few needed icon files.
+    - Renamed the core packge.
+    - Changed the minimum API version, as too low of a value causes
+      non-material design views to creep in.
+
+[33mcommit 207550d76fdda4d679c5880882f1b7c5c50bf65b[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Wed Feb 1 16:53:03 2017 -0500
+
+    corrected file name
+
+[33mcommit 67f15d51f8b948f8b33a375a512c2040697db4f4[m
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Mon Jan 30 18:58:29 2017 -0500
+
+    MCGA-46 Previous key was invalid
+    
+    MCGA-46 Previous key was invalid. Replaced it with a valid key
+
+[33mcommit 3d153fdfadea1f43c54a1698fdaa1a6578d28f4e[m
+Merge: 2577286 a2bae4d
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Sun Jan 29 19:38:39 2017 -0500
+
+    Merge pull request #1 from Taimoorrana1/setup
+    
+    Setup
+
+[33mcommit a2bae4db25544179bf1005905f7f33450a8521a3[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Sun Jan 29 19:31:08 2017 -0500
+
+    MCGA-46 #finish test
+
+[33mcommit f6244ce6165fe64fe9cd9a432c3c560f3991138d[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Sun Jan 29 18:48:51 2017 -0500
+
+    allowing google maps key to be tracked
+
+[33mcommit 43f228df9409821b03791dc6e3cf19ef6e0a7660[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Sun Jan 29 14:23:05 2017 -0500
+
+    google_maps_api.xml was still being tracked. It is no longer tracked
+
+[33mcommit 955243b974fda7108a5cbc9a30e0c6482172938e[m
+Merge: dcdf98e bba5b63
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Sun Jan 29 13:59:02 2017 -0500
+
+    Merge branch 'setup' of https://github.com/Taimoorrana1/MCGA into setup
+
+[33mcommit dcdf98e218eeb9ba8617a1634e1214d9da9d6bf7[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Sun Jan 29 13:58:38 2017 -0500
+
+    removed google_maps_api.xml because it contained sensitive data and added it to gitignore
+
+[33mcommit bba5b6318925e335a6901225ba1a1535a9132b7b[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 22:40:52 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit 9c7d79a9975a19a8a609aba57a7e056f3f9a606a[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 22:29:30 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit 207f83bf8aaa86584f2c638bdfc10d5ee03e7dfb[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 22:17:20 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit c8cd6b43986d7360ed453b5e3d84669067b48a50[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 22:15:57 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit 483f478ed4cdc629cc1df7607826aba62b853ef6[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 22:06:23 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit ea11462752e36dc322d241b7ea63a1d78c65c8b8[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 21:57:48 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit 1546bacabb84e400b2b9f4ce384e6b390d3049f8[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 21:56:04 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit ce08fa100105fd8d0779611b413483efed108652[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 21:36:49 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit 001bc66e3bd0322a12011a59e5c87d0d04a113c4[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 21:35:06 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit 5b125f1f3b6b8dcec3081819b983a16b74992560[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 21:25:21 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit 80694bf765e5b89832ffb49dba8d0e6c32219c65[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 21:22:10 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit ab322a1dcbe571c0354ab3eb585d46ee93c89e1b[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 21:21:33 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit d22f1035058f644fd93a4444c600a556b19d1988[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 21:20:59 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit 2859058797737620df0984dc437574d62111f3c3[m
+Author: Arek Manoukian <manoukian.arek@gmail.com>
+Date:   Mon Jan 23 21:06:27 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit 6957040ad1fd7f53ac7cead4a0236446068a9a44[m
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Mon Jan 23 17:12:29 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit 68be4dc70516e3374d252122eae402a2dbe12570[m
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Mon Jan 23 17:09:41 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit e9cfca92bb4b39a7d746161fdf30cdf306168b0f[m
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Mon Jan 23 17:06:42 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit f23380400abaf3c82cecee0d99981de35ed52761[m
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Mon Jan 23 17:02:51 2017 -0500
+
+    Update .travis.yml
+
+[33mcommit d255fec70ad94883aeb92a7ae3724f706e6ff639[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Mon Jan 23 17:01:08 2017 -0500
+
+    integrating Travis
+
+[33mcommit 34313753d975620704db7a93644ccdff2814da29[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Sat Jan 21 21:31:57 2017 -0500
+
+    MCGA-46 Removed build folder
+
+[33mcommit dc475ab75f3ea20ac5ef482846d6822ca715d601[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Sat Jan 21 21:24:35 2017 -0500
+
+    MCGA-46 Ignore build folder
+
+[33mcommit 0be47618e8e462be0355e06b1c4582e0109d9729[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Sat Jan 21 11:59:38 2017 -0500
+
+    MCGA-46 Added Google Maps API and an activity
+
+[33mcommit 200d95155adceca20893a0d7fe50b6b1a916cff6[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Fri Jan 20 17:02:49 2017 -0500
+
+    MCGA-46 Basic Project without Google Maps API
+
+[33mcommit 25772868ed69718f4a7abeb6a6a2a51afa5833ab[m
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Fri Jan 20 16:03:11 2017 -0500
+
+    Update Intro.md
+
+[33mcommit 45cae975e9ba93cc4fb550504d6323b9b06c17ef[m
+Author: Taimoor <taimoorrana1@hotmail.com>
+Date:   Fri Jan 20 16:01:45 2017 -0500
+
+    added .gitignore
+
+[33mcommit a37c8a3d41061a60f1c79ec3da2867aad45001f7[m
+Author: Taimoor <taimoorrana1@gmail.com>
+Date:   Fri Jan 20 15:27:52 2017 -0500
+
+    MCGA-3 testing github integration
+
+[33mcommit 1637bf2b5e070f9fe2c241a34bfc66d50ebd5a53[m
+Author: Mihai <mihai_qc@hotmail.fr>
+Date:   Mon Jan 9 20:43:48 2017 -0500
+
+    Update and rename README.md to Intro.md
+
+[33mcommit 8eceb8c7ab3e2f13172534f71427276d1a8c9273[m
+Author: Mihai <mihai_qc@hotmail.fr>
+Date:   Mon Jan 9 20:43:28 2017 -0500
+
+    Introduction
+
+[33mcommit 1f06aedce7b98dc0ed08e47a7da2736f02c78aa7[m
+Author: Mihai <mihai_qc@hotmail.fr>
+Date:   Mon Jan 9 20:42:12 2017 -0500
+
+    Initial commit
