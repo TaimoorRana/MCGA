@@ -1,5 +1,6 @@
 package com.concordia.mcga.fragments;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.icu.text.DateFormat;
 import android.os.Bundle;
@@ -32,11 +33,15 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private Boolean fabExpanded = false;
     private MainActivity activity;
 
+    private boolean shuttleAvailable;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.transport_button_fragment, container, false);
+
+        shuttleAvailable = shuttleAvailable();
+
         //Initialize FABs
         FloatingActionButton transportExpandFAB = (FloatingActionButton) view
                 .findViewById(R.id.transportExpandFAB);
@@ -44,14 +49,14 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         bikeFAB = (FloatingActionButton) view.findViewById(R.id.bikeFAB);
         carFAB = (FloatingActionButton) view.findViewById(R.id.carFAB);
         publicTransportFAB = (FloatingActionButton) view.findViewById(R.id.publicTransportFAB);
-        shuttleFAB = (FloatingActionButton) view.findViewById(R.id.shuttleFAB);
+        if(shuttleAvailable){shuttleFAB = (FloatingActionButton) view.findViewById(R.id.shuttleFAB);}
 
         //Initialize Text Views
         walkTextView = (TextView) view.findViewById(R.id.textViewWalk);
         bikeTextView = (TextView) view.findViewById(R.id.textViewBike);
         carTextView = (TextView) view.findViewById(R.id.textViewCar);
         publicTransportTextView = (TextView) view.findViewById(R.id.textViewPublicTransport);
-        shuttleTextView = (TextView) view.findViewById(R.id.textViewShuttle);
+        if(shuttleAvailable){shuttleTextView = (TextView) view.findViewById(R.id.textViewShuttle);}
 
         //Initialize Animations
         transport_fab_open = AnimationUtils.loadAnimation(getContext(), R.anim.transport_fab_open);
@@ -65,14 +70,14 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         bikeFAB.setOnClickListener(this);
         carFAB.setOnClickListener(this);
         publicTransportFAB.setOnClickListener(this);
-        shuttleFAB.setOnClickListener(this);
+        if(shuttleAvailable){shuttleFAB.setOnClickListener(this);}
 
         //Some test values
         setWalkTime(30);
         setBikeTime(10);
         setCarTime(30);
         setPublicTransportTime(45);
-        setShuttleTime(getNumberOfMinutesToNextShuttleFromCurrentTime(activity.getCurrentCampus()));
+        if(shuttleAvailable){setShuttleTime(getNumberOfMinutesToNextShuttleFromCurrentTime(activity.getCurrentCampus()));}
         return view;
     }
 
@@ -105,6 +110,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
                 swapIcons(R.drawable.ic_stingers_icon);
                 break;
         }
+
+        if(shuttleAvailable){setShuttleTime(getNumberOfMinutesToNextShuttleFromCurrentTime(activity.getCurrentCampus()));}
     }
 
     public void expandFAB() {
@@ -126,9 +133,11 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             publicTransportTextView.startAnimation(transport_textview_close);
             publicTransportFAB.setClickable(false);
 
-            shuttleFAB.startAnimation(transport_fab_close);
-            shuttleTextView.startAnimation(transport_textview_close);
-            shuttleFAB.setClickable(false);
+            if(shuttleAvailable){
+                shuttleFAB.startAnimation(transport_fab_close);
+                shuttleTextView.startAnimation(transport_textview_close);
+                shuttleFAB.setClickable(false);
+                }
         } else {
             fabExpanded = true;
             walkFAB.startAnimation(transport_fab_open);
@@ -147,9 +156,11 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             publicTransportTextView.startAnimation(transport_textview_open);
             publicTransportFAB.setClickable(true);
 
-            shuttleFAB.startAnimation(transport_fab_open);
-            shuttleTextView.startAnimation(transport_textview_open);
-            shuttleFAB.setClickable(true);
+            if(shuttleAvailable) {
+                shuttleFAB.startAnimation(transport_fab_open);
+                shuttleTextView.startAnimation(transport_textview_open);
+                shuttleFAB.setClickable(true);
+            }
         }
     }
 
@@ -172,6 +183,17 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         return time;
     }
 
+    @TargetApi(24)
+    private static boolean shuttleAvailable(){
+        int dayOfWeek =Integer.parseInt((DateFormat.getPatternInstance("ee")).format(new Date()));
+        dayOfWeek=1;
+        if (dayOfWeek == 1 || dayOfWeek == 7)
+            return false;
+        else
+            return true;
+    }
+
+    @TargetApi(24)
     public static int getNumberOfMinutesToNextShuttleFromCurrentTime(Campus c)
     {
         /* Fancy pseudo-code */
@@ -183,10 +205,31 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         Log.d("Current day",String.valueOf(dayOfWeek));
         Log.d("Campus is", c.getName());
 
+        dayOfWeek = 1;
+
+        int timeToShuttle;
         if(c == Campus.LOY)
-            return 67;
+            timeToShuttle = 7;
         else
-            return 18;
+            timeToShuttle = 5;
+
+        switch (dayOfWeek){
+            case 1:
+            case 7:
+                //There's no shuttle on the weekends
+                return -1;
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+                //Shuttle Monday-Thursday
+                return 3*timeToShuttle;
+            case 6:
+                //Shuttle Friday
+                return 11*timeToShuttle;
+        }
+
+    return -2; //Should not be able to reach here.
     }
 
     /**
@@ -231,6 +274,15 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     public void setShuttleTime(int minutes) {
+        Log.d("Time to shuttle", String.valueOf(minutes));
+        if ( minutes < 0)
+        {
+            shuttleTextView.setText("Shuttle not available");
+//            shuttleFAB.startAnimation(transport_fab_close);
+//            shuttleTextView.startAnimation(transport_textview_close);
+            shuttleFAB.setClickable(false);
+            return;
+        }
         int[] hoursMinutes = convertMinutesToHoursMinutes(minutes);
         shuttleTextView.setText(formatTime(hoursMinutes[0], hoursMinutes[1]));
     }

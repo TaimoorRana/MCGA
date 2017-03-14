@@ -1,5 +1,6 @@
 package com.concordia.mcga.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                             return true;
                         case R.id.shuttle_schedule:
                             Toast.makeText(getApplicationContext(), "Shuttle Schedule", Toast.LENGTH_SHORT).show();
+                            openShuttleActivity();
                             return true;
                         case R.id.settings:
                             Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
@@ -110,4 +112,8 @@ public class MainActivity extends AppCompatActivity {
         this.currentCampus = c;
     }
 
+    public void openShuttleActivity(){
+        Intent intent = new Intent(this, ShuttleActivity.class);
+        startActivity(intent);
+    }
 }
