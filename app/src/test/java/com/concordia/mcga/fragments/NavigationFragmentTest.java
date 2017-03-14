@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.SearchView;
@@ -18,12 +19,15 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 
 
+import com.concordia.mcga.activities.R;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+// Junit Import
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,6 +61,7 @@ public class NavigationFragmentTest {
 
     // Search components
     private Dialog searchDialog;
+    private FragmentManager childFragmentManager;
 
     @Before
     public void setUp() throws Exception {
@@ -75,18 +80,22 @@ public class NavigationFragmentTest {
 
     @Test
     public void locateMe_locatesMe() throws Exception {
-        /*assertEquals(ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION), PackageManager.PERMISSION_GRANTED);
+        assertEquals(ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION), PackageManager.PERMISSION_GRANTED);
         assertNotNull(mapFragment.getActivity().getSystemService(Context.LOCATION_SERVICE));
         assertNotNull(gpsmanager.getBestProvider(criteria, true));
         assertNotNull(location);
-        assertNotNull(myPosition);*/
+        assertNotNull(myPosition);
         //Move Camera test, need to read more
     }
 
-    @Test
+    public FragmentManager getChildFragmentManager() {
+        return childFragmentManager;
+    }
+
+    /*@Test
     public void onActivityCreated() throws Exception {
 
-    }
+    }*/
 
 }
 
