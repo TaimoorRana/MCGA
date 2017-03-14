@@ -2,6 +2,7 @@ package com.concordia.mcga.fragments;
 
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.models.Transportation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +51,7 @@ public class TransportButtonFragmentTest {
         assertNotNull(transportButtonFragment.getTransport_textview_open());
         assertNotNull(transportButtonFragment.getTransport_textview_close());
 
-        assertTrue(transportButtonFragment.getTransportType() == TransportButtonFragment.TransportType.PUBLIC_TRANSPORT);
+        assertTrue(transportButtonFragment.getTransportType() == Transportation.PUBLIC_TRANSPORT);
     }
 
     @Test
@@ -98,6 +99,6 @@ public class TransportButtonFragmentTest {
     @Test
     public void testTransportOptionClick() {
         transportButtonFragment.getWalkFAB().performClick();
-        assertTrue(transportButtonFragment.getTransportType().equals(TransportButtonFragment.TransportType.WALK));
+        assertTrue(transportButtonFragment.getTransportType().equals(Transportation.WALK));
     }
 }

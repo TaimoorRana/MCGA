@@ -14,15 +14,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.models.Transportation;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
-
-    /**
-     * Enum representing which transport type is selected
-     */
-    enum TransportType {
-        WALK, BIKE, CAR, PUBLIC_TRANSPORT, SHUTTLE
-    }
 
     //Floating Action Buttons
     private FloatingActionButton transportExpandFAB;
@@ -42,7 +36,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     //State
     private Boolean fabExpanded = false;
     private Boolean shuttleVisible = true;
-    private TransportType transportType;
+    private Transportation transportType;
 
     @Nullable
     @Override
@@ -78,8 +72,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         shuttleFAB.setOnClickListener(this);
 
         //Set initial transport type and icon
-        this.transportType = TransportType.PUBLIC_TRANSPORT;
-        swapIcons(R.drawable.ic_directions_transit_black_24dp);
+        this.transportType = Transportation.PUBLIC_TRANSPORT;
+        swapIcons(Transportation.PUBLIC_TRANSPORT.getIconID());
 
         return view;
     }
@@ -93,24 +87,24 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
                     restorePreviousIcon();
                 break;
             case R.id.walkFAB:
-                this.transportType = TransportType.WALK;
-                swapIcons(R.drawable.ic_directions_walk_black_24dp);
+                this.transportType = Transportation.WALK;
+                swapIcons(Transportation.WALK.getIconID());
                 break;
             case R.id.bikeFAB:
-                this.transportType = TransportType.BIKE;
-                swapIcons(R.drawable.ic_directions_bike_black_24dp);
+                this.transportType = Transportation.BIKE;
+                swapIcons(Transportation.BIKE.getIconID());
                 break;
             case R.id.carFAB:
-                this.transportType = TransportType.CAR;
-                swapIcons(R.drawable.ic_directions_car_black_24dp);
+                this.transportType = Transportation.CAR;
+                swapIcons(Transportation.CAR.getIconID());
                 break;
             case R.id.publicTransportFAB:
-                this.transportType = TransportType.PUBLIC_TRANSPORT;
-                swapIcons(R.drawable.ic_directions_transit_black_24dp);
+                this.transportType = Transportation.PUBLIC_TRANSPORT;
+                swapIcons(Transportation.PUBLIC_TRANSPORT.getIconID());
                 break;
             case R.id.shuttleFAB:
-                this.transportType = TransportType.SHUTTLE;
-                swapIcons(R.drawable.ic_stingers_icon);
+                this.transportType = Transportation.SHUTTLE;
+                swapIcons(Transportation.SHUTTLE.getIconID());
                 break;
         }
     }
@@ -343,7 +337,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         return transport_textview_close;
     }
 
-    public TransportType getTransportType() {
+    public Transportation getTransportType() {
         return transportType;
     }
 }

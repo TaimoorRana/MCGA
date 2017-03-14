@@ -87,9 +87,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 }
             }
         });
-        
+
         //Hide Fragments
-        showTransportButton(false);
+        showTransportButton(true);
 
         return parentLayout;
     }
@@ -295,4 +295,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         return outdoorMapVisible;
     }
 
+    public ViewType getViewType() {
+        return viewType;
+    }
 }
