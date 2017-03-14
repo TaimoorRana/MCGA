@@ -29,13 +29,26 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ShuttleActivity"></activity>
+
+        <activity
+            android:name=".ShuttleActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
     </application>
 
 </manifest>

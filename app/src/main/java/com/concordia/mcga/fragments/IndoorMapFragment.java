@@ -14,14 +14,15 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
-
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.factories.IndoorMapFactory;
-import com.concordia.mcga.models.IndoorMap;
+import com.concordia.mcga.exceptions.MCGAPathFindingException;
+import com.concordia.mcga.models.Building;
+import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorPOI;
-import com.concordia.mcga.utilities.pathfinding.PathFinder;
-import com.concordia.mcga.utilities.pathfinding.PathFinderTile;
-
+import com.concordia.mcga.utilities.pathfinding.IndoorMapTile;
+import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -37,10 +38,10 @@ public class IndoorMapFragment extends Fragment {
     private boolean pathsDrawn = false;
 
     //Test POIs for Demo
-    IndoorPOI H423 = new IndoorPOI(null, "H423", 4, 353, 1326);
-    IndoorPOI H436 = new IndoorPOI(null, "H436", 4, 1220, 594);
-    IndoorPOI H433 = new IndoorPOI(null, "H433", 4, 354, 57);
-    IndoorPOI H401 = new IndoorPOI(null, "H401", 4, 1972, 1616);
+    IndoorPOI H423 = new IndoorPOI(null, "H423", new IndoorMapTile(353, 1326));
+    IndoorPOI H436 = new IndoorPOI(null, "H436", new IndoorMapTile(1220, 594));
+    IndoorPOI H433 = new IndoorPOI(null, "H433", new IndoorMapTile(354, 57));
+    IndoorPOI H401 = new IndoorPOI(null, "H401", new IndoorMapTile(1972, 1616));
     private ArrayList<IndoorPOI> indoorPoiStack;
 
     @Override
@@ -80,24 +81,24 @@ public class IndoorMapFragment extends Fragment {
         leafletView.post(new Runnable() {
             @Override
             public void run() {
-                IndoorMap H4 = IndoorMapFactory.getHall4thFloor(getContext());
-                PathFinder pf = new PathFinder(H4.getMap());
+                Building hall = new Building(new LatLng(0,0), "Hall", "H", new MarkerOptions());
+                Floor H4 = hall.getFloorMap(4);
+                SingleMapPathFinder pf = new SingleMapPathFinder(H4.getMap());
 
-                ArrayList<PathFinderTile> shortestPath = null;
-                ArrayList<PathFinderTile> pathTilesJunctions = null;
+                ArrayList<IndoorMapTile> pathTilesJunctions = null;
 
                 try {
-                    pathTilesJunctions = (ArrayList<PathFinderTile>) pf.shortestPathJunctions(start.getIndoorCoordinateX(), start.getIndoorCoordinateY(), dest.getIndoorCoordinateX(), dest.getIndoorCoordinateY());
+                    pathTilesJunctions = (ArrayList<IndoorMapTile>) pf.shortestPathJunctions(start.getTile(), dest.getTile());
 
-                    Iterator<PathFinderTile> it2 = pathTilesJunctions.iterator();
+                    Iterator<IndoorMapTile> it2 = pathTilesJunctions.iterator();
                     while (it2.hasNext()) {
-                        PathFinderTile pft2 = it2.next();
+                        IndoorMapTile pft2 = it2.next();
                         Log.d("JCT: ", pft2.toString());
                     }
 
                     if (pageLoaded)
                         leafletView.evaluateJavascript("drawWalkablePath(" + pf.toJSONArray(pathTilesJunctions).toString() + ")", null);
-                } catch (Exception e) {
+                } catch (MCGAPathFindingException e) {
                     e.printStackTrace();
                 }
             }
