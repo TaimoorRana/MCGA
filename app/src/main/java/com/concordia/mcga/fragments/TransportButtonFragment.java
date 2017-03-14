@@ -1,9 +1,11 @@
 package com.concordia.mcga.fragments;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,9 @@ import com.concordia.mcga.activities.R;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
 
-    //Enum representing which transport type is selected
+    /**
+     * Enum representing which transport type is selected
+     */
     enum TransportType {
         WALK, BIKE, CAR, PUBLIC_TRANSPORT, SHUTTLE
     }
@@ -28,6 +32,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private FloatingActionButton publicTransportFAB;
     private FloatingActionButton shuttleFAB;
 
+
     //Text Views
     private TextView walkTextView, bikeTextView, carTextView, publicTransportTextView, shuttleTextView;
 
@@ -36,6 +41,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
 
     //State
     private Boolean fabExpanded = false;
+    private Boolean shuttleVisible = true;
     private TransportType transportType;
 
     @Nullable
@@ -43,7 +49,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.transport_button_fragment, container, false);
         //Initialize FABs
-       transportExpandFAB = (FloatingActionButton) view.findViewById(R.id.transportExpandFAB);
+        transportExpandFAB = (FloatingActionButton) view.findViewById(R.id.transportExpandFAB);
         walkFAB = (FloatingActionButton) view.findViewById(R.id.walkFAB);
         bikeFAB = (FloatingActionButton) view.findViewById(R.id.bikeFAB);
         carFAB = (FloatingActionButton) view.findViewById(R.id.carFAB);
@@ -109,7 +115,11 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    private void toggle() {
+    /**
+     * Expands and retracts the transport option buttons, performed automatically when the expand button is clicked. Use this to expand
+     * and retract the transport options programatically.
+     */
+    public void toggle() {
         if (fabExpanded) {
             fabExpanded = false;
             walkFAB.startAnimation(transport_fab_close);
@@ -128,9 +138,13 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             publicTransportTextView.startAnimation(transport_textview_close);
             publicTransportFAB.setClickable(false);
 
+
             shuttleFAB.startAnimation(transport_fab_close);
-            shuttleTextView.startAnimation(transport_textview_close);
-            shuttleFAB.setClickable(false);
+            if (shuttleVisible) {
+                shuttleTextView.startAnimation(transport_textview_close);
+                shuttleFAB.setClickable(false);
+            }
+
         } else {
             fabExpanded = true;
 
@@ -150,9 +164,12 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             publicTransportTextView.startAnimation(transport_textview_open);
             publicTransportFAB.setClickable(true);
 
+
             shuttleFAB.startAnimation(transport_fab_open);
-            shuttleTextView.startAnimation(transport_textview_open);
-            shuttleFAB.setClickable(true);
+            if (shuttleVisible) {
+                shuttleTextView.startAnimation(transport_textview_open);
+                shuttleFAB.setClickable(true);
+            }
 
             swapIcons(R.drawable.ic_close_black_24dp);
         }
@@ -174,8 +191,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
 
     private String formatTime(int hours, int minutes) {
         String time = null;
-        if (hours > 0) {
-            time =  hours + "h" + " " + minutes + "min";
+        if (hours > 0 && minutes > 0) {
+            time = hours + "h" + " " + minutes + "min";
         } else if (hours == 0) {
             time = minutes + "min";
         } else if (minutes == 0) {
@@ -185,7 +202,24 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     /**
+     *  Disabled the shuttle transport option by greying it out and disable any click activity
+     * @param isDisabled
+     */
+    public void disableShuttle(boolean isDisabled) {
+        if (isDisabled) {
+            this.shuttleFAB.setClickable(false);
+            this.shuttleFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.grey)));
+            this.shuttleVisible = false;
+        } else {
+            this.shuttleFAB.setClickable(true);
+            this.shuttleFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorPrimary)));
+            this.shuttleVisible = true;
+        }
+    }
+
+    /**
      * Sets the value of the walk time textbox
+     *
      * @param hours
      * @param minutes
      */
@@ -195,6 +229,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
 
     /**
      * Sets the value of the bike time textbox
+     *
      * @param hours
      * @param minutes
      */
@@ -204,6 +239,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
 
     /**
      * Sets the value of the car time textbox
+     *
      * @param hours
      * @param minutes
      */
@@ -213,6 +249,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
 
     /**
      * Sets the value of the public transport time textbox
+     *
      * @param hours
      * @param minutes
      */
@@ -222,6 +259,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
 
     /**
      * Sets the value of the concordia shuttle time textbox
+     *
      * @param hours
      * @param minutes
      */
@@ -232,16 +270,80 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     /* Getters */
 
     /**
-     * @return True if the the option buttons are expanded, false otherwise
+     * @return True if the option buttons are expanded, false otherwise
      */
     public Boolean isExpanded() {
         return fabExpanded;
     }
 
     /**
-     * @return The transport type that has been selected, or the default (Public Transport)
+     * @return True if the shuttle icon is active
      */
-    public TransportType getSelectedTransportType() {
-        return this.transportType;
+    public Boolean isShuttleVisible() {
+        return shuttleVisible;
+    }
+
+    public FloatingActionButton getTransportExpandFAB() {
+        return transportExpandFAB;
+    }
+
+    public FloatingActionButton getWalkFAB() {
+        return walkFAB;
+    }
+
+    public FloatingActionButton getBikeFAB() {
+        return bikeFAB;
+    }
+
+    public FloatingActionButton getCarFAB() {
+        return carFAB;
+    }
+
+    public FloatingActionButton getPublicTransportFAB() {
+        return publicTransportFAB;
+    }
+
+    public FloatingActionButton getShuttleFAB() {
+        return shuttleFAB;
+    }
+
+    public TextView getWalkTextView() {
+        return walkTextView;
+    }
+
+    public TextView getBikeTextView() {
+        return bikeTextView;
+    }
+
+    public TextView getCarTextView() {
+        return carTextView;
+    }
+
+    public TextView getPublicTransportTextView() {
+        return publicTransportTextView;
+    }
+
+    public TextView getShuttleTextView() {
+        return shuttleTextView;
+    }
+
+    public Animation getTransport_fab_open() {
+        return transport_fab_open;
+    }
+
+    public Animation getTransport_fab_close() {
+        return transport_fab_close;
+    }
+
+    public Animation getTransport_textview_open() {
+        return transport_textview_open;
+    }
+
+    public Animation getTransport_textview_close() {
+        return transport_textview_close;
+    }
+
+    public TransportType getTransportType() {
+        return transportType;
     }
 }
