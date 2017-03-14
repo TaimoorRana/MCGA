@@ -11,3 +11,5 @@ def process(filename):
                 f.write(str(y) + ',' + str(x) + '\n')
 
 process('Concordia-Floor-Map-H4')
+process('Concordia-Floor-Map-H2')
+process('Concordia-Floor-Map-H1')
