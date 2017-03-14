@@ -361,7 +361,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, CAMPUS_DEFAULT_ZOOM_LEVEL));//Camera Update method
             }
         }
-
     }
 
     private enum ViewType {
