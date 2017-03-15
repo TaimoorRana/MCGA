@@ -1,9 +1,22 @@
 package com.concordia.mcga.fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
@@ -23,6 +37,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
@@ -30,10 +45,29 @@ import com.google.android.gms.maps.model.Polygon;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.LOCATION_SERVICE;
+
 public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject {
 
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
+    Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
+    LocationListener gpsListen = new LocationListener() {
+        public void onLocationChanged(Location location) {
+            //Method called when new location is found by the network
+
+            Log.d("Message: ", "Location changed," + location.getLatitude() + "," + location.getLongitude() + ".");
+        }
+
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+    };
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
     //State
@@ -46,6 +80,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     //View Components
     private Button campusButton;
     private Button viewSwitchButton;
+    private FloatingActionButton mapCenterButton;
+    private EditText navigationSearch;
+    //GPS attributes
+    private LocationManager gpsmanager; //LocationManager instance to check gps activity
+    private LatLng myPosition; //Creating LatLng to store current position
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,8 +95,36 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Init Fragments
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
         indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
-
         //Init View Components
+        navigationSearch = (EditText) parentLayout.findViewById(R.id.navigationSearch);
+        mapCenterButton = (FloatingActionButton) parentLayout.findViewById(R.id.mapCenterButton);
+        mapCenterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Testing mapCenterButton", "Initializing OnClickListener");
+                if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    Log.d("Testing AlertGPS Launch", "Initializing method");
+                    AlertGPS();
+                    Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
+
+                }
+                Log.d("Testing", "Checkpoint 1 - Button initializer");
+                if (viewType == ViewType.INDOOR) {
+                    viewType = ViewType.OUTDOOR;
+                    getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
+                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit(); //To be removed after Outside transportation Google API incorporation
+                    campusButton.setVisibility(View.VISIBLE);
+                    viewSwitchButton.setText("GO INDOORS");
+                }
+                if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to a ton of changes depending on how MCGA-12 goes
+                    navigationSearch.setText("");
+                }
+
+                locateMe();
+
+            }
+        });
+
         campusButton = (Button) parentLayout.findViewById(R.id.campusButton);
         viewSwitchButton = (Button) parentLayout.findViewById(R.id.viewSwitchButton);
         viewSwitchButton.setText("GO INDOORS");
@@ -92,6 +159,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        gpsmanager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -112,7 +180,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 updateCampus();
             }
         });
-
         //Show outdoor map on start
         getFragmentManager().beginTransaction().show(mapFragment).commit();
     }
@@ -124,6 +191,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
+        map.getUiSettings().setAllGesturesEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
 
         //Map Customization
         applyCustomGoogleMapsStyle();
@@ -140,7 +209,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         final List<Building> sgwBuildings = Campus.SGW.getBuildings();
         final List<Building> loyBuildings = Campus.LOY.getBuildings();
 
-
         for (Building building : sgwBuildings) {
             createBuildingMarkersAndPolygonOverlay(building);
         }
@@ -155,7 +223,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                  * ONLY FOR DEMO PURPOSES
                  */
                 Building building = Campus.SGW.getBuilding(polygon);
-                if(building == null){
+                if (building == null) {
                     building = Campus.LOY.getBuilding(polygon);
                 }
                 ((MainActivity) getActivity()).createToast(building.getShortName());
@@ -169,7 +237,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                  * ONLY FOR DEMO PURPOSES
                  */
                 Building building = Campus.SGW.getBuilding(marker);
-                if(building == null){
+                if (building == null) {
                     building = Campus.LOY.getBuilding(marker);
                 }
                 ((MainActivity) getActivity()).createToast(building.getShortName());
@@ -205,7 +273,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             boolean success = map.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                             getActivity(), R.raw.style_json));
-
             if (!success) {
                 Log.e("Google Map Style", "Style parsing failed.");
             }
@@ -250,8 +317,53 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
+    public void AlertGPS() { //GPS detection method
+        Log.e("Testing Alert GPS", "Alert GPS Start");
+        AlertDialog.Builder build = new AlertDialog.Builder(
+                mapFragment.getActivity());
+        Log.e("Testing Alert GPS", "AlertDialog builder successful");
+        build
+                .setTitle("GPS Detection Services")
+                .setMessage("GPS is disabled in your device. Enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Enable GPS",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(i);
+                            }
+                        });
+        build.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = build.create();
+        alert.show();
+    }
+
+    public void locateMe() {
+        if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1500, 2, gpsListen); //Enable Network Provider updates
+            gpsmanager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, gpsListen); //Enable GPS Provider updates - Both can be enabled on one instance of a location manager, this helps the getBestProvider be selected.
+            gpsmanager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE); // Getting LocationManager object from System Service LOCATION_SERVICE
+            String provider = gpsmanager.getBestProvider(criteria, true);// Getting the name of the best provider
+            //Remember last known location in case of GPS instability
+            map.setMyLocationEnabled(true);
+            Location location = gpsmanager.getLastKnownLocation(provider);
+            if (location != null) {
+                double latitude = location.getLatitude(); //Getting latitude of the current location
+                double longitude = location.getLongitude(); // Getting longitude of the current location
+                myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, CAMPUS_DEFAULT_ZOOM_LEVEL));//Camera Update method
+            }
+        }
+    }
+
     private enum ViewType {
         INDOOR, OUTDOOR
     }
-
 }
