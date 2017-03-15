@@ -1,6 +1,5 @@
 package com.concordia.mcga.models;
 
-import com.concordia.mcga.utilities.pathfinding.IndoorMapTile;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;

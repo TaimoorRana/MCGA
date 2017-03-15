@@ -1,6 +1,7 @@
 package com.concordia.mcga.utilities.pathfinding;
 
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
+import com.concordia.mcga.models.IndoorMapTile;
 
 public class TiledMap {
     private PathFinderTile[][] allTiles;
