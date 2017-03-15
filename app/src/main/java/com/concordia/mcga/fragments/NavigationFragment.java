@@ -204,14 +204,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         //Map Customization
         applyCustomGoogleMapsStyle();
         Campus.populateCampusesWithBuildings();
-        addBuildingMarkers();
+        addBuildingMarkersAndPolygons();
 
         updateCampus();
     }
 
-    private void addBuildingMarkers() {
-        List<Building> sgwBuildings = Campus.SGW.getBuildings();
-        List<Building> loyBuildings = Campus.LOY.getBuildings();
+    /**
+     * add markers and polygons overlay for each building
+     */
+    private void addBuildingMarkersAndPolygons() {
+        final List<Building> sgwBuildings = Campus.SGW.getBuildings();
+        final List<Building> loyBuildings = Campus.LOY.getBuildings();
 
 
         for (Building building : sgwBuildings) {
@@ -236,6 +239,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         });
     }
 
+    /**
+     * Create markers and polygons overlay for each building
+     */
     private void createBuildingMarkersAndPolygonOverlay(Building building) {
         register(building);
 
@@ -248,10 +254,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         Marker marker = map.addMarker(building.getMarkerOptions());
         multiBuildingMap.put(marker.getId(), building);
 
+        building.setPolygon(polygon);
         building.setMarker(marker);
     }
 
+
+    /**
+     * Applying custom google map style in order to get rid of unwanted POI and other information that is not useful to our application
+     */
     private void applyCustomGoogleMapsStyle() {
+        map.setIndoorEnabled(false);
         try {
             // Customise the styling of the base map using a JSON object define
             // in a raw resource file.
@@ -267,10 +279,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    /**
+     * Applying custom google map style in order to get rid of unwanted POI and other information that is not useful to our application
+     */
     void updateCampus() {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentCampus.getMapCoordinates(), CAMPUS_DEFAULT_ZOOM_LEVEL));
     }
 
+    /**
+     * When the camera idles, notify the observers
+     */
     @Override
     public void onCameraIdle() {
         notifyObservers();

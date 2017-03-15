@@ -1,41 +1,69 @@
 package com.concordia.mcga.models;
 
 import com.google.android.gms.maps.model.LatLng;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class IndoorPOI extends POI {
-    private int floorNumber;
-    private int indoorCoordinateX;
-    private int indoorCoordinateY;
+    private Floor floor;
+    private IndoorMapTile tile;
 
-    public IndoorPOI(LatLng mapCoordinates, String name,
-        int floorNumber, int indoorCoordinateX, int indoorCoordinateY) {
+    public IndoorPOI(LatLng mapCoordinates, String name, IndoorMapTile tile) {
         super(mapCoordinates, name);
-        this.floorNumber = floorNumber;
-        this.indoorCoordinateX = indoorCoordinateX;
-        this.indoorCoordinateY = indoorCoordinateY;
+        this.tile = tile;
     }
 
-    public int getFloorNumber() {
-        return floorNumber;
+    public IndoorMapTile getTile() {
+        return tile;
     }
 
-    public void setFloorNumber(int floorNumber) {
-        this.floorNumber = floorNumber;
+    public void setTile(IndoorMapTile tile) {
+        this.tile = tile;
     }
 
-    public int getIndoorCoordinateX() {
-        return indoorCoordinateX;
+    public Floor getFloor() {
+        return floor;
     }
 
-    public void setIndoorCoordinateX(int indoorCoordinateX) {
-        this.indoorCoordinateX = indoorCoordinateX;
+    public void setFloor(Floor floor) {
+        this.floor = floor;
     }
 
-    public int getIndoorCoordinateY() {
-        return indoorCoordinateY;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        IndoorPOI indoorPOI = (IndoorPOI) o;
+
+        return new EqualsBuilder()
+            .appendSuper(super.equals(o))
+            .append(floor, indoorPOI.floor)
+            .append(tile, indoorPOI.tile)
+            .isEquals();
     }
 
-    public void setIndoorCoordinateY(int indoorCoordinateY) {
-        this.indoorCoordinateY = indoorCoordinateY;
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+            .appendSuper(super.hashCode())
+            .append(floor)
+            .append(tile)
+            .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+            .append("floor", floor)
+            .append("tile", tile)
+            .toString();
+    }
+
 }
