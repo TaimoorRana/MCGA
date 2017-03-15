@@ -104,15 +104,6 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
     }
 
     /**
-     * Helper function to determine whether a given filtered POI list (from the query) is empty
-     * @param index The campus to query
-     * @return True if the query-filtered campus list is empty, false if it has items
-     */
-    public boolean getGroupIsEmpty(int index) {
-        return masterList.get(index).isEmpty();
-    }
-
-    /**
      * Inflates and returns the view associated with the index-specified campus or POI group
      * @param groupPosition POIgroup index
      * @param b Whether the group is collapsed or expanded
