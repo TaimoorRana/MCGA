@@ -84,9 +84,20 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String[]> {
             try {
                 for (int i = 0; i < IMAGES_PER_ROW; i++) {
                     switch (image[i]) {
+
+                        // This case is used for testing.
+
                         case "up":
                             imageView[i].setImageResource(R.drawable.ic_arrow_upward_black_24dp);
                             break;
+
+
+
+                                                //////////
+                                                // HALL //
+                                                //////////
+
+
 
                         case "asfa":
                             imageView[i].setImageResource(R.mipmap.ic_asfa);
@@ -112,9 +123,62 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String[]> {
                             imageView[i].setImageResource(R.mipmap.ic_space);
                             break;
 
+                        case "sasu":
+                            imageView[i].setImageResource(R.mipmap.ic_sasu);
+                            break;
+
+                        case "cssu":
+                           imageView[i].setImageResource(R.mipmap.ic_ccsu);
+                            break;
+
                         case "stinger":
                             imageView[i].setImageResource(R.mipmap.ic_stringer);
                             break;
+
+
+
+                                            ////////
+                                            // MB //
+                                            ////////
+
+
+                        case "jmac":
+                            imageView[i].setImageResource(R.mipmap.ic_jmac);
+                            break;
+
+                        case "jmiba":
+                            imageView[i].setImageResource(R.mipmap.ic_jmiba);
+                            break;
+
+                        case "jmsb_case_comp":
+                            imageView[i].setImageResource(R.mipmap.ic_jmsb_case_comp);
+                            break;
+
+                        case "jmma":
+                            imageView[i].setImageResource(R.mipmap.ic_jmma);
+                            break;
+
+                        case "jsec":
+                            imageView[i].setImageResource(R.mipmap.ic_jsec);
+                            break;
+
+                        case "jmas":
+                            imageView[i].setImageResource(R.mipmap.ic_jmas);
+                            break;
+
+                        case "fisa":
+                            imageView[i].setImageResource(R.mipmap.ic_fisa);
+                            break;
+
+                        case "jmucc":
+                            imageView[i].setImageResource(R.mipmap.ic_jmucc);
+                            break;
+
+
+                                         ///////////////
+                                         // None case //
+                                         ///////////////
+
 
                         case "none":
                             break;
