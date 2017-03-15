@@ -42,10 +42,13 @@ public class Campus extends POI {
             throw new Error("Database not initialized");
         }
         while (res.moveToNext()) {
+            Building building = BuildingFactory.createBuilding(res);
+            building.populateRooms();
+
             if (res.getString(CAMPUS_COLUMN_INDEX).equalsIgnoreCase(SGW.getShortName())) {
-                SGW.buildings.add(BuildingFactory.createBuilding(res));
+                SGW.buildings.add(building);
             } else {
-                LOY.buildings.add(BuildingFactory.createBuilding(res));
+                LOY.buildings.add(building);
             }
         }
         res.close();
