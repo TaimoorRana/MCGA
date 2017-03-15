@@ -1,35 +1,25 @@
 package com.concordia.mcga.fragments;
 
-import android.content.Intent;
+
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.adapters.BuildingInformationArrayAdapter;
 import com.concordia.mcga.lib.BuildingBottomSheetInfo;
-
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
-
 import java.util.ArrayList;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
-import static org.robolectric.util.FragmentTestUtil.startFragment;
+import static org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startFragment;
 
 
 

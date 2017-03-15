@@ -1,10 +1,9 @@
 package com.concordia.mcga.fragments;
 
-import android.app.Fragment;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
-
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,13 +53,69 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         parentLayout = (LinearLayoutCompat) inflater.inflate(R.layout.nav_main_fragment, container, false);
 
+        //Init Fragments
+        transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
+        indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
 
+        //Init View Components
+        campusButton = (Button) parentLayout.findViewById(R.id.campusButton);
+        viewSwitchButton = (Button) parentLayout.findViewById(R.id.viewSwitchButton);
+        viewSwitchButton.setText("GO INDOORS");
+        viewSwitchButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewType == ViewType.OUTDOOR) {
+                    viewType = ViewType.INDOOR;
+                    getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
+                    getChildFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
+                    campusButton.setVisibility(View.GONE);
+                    viewSwitchButton.setText("GO OUTDOORS");
+                } else {
+                    viewType = ViewType.OUTDOOR;
+                    getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
+                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit();
+                    campusButton.setVisibility(View.VISIBLE);
+                    viewSwitchButton.setText("GO INDOORS");
+                }
+            }
+        });
+
+        //Set initial view type
+        viewType = ViewType.OUTDOOR;
+
+        //Hide Indoor Fragment
+        getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
 
         return parentLayout;
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
+        Button toggleButton = (Button) getView().findViewById(R.id.campusButton);
+        toggleButton.setBackgroundColor(Color.parseColor("#850f02"));
+        toggleButton.setTextColor(Color.WHITE);
+        toggleButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentCampus == Campus.LOY) {
+                    currentCampus = Campus.SGW;
+                } else {
+                    currentCampus = Campus.LOY;
+                }
+                updateCampus();
+            }
+        });
+
+        //Show outdoor map on start
+        getFragmentManager().beginTransaction().show(mapFragment).commit();
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -103,8 +158,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 if(building == null){
                     building = Campus.LOY.getBuilding(polygon);
                 }
-                // Won't compile
-                //((MainActivity) getActivity()).createToast(building.getShortName());
+                ((MainActivity) getActivity()).createToast(building.getShortName());
 
             }
         });
@@ -118,9 +172,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 if(building == null){
                     building = Campus.LOY.getBuilding(marker);
                 }
-                // wont compile
-                // wont compile
-                //((MainActivity) getActivity()).createToast(building.getShortName());
+                ((MainActivity) getActivity()).createToast(building.getShortName());
                 return true;
             }
         });

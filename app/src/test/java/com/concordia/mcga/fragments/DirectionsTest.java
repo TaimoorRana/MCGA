@@ -27,7 +27,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
-import static org.robolectric.util.FragmentTestUtil.startFragment;
+import static org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startFragment;
 
 
 @RunWith(RobolectricTestRunner.class)
