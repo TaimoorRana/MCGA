@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.concordia.mcga.lib.BuildingBottomSheetInfo;
 
 import java.util.ArrayList;
 
+import static android.content.ContentValues.TAG;
 import static android.support.design.R.styleable.CoordinatorLayout;
 
 
@@ -41,8 +43,12 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
 
     // Array adapter
     private BuildingInformationArrayAdapter adapter;
-    private ArrayList<String> images = new ArrayList<String>();
-    private ArrayList<String> rowImages = new ArrayList<String>();
+
+    // Arraylist containing all images
+    private ArrayList<String[]> rowImages = new ArrayList<String[]>();
+
+    // 4 images per row
+    private final int IMAGES_PER_ROW = 4;
 
     // Main view
     private View view = null;
@@ -74,6 +80,20 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         setupBottomSheetBehavior();
         overrideBottomSheetCallBack();
         setupListAdapter();
+        String[] test1 = new String[4];
+        String[] test2 = new String[4];
+        test1[0] = "space";
+        test1[1] = "scs";
+        test1[2] = "hive";
+        test1[3] = "csu";
+        addImages(test1);
+        adapter.notifyDataSetChanged();
+        test2[0] = "lifting";
+        test2[1] = "csu";
+        test2[2] = "none";
+        test2[3] = "hive";
+        addImages(test2);
+        adapter.notifyDataSetChanged();
         return view;
     }
 
@@ -145,7 +165,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
      * Instanciate the arraylist adapter and assign it to the list
      */
     private void setupListAdapter(){
-        adapter = new BuildingInformationArrayAdapter(getActivity().getApplicationContext(), images);
+        adapter = new BuildingInformationArrayAdapter(getActivity().getApplicationContext(), rowImages);
         adapter.notifyDataSetChanged();
         list.setAdapter(adapter);
     }
@@ -211,45 +231,51 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
     /**
      * Updates the row of images associate to the building information. Works
      * similarly to a unit of Work
+     * The array adapter cannot take a String array as a value
      */
     public void updateImageRow(){
-        int imagesPerRow = 4;
-        String img = "";
-        for (int i = 0; i < rowImages.size(); i++){
-            img += rowImages.get(i);
-
-            if ((i + 1) % imagesPerRow ==0){
-                images.add(img);
-                adapter.notifyDataSetChanged();
-                img = "";
-            }
-            else if(i == rowImages.size() - 1){
-                images.add(img);
-                adapter.notifyDataSetChanged();
-                img = "";
-            }
-            else{
-                img += "-";
-            }
-        }
+        adapter.notifyDataSetChanged();
     }
 
     /**
      * Clears array containing all image information
      */
     public void clear(){
-        images.clear();
         rowImages.clear();
         updateImageRow();
     }
 
+    /**
+     * Removes a row from the array list
+     * Catches out of bounds exception
+     * @param index
+     */
+    public void remove(int index){
+        try {
+            rowImages.remove(index);
+        }
+        catch (IndexOutOfBoundsException e){
+            Log.e(TAG, "Exception: "+ Log.getStackTraceString(e));
+        }
+    }
+
 
     /**
-     * Adds an image to the array
+     * Adds an image to the array.. If array passed is greater than 4
+     * then catched exception
      * @param image
      */
-    public void addImage(String image){
-        rowImages.add(image);
+    public void addImages(String[] image){
+        try {
+            String[] temp = new String[IMAGES_PER_ROW];
+            for (int i = 0; i < image.length; i++){
+                temp[i] = image[i];
+            }
+            rowImages.add(temp);
+        }
+        catch(ArrayIndexOutOfBoundsException e){
+            Log.e(TAG, "Exception: "+ Log.getStackTraceString(e));
+        }
     }
 
 
@@ -362,19 +388,12 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         return adapter;
     }
 
-    /**
-     *
-     * @return Array List
-     */
-    public ArrayList<String> getImages() {
-        return images;
-    }
 
     /**
      *
      * @return ArrayList
      */
-    public ArrayList<String> getRowImages() {
+    public ArrayList<String[]> getRowImages() {
         return rowImages;
     }
 

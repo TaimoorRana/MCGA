@@ -1,6 +1,7 @@
 package com.concordia.mcga.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,21 +13,25 @@ import com.concordia.mcga.activities.R;
 
 import java.util.ArrayList;
 
+import static android.content.ContentValues.TAG;
+import static com.concordia.mcga.activities.R.id.imageView;
 
 
-
-
-public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
+public class BuildingInformationArrayAdapter extends ArrayAdapter<String[]> {
 
     ////////////////////////////////////////////////////////////
     // INSTANCE VARIABLES
     ////////////////////////////////////////////////////////////
 
+    private final int IMAGES_PER_ROW = 4;
+
     private final Context context;
-    private ArrayList<String> information = new ArrayList<String>();
-    private int index = 0;
-    private ImageView imageView[] = new ImageView[4];
-    private String[] imageString = new String[4];
+    private ArrayList<String[]> rowImages = new ArrayList<String[]>();
+
+    // 4 images per per row
+    private String[] image = new String[IMAGES_PER_ROW];
+    private ImageView[] imageView = new ImageView[IMAGES_PER_ROW];
+
 
 
     ////////////////////////////////////////////////////////////
@@ -36,12 +41,12 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
     /**
      * Constructor
      * @param context application context
-     * @param information Constains the list of images to display
+     * @param rowImages Contains the list of images to display
      */
-    public BuildingInformationArrayAdapter(Context context, ArrayList<String> information) {
-        super(context, R.layout.building_info_list, information);
+    public BuildingInformationArrayAdapter(Context context, ArrayList<String[]> rowImages) {
+        super(context, R.layout.building_info_list, rowImages);
         this.context = context;
-        this.information = information;
+        this.rowImages = rowImages;
 
     }
 
@@ -57,33 +62,72 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Inflate Layout + get view
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.building_info_list, parent, false);
-        // Get Ids of layout
-        imageView[0] = (ImageView) rowView.findViewById(R.id.buildingImage1);
-        imageView[1] = (ImageView) rowView.findViewById(R.id.buildingImage2);
-        imageView[2] = (ImageView) rowView.findViewById(R.id.buildingImage3);
-        imageView[3] = (ImageView) rowView.findViewById(R.id.buildingImage4);
+        View rowView = null;
 
-        String[] image = information.get(position).split("-");
-        int imagesPerRow = 4;
-
-        // This will display a maximum of 4 images per row
         try {
-            for (int i = 0; i < imagesPerRow; i ++) {
-                switch (image[i]) {
-                    case "up":
-                        imageView[i].setImageResource(R.drawable.ic_arrow_upward_black_24dp);
-                        break;
+            rowView = inflater.inflate(R.layout.building_info_list, parent, false);
 
-                    case "none":
-                        break;
-                    default:
-                        break;
+            // Get Ids of layout
+            imageView[0] = (ImageView) rowView.findViewById(R.id.buildingImage1);
+            imageView[1] = (ImageView) rowView.findViewById(R.id.buildingImage2);
+            imageView[2] = (ImageView) rowView.findViewById(R.id.buildingImage3);
+            imageView[3] = (ImageView) rowView.findViewById(R.id.buildingImage4);
+
+            // associate the string of an image to the corresponding picture
+            // Will take the row at index 'position' in the arraylist and assign
+            // the correct string to the image array
+            for (int i = 0; i < IMAGES_PER_ROW; i++) {
+                image[i] = rowImages.get(position)[i];
+            }
+
+            // This will display a maximum of 4 images per row
+            try {
+                for (int i = 0; i < IMAGES_PER_ROW; i++) {
+                    switch (image[i]) {
+                        case "up":
+                            imageView[i].setImageResource(R.drawable.ic_arrow_upward_black_24dp);
+                            break;
+
+                        case "asfa":
+                            imageView[i].setImageResource(R.mipmap.ic_asfa);
+                            break;
+
+                        case "csu":
+                            imageView[i].setImageResource(R.mipmap.ic_csu);
+                            break;
+
+                        case "hive":
+                            imageView[i].setImageResource(R.mipmap.ic_hive);
+                            break;
+
+                        case "lifting":
+                            imageView[i].setImageResource(R.mipmap.ic_lifting);
+                            break;
+
+                        case "scs":
+                            imageView[i].setImageResource(R.mipmap.ic_scs);
+                            break;
+
+                        case "space":
+                            imageView[i].setImageResource(R.mipmap.ic_space);
+                            break;
+
+                        case "stinger":
+                            imageView[i].setImageResource(R.mipmap.ic_stringer);
+                            break;
+
+                        case "none":
+                            break;
+                        default:
+                            break;
+                    }
                 }
+            } catch (Exception e) {
+                Log.e(TAG, "Exception: " + Log.getStackTraceString(e));
             }
         }
-        catch (Exception e){
-
+        catch(NullPointerException e){
+            Log.e(TAG, "Exception: " + Log.getStackTraceString(e));
         }
         return rowView;
     }
@@ -96,9 +140,9 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
 
     /**
      *
-     * @return ArrayList information
+     * @return ArrayList images
      */
-    public ArrayList<String> getInformation(){
-        return information;
+    public ArrayList<String[]> getRowImages(){
+        return rowImages;
     }
 }

@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 
@@ -31,7 +31,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
 import static org.robolectric.util.FragmentTestUtil.startFragment;
 
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class,sdk = 21)
 /**
  * Created by root on 3/11/17.
@@ -41,6 +41,8 @@ public class BuildingInfoTest {
     MainActivity mainActivity;
     private ActivityController<MainActivity> controller;
     private BuildingBottomSheetInfo behavior = null;
+
+    private final int IMAGES_PER_ROW = 4;
 
     // UI elements
     private ImageButton expandButton = null;
@@ -201,30 +203,50 @@ public class BuildingInfoTest {
 
     @Test
     public void AddImage_ArrayUpdated_True(){
-        ArrayList<String> array = new ArrayList<String>();
-        myFragment.addImage("up");
+        ArrayList<String[]> array = new ArrayList<String[]>();
+        String[] someImages = new String[IMAGES_PER_ROW];
+
+        someImages[0] = "up";
+        someImages[1] = "up";
+        someImages[2] = "up";
+        someImages[3] = "up";
+
+
+        myFragment.addImages(someImages);
         array = myFragment.getRowImages();
-        assertEquals(array.get(0), "up");
+        assertEquals(array.get(0)[0], "up");
     }
 
     @Test
     public void UpdateImages_ArrayUpdated_True(){
-        ArrayList<String> array = new ArrayList<String>();
-        myFragment.addImage("up");
+        ArrayList<String[]> array = new ArrayList<String[]>();
+        String[] someImages = new String[IMAGES_PER_ROW];
+
+        someImages[0] = "up";
+        someImages[1] = "up";
+        someImages[2] = "up";
+        someImages[3] = "up";
+        myFragment.addImages(someImages);
+
         myFragment.updateImageRow();
-        array = myFragment.getImages();
+        array = myFragment.getRowImages();
         assertNotNull(array.get(0));
     }
 
     @Test public void ClearImages_ArrayIsSize0_True(){
-        ArrayList<String> array1 = new ArrayList<String>();
-        ArrayList<String> array2 = new ArrayList<String>();
-        myFragment.addImage("up");
+        ArrayList<String[]> array = new ArrayList<String[]>();
+
+        String[] someImages = new String[IMAGES_PER_ROW];
+        someImages[0] = "up";
+        someImages[1] = "up";
+        someImages[2] = "up";
+        someImages[3] = "up";
+
+        myFragment.addImages(someImages);
         myFragment.updateImageRow();
         myFragment.clear();
-        array1 = myFragment.getImages();
-        array2 = myFragment.getRowImages();
-        assertEquals(array1.size(), 0);
-        assertEquals(array2.size(), 0);
+
+        array = myFragment.getRowImages();
+        assertEquals(array.size(), 0);
     }
 }

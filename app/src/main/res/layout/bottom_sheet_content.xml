@@ -59,7 +59,6 @@
                         android:id="@+id/bottom_sheet_title"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="Title dummy"
                         android:textColor="?android:attr/textColorPrimaryNoDisable"
                         android:textSize="24sp"
                         android:textAlignment="center"

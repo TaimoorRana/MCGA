@@ -9,7 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.robolectric.RobolectricGradleTestRunner;
+
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
@@ -18,10 +19,8 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Charmander on 3/12/2017.
- */
-@RunWith(RobolectricGradleTestRunner.class)
+
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class,sdk = 21)
 
 public class DirectionArrayAdapterTest {

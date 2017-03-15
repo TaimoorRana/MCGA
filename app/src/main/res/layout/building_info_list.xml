@@ -20,7 +20,6 @@
             app:srcCompat="@drawable/cast_ic_notification_stop_live_stream"
             android:id="@+id/buildingImage1"
             android:layout_weight="0.1"
-            android:padding="10dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_marginStart="35dp" />
@@ -31,7 +30,6 @@
             app:srcCompat="@drawable/cast_ic_mini_controller_stop_large"
             android:id="@+id/buildingImage2"
             android:layout_weight="0.1"
-            android:padding="10dp"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/buildingImage1"
             android:layout_marginStart="35dp" />
@@ -39,23 +37,21 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/cast_ic_mini_controller_play_large"
-            android:id="@+id/buildingImage3"
-            android:layout_weight="0.1"
-            android:padding="10dp"
-            android:layout_marginStart="35dp"
+            app:srcCompat="@drawable/cast_ic_mini_controller_stop_large"
+            android:id="@+id/buildingImage4"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/buildingImage2" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="35dp" />
 
         <ImageView
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/cast_ic_mini_controller_stop_large"
-            android:id="@+id/buildingImage4"
-            android:padding="10dp"
+            app:srcCompat="@drawable/cast_ic_mini_controller_play_large"
+            android:id="@+id/buildingImage3"
+            android:layout_weight="0.1"
+            android:layout_marginStart="37dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="35dp" />
+            android:layout_toEndOf="@+id/buildingImage2" />
     </RelativeLayout>
 
 </LinearLayout>

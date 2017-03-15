@@ -1,39 +1,23 @@
 package com.concordia.mcga.adapters;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.concordia.mcga.activities.BuildConfig;
-import com.concordia.mcga.activities.MainActivity;
-import com.concordia.mcga.activities.R;
-import com.concordia.mcga.fragments.BottomSheetBuildingInfoFragment;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.util.ActivityController;
-
 import java.util.ArrayList;
-
-import static android.support.v7.appcompat.R.styleable.View;
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static org.robolectric.util.FragmentTestUtil.startFragment;
 
-/**
- * Created by root on 3/12/17.
- */
-@RunWith(RobolectricGradleTestRunner.class)
+
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class,sdk = 21)
 public class BuildingInfoAdapterTest {
 
@@ -41,8 +25,10 @@ public class BuildingInfoAdapterTest {
     private BuildingInformationArrayAdapter adapter = null;
 
     // List passed to the adapter
-    private ArrayList<String> images = new ArrayList<String>();
+    private ArrayList<String[]> rowImages = new ArrayList<String[]>();
 
+    private final int IMAGES_PER_ROW = 4;
+    private String[] images = new String [IMAGES_PER_ROW];
 
     // Other variables
     Context context;
@@ -53,7 +39,7 @@ public class BuildingInfoAdapterTest {
     public void setUp() throws Exception {
         context = Mockito.mock(Context.class);
         when(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).thenReturn(null);
-        adapter = new BuildingInformationArrayAdapter(context, images);
+        adapter = new BuildingInformationArrayAdapter(context, rowImages);
     }
 
     @Test
@@ -63,10 +49,15 @@ public class BuildingInfoAdapterTest {
 
     @Test
     public void AddingImages_UpdateArray_True(){
-        images.add("up");
+        images[0] = "up";
+        images[1] = "up";
+        images[2] = "up";
+        images[3] = "up";
+
+        rowImages.add(images);
         adapter.notifyDataSetChanged();
-        ArrayList<String> dummyArray = adapter.getInformation();
-        assertTrue(dummyArray.get(0).equals("up"));
+        ArrayList<String[]> dummyArray = adapter.getRowImages();
+        assertTrue(dummyArray.get(0)[0].equals("up"));
     }
 
     @Test

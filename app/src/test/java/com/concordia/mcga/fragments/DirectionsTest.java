@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 
@@ -29,10 +29,8 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
 import static org.robolectric.util.FragmentTestUtil.startFragment;
 
-/**
- * Created by Charmander on 3/12/2017.
- */
-@RunWith(RobolectricGradleTestRunner.class)
+
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class,sdk = 21)
 public class DirectionsTest {
     // Layout elements
