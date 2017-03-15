@@ -80,20 +80,6 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         setupBottomSheetBehavior();
         overrideBottomSheetCallBack();
         setupListAdapter();
-        String[] test1 = new String[4];
-        String[] test2 = new String[4];
-        test1[0] = "space";
-        test1[1] = "scs";
-        test1[2] = "hive";
-        test1[3] = "csu";
-        addImages(test1);
-        adapter.notifyDataSetChanged();
-        test2[0] = "lifting";
-        test2[1] = "csu";
-        test2[2] = "none";
-        test2[3] = "hive";
-        addImages(test2);
-        adapter.notifyDataSetChanged();
         return view;
     }
 
