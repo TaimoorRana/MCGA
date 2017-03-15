@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.POI;
+import com.concordia.mcga.models.Room;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,9 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
 
     private List<Building> sgwFilteredList;
     private List<Building> loyolaFilteredList;
+    private List<Room> roomFilteredList;
+
+    private List<List> masterList;
 
     /**
      * The constructor initializes the empty lists that store the currently queried POIs
@@ -38,6 +43,9 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
 
         this.sgwFilteredList = new ArrayList<>();
         this.loyolaFilteredList = new ArrayList<>();
+        this.roomFilteredList = new ArrayList<>();
+
+        this.masterList = new ArrayList<>();
     }
 
     /**
@@ -46,14 +54,7 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
      */
     @Override
     public int getGroupCount() {
-        int count = 0;
-        if (!getGroupIsEmpty(SGW_INDEX)) {
-            count++;
-        }
-        if (!getGroupIsEmpty(LOY_INDEX)) {
-            count++;
-        }
-        return count;
+        return masterList.size();
     }
 
     /**
@@ -63,53 +64,17 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
      */
     @Override
     public int getChildrenCount(int childPosition) {
-        Campus campus = (Campus)getGroup(childPosition);
-        if (campus == Campus.SGW) {
-            return sgwFilteredList.size();
-        } else if (campus == Campus.LOY) {
-            return loyolaFilteredList.size();
-        } else {
-            return 0;
-        }
+        return masterList.get(childPosition).size();
     }
 
     /**
-     * This overrides the BaseExpandableList function to get the campus specified by an index.
-     * This function is written specifically to address the quirks in the way BaseExpandableList
-     * handles groups and children - it is used internally to get the "group" (campus) based on the
-     * number of visible groups, so we have to handle different cases depending on whether the
-     * POIs filtered by the query come from a single campus or both of them.
+     * This overrides the BaseExpandableList function to get the POI group specified by an index.
      * @param groupPosition Active campus index
      * @return The campus specified by the index
      */
     @Override
     public Object getGroup(int groupPosition) {
-        boolean sgwClear = getGroupIsEmpty(SGW_INDEX);
-        boolean loyClear = getGroupIsEmpty(LOY_INDEX);
-
-        if (sgwClear && loyClear) {
-            return null;
-        } else if (sgwClear) {
-            if (groupPosition == 0) {
-                return Campus.LOY;
-            } else {
-                return null;
-            }
-        } else if (loyClear) {
-            if (groupPosition == 0) {
-                return Campus.SGW;
-            } else {
-                return null;
-            }
-        } else {
-            if (groupPosition == SGW_INDEX) {
-                return Campus.SGW;
-            } else if (groupPosition == LOY_INDEX) {
-                return Campus.LOY;
-            } else {
-                return null;
-            }
-        }
+        return masterList.get(groupPosition);
     }
 
     /**
@@ -120,14 +85,7 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
      */
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        Campus campus = (Campus)getGroup(groupPosition);
-        if (campus == Campus.SGW) {
-            return sgwFilteredList.get(childPosition);
-        } else if (campus == Campus.LOY) {
-            return loyolaFilteredList.get(childPosition);
-        } else {
-            return null;
-        }
+        return masterList.get(groupPosition).get(childPosition);
     }
 
     @Override
@@ -151,18 +109,12 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
      * @return True if the query-filtered campus list is empty, false if it has items
      */
     public boolean getGroupIsEmpty(int index) {
-        if (index == SGW_INDEX) {
-            return sgwFilteredList.isEmpty();
-        } else if (index == LOY_INDEX) {
-            return loyolaFilteredList.isEmpty();
-        } else {
-            return false;
-        }
+        return masterList.get(index).isEmpty();
     }
 
     /**
      * Inflates and returns the view associated with the index-specified campus or POI group
-     * @param groupPosition Campus/group index
+     * @param groupPosition POIgroup index
      * @param b Whether the group is collapsed or expanded
      * @param view The old view to reuse, if possible
      * @param viewGroup The parent that this view will be attached to
@@ -170,27 +122,32 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
      */
     @Override
     public View getGroupView(int groupPosition, boolean b, View view, ViewGroup viewGroup) {
-        Campus campus = (Campus)getGroup(groupPosition);
+        String title;
+        int resId;
 
-        if (campus == null) {
-            return null;
+        List group = (List) getGroup(groupPosition);
+        if (group == sgwFilteredList) {
+            title = "Sir George Williams";
+            resId = R.mipmap.ic_sgw_campus;
+        } else if (group == loyolaFilteredList) {
+            title = "Loyola";
+            resId = R.mipmap.ic_loy_campus;
+        } else {
+            title = "Classrooms";
+            resId = R.mipmap.ic_h_building; // Placeholder
         }
 
         if (view == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(
+                    Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.poi_search_group_row, null);
         }
 
         CircleImageView campusImage = (CircleImageView) view.findViewById(R.id.groupImage);
-        Campus camp = (Campus)getGroup(groupPosition);
-        if (camp == Campus.SGW) {
-            campusImage.setImageResource(R.mipmap.ic_sgw_campus);
-        } else {
-            campusImage.setImageResource(R.mipmap.ic_loy_campus);
-        }
+        campusImage.setImageResource(resId);
 
         TextView campusRow = (TextView) view.findViewById(R.id.groupText);
-        campusRow.setText(campus.getName());
+        campusRow.setText(title);
 
         return view;
     }
@@ -205,22 +162,25 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
      * @return The POI menu item (building name)
      */
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean b, View view, ViewGroup viewGroup) {
-        Building building = (Building)getChild(groupPosition, childPosition);
+    public View getChildView(int groupPosition, int childPosition, boolean b, View view,
+                             ViewGroup viewGroup) {
 
-        if (building == null) {
+        POI poi = (POI)getChild(groupPosition, childPosition);
+
+        if (poi == null) {
             return null;
         }
 
         if (view == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(
+                    Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.poi_search_child_row, null);
         }
 
         TextView buildingRow = (TextView) view.findViewById(R.id.childText);
         int backgroundColor = (childPosition % 2) == 0 ? Color.WHITE : Color.LTGRAY;
         view.setBackgroundColor(backgroundColor);
-        buildingRow.setText(building.getName());
+        buildingRow.setText(poi.getName());
 
         return view;
     }
@@ -240,12 +200,13 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         query = query.toLowerCase();
         sgwFilteredList.clear();
         loyolaFilteredList.clear();
+        roomFilteredList.clear();
+        masterList.clear();
 
         if (query.isEmpty()) {
-            //sgwFilteredList.addAll(Campus.SGW.getBuildings());
-            //loyolaFilteredList.addAll(Campus.LOY.getBuildings());
+            // loyolaFilteredList.addAll(Campus.LOY.getBuildings());
         } else {
-            // We only should check once whether the campus name is a match. Added at end for consistency
+            // Get matching SGW buildings
             if (Campus.SGW.getName().toLowerCase().contains(query) ||
                     Campus.SGW.getShortName().toLowerCase().contains(query)) {
                 sgwFilteredList.addAll(Campus.SGW.getBuildings());
@@ -260,6 +221,7 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
                 sgwFilteredList.addAll(sgwList);
             }
 
+            // Get matching Loyola buildings
             if (Campus.LOY.getName().toLowerCase().contains(query) ||
                     Campus.LOY.getShortName().toLowerCase().contains(query)) {
                 loyolaFilteredList.addAll(Campus.LOY.getBuildings());
@@ -273,6 +235,34 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
                 }
                 loyolaFilteredList.addAll(loyList);
             }
+
+            // Get matching rooms
+            List<Room> roomList = new ArrayList<>();
+            for (Building building : Campus.LOY.getBuildings()) {
+                for (Room room : building.getRooms()) {
+                    if (room.getName().toLowerCase().contains(query)) {
+                        roomList.add(room);
+                    }
+                }
+            }
+            for (Building building : Campus.SGW.getBuildings()) {
+                for (Room room : building.getRooms()) {
+                    if (room.getName().toLowerCase().contains(query)) {
+                        roomList.add(room);
+                    }
+                }
+            }
+            roomFilteredList.addAll(roomList);
+        }
+
+        if (!sgwFilteredList.isEmpty()) {
+            masterList.add(sgwFilteredList);
+        }
+        if (!loyolaFilteredList.isEmpty()) {
+            masterList.add(loyolaFilteredList);
+        }
+        if (!roomFilteredList.isEmpty()) {
+            masterList.add(roomFilteredList);
         }
         notifyDataSetChanged();
     }
