@@ -1,8 +1,6 @@
 package com.concordia.mcga.adapters;
 
-/**
- * Created by Charmander on 3/4/2017.
- */
+
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -24,9 +22,9 @@ public class DirectionsArrayAdapter extends ArrayAdapter<String> {
 
     /**
      * Constructor
-     * @param context
-     * @param directionsText
-     * @param directionsImage
+     * @param context application context
+     * @param directionsText text that will give directions
+     * @param directionsImage images associated with directions
      */
     public DirectionsArrayAdapter(Context context, ArrayList<String> directionsText, ArrayList<String> directionsImage) {
         super(context, R.layout.list_text, directionsText);
@@ -37,11 +35,11 @@ public class DirectionsArrayAdapter extends ArrayAdapter<String> {
 
 
     /**
-     * Override getView
-     * @param position
-     * @param convertView
-     * @param parent
-     * @return
+     * Override getView in the array adapter to allow us to add images to a row
+     * @param position row index that the user views
+     * @param convertView application View
+     * @param parent Viewgroup of the application View
+     * @return view
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -59,6 +57,7 @@ public class DirectionsArrayAdapter extends ArrayAdapter<String> {
         try {
             String image = directionsImage.get(position);
 
+            // Depending on the string, a different image is generated
             switch (image) {
                 case "up":
                     imageView.setImageResource(R.drawable.ic_arrow_upward_black_24dp);

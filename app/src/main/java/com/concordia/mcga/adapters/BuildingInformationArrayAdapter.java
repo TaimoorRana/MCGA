@@ -14,9 +14,7 @@ import java.util.ArrayList;
 
 
 
-/**
- * Created by Charmander on 3/5/2017.
- */
+
 
 public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
 
@@ -37,8 +35,8 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
 
     /**
      * Constructor
-     * @param context
-     * @param information
+     * @param context application context
+     * @param information Constains the list of images to display
      */
     public BuildingInformationArrayAdapter(Context context, ArrayList<String> information) {
         super(context, R.layout.building_info_list, information);
@@ -50,9 +48,9 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
 
     /**
      * Override getView in the array adapter to allow us to add images to a row
-     * @param position
-     * @param convertView
-     * @param parent
+     * @param position row index that the user views
+     * @param convertView application View
+     * @param parent Viewgroup of the application View
      * @return view
      */
     @Override
@@ -67,9 +65,11 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String> {
         imageView[3] = (ImageView) rowView.findViewById(R.id.buildingImage4);
 
         String[] image = information.get(position).split("-");
+        int imagesPerRow = 4;
 
+        // This will display a maximum of 4 images per row
         try {
-            for (int i = 0; i < 4; i ++) {
+            for (int i = 0; i < imagesPerRow; i ++) {
                 switch (image[i]) {
                     case "up":
                         imageView[i].setImageResource(R.drawable.ic_arrow_upward_black_24dp);

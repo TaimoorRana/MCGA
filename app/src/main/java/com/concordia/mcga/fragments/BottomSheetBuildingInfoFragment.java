@@ -21,9 +21,7 @@ import java.util.ArrayList;
 
 import static android.support.design.R.styleable.CoordinatorLayout;
 
-/**
- * Created by Charmander on 3/5/2017.
- */
+
 
 public class BottomSheetBuildingInfoFragment extends Fragment implements View.OnClickListener{
 
@@ -215,11 +213,12 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
      * similarly to a unit of Work
      */
     public void updateImageRow(){
+        int imagesPerRow = 4;
         String img = "";
         for (int i = 0; i < rowImages.size(); i++){
             img += rowImages.get(i);
 
-            if ((i + 1) % 4 ==0){
+            if ((i + 1) % imagesPerRow ==0){
                 images.add(img);
                 adapter.notifyDataSetChanged();
                 img = "";

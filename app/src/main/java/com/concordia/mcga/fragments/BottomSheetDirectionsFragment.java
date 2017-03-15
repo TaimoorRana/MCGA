@@ -18,9 +18,7 @@ import com.concordia.mcga.lib.BuildingBottomSheetInfo;
 
 import java.util.ArrayList;
 
-/**
- * Created by Charmander on 2/25/2017.
- */
+
 
 public class BottomSheetDirectionsFragment extends Fragment implements View.OnClickListener{
 

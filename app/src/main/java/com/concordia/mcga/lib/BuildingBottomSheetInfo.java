@@ -368,19 +368,7 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         int currentTop = child.getTop();
         int newTop     = currentTop - dy;
 
-        // Force stop at the anchor - do not go from collapsed to expanded in one scroll
-        /*
-        if (
-                ( mLastStableState == STATE_COLLAPSED  &&  newTop < mAnchorPoint )  ||
-                        ( mLastStableState == STATE_EXPANDED   &&  newTop > mAnchorPoint )
-                ) {
-            consumed[1] = dy;
-            ViewCompat.offsetTopAndBottom( child, mAnchorPoint - currentTop );
-            dispatchOnSlide( child.getTop() );
-            mNestedScrolled = true;
-            return;
-        }
-        */
+
         if ( dy > 0 ) { // Upward
             if ( newTop < mMinOffset ) {
                 consumed[1] = currentTop - mMinOffset;
