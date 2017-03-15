@@ -34,8 +34,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private Animation transport_fab_open, transport_fab_close, transport_textview_open, transport_textview_close;
 
     //State
-    private Boolean fabExpanded = false;
-    private Boolean shuttleVisible = true;
+    private boolean fabExpanded = false;
+    private boolean shuttleVisible = true;
     private Transportation transportType;
 
     @Nullable
@@ -186,9 +186,9 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private String formatTime(int hours, int minutes) {
         String time = null;
         if (hours > 0 && minutes > 0) {
-            time = hours + "h" + " " + minutes + "min";
+            time = hours + "h" + minutes + "m";
         } else if (hours == 0) {
-            time = minutes + "min";
+            time = minutes + "m";
         } else if (minutes == 0) {
             time = hours + "h";
         }
@@ -266,14 +266,14 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     /**
      * @return True if the option buttons are expanded, false otherwise
      */
-    public Boolean isExpanded() {
+    public boolean isExpanded() {
         return fabExpanded;
     }
 
     /**
      * @return True if the shuttle icon is active
      */
-    public Boolean isShuttleVisible() {
+    public boolean isShuttleVisible() {
         return shuttleVisible;
     }
 
