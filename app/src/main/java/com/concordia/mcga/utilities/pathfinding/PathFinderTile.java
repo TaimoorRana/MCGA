@@ -1,34 +1,53 @@
 package com.concordia.mcga.utilities.pathfinding;
 
-import android.util.Log;
+import android.support.annotation.NonNull;
 
+import com.concordia.mcga.models.IndoorMapTile;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class PathFinderTile {
+/**
+ * Object acts as a wrapper for {@link IndoorMapTile}. Holds
+ * additional information about the tiles that are specifically used
+ * by the pathfinder algorithms
+ */
+public class PathFinderTile implements Comparable<PathFinderTile> {
 
-    public static final PathFinderTile MAX_COST = new PathFinderTile(Integer.MIN_VALUE, Integer.MIN_VALUE);
+    enum Type {START, DESTINATION}
+
+    public static final PathFinderTile MAX_COST = new PathFinderTile();
 
     static {
         MAX_COST.setDistFromEnd(Integer.MAX_VALUE);
     }
 
+    private IndoorMapTile indoorMapTile;
     private Type tileType;
     private int distFromStart;
     private int distFromEnd;
-    private int coordinateX;
-    private int coordinateY;
     private PathFinderTile parent;
 
-    public PathFinderTile(int x, int y) {
-        this.coordinateX = x;
-        this.coordinateY = y;
+    private PathFinderTile(){}
+
+    public PathFinderTile(IndoorMapTile indoorMapTile) {
+        this.indoorMapTile = indoorMapTile;
+    }
+
+    public Type getTileType() {
+        return tileType;
     }
 
     public void setTileType(Type tileType) {
         this.tileType = tileType;
+    }
+
+    public IndoorMapTile getIndoorMapTile() {
+        return indoorMapTile;
+    }
+
+    public void setIndoorMapTile(IndoorMapTile indoorMapTile) {
+        this.indoorMapTile = indoorMapTile;
     }
 
     public int getCost() {
@@ -43,6 +62,24 @@ public class PathFinderTile {
         this.distFromStart = distFromStart;
     }
 
+    public PathFinderTile getParent() {
+        return parent;
+    }
+
+    public void setParent(PathFinderTile parent) {
+        this.parent = parent;
+    }
+
+    /**
+     * @param tile tile to calculate the distance to
+     * @return the units of distance between both tiles. Units are in X or Y direction.
+     *         Does not take diagonal distance.
+     */
+    public int calculateDistanceTo(PathFinderTile tile) {
+        return Math.abs(indoorMapTile.getCoordinateX() - tile.indoorMapTile.getCoordinateX()) + Math
+            .abs(indoorMapTile.getCoordinateY() - tile.indoorMapTile.getCoordinateY());
+    }
+
     public int calculateDistFromStart() {
         return parent.distFromStart + 1;
     }
@@ -55,58 +92,21 @@ public class PathFinderTile {
         this.distFromEnd = distFromEnd;
     }
 
-    public int getCoordinateX() {
-        return coordinateX;
-    }
-
-    public int getCoordinateY() {
-        return coordinateY;
-    }
-
-    public PathFinderTile getParent() {
-        return parent;
-    }
-
-    public void setParent(PathFinderTile parent) {
-        this.parent = parent;
-    }
-
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        try {
-            json.put("lat", this.coordinateY);
-            json.put("lng", this.coordinateX);
-        } catch (JSONException e) {
-            Log.e("PathFinderTile Error", Log.getStackTraceString(e));
-        }
-        return json;
-    }
-
     @Override
-    public String toString() {
-        return "PathFinderTile{" +
-                "coordinateX=" + coordinateX +
-                ", coordinateY=" + coordinateY +
-                '}';
+    public int compareTo(@NonNull PathFinderTile o) {
+        return this.getCost() - o.getCost();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
+        if (this == o) return true;
 
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (o == null || getClass() != o.getClass()) return false;
 
         PathFinderTile that = (PathFinderTile) o;
 
         return new EqualsBuilder()
-                .append(distFromStart, that.distFromStart)
-                .append(distFromEnd, that.distFromEnd)
-                .append(coordinateX, that.coordinateX)
-                .append(coordinateY, that.coordinateY)
+                .append(indoorMapTile, that.indoorMapTile)
                 .append(tileType, that.tileType)
                 .isEquals();
     }
@@ -114,13 +114,18 @@ public class PathFinderTile {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
+                .append(indoorMapTile)
                 .append(tileType)
-                .append(distFromStart)
-                .append(distFromEnd)
-                .append(coordinateX)
-                .append(coordinateY)
                 .toHashCode();
     }
 
-    enum Type {START, DESTINATION}
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("indoorMapTile", indoorMapTile)
+                .append("tileType", tileType)
+                .append("distFromStart", distFromStart)
+                .append("distFromEnd", distFromEnd)
+                .toString();
+    }
 }
