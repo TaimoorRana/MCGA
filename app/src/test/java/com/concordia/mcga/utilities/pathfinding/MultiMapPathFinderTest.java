@@ -5,6 +5,7 @@ import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.ConnectedPOI;
 import com.concordia.mcga.models.Floor;
+import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.IndoorPOI;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;

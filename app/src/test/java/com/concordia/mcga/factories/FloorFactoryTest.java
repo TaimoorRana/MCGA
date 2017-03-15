@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.models.Building;
-import com.concordia.mcga.utilities.pathfinding.IndoorMapTile;
+import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.TiledMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
