@@ -1,9 +1,15 @@
 package com.concordia.mcga.adapters;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
+
 import com.concordia.mcga.activities.BuildConfig;
+import com.concordia.mcga.activities.R;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,9 +67,10 @@ public class BuildingInfoAdapterTest {
     }
 
     @Test
-    public void GetView_IsNotNull_True(){
+    public void GetView_IsNull_True(){
         View view = adapter.getView(0, null, null);
         assertNull(view);
     }
+
 
 }

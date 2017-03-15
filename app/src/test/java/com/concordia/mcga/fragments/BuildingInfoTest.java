@@ -31,11 +31,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertNotEquals;
 import static org.robolectric.util.FragmentTestUtil.startFragment;
 
-@RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class,sdk = 21)
-/**
- * Created by root on 3/11/17.
- */
+
 
 public class BuildingInfoTest {
     MainActivity mainActivity;
