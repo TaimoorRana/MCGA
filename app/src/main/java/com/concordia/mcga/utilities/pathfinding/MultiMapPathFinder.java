@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.ConnectedPOI;
 import com.concordia.mcga.models.Floor;
+import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.IndoorPOI;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

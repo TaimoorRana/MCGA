@@ -1,4 +1,4 @@
-package com.concordia.mcga.utilities.pathfinding;
+package com.concordia.mcga.models;
 
 import android.util.Log;
 import org.apache.commons.lang3.builder.EqualsBuilder;

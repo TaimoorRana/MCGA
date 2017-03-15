@@ -6,7 +6,7 @@ import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Floor;
-import com.concordia.mcga.utilities.pathfinding.IndoorMapTile;
+import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.TiledMap;
 
 public class IndoorMapFactory {
