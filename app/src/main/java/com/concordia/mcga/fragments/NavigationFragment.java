@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,13 +38,18 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     Campus currentCampus = Campus.SGW;
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
+
     //State
     private ViewType viewType;
+
     //Fragments
     private LinearLayoutCompat parentLayout;
     private SupportMapFragment mapFragment;
     private TransportButtonFragment transportButtonFragment;
     private IndoorMapFragment indoorMapFragment;
+    private BottomSheetDirectionsFragment directionsFragment;
+    private BottomSheetBuildingInfoFragment buildingInfoFragment;
+
     //View Components
     private Button campusButton;
     private Button viewSwitchButton;
@@ -56,6 +63,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         //Init Fragments
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
         indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
+        directionsFragment = (BottomSheetDirectionsFragment) getChildFragmentManager().findFragmentById(R.id.directionsFragment);
+        buildingInfoFragment = (BottomSheetBuildingInfoFragment) getChildFragmentManager().findFragmentById(R.id.buildingInfoFragment);
 
         //Init View Components
         campusButton = (Button) parentLayout.findViewById(R.id.campusButton);
@@ -82,9 +91,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         //Set initial view type
         viewType = ViewType.OUTDOOR;
-
-        //Hide Indoor Fragment
+        
+        //Hide Fragments
         getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
+        showBuildingInfoFragment(false);
+        showDirectionsFragment(false);
 
         return parentLayout;
     }
@@ -131,6 +142,30 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         addBuildingMarkersAndPolygons();
 
         updateCampus();
+    }
+
+    /**
+     * Shows or hides the bottom sheet building information fragment
+     * @param isVisible
+     */
+    private void showBuildingInfoFragment(boolean isVisible) {
+        if (isVisible) {
+            getChildFragmentManager().beginTransaction().show(buildingInfoFragment).commit();
+        } else {
+            getChildFragmentManager().beginTransaction().hide(buildingInfoFragment).commit();
+        }
+    }
+
+    /**
+     * Shows or hides the directions bottom sheet fragment
+     * @param isVisible
+     */
+    private void showDirectionsFragment(boolean isVisible) {
+        if (isVisible) {
+            getChildFragmentManager().beginTransaction().show(directionsFragment).commit();
+        } else {
+            getChildFragmentManager().beginTransaction().hide(directionsFragment).commit();
+        }
     }
 
     /**

@@ -43,6 +43,18 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom" />
 
+        <fragment
+            android:id="@+id/buildingInfoFragment"
+            android:name="com.concordia.mcga.fragments.BottomSheetBuildingInfoFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <fragment
+            android:id="@+id/directionsFragment"
+            android:name="com.concordia.mcga.fragments.BottomSheetDirectionsFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/mapCenterButton"
             android:layout_width="wrap_content"
