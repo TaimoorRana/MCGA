@@ -30,6 +30,7 @@ import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.POI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -44,7 +45,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class NavigationFragment extends Fragment implements OnMapReadyCallback,
+        OnCameraIdleListener, Subject, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
@@ -72,8 +74,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private ExpandableListView searchList;
     private Dialog searchDialog;
 
-    private Building location;
-    private Building destination;
+    private POI location;
+    private POI destination;
     private SearchState searchState;
 
     private enum SearchState {
@@ -118,7 +120,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             }
         });
 
-        locationCancelButton = (AppCompatImageButton)toolbarView.findViewById(R.id.search_location_button);
+        locationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
+                R.id.search_location_button);
         locationCancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,7 +134,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 updateSearchUI();
             }
         });
-        destinationCancelButton = (AppCompatImageButton)toolbarView.findViewById(R.id.search_destination_button);
+        destinationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
+                R.id.search_destination_button);
         destinationCancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -332,12 +336,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         if (location != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
-            locationText.setText(location.getShortName());
+            locationText.setText(location.getName());
         }
         if (destination != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
-            destinationText.setText(destination.getShortName());
+            destinationText.setText(destination.getName());
         }
 
         if (searchState == SearchState.NONE) {
@@ -436,7 +440,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                Building dest = (Building)poiSearchAdapter.getChild(groupPosition, childPosition);
+                POI dest = (POI)poiSearchAdapter.getChild(groupPosition, childPosition);
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(),
                         CAMPUS_DEFAULT_ZOOM_LEVEL));
 
@@ -447,7 +451,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         });
     }
 
-    private boolean setNavigationPOI(Building dest) {
+    /**
+     * Sets the navigation state and location/destination for internal use
+     * @param dest The {@link POI} location to be added to the search state
+     * @return Whether the state was updated or not
+     */
+    private boolean setNavigationPOI(POI dest) {
         if (searchState == SearchState.NONE) {
             location = dest;
             searchState = SearchState.LOCATION;

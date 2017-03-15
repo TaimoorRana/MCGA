@@ -24,18 +24,18 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/search_location_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_close_dark" />
+
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/search_location_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/location_string"
                     android:textColor="@color/white"/>
-
-                <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/search_location_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_close_dark" />
             </android.support.v7.widget.LinearLayoutCompat>
 
             <View
@@ -52,18 +52,18 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/search_destination_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_close_dark" />
+
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/search_destination_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:text="@string/destination_string" />
-
-                <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/search_destination_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_close_dark" />
             </android.support.v7.widget.LinearLayoutCompat>
         </RelativeLayout>
 

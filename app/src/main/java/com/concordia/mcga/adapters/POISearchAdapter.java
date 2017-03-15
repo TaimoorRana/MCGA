@@ -134,7 +134,7 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
             resId = R.mipmap.ic_loy_campus;
         } else {
             title = "Classrooms";
-            resId = R.mipmap.ic_h_building; // Placeholder
+            resId = R.mipmap.ic_classroom;
         }
 
         if (view == null) {
