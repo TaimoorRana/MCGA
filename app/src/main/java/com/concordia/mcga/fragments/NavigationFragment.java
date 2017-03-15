@@ -24,14 +24,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
-import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
-import com.concordia.mcga.models.POI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -42,7 +40,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
@@ -50,6 +50,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     Campus currentCampus = Campus.SGW;
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
+    private Map<String, Object> multiBuildingMap = new HashMap<>();
     //State
     private ViewType viewType;
     //Fragments
@@ -219,13 +220,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
-                ((MainActivity) getActivity()).createToast("Building Clicked");
+                setNavigationPOI((Building) multiBuildingMap.get(polygon.getId()));
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                ((MainActivity) getActivity()).createToast("Building Clicked");
+                setNavigationPOI((Building) multiBuildingMap.get(marker.getId()));
                 return true;
             }
         });
@@ -233,9 +234,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
     private void createBuildingMarkersAndPolygonOverlay(Building building) {
         register(building);
-        map.addPolygon(building.getPolygonOverlayOptions()).setClickable(true);
+
+        Polygon polygon = map.addPolygon(building.getPolygonOverlayOptions());
+        polygon.setClickable(true);
+
+        // Add the building to a map to be retrieved later
+        multiBuildingMap.put(polygon.getId(), building);
 
         Marker marker = map.addMarker(building.getMarkerOptions());
+        multiBuildingMap.put(marker.getId(), building);
+
         building.setMarker(marker);
     }
 
@@ -432,23 +440,27 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(),
                         CAMPUS_DEFAULT_ZOOM_LEVEL));
 
-                if (searchState == SearchState.NONE) {
-                    location = dest;
-                    searchState = SearchState.LOCATION;
-                } else if (searchState == SearchState.DESTINATION) {
-                    location = dest;
-                    searchState = SearchState.LOCATION_DESTINATION;
-                } else if (searchState == SearchState.LOCATION) {
-                    destination = dest;
-                    searchState = SearchState.LOCATION_DESTINATION;
-                } else { // if searchState == SearchState.LOCATION_DESTINATION
-                    // do nothing
-                }
-
-                updateSearchUI();
+                setNavigationPOI(dest);
                 onClose();
                 return true;
             }
         });
+    }
+
+    private boolean setNavigationPOI(Building dest) {
+        if (searchState == SearchState.NONE) {
+            location = dest;
+            searchState = SearchState.LOCATION;
+        } else if (searchState == SearchState.DESTINATION) {
+            location = dest;
+            searchState = SearchState.LOCATION_DESTINATION;
+        } else if (searchState == SearchState.LOCATION) {
+            destination = dest;
+            searchState = SearchState.LOCATION_DESTINATION;
+        } else { // if searchState == SearchState.LOCATION_DESTINATION
+            return false;
+        }
+        updateSearchUI();
+        return true;
     }
 }
