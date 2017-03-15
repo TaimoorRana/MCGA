@@ -6,7 +6,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         vectorDrawables.useSupportLibrary = true
-        //applicationId "com.example.mcga.mcga"
+        applicationId "com.concordia.mcga"
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
@@ -15,6 +15,9 @@ android {
         multiDexEnabled true
     }
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -22,6 +25,13 @@ android {
     }
     lintOptions {
         abortOnError false
+    }
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
     }
 }
 

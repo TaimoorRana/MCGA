@@ -45,15 +45,6 @@
         android:fitsSystemWindows="true"
         tools:context=".sample.MainActivity">
 
-
-
-        <fragment
-            android:name= "com.concordia.mcga.fragments.BottomSheetBuildingInfoFragment"
-            android:id="@+id/buildingInfo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
     </android.support.design.widget.CoordinatorLayout>
 
 </android.support.v4.widget.DrawerLayout>

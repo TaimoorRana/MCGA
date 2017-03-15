@@ -1,21 +1,19 @@
 package com.concordia.mcga.models;
 
 import android.database.Cursor;
-
-import com.concordia.mcga.helperClasses.DatabaseHelper;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.concordia.mcga.exceptions.MCGADatabaseException;
+import com.concordia.mcga.factories.BuildingFactory;
+import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polygon;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Campus extends POI {
-    public static final Campus LOY = new Campus(new LatLng(45.458563, -73.640156), "Loyola Campus", "LOY");
-    public static final Campus SGW = new Campus(new LatLng(45.497100, -73.579077), "SGW Campus", "SGW");
+    public static final Campus LOY = new Campus(new LatLng(45.458265, -73.639071), "Loyola Campus", "LOY");
+    public static final Campus SGW = new Campus(new LatLng(45.495203, -73.576981), "SGW Campus", "SGW");
     private String shortName;
     private List<Building> buildings;
 
@@ -32,43 +30,25 @@ public class Campus extends POI {
     }
 
     /**
-     * This methods creates Building and SmallBuilding objects by reading data from the database and add this object
-     * to the appropriate campus
+     *  Populates both SGW and Loyola {@link Campus} objects from the data found in the SQLite database.
      */
     public static void populateCampusesWithBuildings() {
-        if (DatabaseHelper.getInstance() == null || !SGW.buildings.isEmpty() || !LOY.buildings.isEmpty())  // if the database has not been initialized || buildings already exists
-        {
-            return;
+        final int CAMPUS_COLUMN_INDEX = 7;
+        Cursor res;
+        try {
+            if (!SGW.buildings.isEmpty() || !LOY.buildings.isEmpty())  // if the database has not been initialized || buildings already exists
+            {
+                return;
+            }
+            res = DatabaseConnector.getInstance().getDb().rawQuery("select * from building", null);
+        } catch (MCGADatabaseException e) {
+            throw new Error("Database not initialized");
         }
-
-        final int NAME_COLUMN_INDEX = 1, SHORT_NAME_COLUMN_INDEX = 2, CENTER_COORDINATE_COLUMN_INDEX = 3,
-                EDGE_COORDINATES_COLUMN_INDEX = 4, RESOURCE_IMAGE_COLUMN_INDEX = 5, IS_SMALL_BUILDING_COLUMN_INDEX = 6, CAMPUS_COLUMN_INDEX = 7;
-
-        Gson gson = new Gson();
-        Cursor res = DatabaseHelper.getDb().rawQuery("select * from building", null);
-        Type listType = new TypeToken<List<LatLng>>() {
-        }.getType();
-
         while (res.moveToNext()) {
-            MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(res.getInt(RESOURCE_IMAGE_COLUMN_INDEX)));
             if (res.getString(CAMPUS_COLUMN_INDEX).equalsIgnoreCase(SGW.getShortName())) {
-                if (res.getInt(IS_SMALL_BUILDING_COLUMN_INDEX) == 1) // 1 means that it is a small building
-                {
-                    SGW.buildings.add(new SmallBuilding(gson.fromJson(res.getString(CENTER_COORDINATE_COLUMN_INDEX), LatLng.class), res.getString(NAME_COLUMN_INDEX), res.getString(SHORT_NAME_COLUMN_INDEX), markerOptions)
-                            .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(EDGE_COORDINATES_COLUMN_INDEX), listType)));
-                } else {
-                    SGW.buildings.add(new Building(gson.fromJson(res.getString(CENTER_COORDINATE_COLUMN_INDEX), LatLng.class), res.getString(NAME_COLUMN_INDEX), res.getString(SHORT_NAME_COLUMN_INDEX), markerOptions)
-                            .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(EDGE_COORDINATES_COLUMN_INDEX), listType)));
-                }
+                SGW.buildings.add(BuildingFactory.createBuilding(res));
             } else {
-                if (res.getInt(IS_SMALL_BUILDING_COLUMN_INDEX) == 1) // 1 means that it is a small building
-                {
-                    LOY.buildings.add(new SmallBuilding(gson.fromJson(res.getString(CENTER_COORDINATE_COLUMN_INDEX), LatLng.class), res.getString(NAME_COLUMN_INDEX), res.getString(SHORT_NAME_COLUMN_INDEX), markerOptions)
-                            .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(EDGE_COORDINATES_COLUMN_INDEX), listType)));
-                } else {
-                    LOY.buildings.add(new Building(gson.fromJson(res.getString(CENTER_COORDINATE_COLUMN_INDEX), LatLng.class), res.getString(NAME_COLUMN_INDEX), res.getString(SHORT_NAME_COLUMN_INDEX), markerOptions)
-                            .addEdgeCoordinate((List<LatLng>) gson.fromJson(res.getString(EDGE_COORDINATES_COLUMN_INDEX), listType)));
-                }
+                LOY.buildings.add(BuildingFactory.createBuilding(res));
             }
         }
         res.close();
@@ -87,6 +67,35 @@ public class Campus extends POI {
      */
     public String getShortName() {
         return shortName;
+    }
+
+    /**
+     * @param polygon polygon object to search for
+     * @return return the building which contains this polygon
+     */
+    public Building getBuilding(Polygon polygon){
+        for (Building building : buildings) {
+            if(building.getPolygon().getId().equalsIgnoreCase(polygon.getId()))
+                return building;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param marker marker object to search for
+     * @return return the building which contains this marker
+     */
+    public Building getBuilding(Marker marker){
+        for (Building building : buildings) {
+            if(building.getMarker().getId().equalsIgnoreCase(marker.getId()))
+                return building;
+        }
+        return null;
+    }
+
+    public void addBuilding(Building building){
+        buildings.add(building);
     }
 
 }

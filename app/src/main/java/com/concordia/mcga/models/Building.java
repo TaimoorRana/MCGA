@@ -1,27 +1,30 @@
 package com.concordia.mcga.models;
 
 import android.graphics.Color;
-
+import com.concordia.mcga.factories.IndoorMapFactory;
 import com.concordia.mcga.helperClasses.Observer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Building extends POI implements Observer {
     private final static int strokeColor = Color.YELLOW;
     private final static int strokeWidth = 2;
     private final static int fillColor = 0x996d171f;
     public int resourceImageId;
-    protected Marker marker;
+    Marker marker;
     private float markerVisibleAtMinimumZoomLevel = 15f;
     private String shortName;
     private MarkerOptions markerOptions;
     private List<LatLng> edgeCoordinateList;
-    private List<IndoorMap> floorMaps;
+    private Polygon polygon;
+    private Map<Integer, Floor> floorMaps;
 
     /**
      *  returns a Building object
@@ -35,22 +38,27 @@ public class Building extends POI implements Observer {
         this.shortName = shortName;
         this.markerOptions = markerOptions.position(centerCoordinate).anchor(0.5f, 0.5f);
         edgeCoordinateList = new ArrayList<>();
-        floorMaps = new ArrayList<>();
+        floorMaps = new HashMap<>();
     }
 
     /**
      *
-     * @return List of floor maps for this maps
+     * @return Floor maps for the given floor Number
      */
-    public List<IndoorMap> getFloorMaps() {
-        return floorMaps;
+    public Floor getFloorMap(int floorNumber) {
+        Floor returnMap = floorMaps.get(floorNumber);
+        if (returnMap == null){
+            returnMap = IndoorMapFactory.getInstance().createIndoorMap(this, floorNumber);
+            floorMaps.put(floorNumber, returnMap);
+        }
+        return returnMap;
     }
 
     /**
-     *
-     * @param floorMaps Set floor maps for this building
+     * Setter for floorMaps
+     * @param floorMaps
      */
-    public void setFloorMaps(List<IndoorMap> floorMaps) {
+    public void setFloorMaps(Map<Integer, Floor> floorMaps) {
         this.floorMaps = floorMaps;
     }
 
@@ -145,6 +153,18 @@ public class Building extends POI implements Observer {
      */
     public void setResourceImageId(int resourceImageId) {
         this.resourceImageId = resourceImageId;
+    }
+
+    public void setPolygon(Polygon polygon){
+        this.polygon = polygon;
+    }
+
+    public Polygon getPolygon(){
+        return polygon;
+    }
+
+    public Marker getMarker(){
+        return marker;
     }
 
 }
