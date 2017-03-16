@@ -1,7 +1,6 @@
 package com.concordia.mcga.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -28,13 +27,14 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class POISearchAdapterTest {
     private POISearchAdapter searchAdapter;
-    private Context context;
     private Campus fakeSgw, fakeLoyola;
     private Building fakeH, fakeX;
 
     @Before
     public void setUp() throws Exception {
         // Fake context
+        Context context;
+
         context = Mockito.mock(Context.class);
         LayoutInflater fakeInflater = Mockito.mock(LayoutInflater.class);
         View fakeGroupView = Mockito.mock(View.class);

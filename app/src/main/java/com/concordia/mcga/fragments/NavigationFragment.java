@@ -65,8 +65,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private View toolbarView;
     private Button campusButton;
     private Button viewSwitchButton;
-    private AppCompatImageButton locationCancelButton;
-    private AppCompatImageButton destinationCancelButton;
 
     // Search components
     private SearchView search;
@@ -120,6 +118,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             }
         });
 
+        AppCompatImageButton locationCancelButton;
         locationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
                 R.id.search_location_button);
         locationCancelButton.setOnClickListener(new OnClickListener() {
@@ -134,6 +133,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 updateSearchUI();
             }
         });
+
+        AppCompatImageButton destinationCancelButton;
         destinationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
                 R.id.search_destination_button);
         destinationCancelButton.setOnClickListener(new OnClickListener() {

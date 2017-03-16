@@ -9,7 +9,7 @@ import com.google.gson.Gson;
  *  Factory used to create rooms from the database.
  */
 public class RoomFactory {
-    final static int NAME_COLUMN_INDEX = 1, CENTER_COORDINATE_COLUMN_INDEX = 2,
+    public final static int NAME_COLUMN_INDEX = 1, CENTER_COORDINATE_COLUMN_INDEX = 2,
             ROOM_NUMBER_COLUMN_INDEX = 3;
     private final static Gson GSON = new Gson();
 
