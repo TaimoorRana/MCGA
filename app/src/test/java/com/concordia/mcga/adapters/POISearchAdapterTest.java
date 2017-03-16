@@ -1,7 +1,12 @@
 package com.concordia.mcga.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
+import com.concordia.mcga.activities.R;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.model.LatLng;
@@ -14,6 +19,8 @@ import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
 import java.lang.reflect.Constructor;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
@@ -29,7 +36,19 @@ public class POISearchAdapterTest {
     public void setUp() throws Exception {
         // Fake context
         context = Mockito.mock(Context.class);
-        when(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).thenReturn(null);
+        LayoutInflater fakeInflater = Mockito.mock(LayoutInflater.class);
+        View fakeGroupView = Mockito.mock(View.class);
+        View fakeChildView = Mockito.mock(View.class);
+        CircleImageView fakeImage = Mockito.mock(CircleImageView.class);
+        TextView fakeText = Mockito.mock(TextView.class);
+
+        when(fakeGroupView.findViewById(R.id.groupImage)).thenReturn(fakeImage);
+        when(fakeGroupView.findViewById(R.id.groupText)).thenReturn(fakeText);
+        when(fakeChildView.findViewById(R.id.childText)).thenReturn(fakeText);
+
+        when(fakeInflater.inflate(R.layout.poi_search_group_row, null)).thenReturn(fakeGroupView);
+        when(fakeInflater.inflate(R.layout.poi_search_child_row, null)).thenReturn(fakeChildView);
+        when(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).thenReturn(fakeInflater);
 
         // Use a bit of reflection to get access to the private constructor
         Constructor<Campus> constructor;
@@ -78,5 +97,19 @@ public class POISearchAdapterTest {
 
         searchAdapter.filterData("");
         assertEquals(searchAdapter.getGroupCount(), 0);
+    }
+
+    @Test
+    public void checkViews() throws Exception {
+        searchAdapter.filterData("SGW");
+        View view = searchAdapter.getGroupView(0, false, null, null);
+        assertNotNull(view);
+
+        searchAdapter.filterData("LOY");
+        view = searchAdapter.getGroupView(0, false, null, null);
+        assertNotNull(view);
+
+        view = searchAdapter.getChildView(0, 0, false, null, null);
+        assertNotNull(view);
     }
 }
