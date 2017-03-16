@@ -1,7 +1,6 @@
 package com.concordia.mcga.adapters;
 
 import android.content.Context;
-import android.view.View;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,8 +13,8 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 public class POISearchAdapterTest {
-    POISearchAdapter searchAdapter;
-    Context context;
+    private POISearchAdapter searchAdapter;
+    private Context context;
 
     @Before
     public void setUp() throws Exception {

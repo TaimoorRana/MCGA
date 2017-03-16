@@ -117,10 +117,10 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         int resId;
 
         List group = (List) getGroup(groupPosition);
-        if (group == sgwFilteredList) {
+        if (group.equals(sgwFilteredList)) {
             title = "Sir George Williams";
             resId = R.mipmap.ic_sgw_campus;
-        } else if (group == loyolaFilteredList) {
+        } else if (group.equals(loyolaFilteredList)) {
             title = "Loyola";
             resId = R.mipmap.ic_loy_campus;
         } else {
@@ -194,9 +194,7 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         roomFilteredList.clear();
         masterList.clear();
 
-        if (query.isEmpty()) {
-            // loyolaFilteredList.addAll(Campus.LOY.getBuildings());
-        } else {
+        if (!query.isEmpty()) {
             // Get matching SGW buildings
             if (Campus.SGW.getName().toLowerCase().contains(query) ||
                     Campus.SGW.getShortName().toLowerCase().contains(query)) {
