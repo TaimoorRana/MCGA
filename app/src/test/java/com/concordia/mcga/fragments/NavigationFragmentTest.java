@@ -1,55 +1,71 @@
 package com.concordia.mcga.fragments;
 
-// Junit Import
-import android.support.design.BuildConfig;
-import android.app.Activity;
+import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
-import junit.framework.Assert;
+import com.concordia.mcga.activities.BuildConfig;
+import com.concordia.mcga.activities.R;
+import com.concordia.mcga.factories.ShadowBitmapDescriptorFactory;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowLooper;
+import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 
 import static org.junit.Assert.assertNotNull;
-import static org.robolectric.util.FragmentTestUtil.startFragment;
+import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static android.content.Context.LOCATION_SERVICE;
-import static org.junit.Assert.*;
-
-
-@Config(constants = BuildConfig.class)
 @RunWith(RobolectricTestRunner.class)
-
+@Config(constants = BuildConfig.class, shadows = ShadowBitmapDescriptorFactory.class)
 public class NavigationFragmentTest {
+    private NavigationFragment fragment;
 
     @Before
     public void setUp() throws Exception {
+        LayoutInflater fakeInflater = Mockito.mock(LayoutInflater.class);
+        ViewGroup fakeContainer =  Mockito.mock(ViewGroup.class);
+        //View fakeToolbar = Mockito.mock(View.class);
+        LinearLayoutCompat fakeLayout = Mockito.mock(LinearLayoutCompat.class);
+        Bundle fakeBundle = Mockito.mock(Bundle.class);
+        //AppCompatImageButton fakeCancelButton = Mockito.mock(AppCompatImageButton.class);
+        IndoorMapFragment fakeIndoors = Mockito.mock(IndoorMapFragment.class);
+
+        Button fakeButton = Mockito.mock(Button.class);
+
+        when(fakeLayout.findViewById(R.id.viewSwitchButton)).thenReturn(fakeButton);
+        //when(fakeLayout.findViewById(R.id.nav_toolbar)).thenReturn(fakeToolbar);
+        //when(fakeToolbar.findViewById(R.id.search_location_button)).thenReturn(fakeCancelButton);
+        //when(fakeToolbar.findViewById(R.id.search_destination_button)).thenReturn(fakeCancelButton);
+
+        when(fakeInflater.inflate(R.layout.nav_main_fragment, fakeContainer, false)).thenReturn(fakeLayout);
+
+        fragment = new NavigationFragment();
+        ShadowLooper.pauseMainLooper();
+        SupportFragmentTestUtil.startVisibleFragment(fragment);
+        Robolectric.getForegroundThreadScheduler().advanceToLastPostedRunnable();
+
+        //fragment.onCreateView(fakeInflater, fakeContainer, fakeBundle);
+
+
+        //viewSwitchButton = (Button) parentLayout.findViewById(R.id.viewSwitchButton);
+        //SupportFragmentTestUtil.startFragment(fragment);
 
     }
 
     @Test
-    public void testIfGPSOn() throws Exception{
-
+    public void shouldNotBeNull() throws Exception
+    {
+        assertNotNull(fragment);
     }
-
-    @Test
-    public void locateMe_locatesMe() throws Exception { //Problematic void that takes no argument and return nothing
-
-    }
-
 
 }
-

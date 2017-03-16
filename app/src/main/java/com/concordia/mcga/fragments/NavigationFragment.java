@@ -120,7 +120,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to a ton of changes depending on how MCGA-12 goes
                     navigationSearch.setText("");
                 }
-
                 locateMe();
 
             }
