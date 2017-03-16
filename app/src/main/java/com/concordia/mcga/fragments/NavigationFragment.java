@@ -84,8 +84,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     //GPS attributes
     private LocationManager gpsmanager; //LocationManager instance to check gps activity
     private LatLng myPosition; //Creating LatLng to store current position
-    private Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
-    private String provider;
     private Location location;
 
 
@@ -349,12 +347,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else {
-            provider = gpsmanager.getBestProvider(criteria, true);// Getting the name of the best provider
             gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1500, 2, gpsListen); //Enable Network Provider updates
-            gpsmanager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, gpsListen); //Enable GPS Provider updates - Both can be enabled on one instance of a location manager, this helps the getBestProvider be selected.
             //Remember last known location in case of GPS instability
             map.setMyLocationEnabled(true);
-            location = gpsmanager.getLastKnownLocation(provider);
+            location = gpsmanager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (location != null) {
                 double latitude = location.getLatitude(); //Getting latitude of the current location
                 double longitude = location.getLongitude(); // Getting longitude of the current location
