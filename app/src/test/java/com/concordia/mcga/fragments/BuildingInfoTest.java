@@ -7,12 +7,17 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.adapters.BuildingInformationArrayAdapter;
 import com.concordia.mcga.lib.BuildingBottomSheetInfo;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 import java.util.ArrayList;
 import static junit.framework.Assert.assertEquals;
@@ -23,11 +28,12 @@ import static org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startFr
 
 
 
+@RunWith(RobolectricTestRunner.class)
+@Config(constants = BuildConfig.class,sdk = 21)
 public class BuildingInfoTest {
     MainActivity mainActivity;
-    private ActivityController<MainActivity> controller;
     private BuildingBottomSheetInfo behavior = null;
-
+    private ActivityController<MainActivity> controller;
     private final int IMAGES_PER_ROW = 4;
 
     // UI elements
