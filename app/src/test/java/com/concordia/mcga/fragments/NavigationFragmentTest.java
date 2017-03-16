@@ -23,6 +23,7 @@ import org.robolectric.shadows.ShadowLooper;
 import org.robolectric.shadows.support.v4.SupportFragmentTestUtil;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
@@ -66,6 +67,7 @@ public class NavigationFragmentTest {
     public void shouldNotBeNull() throws Exception
     {
         assertNotNull(fragment);
+        assertNotNull(fragment.getView());
     }
 
 }
