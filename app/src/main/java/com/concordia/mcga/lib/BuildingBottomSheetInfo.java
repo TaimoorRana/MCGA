@@ -204,11 +204,11 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
 
         if (mType == "building_navigation") {
             mMinOffset = mParentHeight - child.getHeight() / 2 - child.getHeight() / 5 - child.getHeight() / 10;
-            mMaxOffset = mParentHeight - parent.getHeight() / 8;
+            mMaxOffset = mParentHeight - parent.getHeight() / 6;
         }
         else if(mType == "building_information"){
             mMinOffset = mParentHeight - child.getHeight() / 2;
-            mMaxOffset = mParentHeight - parent.getHeight() / 8;
+            mMaxOffset = mParentHeight - parent.getHeight() / 6;
         }
         else {
             mMinOffset = mParentHeight - child.getHeight() / 2;
@@ -592,7 +592,11 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         }
         else
         if (mHideable && state == STATE_HIDDEN) {
-            top = mMaxOffset;
+            if (mType == "building_information") {
+                top = mParentHeight;
+            }else {
+                top = mMaxOffset;
+            }
         } else {
             throw new IllegalArgumentException("Illegal state argument: " + state);
         }
@@ -708,8 +712,13 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
             }
             else
             if ( mHideable  &&  shouldHide(releasedChild, yvel) ) {
-                top = mMaxOffset;
-                targetState = STATE_COLLAPSED;
+                if (mType == "building_information"){
+                    top = mParentHeight;
+                    targetState = STATE_HIDDEN;
+                }else {
+                    top = mMaxOffset;
+                    targetState = STATE_COLLAPSED;
+                }
             }
             else
             if ( yvel == 0.f ) {

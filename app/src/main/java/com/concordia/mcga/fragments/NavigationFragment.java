@@ -79,12 +79,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     getChildFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
                     campusButton.setVisibility(View.GONE);
                     viewSwitchButton.setText("GO OUTDOORS");
+                    showDirectionsFragment(true);
+                    showBuildingInfoFragment(false);
                 } else {
                     viewType = ViewType.OUTDOOR;
                     getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
                     getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit();
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO INDOORS");
+                    showDirectionsFragment(false);
+                    showBuildingInfoFragment(true);
                 }
             }
         });
@@ -94,7 +98,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         
         //Hide Fragments
         getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
-        showBuildingInfoFragment(false);
+
+        // Set the building information bottomsheet to true
+        // When the app starts
+        // Set the directions one to false
+        showBuildingInfoFragment(true);
         showDirectionsFragment(false);
 
         return parentLayout;
@@ -194,6 +202,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     building = Campus.LOY.getBuilding(polygon);
                 }
                 ((MainActivity) getActivity()).createToast(building.getShortName());
+                String buildingName = building.getShortName();
+                buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
+                buildingInfoFragment.clear();
+                // TEMPORARY
+                if (buildingName.equals("H")){
+                    buildingInfoFragment.displayHBuildingAssociations();
+                }
+                else if (buildingName.equals("JM")){
+                    buildingInfoFragment.displayMBBuildingAssociations();
+                }
+                buildingInfoFragment.collapse();
 
             }
         });
@@ -208,6 +227,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     building = Campus.LOY.getBuilding(marker);
                 }
                 ((MainActivity) getActivity()).createToast(building.getShortName());
+                String buildingName = building.getShortName();
+                buildingInfoFragment.setBuildingInformation(buildingName, "address", "7:00", "23:00");
+                buildingInfoFragment.clear();
+                // TEMPORARY
+                if (buildingName.equals("H")){
+                    buildingInfoFragment.displayHBuildingAssociations();
+                }
+                else if (buildingName.equals("JM")){
+                    buildingInfoFragment.displayMBBuildingAssociations();
+                }
+                buildingInfoFragment.collapse();
                 return true;
             }
         });

@@ -264,6 +264,42 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         }
     }
 
+    public void displayHBuildingAssociations(){
+        String temp[] = new String[IMAGES_PER_ROW];
+        temp[0] = "asfa";
+        temp[1] = "sasu";
+        temp[2] = "space";
+        temp[3] = "lifting";
+        addImages(temp);
+        updateImageRow();
+
+        temp[0] = "hive";
+        temp[1] = "csu";
+        temp[2] = "ccsu";
+        temp[3] = "scs";
+        addImages(temp);
+        updateImageRow();
+
+    }
+
+    public void displayMBBuildingAssociations(){
+        String temp[] = new String[IMAGES_PER_ROW];
+        temp[0] = "jmac";
+        temp[1] = "jmiba";
+        temp[2] = "jmma";
+        temp[3] = "jmas";
+        addImages(temp);
+        updateImageRow();
+
+
+        temp[0] = "fisa";
+        temp[1] = "jmucc";
+        temp[2] = "jsec";
+        temp[3] = "jmsb_case_comp";
+        addImages(temp);
+        updateImageRow();
+    }
+
 
     /**
      * Sets the Bottom Sheet title / building name

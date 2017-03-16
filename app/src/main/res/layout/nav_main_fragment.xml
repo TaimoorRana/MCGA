@@ -75,6 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/mapCenterButton"
+            android:elevation="10dp"
             android:layout_alignParentEnd="true" />
 
         <ToggleButton
@@ -93,6 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
+            android:elevation="20dp"
             android:text="In/Out" />
 
     </RelativeLayout>
