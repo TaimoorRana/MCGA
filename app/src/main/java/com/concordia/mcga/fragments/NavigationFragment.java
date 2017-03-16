@@ -51,7 +51,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
-    Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
     LocationListener gpsListen = new LocationListener() {
         public void onLocationChanged(Location location) {
             //Method called when new location is found by the network
@@ -85,6 +84,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     //GPS attributes
     private LocationManager gpsmanager; //LocationManager instance to check gps activity
     private LatLng myPosition; //Creating LatLng to store current position
+    private Criteria criteria = new Criteria();// Creating a criteria object to retrieve provider
+    private String provider;
+    private Location location;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -319,8 +322,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
     public void AlertGPS() { //GPS detection method
         Log.e("Testing Alert GPS", "Alert GPS Start");
-        AlertDialog.Builder build = new AlertDialog.Builder(
-                mapFragment.getActivity());
+        AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
         Log.e("Testing Alert GPS", "AlertDialog builder successful");
         build
                 .setTitle("GPS Detection Services")
@@ -347,13 +349,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else {
+            provider = gpsmanager.getBestProvider(criteria, true);// Getting the name of the best provider
             gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1500, 2, gpsListen); //Enable Network Provider updates
             gpsmanager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 2, gpsListen); //Enable GPS Provider updates - Both can be enabled on one instance of a location manager, this helps the getBestProvider be selected.
-            gpsmanager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE); // Getting LocationManager object from System Service LOCATION_SERVICE
-            String provider = gpsmanager.getBestProvider(criteria, true);// Getting the name of the best provider
             //Remember last known location in case of GPS instability
             map.setMyLocationEnabled(true);
-            Location location = gpsmanager.getLastKnownLocation(provider);
+            location = gpsmanager.getLastKnownLocation(provider);
             if (location != null) {
                 double latitude = location.getLatitude(); //Getting latitude of the current location
                 double longitude = location.getLongitude(); // Getting longitude of the current location
