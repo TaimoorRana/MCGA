@@ -28,6 +28,9 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
     public static final int SGW_INDEX = 0;
     public static final int LOY_INDEX = 1;
 
+    private Campus sgw;
+    private Campus loyola;
+
     private List<Building> sgwFilteredList;
     private List<Building> loyolaFilteredList;
     private List<Room> roomFilteredList;
@@ -38,8 +41,11 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
      * The constructor initializes the empty lists that store the currently queried POIs
      * @param context View context to search
      */
-    public POISearchAdapter(Context context) {
+    public POISearchAdapter(Context context, Campus sgw, Campus loyola) {
         this.context = context;
+
+        this.sgw = sgw;
+        this.loyola = loyola;
 
         this.sgwFilteredList = new ArrayList<>();
         this.loyolaFilteredList = new ArrayList<>();
@@ -196,12 +202,12 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
 
         if (!query.isEmpty()) {
             // Get matching SGW buildings
-            if (Campus.SGW.getName().toLowerCase().contains(query) ||
-                    Campus.SGW.getShortName().toLowerCase().contains(query)) {
-                sgwFilteredList.addAll(Campus.SGW.getBuildings());
+            if (sgw.getName().toLowerCase().contains(query) ||
+                    sgw.getShortName().toLowerCase().contains(query)) {
+                sgwFilteredList.addAll(sgw.getBuildings());
             } else {
                 List<Building> sgwList = new ArrayList<>();
-                for (Building building : Campus.SGW.getBuildings()) {
+                for (Building building : sgw.getBuildings()) {
                     if (building.getName().toLowerCase().contains(query) ||
                             building.getShortName().toLowerCase().contains(query)) {
                         sgwList.add(building);
@@ -211,12 +217,12 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
             }
 
             // Get matching Loyola buildings
-            if (Campus.LOY.getName().toLowerCase().contains(query) ||
-                    Campus.LOY.getShortName().toLowerCase().contains(query)) {
-                loyolaFilteredList.addAll(Campus.LOY.getBuildings());
+            if (loyola.getName().toLowerCase().contains(query) ||
+                    loyola.getShortName().toLowerCase().contains(query)) {
+                loyolaFilteredList.addAll(loyola.getBuildings());
             } else {
                 List<Building> loyList = new ArrayList<>();
-                for (Building building : Campus.LOY.getBuildings()) {
+                for (Building building : loyola.getBuildings()) {
                     if (building.getName().toLowerCase().contains(query) ||
                             building.getShortName().toLowerCase().contains(query)) {
                         loyList.add(building);
@@ -227,14 +233,14 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
 
             // Get matching rooms
             List<Room> roomList = new ArrayList<>();
-            for (Building building : Campus.LOY.getBuildings()) {
+            for (Building building : loyola.getBuildings()) {
                 for (Room room : building.getRooms()) {
                     if (room.getName().toLowerCase().contains(query)) {
                         roomList.add(room);
                     }
                 }
             }
-            for (Building building : Campus.SGW.getBuildings()) {
+            for (Building building : sgw.getBuildings()) {
                 for (Room room : building.getRooms()) {
                     if (room.getName().toLowerCase().contains(query)) {
                         roomList.add(room);

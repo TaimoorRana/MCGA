@@ -451,7 +451,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      */
     private void setupSearchList() {
         searchList = (ExpandableListView) searchDialog.findViewById(R.id.expandableList);
-        poiSearchAdapter = new POISearchAdapter(getActivity());
+        poiSearchAdapter = new POISearchAdapter(getActivity(), Campus.SGW, Campus.LOY);
         searchList.setAdapter(poiSearchAdapter);
 
         searchList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
