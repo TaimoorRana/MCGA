@@ -348,9 +348,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         } else {
             gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1500, 2, gpsListen); //Enable Network Provider updates
-            //Remember last known location in case of GPS instability
-            map.setMyLocationEnabled(true);
-            location = gpsmanager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            map.setMyLocationEnabled(true); //Enable Google Map layer over mapFragment
+            location = gpsmanager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); //Force Network provider due to GPS problems with different phone brands
             if (location != null) {
                 double latitude = location.getLatitude(); //Getting latitude of the current location
                 double longitude = location.getLongitude(); // Getting longitude of the current location
