@@ -19,6 +19,7 @@
             app:srcCompat="@drawable/ic_search_black_24dp" />
 
         <EditText
+            android:id="@+id/navigationSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white" />
@@ -34,7 +35,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"/>
 
         <fragment
             android:id="@+id/indoormap"
@@ -63,7 +64,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/mapCenterButton"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            tools:layout="@layout/transport_button_fragment" />
 
         <ToggleButton
             android:id="@+id/campusButton"
