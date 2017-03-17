@@ -161,6 +161,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         //Hide Fragments
         showTransportButton(true);
 
+        //Hide Fragments
+        showTransportButton(true);
+
         setupSearchAttributes();
         setupSearchList();
 
@@ -542,6 +545,5 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     public ViewType getViewType() {
         return viewType;
-
     }
 }
