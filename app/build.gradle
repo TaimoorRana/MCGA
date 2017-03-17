@@ -30,7 +30,7 @@ android {
         unitTests.all {
             jacoco {
                 includeNoLocationClasses = true
-                excludes += ['com/concordia/mcga.lib/**',
+                excludes += ['**/com/concordia/mcga.lib/**',
                              'com/concordia/mcga/fragments/NavigationFragment']
             }
         }
