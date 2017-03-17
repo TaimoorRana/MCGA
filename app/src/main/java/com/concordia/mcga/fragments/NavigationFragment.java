@@ -1,23 +1,36 @@
 package com.concordia.mcga.fragments;
 
+import android.app.Dialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 
-import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.POI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -28,19 +41,27 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject {
+public class NavigationFragment extends Fragment implements OnMapReadyCallback,
+        OnCameraIdleListener, Subject, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     //Enum representing which map view is active
     private enum ViewType {
         INDOOR, OUTDOOR
     }
 
+    private enum SearchState {
+        NONE, LOCATION, DESTINATION, LOCATION_DESTINATION
+    }
+
     //Outdoor Map
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
+    private Map<String, Object> multiBuildingMap = new HashMap<>();
 
     //State
     private ViewType viewType;
@@ -56,14 +77,28 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private IndoorMapFragment indoorMapFragment;
 
     //View Components
+    private View rootView;
+    private View toolbarView;
     private Button campusButton;
     private Button viewSwitchButton;
+
+    // Search components
+    private SearchView search;
+    private POISearchAdapter poiSearchAdapter;
+    private ExpandableListView searchList;
+    private Dialog searchDialog;
+
+    private POI location;
+    private POI destination;
+    private SearchState searchState;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         parentLayout = (LinearLayoutCompat) inflater.inflate(R.layout.nav_main_fragment, container, false);
+        rootView = parentLayout.findViewById(R.id.navigationMain);
+        toolbarView = parentLayout.findViewById(R.id.nav_toolbar);
 
         //Init Fragments
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
@@ -88,8 +123,56 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             }
         });
 
+        AppCompatImageButton locationCancelButton;
+        locationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
+                R.id.search_location_button);
+        locationCancelButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                location = null;
+                if (destination == null) {
+                    searchState = SearchState.NONE;
+                } else {
+                    searchState = SearchState.DESTINATION;
+                }
+                updateSearchUI();
+            }
+        });
+
+        AppCompatImageButton destinationCancelButton;
+        destinationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
+                R.id.search_destination_button);
+        destinationCancelButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                destination = null;
+                if (location == null) {
+                    searchState = SearchState.NONE;
+                } else {
+                    searchState = SearchState.LOCATION;
+                }
+                updateSearchUI();
+            }
+        });
+
+        //Hide Indoor Fragment
+        getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
+
         //Hide Fragments
         showTransportButton(true);
+
+        //Hide Fragments
+        showTransportButton(true);
+
+        setupSearchAttributes();
+        setupSearchList();
+
+        //Set initial view type
+        viewType = ViewType.OUTDOOR;
+
+        // Display no location/destination by default
+        searchState = SearchState.NONE;
+        updateSearchUI();
 
         return parentLayout;
     }
@@ -187,28 +270,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
-                /**
-                 * ONLY FOR DEMO PURPOSES
-                 */
-                Building building = Campus.SGW.getBuilding(polygon);
-                if(building == null){
-                    building = Campus.LOY.getBuilding(polygon);
-                }
-                ((MainActivity) getActivity()).createToast(building.getShortName());
-
+                setNavigationPOI((Building) multiBuildingMap.get(polygon.getId()));
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                /**
-                 * ONLY FOR DEMO PURPOSES
-                 */
-                Building building = Campus.SGW.getBuilding(marker);
-                if(building == null){
-                    building = Campus.LOY.getBuilding(marker);
-                }
-                ((MainActivity) getActivity()).createToast(building.getShortName());
+                setNavigationPOI((Building) multiBuildingMap.get(marker.getId()));
                 return true;
             }
         });
@@ -222,10 +290,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
         Polygon polygon = map.addPolygon(building.getPolygonOverlayOptions());
         polygon.setClickable(true);
-        building.setPolygon(polygon);
+
+        // Add the building to a map to be retrieved later
+        multiBuildingMap.put(polygon.getId(), building);
 
         Marker marker = map.addMarker(building.getMarkerOptions());
-        marker.setTitle(building.getShortName());
+        multiBuildingMap.put(marker.getId(), building);
+
+        building.setPolygon(polygon);
         building.setMarker(marker);
     }
 
@@ -284,6 +356,182 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         for (Observer observer : observerList) {
             observer.update(map.getCameraPosition().zoom);
         }
+    }
+
+    // Bug in API, onClose doesn't get called. Use this manually
+    @Override
+    public boolean onClose() {
+        search.setQuery("", false);
+        search.clearFocus();
+        rootView.requestFocus();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        poiSearchAdapter.filterData(query);
+        expandAll();
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        poiSearchAdapter.filterData(newText);
+        expandAll();
+        return false;
+    }
+
+    /**
+     * Updates the UI elements associated with the search state.
+     * If no location or destination has been selected, hide the elements.
+     * If a location has been specified, hide the destination element but update the location label.
+     * If a destination has been specified, hide the location element but update destination label.
+     * If both have been specified, show everything and update both labels.
+     */
+    private void updateSearchUI() {
+        LinearLayoutCompat locationLayout = (LinearLayoutCompat)
+                toolbarView.findViewById(R.id.search_location);
+        LinearLayoutCompat destinationLayout = (LinearLayoutCompat)
+                toolbarView.findViewById(R.id.search_destination);
+
+        if (location != null) {
+            AppCompatTextView locationText = (AppCompatTextView)
+                    toolbarView.findViewById(R.id.search_location_text);
+            locationText.setText(location.getName());
+        }
+        if (destination != null) {
+            AppCompatTextView destinationText = (AppCompatTextView)
+                    toolbarView.findViewById(R.id.search_destination_text);
+            destinationText.setText(destination.getName());
+        }
+
+        if (searchState == SearchState.NONE) {
+            locationLayout.setVisibility(View.GONE);
+            destinationLayout.setVisibility(View.GONE);
+            search.setQueryHint("Enter location...");
+        } else if (searchState == SearchState.LOCATION) {
+            locationLayout.setVisibility(View.VISIBLE);
+            destinationLayout.setVisibility(View.GONE);
+            search.setQueryHint("Enter destination...");
+        } else if (searchState == SearchState.DESTINATION) {
+            locationLayout.setVisibility(View.GONE);
+            destinationLayout.setVisibility(View.VISIBLE);
+            search.setQueryHint("Enter location...");
+        } else { // searchState == SearchState.LOCATION_DESTINATION
+            locationLayout.setVisibility(View.VISIBLE);
+            destinationLayout.setVisibility(View.VISIBLE);
+            search.setQueryHint("Search...");
+        }
+    }
+
+    /**
+     * Expands all the view result groups (showing the POIs under the campus search results)
+     */
+    private void expandAll() {
+        if (poiSearchAdapter.getGroupCount() == 0) {
+            searchDialog.dismiss();
+        } else {
+            searchDialog.show();
+            for (int i = 0; i < poiSearchAdapter.getGroupCount(); i++) {
+                searchList.expandGroup(i);
+            }
+        }
+    }
+
+    /**
+     * Constructor helper function to set up the search functionality of the view
+     */
+    private void setupSearchAttributes() {
+        //Search
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(
+                Context.SEARCH_SERVICE);
+        search = (SearchView) parentLayout.findViewById(R.id.navigation_search);
+        search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        search.setIconifiedByDefault(false);
+        search.setOnQueryTextListener(this);
+        search.setOnCloseListener(this);
+        search.setQueryHint("Enter destination");
+
+        //Custom search dialog
+        searchDialog = new Dialog(getActivity());
+        searchDialog.setCanceledOnTouchOutside(true);
+        searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        searchDialog.setContentView(R.layout.search_dialog);
+        final Window window = searchDialog.getWindow();
+        window.setGravity(Gravity.TOP);
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+        window.setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
+        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        window.setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
+                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        window.setLayout(LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
+                LinearLayoutCompat.LayoutParams.MATCH_PARENT);
+
+        parentLayout.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        // Set dialog window offset and height
+                        WindowManager.LayoutParams wmlp = window.getAttributes();
+                        int xy[] = new int[2];
+                        parentLayout.findViewById(R.id.navigation_search).getLocationOnScreen(xy);
+                        wmlp.y = xy[1] + 20;
+
+                        Rect r = new Rect();
+                        parentLayout.getWindowVisibleDisplayFrame(r);
+                        wmlp.height = (r.bottom - r.top) - wmlp.y;
+                        window.setAttributes(wmlp);
+                    }
+                }
+        );
+    }
+
+    /**
+     * Constructor helper function to set up the list and listener for the navigation search
+     */
+    private void setupSearchList() {
+        searchList = (ExpandableListView) searchDialog.findViewById(R.id.expandableList);
+        poiSearchAdapter = new POISearchAdapter(getActivity(), Campus.SGW, Campus.LOY);
+        searchList.setAdapter(poiSearchAdapter);
+
+        searchList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                POI dest = (POI)poiSearchAdapter.getChild(groupPosition, childPosition);
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(),
+                        CAMPUS_DEFAULT_ZOOM_LEVEL));
+
+                setNavigationPOI(dest);
+                onClose();
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Sets the navigation state and location/destination for internal use
+     * @param dest The {@link POI} location to be added to the search state
+     * @return Whether the state was updated or not
+     */
+    private boolean setNavigationPOI(POI dest) {
+        if (searchState == SearchState.NONE) {
+            location = dest;
+            searchState = SearchState.LOCATION;
+        } else if (searchState == SearchState.DESTINATION) {
+            location = dest;
+            searchState = SearchState.LOCATION_DESTINATION;
+        } else if (searchState == SearchState.LOCATION) {
+            destination = dest;
+            searchState = SearchState.LOCATION_DESTINATION;
+        } else { // if searchState == SearchState.LOCATION_DESTINATION
+            return false;
+        }
+        updateSearchUI();
+        return true;
     }
 
     //Getters
