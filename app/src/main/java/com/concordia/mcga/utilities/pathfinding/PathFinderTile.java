@@ -2,6 +2,7 @@ package com.concordia.mcga.utilities.pathfinding;
 
 import android.support.annotation.NonNull;
 
+import com.concordia.mcga.models.IndoorMapTile;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;

@@ -1,7 +1,6 @@
 package com.concordia.mcga.models;
 
 import static junit.framework.Assert.assertEquals;
-
 import com.concordia.mcga.factories.IndoorMapFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -10,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;

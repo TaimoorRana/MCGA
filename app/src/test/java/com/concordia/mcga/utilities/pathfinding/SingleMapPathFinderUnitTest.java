@@ -1,6 +1,7 @@
 package com.concordia.mcga.utilities.pathfinding;
 
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
+import com.concordia.mcga.models.IndoorMapTile;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
