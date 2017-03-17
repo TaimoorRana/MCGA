@@ -186,7 +186,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             getChildFragmentManager().beginTransaction().show(directionsFragment).commit();
         } else {
             getChildFragmentManager().beginTransaction().hide(directionsFragment).commit();
-
+        }
+    }
+    /*
      * Shows or hides the indoor map, will hide the outdoormap if visible
      */
     public void showIndoorMap() {
@@ -364,7 +366,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     }
 
 
-}
+
 
     public boolean isOutdoorMapVisible() {
         return outdoorMapVisible;
