@@ -50,6 +50,12 @@ import static android.content.Context.LOCATION_SERVICE;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback, OnCameraIdleListener, Subject {
 
+    //Enum representing which map view is active
+    private enum ViewType {
+        INDOOR, OUTDOOR
+    }
+
+    //Outdoor Map
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     Campus currentCampus = Campus.SGW;
     LocationListener gpsListen = new LocationListener() {
@@ -70,13 +76,20 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     };
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
+
     //State
     private ViewType viewType;
+    private Campus currentCampus = Campus.SGW;
+
+    private boolean indoorMapVisible = false;
+    private boolean outdoorMapVisible = false;
+
     //Fragments
     private LinearLayoutCompat parentLayout;
     private SupportMapFragment mapFragment;
     private TransportButtonFragment transportButtonFragment;
     private IndoorMapFragment indoorMapFragment;
+
     //View Components
     private Button campusButton;
     private Button viewSwitchButton;
@@ -134,26 +147,19 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             @Override
             public void onClick(View v) {
                 if (viewType == ViewType.OUTDOOR) {
-                    viewType = ViewType.INDOOR;
-                    getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
-                    getChildFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
+                    showIndoorMap();
                     campusButton.setVisibility(View.GONE);
                     viewSwitchButton.setText("GO OUTDOORS");
                 } else {
-                    viewType = ViewType.OUTDOOR;
-                    getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
-                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit();
+                    showOutdoorMap();
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO INDOORS");
                 }
             }
         });
 
-        //Set initial view type
-        viewType = ViewType.OUTDOOR;
-
-        //Hide Indoor Fragment
-        getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
+        //Hide Fragments
+        showTransportButton(true);
 
         return parentLayout;
     }
@@ -164,8 +170,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         gpsmanager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map);
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         Button toggleButton = (Button) getView().findViewById(R.id.campusButton);
@@ -183,7 +188,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
             }
         });
         //Show outdoor map on start
-        getFragmentManager().beginTransaction().show(mapFragment).commit();
+        showOutdoorMap();
     }
 
     @Override
@@ -202,6 +207,38 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         addBuildingMarkersAndPolygons();
 
         updateCampus();
+    }
+
+    /**
+     * Shows or hides the indoor map, will hide the outdoormap if visible
+     */
+    public void showIndoorMap() {
+        outdoorMapVisible = false;
+        indoorMapVisible = true;
+        viewType = ViewType.INDOOR;
+        getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
+    }
+
+    /**
+     * Shows or hides the outdoor map, will hide the indoormap if visible
+     */
+    public void showOutdoorMap() {
+        outdoorMapVisible = true;
+        indoorMapVisible = false;
+        viewType = ViewType.OUTDOOR;
+        getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
+    }
+
+    /**
+     * Shows or hides the transport button
+     * @param isVisible
+     */
+    public void showTransportButton(boolean isVisible) {
+        if (isVisible) {
+            getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit();
+        } else {
+            getChildFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
+        }
     }
 
     /**
@@ -361,7 +398,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
-    private enum ViewType {
-        INDOOR, OUTDOOR
+    //Getters
+    public boolean isIndoorMapVisible() {
+        return indoorMapVisible;
     }
+
+    public boolean isOutdoorMapVisible() {
+        return outdoorMapVisible;
+    }
+
+    public ViewType getViewType() {
+        return viewType;
+    }
+
 }
