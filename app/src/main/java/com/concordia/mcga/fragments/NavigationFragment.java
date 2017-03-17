@@ -1,5 +1,6 @@
 package com.concordia.mcga.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -86,7 +87,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private LatLng myPosition; //Creating LatLng to store current position
     private Location location;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -105,8 +105,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 Log.d("Testing mapCenterButton", "Initializing OnClickListener");
                 if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     Log.d("Testing AlertGPS Launch", "Initializing method");
-                    AlertGPS();
-                    Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
+                    if(AlertGPS(mapFragment.getActivity())){
+                        Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
+                    };
+
 
                 }
                 Log.d("Testing", "Checkpoint 1 - Button initializer");
@@ -317,9 +319,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
-    public void AlertGPS() { //GPS detection method
+    public static boolean AlertGPS(final Activity activity) { //GPS detection method
         Log.e("Testing Alert GPS", "Alert GPS Start");
-        AlertDialog.Builder build = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder build = new AlertDialog.Builder(activity);
         Log.e("Testing Alert GPS", "AlertDialog builder successful");
         build
                 .setTitle("GPS Detection Services")
@@ -329,7 +331,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                startActivity(i);
+                                activity.startActivity(i);
                             }
                         });
         build.setNegativeButton("Cancel",
@@ -340,6 +342,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 });
         AlertDialog alert = build.create();
         alert.show();
+        return true;
     }
 
     public void locateMe() {
