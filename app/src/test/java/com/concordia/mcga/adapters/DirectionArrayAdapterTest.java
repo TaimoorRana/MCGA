@@ -79,7 +79,7 @@ public class DirectionArrayAdapterTest {
         directionsText.add("left");
         directionsImage.add("left");
         adapter.notifyDataSetChanged();
-        
+
         directionsText.add("right");
         directionsImage.add("right");
         adapter.notifyDataSetChanged();
