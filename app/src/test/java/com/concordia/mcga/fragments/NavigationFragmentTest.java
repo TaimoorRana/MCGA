@@ -37,7 +37,7 @@ public class NavigationFragmentTest {
         ViewGroup fakeContainer =  Mockito.mock(ViewGroup.class);
         //View fakeToolbar = Mockito.mock(View.class);
         LinearLayoutCompat fakeLayout = Mockito.mock(LinearLayoutCompat.class);
-        Bundle fakeBundle = Mockito.mock(Bundle.class);
+        //Bundle fakeBundle = Mockito.mock(Bundle.class);
         //AppCompatImageButton fakeCancelButton = Mockito.mock(AppCompatImageButton.class);
         IndoorMapFragment fakeIndoors = Mockito.mock(IndoorMapFragment.class);
 

@@ -57,7 +57,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
 
     //Outdoor Map
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
-    Campus currentCampus = Campus.SGW;
     LocationListener gpsListen = new LocationListener() {
         public void onLocationChanged(Location location) {
             //Method called when new location is found by the network
@@ -97,7 +96,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
     private EditText navigationSearch;
     //GPS attributes
     private LocationManager gpsmanager; //LocationManager instance to check gps activity
-    private LatLng myPosition; //Creating LatLng to store current position
     private Location location;
 
     @Override
@@ -120,9 +118,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                     Log.d("Testing AlertGPS Launch", "Initializing method");
                     if(AlertGPS(mapFragment.getActivity())){
                         Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
-                    };
-
-
+                    }
+                    else {
+                        Log.d("Testing AlertGPS Launch"," Failed AlertGPS");
+                    }
                 }
                 Log.d("Testing", "Checkpoint 1 - Button initializer");
                 if (viewType == ViewType.INDOOR) {
@@ -135,7 +134,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to a ton of changes depending on how MCGA-12 goes
                     navigationSearch.setText("");
                 }
-                locateMe();
+                if(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen)){
+                    Log.d("GPS Locator","Succesful");}
+                else {
+                    Log.d("GPS Locator", "Fail");
+                }
 
             }
         });
@@ -382,21 +385,27 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
         return true;
     }
 
-    public void locateMe() {
-        if (ContextCompat.checkSelfPermission(mapFragment.getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(mapFragment.getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+    public static boolean locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
+        if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return false;
         } else {
             gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1500, 2, gpsListen); //Enable Network Provider updates
             map.setMyLocationEnabled(true); //Enable Google Map layer over mapFragment
-            location = gpsmanager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); //Force Network provider due to GPS problems with different phone brands
+            Location location = gpsmanager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); //Force Network provider due to GPS problems with different phone brands
             if (location != null) {
                 double latitude = location.getLatitude(); //Getting latitude of the current location
                 double longitude = location.getLongitude(); // Getting longitude of the current location
-                myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, CAMPUS_DEFAULT_ZOOM_LEVEL));//Camera Update method
+                LatLng myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 16f));//Camera Update method
+                return true;
+            }
+            else{
+                    return false;
             }
         }
     }
+
 
     //Getters
     public boolean isIndoorMapVisible() {
