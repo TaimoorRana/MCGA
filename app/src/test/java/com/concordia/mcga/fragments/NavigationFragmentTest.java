@@ -35,18 +35,18 @@ public class NavigationFragmentTest {
     public void setUp() throws Exception {
         LayoutInflater fakeInflater = Mockito.mock(LayoutInflater.class);
         ViewGroup fakeContainer =  Mockito.mock(ViewGroup.class);
-        //View fakeToolbar = Mockito.mock(View.class);
+        View fakeToolbar = Mockito.mock(View.class);
         LinearLayoutCompat fakeLayout = Mockito.mock(LinearLayoutCompat.class);
-        //Bundle fakeBundle = Mockito.mock(Bundle.class);
-        //AppCompatImageButton fakeCancelButton = Mockito.mock(AppCompatImageButton.class);
+        Bundle fakeBundle = Mockito.mock(Bundle.class);
+        AppCompatImageButton fakeCancelButton = Mockito.mock(AppCompatImageButton.class);
         IndoorMapFragment fakeIndoors = Mockito.mock(IndoorMapFragment.class);
 
         Button fakeButton = Mockito.mock(Button.class);
 
         when(fakeLayout.findViewById(R.id.viewSwitchButton)).thenReturn(fakeButton);
-        //when(fakeLayout.findViewById(R.id.nav_toolbar)).thenReturn(fakeToolbar);
-        //when(fakeToolbar.findViewById(R.id.search_location_button)).thenReturn(fakeCancelButton);
-        //when(fakeToolbar.findViewById(R.id.search_destination_button)).thenReturn(fakeCancelButton);
+        when(fakeLayout.findViewById(R.id.nav_toolbar)).thenReturn(fakeToolbar);
+        when(fakeToolbar.findViewById(R.id.search_location_button)).thenReturn(fakeCancelButton);
+        when(fakeToolbar.findViewById(R.id.search_destination_button)).thenReturn(fakeCancelButton);
 
         when(fakeInflater.inflate(R.layout.nav_main_fragment, fakeContainer, false)).thenReturn(fakeLayout);
 
@@ -55,11 +55,11 @@ public class NavigationFragmentTest {
         SupportFragmentTestUtil.startVisibleFragment(fragment);
         Robolectric.getForegroundThreadScheduler().advanceToLastPostedRunnable();
 
-        //fragment.onCreateView(fakeInflater, fakeContainer, fakeBundle);
+        fragment.onCreateView(fakeInflater, fakeContainer, fakeBundle);
 
 
         //viewSwitchButton = (Button) parentLayout.findViewById(R.id.viewSwitchButton);
-        //SupportFragmentTestUtil.startFragment(fragment);
+        SupportFragmentTestUtil.startFragment(fragment);
 
     }
 
