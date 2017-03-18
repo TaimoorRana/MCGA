@@ -246,7 +246,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 if(building == null){
                     building = Campus.LOY.getBuilding(polygon);
                 }
-                ((MainActivity) getActivity()).createToast(building.getShortName());
+                getActivity().getApplicationContext().createToast(building.getShortName());
                 String buildingName = building.getShortName();
                 buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
                 buildingInfoFragment.clear();
@@ -271,7 +271,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback, 
                 if(building == null){
                     building = Campus.LOY.getBuilding(marker);
                 }
-                ((MainActivity) getActivity()).createToast(building.getShortName());
+                getActivity().getApplicationContext().createToast(building.getShortName());
                 String buildingName = building.getShortName();
                 buildingInfoFragment.setBuildingInformation(buildingName, "address", "7:00", "23:00");
                 buildingInfoFragment.clear();
