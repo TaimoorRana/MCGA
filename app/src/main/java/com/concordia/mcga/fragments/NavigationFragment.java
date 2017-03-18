@@ -77,7 +77,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     LocationListener gpsListen = new LocationListener() {
         public void onLocationChanged(Location location) {
             //Method called when new location is found by the network
-
             Log.d("Message: ", "Location changed," + location.getLatitude() + "," + location.getLongitude() + ".");
         }
 
@@ -143,17 +142,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Testing mapCenterButton", "Initializing OnClickListener");
                 if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    Log.d("Testing AlertGPS Launch", "Initializing method");
-                    if(AlertGPS(mapFragment.getActivity())){
+                    if(alertGPS(mapFragment.getActivity())){
                         Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
                     }
-                    else {
-                        Log.d("Testing AlertGPS Launch"," Failed AlertGPS");
-                    }
                 }
-                Log.d("Testing", "Checkpoint 1 - Button initializer");
                 if (viewType == ViewType.INDOOR) {
                     viewType = ViewType.OUTDOOR;
                     getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
@@ -424,10 +417,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    public static boolean AlertGPS(final Activity activity) { //GPS detection method
-        Log.e("Testing Alert GPS", "Alert GPS Start");
+    /**
+     * Build alert dialog on fragment's activity
+     * Shown iff (gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER) is false
+     * Prompt user to enable the GPS
+     * If user presses "Enable GPS",  minimize application and prompt user to GPS Android window
+     */
+
+    public static boolean alertGPS(final Activity activity) { //GPS detection method
         AlertDialog.Builder build = new AlertDialog.Builder(activity);
-        Log.e("Testing Alert GPS", "AlertDialog builder successful");
         build
                 .setTitle("GPS Detection Services")
                 .setMessage("GPS is disabled in your device. Enable it?")
@@ -449,6 +447,23 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         alert.show();
         return true;
     }
+
+    /**
+     *
+     * @param map object of the navigation fragment's
+     * @param activity acquired with mapfragment.getActivity()
+     * @param gpsmanager object of LocationManager (from android and not google maps)
+     * @param gpsListen object from interface LocationListener (from android and not google maps)
+     * @return true if the operation is a success (if permission is acquired && a location was succesfully retrieved
+     *
+     * Method run to acquire user's location on a map, display it and update camera to it
+     * if permission NOT found, request the permission
+     * Enable GPS provider updates on locationmanager (requires permission check)
+     * Enable Google Map layer over map object to display user's location on the map
+     * Instantiate location with last known location of Network provider
+     * if no location found, return false, otherwise, map centers on user's location
+     *
+     */
 
     public static boolean locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
         if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
