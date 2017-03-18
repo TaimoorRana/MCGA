@@ -23,11 +23,17 @@ public class BuildingFactory {
     final static int NAME_COLUMN_INDEX = 1, SHORT_NAME_COLUMN_INDEX = 2, CENTER_COORDINATE_COLUMN_INDEX = 3,
     EDGE_COORDINATES_COLUMN_INDEX = 4, RESOURCE_IMAGE_COLUMN_INDEX = 5, IS_SMALL_BUILDING_COLUMN_INDEX = 6;
     private final static Gson GSON = new Gson();
-    private static Resources resources;{
-        Context context = MainActivity.getContext();
+    private static Resources resources;
+    private static Context context;
+
+    static {
+        context = MainActivity.getContext();
         resources = context.getResources();
     }
 
+    /**
+     * @param resources {@link Resources} object to get building marker icons from
+     */
     static void setResources(Resources resources) {
         BuildingFactory.resources = resources;
     }
