@@ -69,6 +69,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     private boolean indoorMapVisible = false;
     private boolean outdoorMapVisible = false;
+    private boolean transportButtonVisible = false;
 
     //Fragments
     private LinearLayoutCompat parentLayout;
@@ -159,10 +160,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
 
         //Hide Fragments
-        showTransportButton(true);
-
-        //Hide Fragments
-        showTransportButton(true);
+        showTransportButton(false);
 
         setupSearchAttributes();
         setupSearchList();
@@ -221,12 +219,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     * Shows or hides the indoor map, will hide the outdoormap if visible
+     * Shows or hides the indoor map, will hide the outdoormap and transport button if visible
      */
     public void showIndoorMap() {
         outdoorMapVisible = false;
         indoorMapVisible = true;
         viewType = ViewType.INDOOR;
+        if (transportButtonVisible) {
+            showTransportButton(false);
+        }
         getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
     }
 
@@ -246,8 +247,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      */
     public void showTransportButton(boolean isVisible) {
         if (isVisible) {
+            transportButtonVisible = true;
             getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit();
         } else {
+            transportButtonVisible = false;
             getChildFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
         }
     }
@@ -542,6 +545,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     public boolean isOutdoorMapVisible() {
         return outdoorMapVisible;
     }
+
+    public boolean isTransportButtonVisible() { return transportButtonVisible; }
 
     public ViewType getViewType() {
         return viewType;
