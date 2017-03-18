@@ -74,7 +74,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     //Outdoor Map
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
-    LocationListener gpsListen = new LocationListener() {
+    private LocationListener gpsListen = new LocationListener() {
         public void onLocationChanged(Location location) {
             //Method called when new location is found by the network
             Log.d("Message: ", "Location changed," + location.getLatitude() + "," + location.getLongitude() + ".");
