@@ -177,11 +177,25 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
     }
 
+    /**
+     * Will return the saved/previous state that the BottomSheet was found in
+     * @param parent Coordinator Layout surrounding the BottomSheet
+     * @param child ListView of the BottomSheet
+     * @return The saved state of the BottomSheet
+     */
     @Override
     public Parcelable onSaveInstanceState(CoordinatorLayout parent, V child ) {
         return new SavedState(super.onSaveInstanceState(parent, child), mState);
     }
 
+    /**
+     * When restoring the instance, the saved state is then generated
+     * If the state wasn't set to a static point such as 'expanded' or 'collapsed'
+     * then the default state will be set to 'collapsed'
+     * @param parent Coordinator Layout surrounding the BottomSheet
+     * @param child ListView of the BottomSheet
+     * @param state The saved state of the BottomSheet
+     */
     @Override
     public void onRestoreInstanceState(CoordinatorLayout parent, V child, Parcelable state ) {
         SavedState ss = (SavedState) state;
@@ -196,10 +210,27 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         mLastStableState = mState;
     }
 
+    /**
+     * Sets the type of bottomsheet attributes to set. The onCreate method
+     * will look at this variable to decide which attributable makeup
+     * the bottomsheet will have to use
+     * @param type A string dictating which kind of BottomSheet configuration will be used
+     */
     public void setmType(String type){
         mType = type;
     }
 
+    /**
+     * Method configures the childlayout of the bottomsheet
+     * This layout represents the list contained within the
+     * Coordinator Layout
+     * Maximum displaceable height and retraction are set here
+     * Anchor points are also defined if necessary
+     * @param parent
+     * @param child
+     * @param layoutDirection
+     * @return True if The views are not null
+     */
     @Override
     public boolean onLayoutChild(CoordinatorLayout parent, V child, int layoutDirection ) {
         // First let the parent lay it out
@@ -251,6 +282,18 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         return true;
     }
 
+    /**
+     * The onInterceptTouchEvent() method is called whenever a
+     * touch event is detected on the surface of a ViewGroup,
+     * including on the surface of its children. If onInterceptTouchEvent()
+     * returns true, the MotionEvent is intercepted, meaning it
+     * will be not be passed on to the child, but rather
+     * to the onTouchEvent() method of the parent.
+     * @param parent coordinator Layout
+     * @param child ListView
+     * @param event MotionEvent
+     * @return true is the MotionEvent is intercepted
+     */
     @Override
     public boolean onInterceptTouchEvent(CoordinatorLayout parent, V child, MotionEvent event ) {
         if ( ! child.isShown() ) {
@@ -312,6 +355,15 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         return ret;
     }
 
+    /**
+     * If this method is used to detect click actions,
+     * it is recommended that the actions be performed by implementing and
+     * calling performClick().
+     * @param parent
+     * @param child
+     * @param event
+     * @return True if an Action was detected and the Child is visible on the phone screen
+     */
     @Override
     public boolean onTouchEvent(CoordinatorLayout parent, V child, MotionEvent event ) {
         if ( ! child.isShown() ) {
@@ -339,17 +391,37 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         return ! mIgnoreEvents;
     }
 
+    /**
+     * Called when a descendant of the CoordinatorLayout attempts to initiate a nested scroll.
+     * Any Behavior associated with any direct child of the CoordinatorLayout may respond to
+     * this event and return true to indicate that the CoordinatorLayout should act as a nested
+     * scrolling parent for this scroll. Only Behaviors that return true from this method will receive
+     * subsequent nested scroll events.
+     * @param coordinatorLayout
+     * @param child
+     * @param directTargetChild
+     * @param target
+     * @param nestedScrollAxes
+     * @return true if Scrolling
+     */
     @Override
     public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout, V child, View directTargetChild, View target, int nestedScrollAxes ) {
         mNestedScrolled = false;
         return ( nestedScrollAxes & ViewCompat.SCROLL_AXIS_VERTICAL ) != 0;
     }
 
+
+
     private ScrollVelocityTracker mScrollVelocityTracker = new ScrollVelocityTracker();
     private class ScrollVelocityTracker {
         private long  mPreviousScrollTime = 0;
         private float mScrollVelocity     = 0;
 
+        /**
+         * Records scroll time of the user
+         * Velocity of the scroll is a function of time
+         * @param dy
+         */
         public void recordScroll( int dy ) {
             long now = System.currentTimeMillis();
 
@@ -361,16 +433,35 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
             mPreviousScrollTime = now;
         }
 
+        /**
+         * Resets scroll time and velocity
+         */
         public void clear() {
             mPreviousScrollTime = 0;
             mScrollVelocity = 0;
         }
 
+        /**
+         * Returns scroll velocity
+         * @return
+         */
         public float getScrollVelocity() {
             return mScrollVelocity;
         }
     }
 
+    /**
+     * Called when a nested scroll in progress is about to update, before the target
+     * has consumed any of the scrolled distance.
+     * The CoordinatorLayout will report as consumed the maximum number of pixels in
+     * either direction that any Behavior responding to the nested scroll reported as consumed.
+     * @param coordinatorLayout Coordinator Layout
+     * @param child ListView
+     * @param target the descendant view of the CoordinatorLayout performing the nested scroll
+     * @param dx the raw horizontal number of pixels that the user attempted to scroll
+     * @param dy the raw vertical number of pixels that the user attempted to scroll
+     * @param consumed Travelled distance
+     */
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, V child, View target, int dx, int dy, int[] consumed ) {
 
@@ -423,9 +514,21 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         mNestedScrolled = true;
     }
 
+    /**
+     * @return True if nested scrolling
+     */
     public boolean getmNestedScrolled(){
         return mNestedScrolled;
     }
+
+    /**
+     *  Each Behavior that returned true will receive subsequent nested scroll events for that nested scroll.
+     *  onStopNestedScroll marks the end of a single nested scroll event sequence.
+     *  The override is necessary to define the State Machine
+     * @param coordinatorLayout Coordinator Layout
+     * @param child Listview
+     * @param target the descendant view of the CoordinatorLayout performing the nested scroll
+     */
     @Override
     public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, V child, View target ) {
         if ( child.getTop() == mMinOffset ) {
@@ -510,6 +613,15 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         mNestedScrolled = false;
     }
 
+    /**
+     *  Each Behavior that returned true will receive subsequent nested scroll events for that nested scroll.
+     * @param coordinatorLayout Coordinator Layout
+     * @param child ListView
+     * @param target the descendant view of the CoordinatorLayout performing the nested scroll
+     * @param velocityX speed of the fling vertically
+     * @param velocityY speed of the fling horizontally
+     * @return
+     */
     @Override
     public boolean onNestedPreFling(CoordinatorLayout coordinatorLayout, V child, View target,
                                     float velocityX, float velocityY) {
@@ -530,6 +642,9 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         mMaxOffset = mParentHeight - peekHeight;
     }
 
+    /**
+     * @return maximum offset value of the bottomsheet
+     */
     public int getmMaxOffset(){
         return mMaxOffset;
     }
@@ -582,20 +697,35 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         mCallback.add(callback);
     }
 
+    /**
+     *
+     * @return Vector containing all callbacks
+     */
     public Vector getmCallBack(){
         return mCallback;
     }
 
+    /**
+     *
+     * @return last static state of the bottomsheet (not dragging)
+     */
     public int getmLastStableState(){
         return mLastStableState;
     }
 
     private int top_position;
 
+    /**
+     * @return top position of bottomsheet
+     */
     public int getTop_position(){
         return top_position;
     }
 
+    /**
+     *
+     * @return minimum offset of the bottomsheet
+     */
     public int getmMinOffset(){
         return mMinOffset;
     }
@@ -668,6 +798,10 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         return mState;
     }
 
+    /**
+     * Sets the state of the bottomsheet
+     * @param state represented as an integer
+     */
     private void setStateInternal(@State int state) {
         if (mState == state) {
             return;
@@ -686,22 +820,42 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         }
     }
 
+    /**
+     * Listens for any state changes of the bottomsheet
+     * @param bottomSheet
+     * @param newState
+     */
     private void notifyStateChangedToListeners(@NonNull View bottomSheet, @State int newState) {
         for (BottomSheetCallback bottomSheetCallback:mCallback) {
             bottomSheetCallback.onStateChanged(bottomSheet, newState);
         }
     }
 
+    /**
+     * Listens for sliding movements
+     * @param bottomSheet
+     * @param slideOffset
+     */
     private void notifyOnSlideToListeners(@NonNull View bottomSheet, float slideOffset) {
         for (BottomSheetCallback bottomSheetCallback:mCallback) {
             bottomSheetCallback.onSlide(bottomSheet, slideOffset);
         }
     }
 
+    /**
+     * Will reset the view to its basic configuration of the onChildLayout
+     */
     private void reset() {
         mActivePointerId = ViewDragHelper.INVALID_POINTER;
     }
 
+    /**
+     * Depending on the current state of the bottomsheet, we can determine
+     * if the user's intention was to hide it
+     * @param child
+     * @param yvel
+     * @return true if we hide the bottomsheet at the bottom
+     */
     private boolean shouldHide(View child, float yvel) {
         if (child.getTop() < mMaxOffset) {
             // It should not hide, but collapse.
@@ -711,6 +865,11 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         return Math.abs(newTop - mMaxOffset) / (float) mPeekHeight > HIDE_THRESHOLD;
     }
 
+    /**
+     * Iteratively find all children of the bottomsheet
+     * @param view
+     * @return view
+     */
     private View findScrollingChild(View view) {
         if (view instanceof NestedScrollingChild) {
             return view;
@@ -727,8 +886,18 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         return null;
     }
 
+
     public final ViewDragHelper.Callback mDragCallback = new ViewDragHelper.Callback() {
 
+        /**
+         * Called when the user's input indicates that they want to capture
+         * the given child view with the pointer indicated by pointerId. The
+         * callback should return true if the user is permitted to drag the
+         * given view with the indicated pointer.
+         * @param child
+         * @param pointerId
+         * @return true if the user is permitted to drag the given view with the indicated pointer.
+         */
         @Override
         public boolean tryCaptureView(View child, int pointerId ) {
             if ( mState == STATE_DRAGGING ) {
@@ -747,11 +916,23 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
             return mViewRef != null && mViewRef.get() == child;
         }
 
+        /**
+         * Called when the captured view's position changes as the result of a drag or settle.
+         * @param changedView
+         * @param left
+         * @param top
+         * @param dx
+         * @param dy
+         */
         @Override
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy ) {
             dispatchOnSlide( top );
         }
 
+        /**
+         * Called when the drag state changes. See the STATE_* constants for more information.
+         * @param state
+         */
         @Override
         public void onViewDragStateChanged( int state ) {
             if ( state == ViewDragHelper.STATE_DRAGGING ) {
@@ -759,6 +940,14 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
             }
         }
 
+        /**
+         * Called when the child view is no longer being actively dragged.
+         * The fling velocity is also supplied, if relevant. The velocity
+         * values may be clamped to system minimums or maximums.
+         * @param releasedChild
+         * @param xvel
+         * @param yvel
+         */
         @Override
         public void onViewReleased(View releasedChild, float xvel, float yvel ) {
             int top;
@@ -800,6 +989,13 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
             }
         }
 
+        /**
+         * Restrict the motion of the dragged child view along the vertical axis.
+         * @param child
+         * @param top
+         * @param dy
+         * @return The new clamped position for top
+         */
         @Override
         public int clampViewPositionVertical(View child, int top, int dy) {
             return constrain(top, mMinOffset, mHideable ? mParentHeight : mMaxOffset);
@@ -808,11 +1004,23 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
             return amount < low ? low : (amount > high ? high : amount);
         }
 
+        /**
+         * Restrict the motion of the dragged child view along the horizontal axis.
+         * @param child
+         * @param left
+         * @param dx
+         * @return The new clamped position for left
+         */
         @Override
         public int clampViewPositionHorizontal(View child, int left, int dx) {
             return child.getLeft();
         }
 
+        /**
+         * Return the magnitude of a draggable child view's vertical range of motion in pixels.
+         * @param child
+         * @return This method should return 0 for views that cannot move vertically.
+         */
         @Override
         public int getViewVerticalDragRange(View child) {
             if (mHideable) {
@@ -823,6 +1031,10 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         }
     };
 
+    /**
+     * Notify on slide listeners when there is a slide motion
+     * @param top
+     */
     private void dispatchOnSlide( int top ) {
         View bottomSheet = null;
         try{
@@ -848,11 +1060,22 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         @State
         private final int mTargetState;
 
+        /**
+         * constructor
+         * @param view
+         * @param targetState
+         */
         SettleRunnable(View view, @State int targetState ) {
             mView = view;
             mTargetState = targetState;
         }
 
+        /**
+         * When an object implementing interface Runnable is used to create a thread,
+         * starting the thread causes the object's run method to be called in that
+         * separately executing thread.The general contract of the method run is that it
+         * may take any action whatsoever.
+         */
         @Override
         public void run() {
             if ( mViewDragHelper != null  &&  mViewDragHelper.continueSettling( true ) ) {
@@ -863,6 +1086,10 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         }
     }
 
+    /**
+     * Set minimum offset
+     * @param offSet
+     */
     public void setmMinOffset(int offSet){
         mMinOffset = offSet;
     }
@@ -872,17 +1099,31 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         @State
         final int state;
 
+        /**
+         * Constructor
+         * @param source
+         */
         public SavedState( Parcel source ) {
             super( source );
             // noinspection ResourceType
             state = source.readInt();
         }
 
+        /**
+         * Saves state of the bottomsheet
+         * @param superState
+         * @param state
+         */
         public SavedState(Parcelable superState, @State int state) {
             super(superState);
             this.state = state;
         }
 
+        /**
+         * Flatten this object in to a Parcel.
+         * @param out
+         * @param flags
+         */
         @Override
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);

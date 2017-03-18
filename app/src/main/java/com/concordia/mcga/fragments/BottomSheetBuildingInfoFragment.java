@@ -264,6 +264,9 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         }
     }
 
+    /**
+     * Display hall buildings POI
+     */
     public void displayHBuildingAssociations(){
         String temp[] = new String[IMAGES_PER_ROW];
         temp[0] = "asfa";
@@ -282,6 +285,9 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
 
     }
 
+    /**
+     * Display MB POI
+     */
     public void displayMBBuildingAssociations(){
         String temp[] = new String[IMAGES_PER_ROW];
         temp[0] = "jmac";

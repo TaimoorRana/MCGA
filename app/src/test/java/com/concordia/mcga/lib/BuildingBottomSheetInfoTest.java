@@ -1,14 +1,12 @@
 package com.concordia.mcga.lib;
 
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.util.AttributeSet;
-import android.util.Xml;
+
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,27 +19,20 @@ import com.concordia.mcga.activities.R;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InOrder;
-import org.mockito.Matchers;
+
 import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.util.ActivityController;
-import org.xmlpull.v1.XmlPullParser;
+
 
 import java.util.Vector;
 
-import static com.concordia.mcga.lib.BuildingBottomSheetInfo.STATE_HIDDEN;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Charmander on 3/17/2017.
- */
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class,sdk = 21)
