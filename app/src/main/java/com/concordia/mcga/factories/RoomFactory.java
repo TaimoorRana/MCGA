@@ -10,7 +10,7 @@ import com.google.gson.Gson;
  */
 public class RoomFactory {
     public final static int NAME_COLUMN_INDEX = 1, CENTER_COORDINATE_COLUMN_INDEX = 2,
-            ROOM_NUMBER_COLUMN_INDEX = 3;
+            ROOM_NUMBER_COLUMN_INDEX = 3, FLOOR_NUMBER_COLUMN_INDEX = 5;
     private final static Gson GSON = new Gson();
 
     /**
@@ -24,9 +24,9 @@ public class RoomFactory {
         LatLng centerCoordinates = GSON.fromJson(res.getString(CENTER_COORDINATE_COLUMN_INDEX),
                 LatLng.class);
         int room_number = res.getInt(ROOM_NUMBER_COLUMN_INDEX);
-
+        int floor_number = res.getInt(FLOOR_NUMBER_COLUMN_INDEX);
         // handle tile
 
-        return new Room(centerCoordinates, name, null, room_number);
+        return new Room(centerCoordinates, name, null, room_number, floor_number);
     }
 }

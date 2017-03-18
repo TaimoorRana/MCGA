@@ -17,14 +17,17 @@ import android.widget.Toast;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
+import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.IndoorMapTile;
+import com.concordia.mcga.models.Room;
 import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class IndoorMapFragment extends Fragment {
 
@@ -74,7 +77,27 @@ public class IndoorMapFragment extends Fragment {
         //Indoor POI Stack
         indoorPoiStack = new ArrayList<IndoorPOI>();
 
+        Campus.populateCampusesWithBuildings();
+        test();
+
         return view;
+    }
+
+    private void test() {
+        Log.d("Test", "IN HERE!!!");
+        Building hBuilding = null;
+        for (Building b : Campus.SGW.getBuildings()) {
+            if(b.getShortName().equalsIgnoreCase("h")) {
+                hBuilding = b;
+            }
+        }
+        Log.d("Building", "H Is: " + hBuilding.getShortName() + " has rooms: " + hBuilding.getRooms().size());
+        for (Room r : hBuilding.getRooms()) {
+            Log.d("Room", "Name: " + r.getName());
+            Log.d("Room", "Lat: " + r.getMapCoordinates().latitude);
+            Log.d("Room", "Lng: " + r.getMapCoordinates().longitude);
+            Log.d("Room", "Floor: " + r.getFloorNumber());
+        }
     }
 
     public void generatePath(final IndoorPOI start, final IndoorPOI dest) {

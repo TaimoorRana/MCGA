@@ -7,15 +7,21 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Room extends IndoorPOI {
     private int roomNumber;
+    private int floorNumber;
 
-    public Room(LatLng mapCoordinates, String name, IndoorMapTile tile, int roomNumber) {
+    public Room(LatLng mapCoordinates, String name, IndoorMapTile tile, int roomNumber, int floorNumber) {
         super(mapCoordinates, name, tile);
         this.roomNumber = roomNumber;
+        this.floorNumber = floorNumber;
     }
 
     public int getRoomNumber() {
 
         return roomNumber;
+    }
+
+    public int getFloorNumber() {
+        return floorNumber;
     }
 
     public void setRoomNumber(int roomNumber) {
@@ -35,16 +41,16 @@ public class Room extends IndoorPOI {
         Room room = (Room) o;
 
         return new EqualsBuilder()
-            .appendSuper(super.equals(o))
-            .append(roomNumber, room.roomNumber)
-            .isEquals();
+                .appendSuper(super.equals(o))
+                .append(roomNumber, room.roomNumber)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-            .appendSuper(super.hashCode())
-            .append(roomNumber)
-            .toHashCode();
+                .appendSuper(super.hashCode())
+                .append(roomNumber)
+                .toHashCode();
     }
 }

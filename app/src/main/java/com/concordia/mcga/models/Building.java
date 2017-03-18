@@ -52,7 +52,7 @@ public class Building extends POI implements Observer {
      *  Populate this Building object with rooms retrieved via database.
      */
     public void populateRooms() {
-        final int BUILDING_COLUMN_INDEX = 7;
+        final int BUILDING_COLUMN_INDEX = 4;
         Cursor res;
 
         try {
@@ -65,7 +65,7 @@ public class Building extends POI implements Observer {
             throw new Error("Database not initialized");
         }
         while (res.moveToNext()) {
-            if (res.getString(BUILDING_COLUMN_INDEX).equals(getName())) {
+            if (res.getString(BUILDING_COLUMN_INDEX).equals(getShortName())) {
                 rooms.add(RoomFactory.createRoom(res));
             }
         }
