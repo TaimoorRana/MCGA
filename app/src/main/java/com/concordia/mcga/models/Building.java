@@ -52,7 +52,7 @@ public class Building extends POI implements Observer {
      *  Populate this Building object with rooms retrieved via database.
      */
     public void populateRooms() {
-        final int BUILDING_COLUMN_INDEX = 4;
+        final int BUILDING_COLUMN_INDEX = 5;
         Cursor res;
 
         try {
@@ -72,6 +72,22 @@ public class Building extends POI implements Observer {
         res.close();
     }
 
+    public void populateFloors() {
+        for (Room room : rooms) {
+            Floor floor = null;
+            if (floorMaps.containsKey(room.getFloorNumber())) {
+                floor = floorMaps.get(room.getFloorNumber());
+                room.setFloor(floor);
+                floor.getIndoorPOIs().add(room);
+            } else {
+                floor = new Floor(this, room.getFloorNumber());
+                room.setFloor(floor);
+                floor.getIndoorPOIs().add(room);
+                floorMaps.put(room.getFloorNumber(), floor);
+            }
+        }
+    }
+
     /**
      *
      * @return Floor maps for the given floor Number
@@ -83,6 +99,14 @@ public class Building extends POI implements Observer {
             floorMaps.put(floorNumber, returnMap);
         }
         return returnMap;
+    }
+
+    /**
+     *
+     * @return Map of all floor maps
+     */
+    public Map<Integer, Floor> getFloorMaps() {
+        return floorMaps;
     }
 
     /**

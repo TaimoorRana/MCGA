@@ -26,8 +26,10 @@ import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class IndoorMapFragment extends Fragment {
 
@@ -92,11 +94,8 @@ public class IndoorMapFragment extends Fragment {
             }
         }
         Log.d("Building", "H Is: " + hBuilding.getShortName() + " has rooms: " + hBuilding.getRooms().size());
-        for (Room r : hBuilding.getRooms()) {
-            Log.d("Room", "Name: " + r.getName());
-            Log.d("Room", "Lat: " + r.getMapCoordinates().latitude);
-            Log.d("Room", "Lng: " + r.getMapCoordinates().longitude);
-            Log.d("Room", "Floor: " + r.getFloorNumber());
+        for (Integer floorNum : hBuilding.getFloorMaps().keySet()) {
+            Floor floor = hBuilding.getFloorMaps().get(floorNum);
         }
     }
 
@@ -129,18 +128,31 @@ public class IndoorMapFragment extends Fragment {
     }
 
     public void initializeHBuilding() {
-        leafletView.evaluateJavascript("loadMap('H4')", null);
-        leafletView.evaluateJavascript("addH4Markers()", null);
+        //This is the default first floor shown for the building
+        leafletView.evaluateJavascript("loadMap('H2')", null);
 
         //Add Floor Buttons
         Button h1 = new Button(getContext());
         h1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
-        h1.setText("1/2");
+        h1.setText("1");
         h1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (pageLoaded) {
-                    leafletView.evaluateJavascript("loadMap('H1-2')", null);
+                    leafletView.evaluateJavascript("loadMap('H1')", null);
+                }
+            }
+        });
+
+        //Add Floor Buttons
+        Button h2 = new Button(getContext());
+        h2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
+        h2.setText("2");
+        h2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pageLoaded) {
+                    leafletView.evaluateJavascript("loadMap('H2')", null);
                 }
             }
         });
@@ -159,6 +171,7 @@ public class IndoorMapFragment extends Fragment {
         });
 
         floorButtonContainer.addView(h4);
+        floorButtonContainer.addView(h2);
         floorButtonContainer.addView(h1);
     }
 

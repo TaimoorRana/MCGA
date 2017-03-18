@@ -5,6 +5,7 @@ var map;
 var floormapGroup;
 var roomMarkerGroup;
 var pathMarkerGroup;
+var polygonGroup;
 var pathGroup;
 
 //Lat and Lng Bounds For Currently Loaded Map
@@ -29,11 +30,14 @@ function initmap() {
 	roomMarkerGroup = L.layerGroup().addTo(map);
 	pathMarkerGroup = L.layerGroup().addTo(map);
 
+	//Polygon Groups
+	polygonGroup = L.layerGroup().addTo(map);
+
 	//Listener Registration
 	map.on('click', function(ev) {
 		console.log(JSON.stringify(ev.latlng));
 	});
-};
+}
 
 //Map Loaders
 function loadMapImage(path, latBound, lngBound) {
@@ -52,14 +56,17 @@ function loadMapImage(path, latBound, lngBound) {
 	};
 	floormapGroup.addLayer(L.imageOverlay(path, bounds, imageOptions));
 	map.fitBounds(bounds);
-};
+}
 
 function loadMap(mapId) {
 	clearAllLayers();
 	switch (mapId) {
-		case "H1-2":
-			loadMapImage('floormaps/H/1-2.png', 2196, 2000);
+		case "H1":
+			loadMapImage('floormaps/H/1.png', 2643, 2823);
 			break;
+		case "H2":
+            loadMapImage('floormaps/H/2.png', 2356, 2604);
+            break;
 		case "H4":
 			loadMapImage('floormaps/H/4.png', 1989, 2196);
 			break;
@@ -90,7 +97,7 @@ function drawWalkablePath(pointArray) {
 			pathGroup.addLayer(L.polyline([points[i - 1], points[i]]));
 		}
 	}
-};
+}
 
 //Addition Of Demo Markers
 function addH4Markers() {
@@ -122,25 +129,30 @@ function addH4Markers() {
 		});
 		roomMarkerGroup.addLayer(marker);
 	}
-};
+}
 
 //Clearing Functions
 function clearPathLayers() {
 	pathGroup.clearLayers();
 	pathMarkerGroup.clearLayers();
-};
+}
 
 function clearMarkerLayers() {
 	pathMarkerGroup.clearLayers();
 	roomMarkerGroup.clearLayers();
-};
+}
+
+function clearPolygonLayers() {
+    polygonGroup.clearLayers();
+}
 
 function clearAllLayers() {
 	clearPathLayers();
-	clearMarkerLayers()
-};
+	clearMarkerLayers();
+	clearPolygonLayers()
+}
 
 //Document Init
 $(document).ready(function() {
 	initmap();
-});
+})

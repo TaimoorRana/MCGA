@@ -47,6 +47,7 @@ public class Campus extends POI {
         while (res.moveToNext()) {
             Building building = BuildingFactory.createBuilding(res);
             building.populateRooms();
+            building.populateFloors();
 
             if (res.getString(CAMPUS_COLUMN_INDEX).equalsIgnoreCase(SGW.getShortName())) {
                 SGW.buildings.add(building);

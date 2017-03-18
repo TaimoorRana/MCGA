@@ -1,9 +1,12 @@
 package com.concordia.mcga.models;
 
 import com.concordia.mcga.utilities.pathfinding.TiledMap;
-import java.util.List;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Floor {
     private Building building;
@@ -19,6 +22,10 @@ public class Floor {
     public Floor(Building building, int floorNumber) {
         this.building = building;
         this.floorNumber = floorNumber;
+        this.indoorPOIs = new ArrayList<>();
+        this.elevators = new ArrayList<>();
+        this.staircases = new ArrayList<>();
+        this.escalators = new ArrayList<>();
     }
 
     public int getFloorNumber() {
