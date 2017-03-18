@@ -1,6 +1,11 @@
 package com.concordia.mcga.models;
 
+import android.database.Cursor;
 import android.graphics.Color;
+
+import com.concordia.mcga.exceptions.MCGADatabaseException;
+import com.concordia.mcga.factories.RoomFactory;
+import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.factories.IndoorMapFactory;
 import com.concordia.mcga.helperClasses.Observer;
 import com.google.android.gms.maps.model.LatLng;
@@ -23,6 +28,7 @@ public class Building extends POI implements Observer {
     private String shortName;
     private MarkerOptions markerOptions;
     private List<LatLng> edgeCoordinateList;
+    private List<Room> rooms;
     private Polygon polygon;
     private Map<Integer, Floor> floorMaps;
 
@@ -39,6 +45,31 @@ public class Building extends POI implements Observer {
         this.markerOptions = markerOptions.position(centerCoordinate).anchor(0.5f, 0.5f);
         edgeCoordinateList = new ArrayList<>();
         floorMaps = new HashMap<>();
+        rooms = new ArrayList<>();
+    }
+
+    /**
+     *  Populate this Building object with rooms retrieved via database.
+     */
+    public void populateRooms() {
+        final int BUILDING_COLUMN_INDEX = 7;
+        Cursor res;
+
+        try {
+            if (!rooms.isEmpty())  // if the building has already had its POIs retrieved
+            {
+                return;
+            }
+            res = DatabaseConnector.getInstance().getDb().rawQuery("select * from room", null);
+        } catch (MCGADatabaseException e) {
+            throw new Error("Database not initialized");
+        }
+        while (res.moveToNext()) {
+            if (res.getString(BUILDING_COLUMN_INDEX).equals(getName())) {
+                rooms.add(RoomFactory.createRoom(res));
+            }
+        }
+        res.close();
     }
 
     /**
@@ -52,6 +83,14 @@ public class Building extends POI implements Observer {
             floorMaps.put(floorNumber, returnMap);
         }
         return returnMap;
+    }
+
+    /**
+     * Get all the rooms belonging to this building
+     * @return List of all the rooms associated with this building
+     */
+    public List<Room> getRooms() {
+        return rooms;
     }
 
     /**

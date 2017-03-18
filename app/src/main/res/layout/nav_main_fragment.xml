@@ -1,29 +1,18 @@
-<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
+    android:id="@+id/navigationMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:layout="@layout/activity_main">
+    tools:layout="@layout/activity_main"
+    android:focusableInTouchMode="true">
 
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
-
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:tint="@color/white"
-            app:srcCompat="@drawable/ic_search_black_24dp" />
-
-        <EditText
-            android:id="@+id/navigationSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white" />
-    </android.support.v7.widget.Toolbar>
+    <include
+        android:id="@+id/nav_toolbar"
+        layout="@layout/nav_main_toolbar"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,7 +24,7 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="bottom" />
 
         <fragment
             android:id="@+id/indoormap"
@@ -64,8 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/mapCenterButton"
-            android:layout_alignParentEnd="true"
-            tools:layout="@layout/transport_button_fragment" />
+            android:layout_alignParentEnd="true" />
 
         <ToggleButton
             android:id="@+id/campusButton"

@@ -6,15 +6,22 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="drawerArrowStyle">@style/MCGADrawerArrowToggle</item>
+        <item name="android:editTextColor">@android:color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="drawerArrowStyle">@style/DrawerStyle</item>
+        <item name="searchViewStyle">@style/SearchStyle</item>
     </style>
 
-    <style name="MCGADrawerArrowToggle" parent="Widget.AppCompat.DrawerArrowToggle">
+    <style name="DrawerStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/white</item>
+    </style>
+
+    <style name="SearchStyle" parent="Widget.AppCompat.SearchView">
+        <item name="searchIcon">@drawable/ic_search_white</item>
+        <item name="closeIcon">@drawable/ic_clear_white</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
     </style>
-
 </resources>
