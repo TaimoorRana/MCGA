@@ -20123,4 +20123,12 @@ INSERT INTO `building` VALUES (54,'Hingston Hall, wing HA','HC','{"latitude":45.
 INSERT INTO `building` VALUES (55,'Terrebonne Building','TA','{"latitude":45.459987,"longitude":-73.640898,"mVersionCode":1}','[{"latitude":45.45994,"longitude":-73.640868,"mVersionCode":1},{"latitude":45.459978,"longitude":-73.64097,"mVersionCode":1},{"latitude":45.460033,"longitude":-73.640929,"mVersionCode":1},{"latitude":45.459993,"longitude":-73.640827,"mVersionCode":1}]',2130903063,1,'LOY');
 CREATE TABLE android_metadata (locale TEXT);
 INSERT INTO `android_metadata` VALUES ('en_US');
+CREATE TABLE "room" (
+	`_id` INTEGER,
+       	`name` TEXT,
+       	`center_coordinate` INTEGER,
+       	`room_number` INTEGER,
+       	`building` TEXT,
+       	PRIMARY KEY(`_id`)
+);
 COMMIT;
