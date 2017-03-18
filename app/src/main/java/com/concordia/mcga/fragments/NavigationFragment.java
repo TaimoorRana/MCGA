@@ -1,5 +1,5 @@
 package com.concordia.mcga.fragments;
-
+import com.concordia.mcga.activities.MainActivity;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -8,8 +8,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -333,7 +331,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 if(building == null){
                     building = Campus.LOY.getBuilding(polygon);
                 }
-                getActivity().getApplicationContext().createToast(building.getShortName());
+                ((MainActivity) getActivity()).createToast(building.getShortName());
                 String buildingName = building.getShortName();
                 buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
                 buildingInfoFragment.clear();
@@ -362,7 +360,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 if(building == null){
                     building = Campus.LOY.getBuilding(marker);
                 }
-                getActivity().getApplicationContext().createToast(building.getShortName());
+                ((MainActivity) getActivity()).createToast(building.getShortName());
                 String buildingName = building.getShortName();
                 buildingInfoFragment.setBuildingInformation(buildingName, "address", "7:00", "23:00");
                 buildingInfoFragment.clear();
