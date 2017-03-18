@@ -4,6 +4,7 @@ import com.concordia.mcga.utilities.pathfinding.TiledMap;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,17 @@ public class Floor {
 
     public List<IndoorPOI> getIndoorPOIs() {
         return indoorPOIs;
+    }
+
+    public JSONArray getRoomsJSON() {
+        JSONArray indoorPOIArray = new JSONArray();
+        for (IndoorPOI poi : getIndoorPOIs()) {
+            if (poi instanceof Room) {
+                Room room = (Room) poi;
+                indoorPOIArray.put(room.toJson());
+            }
+        }
+        return indoorPOIArray;
     }
 
     public void setIndoorPOIs(List<IndoorPOI> indoorPOIs) {

@@ -10,7 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Room extends IndoorPOI {
 
@@ -50,22 +52,30 @@ public class Room extends IndoorPOI {
         this.roomNumber = roomNumber;
     }
 
-   /* public JSONObject toJson() {
+    public JSONObject toJson() {
         JSONObject json = new JSONObject();
+        JSONArray polygonCoordArray = new JSONArray();
+        for (LatLng coord : polygonCoordinates) {
+            JSONObject polygonCoord = new JSONObject();
+            try {
+                polygonCoord.put("lat", coord.latitude);
+                polygonCoord.put("lng", coord.longitude);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            polygonCoordArray.put(polygonCoord);
+        }
         try {
             json.put("roomName", this.getName());
-            json.put("lat", this.coordinateY);
-            json.put("lng", this.coordinateX);
+            json.put("xCoordinate", this.getTile().getCoordinateX());
+            json.put("yCoordinate", this.getTile().getCoordinateY());
+            json.put("floorNumber", this.getFloor().getFloorNumber());
+            json.put("polygonCoords", polygonCoordArray);
         } catch (JSONException e) {
             Log.e("IndoorMapTile Error", Log.getStackTraceString(e));
         }
         return json;
-            JSONArray pftArray = new JSONArray();
-            for (IndoorMapTile pft : pathTilesJunctions) {
-                pftArray.put(pft.toJSON());
-            }
-            return pftArray;
-    }*/
+    }
 
     @Override
     public boolean equals(Object o) {

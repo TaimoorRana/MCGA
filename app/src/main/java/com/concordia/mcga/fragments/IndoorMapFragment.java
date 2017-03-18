@@ -25,6 +25,9 @@ import com.concordia.mcga.models.Room;
 import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -41,6 +44,7 @@ public class IndoorMapFragment extends Fragment {
     //State
     private boolean pageLoaded = false;
     private boolean pathsDrawn = false;
+    private Floor currentFloor;
 
     //Test POIs for Demo
     IndoorPOI H423 = new IndoorPOI(null, "H423", new IndoorMapTile(353, 1326));
@@ -86,16 +90,16 @@ public class IndoorMapFragment extends Fragment {
     }
 
     private void test() {
-        Log.d("Test", "IN HERE!!!");
         Building hBuilding = null;
         for (Building b : Campus.SGW.getBuildings()) {
             if(b.getShortName().equalsIgnoreCase("h")) {
                 hBuilding = b;
             }
         }
-        Log.d("Building", "H Is: " + hBuilding.getShortName() + " has rooms: " + hBuilding.getRooms().size());
         for (Integer floorNum : hBuilding.getFloorMaps().keySet()) {
             Floor floor = hBuilding.getFloorMaps().get(floorNum);
+            Room room = (Room) floor.getIndoorPOIs().get(0);
+            Log.d("JSON Room", room.toJson().toString());
         }
     }
 
@@ -128,6 +132,7 @@ public class IndoorMapFragment extends Fragment {
     }
 
     public void initializeHBuilding() {
+        Building hBuilding = Campus.SGW.getBuilding("H");
         //This is the default first floor shown for the building
         leafletView.evaluateJavascript("loadMap('H2')", null);
 
@@ -157,6 +162,7 @@ public class IndoorMapFragment extends Fragment {
             }
         });
 
+        final Floor h4Floor = hBuilding.getFloorMap(4);
         Button h4 = new Button(getContext());
         h4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
         h4.setText("4");
@@ -164,8 +170,10 @@ public class IndoorMapFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (pageLoaded) {
+                    currentFloor = h4Floor;
                     leafletView.evaluateJavascript("loadMap('H4')", null);
-                    leafletView.evaluateJavascript("addH4Markers()", null);
+                    //leafletView.evaluateJavascript("addH4Markers()", null);
+                    leafletView.evaluateJavascript("addFloorPointsAndMarkers(" + h4Floor.getRoomsJSON().toString() +")", null);
                 }
             }
         });
@@ -173,6 +181,19 @@ public class IndoorMapFragment extends Fragment {
         floorButtonContainer.addView(h4);
         floorButtonContainer.addView(h2);
         floorButtonContainer.addView(h1);
+    }
+
+    @JavascriptInterface
+    public void poiClicked(String poiName) {
+        IndoorPOI poiClicked = null;
+        Log.d("PoiClickEvent", poiName);
+        for (IndoorPOI poi : currentFloor.getIndoorPOIs()) {
+            if (poi.getName().equalsIgnoreCase(poiName)) {
+                poiClicked = poi;
+            }
+        }
+
+        Log.d("PoiClickEvent", "Poi is: " + poiClicked);
     }
 
     @JavascriptInterface

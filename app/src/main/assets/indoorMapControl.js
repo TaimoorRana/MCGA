@@ -65,8 +65,8 @@ function loadMap(mapId) {
 			loadMapImage('floormaps/H/1.png', 2643, 2823);
 			break;
 		case "H2":
-            loadMapImage('floormaps/H/2.png', 2356, 2604);
-            break;
+			loadMapImage('floormaps/H/2.png', 2356, 2604);
+			break;
 		case "H4":
 			loadMapImage('floormaps/H/4.png', 1989, 2196);
 			break;
@@ -80,7 +80,7 @@ function drawWalkablePath(pointArray) {
 	for (var i = 0; i < pointArray.length; i++) {
 		var pointRaw = pointArray[i];
 
-        //Convert coordinates so that origin (0,0) is at the bottom left rather than on the top left
+		//Convert coordinates so that origin (0,0) is at the bottom left rather than on the top left
 		var pointLat = curLatBound - pointRaw.lat;
 		var pointLng = pointRaw.lng;
 
@@ -99,8 +99,27 @@ function drawWalkablePath(pointArray) {
 	}
 }
 
-//Addition Of Demo Markers
-function addH4Markers() {
+function addFloorPointsAndMarkers(roomArray) {
+	console.log(JSON.stringify(roomArray));
+
+	for (var i = 0; i < roomArray.length; i++) {
+		var room = roomArray[i];
+		var polygonBounds = [];
+		for (var j = 0; j < room.polygonCoords.length; j++) {
+			var coord = room.polygonCoords[j];
+			var bound = [coord.lat, coord.lng];
+			polygonBounds.push(bound);
+		}
+
+		var polygon = L.polygon(polygonBounds, {'roomName': room.roomName});
+		polygon.on('click', function(event) {
+			Android.poiClicked(event.target.options.roomName);
+		});
+		polygon.addTo(polygonGroup);
+	}
+}
+
+/*function addH4Markers() {
 	var H423 = {
 		'name': 'H423',
 		'coord': L.latLng([670, 348])
@@ -129,7 +148,7 @@ function addH4Markers() {
 		});
 		roomMarkerGroup.addLayer(marker);
 	}
-}
+}*/
 
 //Clearing Functions
 function clearPathLayers() {
@@ -143,7 +162,7 @@ function clearMarkerLayers() {
 }
 
 function clearPolygonLayers() {
-    polygonGroup.clearLayers();
+	polygonGroup.clearLayers();
 }
 
 function clearAllLayers() {

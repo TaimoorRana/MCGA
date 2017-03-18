@@ -98,6 +98,19 @@ public class Campus extends POI {
         return null;
     }
 
+    /**
+     *
+     * @param shortName The short name of the building, eg: "H"
+     * @return  The building that that short name, if it exists else null
+     */
+    public Building getBuilding(String shortName){
+        for (Building building : buildings) {
+            if(building.getShortName().equalsIgnoreCase(shortName));
+                return building;
+        }
+        return null;
+    }
+
     public void addBuilding(Building building){
         buildings.add(building);
     }
