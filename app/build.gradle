@@ -31,10 +31,7 @@ android {
             jacoco {
                 includeNoLocationClasses = true
 
-                afterEvaluate {
-                    setExcludes(['**/com/concordia/mcga/lib/**',
-                                 '**/com/concordia/mcga/fragments/NavigationFragment'])
-                }
+
             }
         }
 

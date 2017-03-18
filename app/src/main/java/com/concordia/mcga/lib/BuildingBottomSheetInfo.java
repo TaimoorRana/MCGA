@@ -12,6 +12,7 @@ import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -23,6 +24,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.ref.WeakReference;
 import java.util.Vector;
+
+import static android.content.ContentValues.TAG;
 
 
 public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.Behavior<V> {
@@ -149,18 +152,26 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         super( context, attrs );
         TypedArray a = context.obtainStyledAttributes(attrs,
                 android.support.design.R.styleable.BottomSheetBehavior_Layout);
-        setPeekHeight(a.getDimensionPixelSize(android.support.design.R.styleable.BottomSheetBehavior_Layout_behavior_peekHeight, 0));
-        setHideable(a.getBoolean(android.support.design.R.styleable.BottomSheetBehavior_Layout_behavior_hideable, false));
-        a.recycle();
+        try {
+            setPeekHeight(a.getDimensionPixelSize(android.support.design.R.styleable.BottomSheetBehavior_Layout_behavior_peekHeight, 0));
+            setHideable(a.getBoolean(android.support.design.R.styleable.BottomSheetBehavior_Layout_behavior_hideable, false));
+            a.recycle();
 
-        /**
-         * Getting the anchorPoint...
-         */
-        mAnchorPoint = DEFAULT_ANCHOR_POINT;
-        a = context.obtainStyledAttributes(attrs, R.styleable.CustomBottomSheetBehavior);
-        if (attrs != null)
-            mAnchorPoint = (int) a.getDimension( R.styleable.CustomBottomSheetBehavior_anchorPoint, 0);
-        a.recycle();
+            /**
+             * Getting the anchorPoint...
+             */
+            mAnchorPoint = DEFAULT_ANCHOR_POINT;
+            a = context.obtainStyledAttributes(attrs, R.styleable.CustomBottomSheetBehavior);
+            if (attrs != null)
+                mAnchorPoint = (int) a.getDimension( R.styleable.CustomBottomSheetBehavior_anchorPoint, 0);
+            a.recycle();
+        }
+        catch(Exception e){
+            setPeekHeight(1000);
+            setHideable(true);
+            mAnchorPoint = 200;
+        }
+
 
         ViewConfiguration configuration = ViewConfiguration.get(context);
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
@@ -227,8 +238,13 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         } else if (mState == STATE_COLLAPSED) {
             ViewCompat.offsetTopAndBottom(child, mMaxOffset);
         }
-        if ( mViewDragHelper == null ) {
-            mViewDragHelper = ViewDragHelper.create( parent, mDragCallback );
+        try {
+            if (mViewDragHelper == null) {
+                mViewDragHelper = ViewDragHelper.create(parent, mDragCallback);
+            }
+        }
+        catch(Exception e){
+            Log.e(TAG, "Exception: " + Log.getStackTraceString(e));
         }
         mViewRef = new WeakReference<>(child);
         mNestedScrollingChildRef = new WeakReference<>( findScrollingChild( child ) );
@@ -357,9 +373,15 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
 
     @Override
     public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, V child, View target, int dx, int dy, int[] consumed ) {
-        View scrollingChild = mNestedScrollingChildRef.get();
-        if ( target != scrollingChild ) {
-            return;
+
+        try {
+            View scrollingChild = mNestedScrollingChildRef.get();
+            if (target != scrollingChild) {
+                return;
+            }
+        }
+        catch (Exception e){
+            Log.e(TAG, "Exception: "+ Log.getStackTraceString(e));
         }
 
         mScrollVelocityTracker.recordScroll( dy );
@@ -393,10 +415,17 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
                 }
             }
         }
-        dispatchOnSlide(child.getTop());
+        try {
+            dispatchOnSlide(child.getTop());
+        }catch(Exception e){
+            Log.e(TAG, "Exception: "+ Log.getStackTraceString(e));
+        }
         mNestedScrolled = true;
     }
 
+    public boolean getmNestedScrolled(){
+        return mNestedScrolled;
+    }
     @Override
     public void onStopNestedScroll(CoordinatorLayout coordinatorLayout, V child, View target ) {
         if ( child.getTop() == mMinOffset ) {
@@ -501,6 +530,9 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         mMaxOffset = mParentHeight - peekHeight;
     }
 
+    public int getmMaxOffset(){
+        return mMaxOffset;
+    }
     /**
      * Gets the height of the bottom sheet when it is collapsed.
      *
@@ -550,6 +582,23 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         mCallback.add(callback);
     }
 
+    public Vector getmCallBack(){
+        return mCallback;
+    }
+
+    public int getmLastStableState(){
+        return mLastStableState;
+    }
+
+    private int top_position;
+
+    public int getTop_position(){
+        return top_position;
+    }
+
+    public int getmMinOffset(){
+        return mMinOffset;
+    }
     /**
      * Sets the state of the bottom sheet. The bottom sheet will transition to that state with
      * animation.
@@ -574,34 +623,36 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
 
             return;
         }
+
+
         V child = mViewRef.get();
         if (child == null) {
             return;
         }
-        int top;
+
         if (state == STATE_COLLAPSED) {
-            top = mMaxOffset;
+            top_position = mMaxOffset;
         }
         else
         if (state == STATE_ANCHOR_POINT) {
-            top = mAnchorPoint;
+            top_position = mAnchorPoint;
         }
         else
         if (state == STATE_EXPANDED) {
-            top = mMinOffset;
+            top_position = mMinOffset;
         }
         else
         if (mHideable && state == STATE_HIDDEN) {
             if (mType == "building_information") {
-                top = mParentHeight;
+                top_position = mParentHeight;
             }else {
-                top = mMaxOffset;
+                top_position = mMaxOffset;
             }
         } else {
             throw new IllegalArgumentException("Illegal state argument: " + state);
         }
         setStateInternal(STATE_SETTLING);
-        if (mViewDragHelper.smoothSlideViewTo(child, child.getLeft(), top)) {
+        if (mViewDragHelper.smoothSlideViewTo(child, child.getLeft(), top_position)) {
             ViewCompat.postOnAnimation(child, new SettleRunnable(child, state));
         }
     }
@@ -621,8 +672,14 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         if (mState == state) {
             return;
         }
+        View bottomSheet = null;
         mState = state;
-        View bottomSheet = mViewRef.get();
+        try {
+            bottomSheet = mViewRef.get();
+        }
+        catch(Exception e){
+            Log.e(TAG, "Exception: "+ Log.getStackTraceString(e));
+        }
         if (bottomSheet != null && mCallback != null) {
 //            mCallback.onStateChanged(bottomSheet, state);
             notifyStateChangedToListeners(bottomSheet, state);
@@ -767,7 +824,14 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
     };
 
     private void dispatchOnSlide( int top ) {
-        View bottomSheet = mViewRef.get();
+        View bottomSheet = null;
+        try{
+            bottomSheet = mViewRef.get();
+        }
+        catch (Exception e){
+            Log.e(TAG, "Exception: "+ Log.getStackTraceString(e));
+        }
+
         if (bottomSheet != null && mCallback != null) {
             if (top > mMaxOffset) {
                 notifyOnSlideToListeners(bottomSheet, (float) (mMaxOffset - top) / mPeekHeight);
