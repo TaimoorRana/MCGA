@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -36,9 +35,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ExpandableListView;
-import android.widget.EditText;
 
-import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.helperClasses.Observer;
@@ -116,10 +113,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private Button campusButton;
     private Button viewSwitchButton;
     private FloatingActionButton mapCenterButton;
-    private EditText navigationSearch;
     //GPS attributes
     private LocationManager gpsmanager; //LocationManager instance to check gps activity
-    private Location location;
+
 
     // Search components
     private SearchView search;
@@ -143,7 +139,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
         indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
         //Init View Components
-        navigationSearch = (EditText) parentLayout.findViewById(R.id.navigationSearch);
         mapCenterButton = (FloatingActionButton) parentLayout.findViewById(R.id.mapCenterButton);
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -166,11 +161,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO INDOORS");
                 }
-                if (navigationSearch.getText() != null) { //Clear Text Label - This is subject to a ton of changes depending on how MCGA-12 goes
-                    navigationSearch.setText("");
-                }
+                onClose();
+
                 if(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen)){
-                    Log.d("GPS Locator","Succesful");}
+                    Log.d("GPS Locator","Successful");}
                 else {
                     Log.d("GPS Locator", "Fail");
                 }
@@ -284,7 +278,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
-        map.getUiSettings().setAllGesturesEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(false);
 
         //Map Customization
