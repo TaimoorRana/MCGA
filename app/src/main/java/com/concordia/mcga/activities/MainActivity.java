@@ -100,6 +100,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * @return activity context
+     */
     public static Context getContext(){
         return context;
     }
