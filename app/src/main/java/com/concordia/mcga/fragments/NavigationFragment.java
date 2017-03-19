@@ -15,6 +15,7 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.POISearchAdapter;
@@ -397,29 +399,41 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         if (location != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
-            locationText.setText(location.getName());
+            if (location instanceof Building) {
+                locationText.setText(((Building) location).getShortName());
+            } else {
+                locationText.setText(location.getName());
+            }
         }
         if (destination != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
-            destinationText.setText(destination.getName());
+            if (destination instanceof Building) {
+                destinationText.setText(((Building) destination).getShortName());
+            } else {
+                destinationText.setText(destination.getName());
+            }
         }
 
         if (searchState == SearchState.NONE) {
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter location...");
+            search.setVisibility(View.VISIBLE);
         } else if (searchState == SearchState.LOCATION) {
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter destination...");
+            search.setVisibility(View.VISIBLE);
         } else if (searchState == SearchState.DESTINATION) {
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setQueryHint("Enter location...");
+            search.setVisibility(View.VISIBLE);
         } else { // searchState == SearchState.LOCATION_DESTINATION
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.VISIBLE);
+            search.setVisibility(View.GONE);
             search.setQueryHint("Search...");
         }
     }

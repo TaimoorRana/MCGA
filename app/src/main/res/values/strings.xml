@@ -13,6 +13,6 @@
     <string name="email">rms@gnu.org</string>
     <string name="button_SGW">SGW</string>
     <string name="button_loyola">LOY</string>
-    <string name="location_string">Location</string>
-    <string name="destination_string">Destination</string>
+    <string name="location_string">Location:</string>
+    <string name="destination_string">Destination:</string>
 </resources>

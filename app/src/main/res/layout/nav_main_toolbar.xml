@@ -12,23 +12,24 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/search_location_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/location_string"
+                android:textColor="@color/white"/>
 
             <android.support.v7.widget.LinearLayoutCompat
                 android:id="@+id/search_location"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/search_divider"
-                android:gravity="center"
                 android:orientation="horizontal">
-
-                <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/search_location_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_close_dark" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/search_location_text"
@@ -36,36 +37,46 @@
                     android:layout_height="wrap_content"
                     android:text="@string/location_string"
                     android:textColor="@color/white"/>
-            </android.support.v7.widget.LinearLayoutCompat>
-
-            <View
-                android:id="@+id/search_divider"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_centerHorizontal="true" />
-
-            <android.support.v7.widget.LinearLayoutCompat
-                android:id="@+id/search_destination"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/search_divider"
-                android:gravity="center"
-                android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/search_destination_button"
+                    android:id="@+id/search_location_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/ic_close_dark" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/search_destination_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="@string/destination_string" />
             </android.support.v7.widget.LinearLayoutCompat>
-        </RelativeLayout>
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/search_destination_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/destination_string"
+                android:textColor="@color/white" />
+
+                <android.support.v7.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:id="@+id/search_destination" >
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/search_destination_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="@string/destination_string" />
+                    <android.support.v7.widget.AppCompatImageButton
+                        android:id="@+id/search_destination_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_close_dark" />
+                </android.support.v7.widget.LinearLayoutCompat>
+        </android.support.v7.widget.LinearLayoutCompat>
 
         <android.support.v7.widget.SearchView
             android:id="@+id/navigation_search"
