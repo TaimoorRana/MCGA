@@ -19,9 +19,9 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
 import static org.mockito.Mockito.when;
 
 
@@ -32,8 +32,8 @@ public class DirectionArrayAdapterTest {
     // Array Adapter
     private DirectionsArrayAdapter adapter = null;
     Context context;
-    private ArrayList<String> directionsText = new ArrayList<String>();
-    private ArrayList<String> directionsImage = new ArrayList<String>();
+    private List<String> directionsText = new ArrayList<String>();
+    private List<String> directionsImage = new ArrayList<String>();
     View fakeGroupView, fakeChildView;
     ListView fakeList;
     ImageView fakeImage;

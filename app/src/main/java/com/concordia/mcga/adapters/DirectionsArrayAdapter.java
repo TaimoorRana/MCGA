@@ -14,14 +14,15 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
 
 public class DirectionsArrayAdapter extends ArrayAdapter<String> {
     private final Context context;
-    private ArrayList<String> directionsText = new ArrayList<String>();
-    private ArrayList<String> directionsImage = new ArrayList<String>();
+    private List<String> directionsText = new ArrayList<String>();
+    private List<String> directionsImage = new ArrayList<String>();
 
     /**
      * Constructor
@@ -29,7 +30,7 @@ public class DirectionsArrayAdapter extends ArrayAdapter<String> {
      * @param directionsText text that will give directions
      * @param directionsImage images associated with directions
      */
-    public DirectionsArrayAdapter(Context context, ArrayList<String> directionsText, ArrayList<String> directionsImage) {
+    public DirectionsArrayAdapter(Context context, List<String> directionsText, List<String> directionsImage) {
         super(context, R.layout.list_text, directionsText);
         this.context = context;
         this.directionsText = directionsText;

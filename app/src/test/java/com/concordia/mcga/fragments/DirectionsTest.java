@@ -21,6 +21,7 @@ import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -41,12 +42,12 @@ public class DirectionsTest {
     private DirectionsArrayAdapter adapter;
 
     // Arrays store directions and image information
-    private ArrayList<String> displayedDirectionsList =  new ArrayList<String>();
-    private ArrayList<String> displayedDirectionsImage = new ArrayList<String>();
+    private List<String> displayedDirectionsList =  new ArrayList<String>();
+    private List<String> displayedDirectionsImage = new ArrayList<String>();
 
     // Arrays store directions and images that the user may view
-    private ArrayList<String> completeDirectionsImage = new ArrayList<String>();
-    private ArrayList<String> completeDirectionsList = new ArrayList<String>();
+    private List<String> completeDirectionsImage = new ArrayList<String>();
+    private List<String> completeDirectionsList = new ArrayList<String>();
 
     // Counter keeps track of the index of the current direction
     private int currentDirection = 0;
@@ -205,7 +206,7 @@ public class DirectionsTest {
         myFragment.updateDirections();
 
         int index = myFragment.getCurrentDirection();
-        ArrayList<String> direction = myFragment.getCompleteDirectionsList();
+       List<String> direction = myFragment.getCompleteDirectionsList();
 
         assertTrue(direction.get(index).equals("Up"));
 
@@ -220,7 +221,7 @@ public class DirectionsTest {
         myFragment.updateDirections();
 
         int index = myFragment.getCurrentDirection();
-        ArrayList<String> direction = myFragment.getCompleteDirectionsList();
+        List<String> direction = myFragment.getCompleteDirectionsList();
 
         assertTrue(direction.get(index).equals("Up"));
 
@@ -234,7 +235,7 @@ public class DirectionsTest {
         myFragment.addDirection("Up", "up");
         myFragment.addDirection("Down", "down");
         myFragment.updateDirections();
-        ArrayList<String> direction = myFragment.getCompleteDirectionsList();
+        List<String> direction = myFragment.getCompleteDirectionsList();
         nextButton.performClick();
         int index = myFragment.getCurrentDirection();
         assertTrue(index == 1);
@@ -248,7 +249,7 @@ public class DirectionsTest {
         myFragment.addDirection("Up", "up");
         myFragment.updateDirections();
         int index = myFragment.getCurrentDirection();
-        ArrayList<String> direction = myFragment.getCompleteDirectionsList();
+        List<String> direction = myFragment.getCompleteDirectionsList();
         previousButton.performClick();
         int index1 = myFragment.getCurrentDirection();
         assertEquals(index, index1);
@@ -259,7 +260,7 @@ public class DirectionsTest {
         myFragment.addDirection("Up", "up");
         myFragment.updateDirections();
         int index = myFragment.getCurrentDirection();
-        ArrayList<String> array = myFragment.getCompleteDirectionsList();
+        List<String> array = myFragment.getCompleteDirectionsList();
         assertTrue(array.get(index).equals("Up"));
 
         myFragment.addDirection("Left", "left");
@@ -274,7 +275,7 @@ public class DirectionsTest {
         myFragment.updateDirections();
 
         int index = myFragment.getCurrentDirection();
-        ArrayList<String> array = myFragment.getCompleteDirectionsList();
+        List<String> array = myFragment.getCompleteDirectionsList();
         assertTrue(array.get(index).equals("Up"));
 
         myFragment.removeDirection(0);
@@ -289,8 +290,8 @@ public class DirectionsTest {
         myFragment.addDirection("Left", "left");
         myFragment.updateDirections();
 
-        ArrayList<String> array = myFragment.getCompleteDirectionsList();
-        ArrayList<String> array2 = myFragment.getCompleteDirectionsImage();
+        List<String> array = myFragment.getCompleteDirectionsList();
+        List<String> array2 = myFragment.getCompleteDirectionsImage();
         assertTrue(array.size() > 0);
         assertTrue(array2.size() > 0);
 
@@ -305,7 +306,7 @@ public class DirectionsTest {
     public void UpdateDirections_AddingDirectionsWithoutUpdating_False(){
         myFragment.addDirection("Up", "up");
         myFragment.addDirection("Up", "up");
-        ArrayList<String> array = myFragment.getDisplayedDirectionsList();
+        List<String> array = myFragment.getDisplayedDirectionsList();
         assertFalse(array.size() > 0);
     }
 
@@ -314,7 +315,7 @@ public class DirectionsTest {
         myFragment.addDirection("Up", "up");
         myFragment.addDirection("Up", "up");
         myFragment.updateDirections();
-        ArrayList<String> array = myFragment.getDisplayedDirectionsList();
+        List<String> array = myFragment.getDisplayedDirectionsList();
         assertTrue(array.size() > 0);
     }
 
@@ -323,7 +324,7 @@ public class DirectionsTest {
         myFragment.addDirection("Up", "up");
         myFragment.addDirection("Up", "up");
         myFragment.updateDirections();
-        ArrayList<String> array = myFragment.getDisplayedDirectionsList();
+        List<String> array = myFragment.getDisplayedDirectionsList();
         assertTrue(array.size() > 0);
 
         myFragment.removeDirection(0);
@@ -335,7 +336,7 @@ public class DirectionsTest {
         myFragment.addDirection("Up", "up");
         myFragment.addDirection("Up", "up");
         myFragment.updateDirections();
-        ArrayList<String> array = myFragment.getDisplayedDirectionsList();
+        List<String> array = myFragment.getDisplayedDirectionsList();
         assertTrue(array.size() > 0);
 
         myFragment.removeDirection(0);

@@ -17,7 +17,7 @@ import com.concordia.mcga.adapters.DirectionsArrayAdapter;
 import com.concordia.mcga.lib.BuildingBottomSheetInfo;
 
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 public class BottomSheetDirectionsFragment extends Fragment implements View.OnClickListener{
@@ -30,12 +30,12 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     private DirectionsArrayAdapter adapter;
 
     // Arrays store directions and image information
-    private ArrayList<String> displayedDirectionsList =  new ArrayList<String>();
-    private ArrayList<String> displayedDirectionsImage = new ArrayList<String>();
+    private List<String> displayedDirectionsList =  new ArrayList<String>();
+    private List<String> displayedDirectionsImage = new ArrayList<String>();
 
     // Arrays store directions and images that the user may view
-    private ArrayList<String> completeDirectionsImage = new ArrayList<String>();
-    private ArrayList<String> completeDirectionsList = new ArrayList<String>();
+    private List<String> completeDirectionsImage = new ArrayList<String>();
+    private List<String> completeDirectionsList = new ArrayList<String>();
 
     // Counter keeps track of the index of the current direction
     private int currentDirection = 0;
@@ -355,7 +355,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     /**
      * @return  ArrayList of displayed directions
      */
-    public ArrayList<String> getDisplayedDirectionsList() {
+    public List<String> getDisplayedDirectionsList() {
         return displayedDirectionsList;
     }
 
@@ -363,7 +363,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      *
      * @return ArrayList of images that are displayed
      */
-    public ArrayList<String> getDisplayedDirectionsImage() {
+    public List<String> getDisplayedDirectionsImage() {
         return displayedDirectionsImage;
     }
 
@@ -371,7 +371,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      *
      * @return ArrayList of complete images
      */
-    public ArrayList<String> getCompleteDirectionsImage() {
+    public List<String> getCompleteDirectionsImage() {
         return completeDirectionsImage;
     }
 
@@ -379,7 +379,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      *
      * @return ArrayList of complete directions
      */
-    public ArrayList<String> getCompleteDirectionsList() {
+    public List<String> getCompleteDirectionsList() {
         return completeDirectionsList;
     }
 

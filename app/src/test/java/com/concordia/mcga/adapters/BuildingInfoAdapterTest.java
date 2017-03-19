@@ -3,10 +3,8 @@ package com.concordia.mcga.adapters;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.R;
@@ -14,15 +12,14 @@ import com.concordia.mcga.activities.R;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.res.FileTypedResource;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +32,7 @@ public class BuildingInfoAdapterTest {
     private BuildingInformationArrayAdapter adapter = null;
 
     // List passed to the adapter
-    private ArrayList<String[]> rowImages = new ArrayList<String[]>();
+    private List<String[]> rowImages = new ArrayList<String[]>();
 
     private final int IMAGES_PER_ROW = 4;
     private String[] images = new String [IMAGES_PER_ROW];
@@ -89,7 +86,7 @@ public class BuildingInfoAdapterTest {
 
         rowImages.add(images);
         adapter.notifyDataSetChanged();
-        ArrayList<String[]> dummyArray = adapter.getRowImages();
+        List<String[]> dummyArray = adapter.getRowImages();
         assertTrue(dummyArray.get(0)[0].equals("up"));
     }
 
@@ -108,7 +105,7 @@ public class BuildingInfoAdapterTest {
 
     @Test
     public void GetView_IsEmpty_True(){
-        ArrayList<String[]> array = adapter.getRowImages();
+        List<String[]> array = adapter.getRowImages();
         assertTrue(array.size() == 0);
     }
 

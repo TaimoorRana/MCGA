@@ -19,9 +19,9 @@ import com.concordia.mcga.adapters.BuildingInformationArrayAdapter;
 import com.concordia.mcga.lib.BuildingBottomSheetInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
-import static android.support.design.R.styleable.CoordinatorLayout;
 
 
 
@@ -45,7 +45,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
     private BuildingInformationArrayAdapter adapter;
 
     // Arraylist containing all images
-    private ArrayList<String[]> rowImages = new ArrayList<String[]>();
+    private List<String[]> rowImages = new ArrayList<String[]>();
 
     // 4 images per row
     private final int IMAGES_PER_ROW = 4;
@@ -421,7 +421,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
      *
      * @return ArrayList
      */
-    public ArrayList<String[]> getRowImages() {
+    public List<String[]> getRowImages() {
         return rowImages;
     }
 

@@ -7,14 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 
 import com.concordia.mcga.activities.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
-import static com.concordia.mcga.activities.R.id.imageView;
 
 
 public class BuildingInformationArrayAdapter extends ArrayAdapter<String[]> {
@@ -26,7 +26,7 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String[]> {
     private final int IMAGES_PER_ROW = 4;
 
     private final Context context;
-    private ArrayList<String[]> rowImages = new ArrayList<String[]>();
+    private List<String[]> rowImages = new ArrayList<String[]>();
 
     // 4 images per per row
     private String[] image = new String[IMAGES_PER_ROW];
@@ -43,7 +43,7 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String[]> {
      * @param context application context
      * @param rowImages Contains the list of images to display
      */
-    public BuildingInformationArrayAdapter(Context context, ArrayList<String[]> rowImages) {
+    public BuildingInformationArrayAdapter(Context context, List<String[]> rowImages) {
         super(context, R.layout.building_info_list, rowImages);
         this.context = context;
         this.rowImages = rowImages;
@@ -206,7 +206,7 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String[]> {
      *
      * @return ArrayList images
      */
-    public ArrayList<String[]> getRowImages(){
+    public List<String[]> getRowImages(){
         return rowImages;
     }
 }

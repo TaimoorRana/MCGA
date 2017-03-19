@@ -20,6 +20,8 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 import java.util.ArrayList;
+import java.util.List;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
@@ -195,7 +197,7 @@ public class BuildingInfoTest {
 
     @Test
     public void AddImage_ArrayUpdated_True(){
-        ArrayList<String[]> array = new ArrayList<String[]>();
+        List<String[]> array = new ArrayList<String[]>();
         String[] someImages = new String[IMAGES_PER_ROW];
 
         someImages[0] = "up";
@@ -211,7 +213,7 @@ public class BuildingInfoTest {
 
     @Test
     public void UpdateImages_ArrayUpdated_True(){
-        ArrayList<String[]> array = new ArrayList<String[]>();
+        List<String[]> array = new ArrayList<String[]>();
         String[] someImages = new String[IMAGES_PER_ROW];
 
         someImages[0] = "up";
@@ -226,7 +228,7 @@ public class BuildingInfoTest {
     }
 
     @Test public void ClearImages_ArrayIsSize0_True(){
-        ArrayList<String[]> array = new ArrayList<String[]>();
+        List<String[]> array = new ArrayList<String[]>();
 
         String[] someImages = new String[IMAGES_PER_ROW];
         someImages[0] = "up";
