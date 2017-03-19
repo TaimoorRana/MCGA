@@ -31,7 +31,6 @@ import static org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startFr
 
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class,sdk = 21)
 public class BuildingInfoTest {
     MainActivity mainActivity;
     private BuildingBottomSheetInfo behavior = null;
