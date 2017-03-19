@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
-import com.concordia.mcga.lib.BuildingBottomSheetInfo;
+import com.concordia.mcga.lib.BottomSheet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     private CoordinatorLayout coordinatorLayout;
 
     // Bottomsheet
-    private BuildingBottomSheetInfo behavior;
+    private BottomSheet behavior;
 
     // simple buttons
     private ImageButton nextButton, previousButton, expandButton;
@@ -88,9 +88,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      * Instantiate bottomsheet behaviors
      */
     private void setupBottomSheetBehavior(){
-        behavior = BuildingBottomSheetInfo.from(bottomSheet);
+        behavior = BottomSheet.from(bottomSheet);
         behavior.setmType("building_navigation");
-        behavior.setState(BuildingBottomSheetInfo.STATE_COLLAPSED);
+        behavior.setState(BottomSheet.STATE_COLLAPSED);
     }
 
     /**
@@ -128,15 +128,15 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      * added different behaviors on state changes
      */
     private void overrideBottomSheetCallBack(){
-        behavior.addBottomSheetCallback(new BuildingBottomSheetInfo.BottomSheetCallback() {
+        behavior.addBottomSheetCallback(new BottomSheet.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
-                    case BuildingBottomSheetInfo.STATE_COLLAPSED:
+                    case BottomSheet.STATE_COLLAPSED:
                         expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
                         break;
 
-                    case BuildingBottomSheetInfo.STATE_EXPANDED:
+                    case BottomSheet.STATE_EXPANDED:
                         expandButton.setImageResource(R.drawable.ic_expand_more_black_24dp);
                         break;
 
@@ -174,10 +174,10 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
                 break;
 
             case R.id.expandButton:
-                if (behavior.getState() == BuildingBottomSheetInfo.STATE_COLLAPSED){
-                    behavior.setState(BuildingBottomSheetInfo.STATE_EXPANDED);
+                if (behavior.getState() == BottomSheet.STATE_COLLAPSED){
+                    behavior.setState(BottomSheet.STATE_EXPANDED);
                 }else{
-                    behavior.setState(BuildingBottomSheetInfo.STATE_COLLAPSED);
+                    behavior.setState(BottomSheet.STATE_COLLAPSED);
                 }
                 break;
         }
@@ -233,14 +233,14 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      * Forces the Bottom Sheet to collapse
      */
     public void collapse(){
-        behavior.setState(BuildingBottomSheetInfo.STATE_COLLAPSED);
+        behavior.setState(BottomSheet.STATE_COLLAPSED);
     }
 
     /**
      * Forces the Bottom Sheet to expand
      */
     public void expand(){
-        behavior.setState(BuildingBottomSheetInfo.STATE_EXPANDED);
+        behavior.setState(BottomSheet.STATE_EXPANDED);
     }
 
 
@@ -421,7 +421,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      *
      * @return BottomSheet Behavior
      */
-    public BuildingBottomSheetInfo getBehavior() {
+    public BottomSheet getBehavior() {
         return behavior;
     }
 

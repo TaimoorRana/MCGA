@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
-import com.concordia.mcga.lib.BuildingBottomSheetInfo;
+import com.concordia.mcga.lib.BottomSheet;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +58,7 @@ public class DirectionsTest {
     private CoordinatorLayout coordinatorLayout;
 
     // Bottomsheet
-    private BuildingBottomSheetInfo behavior;
+    private BottomSheet behavior;
 
     // simple buttons
     private ImageButton nextButton, previousButton, expandButton;
@@ -95,79 +95,24 @@ public class DirectionsTest {
     }
 
     @Test
-    public void BottomSheetDirectionsFragment_ShouldNotBeNull_True(){
-        assertNotNull(myFragment);
-    }
-
-    @Test
-    public void list_ShouldNotBeNull_True(){
+    public void UIElements_ShouldNotBeNull_True(){
         assertNotNull(list);
-    }
-
-    @Test
-    public void adapter_ShouldNotBeNull_True(){
+        assertNotNull(myFragment);
         assertNotNull(adapter);
-    }
-
-    @Test
-    public void DisplayedDirectionsList_ShouldNotBeNull_True(){
         assertNotNull(displayedDirectionsList);
-    }
-
-    @Test
-    public void DisplayedDirectionsImage_ShouldNotBeNull_True(){
         assertNotNull(displayedDirectionsImage);
-    }
-
-    @Test
-    public void CompleteDirectionsList_ShouldNotBeNull_True(){
         assertNotNull(completeDirectionsList);
-    }
-
-    @Test
-    public void CompleteDirectionsImages_ShouldNotBeNull_True(){
         assertNotNull(completeDirectionsImage);
-    }
-
-    @Test
-    public void CurrentDirection_ShouldNotBeNull_True(){
         assertNotNull(currentDirection);
-    }
-
-    @Test
-    public void View_ShouldNotBeNull_True(){
         assertNotNull(view);
-    }
-
-    @Test
-    public void BottomSheet_ShouldNotBeNull_True(){
         assertNotNull(bottomSheet);
-    }
-
-    @Test
-    public void CoordinatorLayout_ShouldNotBeNull_True(){
         assertNotNull(coordinatorLayout);
-    }
-
-    @Test
-    public void Behavior_ShouldNotBeNull_True(){
         assertNotNull(behavior);
-    }
-
-    @Test
-    public void NextButton_ShouldNotBeNull_True(){
         assertNotNull(nextButton);
-    }
-
-    @Test
-    public void PreviousButton_ShouldNotBeNull_True(){
         assertNotNull(previousButton);
-    }
-
-    @Test
-    public void ExpandButton_ShouldNotBeNull_True(){
         assertNotNull(expandButton);
     }
+
 
     //State Expanded = 4
     // State collapsed = 5

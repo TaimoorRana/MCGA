@@ -36,9 +36,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class BuildingBottomSheetInfoTest {
+public class BottomSheetTest {
 
-    BuildingBottomSheetInfo bottomSheet;
+    BottomSheet bottomSheet;
     Activity controller;
     Context context;
     View fakeGroupView, fakeChildView;
@@ -63,7 +63,7 @@ public class BuildingBottomSheetInfoTest {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         controller =  Robolectric.buildActivity(MainActivity.class).withIntent(intent).create().get();;
         context = controller.getApplicationContext();
-        bottomSheet = new BuildingBottomSheetInfo(context, null);
+        bottomSheet = new BottomSheet(context, null);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class BuildingBottomSheetInfoTest {
 
     @Test
     public void savedState_shouldUpdate_True(){
-        bottomSheet.setState(BuildingBottomSheetInfo.STATE_ANCHOR_POINT);
+        bottomSheet.setState(BottomSheet.STATE_ANCHOR_POINT);
         int state = bottomSheet.getState();
         Parcelable mState = bottomSheet.onSaveInstanceState(fakeCoordinatorLayout, fakeChildView);
         int state2 = bottomSheet.getState();
@@ -86,7 +86,7 @@ public class BuildingBottomSheetInfoTest {
 
         assertTrue(state2 == state3);
 
-        bottomSheet.setState(BuildingBottomSheetInfo.STATE_HIDDEN);
+        bottomSheet.setState(BottomSheet.STATE_HIDDEN);
         state2 = bottomSheet.getState();
         state3 = bottomSheet.getmLastStableState();
         assertTrue(state2 == state3);
@@ -135,17 +135,17 @@ public class BuildingBottomSheetInfoTest {
     @Test
     public void addBottomSheetCallBack_UpdateBottomSheetCallBack_True(){
         bottomSheet.addBottomSheetCallback(null);
-        Vector<BuildingBottomSheetInfo.BottomSheetCallback> vector = bottomSheet.getmCallBack();
+        Vector<BottomSheet.BottomSheetCallback> vector = bottomSheet.getmCallBack();
         assertTrue(vector.get(0) == null);
 
-        bottomSheet.addBottomSheetCallback(new BuildingBottomSheetInfo.BottomSheetCallback() {
+        bottomSheet.addBottomSheetCallback(new BottomSheet.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
-                    case BuildingBottomSheetInfo.STATE_COLLAPSED:
+                    case BottomSheet.STATE_COLLAPSED:
                         break;
 
-                    case BuildingBottomSheetInfo.STATE_EXPANDED:
+                    case BottomSheet.STATE_EXPANDED:
                         break;
 
                     default:
@@ -164,12 +164,12 @@ public class BuildingBottomSheetInfoTest {
     @Test
     public void setState_UpdatesTopPositionOfbottomSheet_true(){
         int top, offset;
-        bottomSheet.setState(BuildingBottomSheetInfo.STATE_COLLAPSED);
+        bottomSheet.setState(BottomSheet.STATE_COLLAPSED);
         top = bottomSheet.getTop_position();
         offset = bottomSheet.getmMaxOffset();
         assertTrue(top == offset);
 
-        bottomSheet.setState(BuildingBottomSheetInfo.STATE_EXPANDED);
+        bottomSheet.setState(BottomSheet.STATE_EXPANDED);
         top = bottomSheet.getTop_position();
         offset = bottomSheet.getmMinOffset();
         assertTrue(top == offset);

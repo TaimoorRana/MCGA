@@ -28,7 +28,7 @@ import java.util.Vector;
 import static android.content.ContentValues.TAG;
 
 
-public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.Behavior<V> {
+public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
 
     /**
      * Callback for monitoring events about bottom sheets.
@@ -140,7 +140,7 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
     /**
      * Default constructor for instantiating BottomSheetBehaviors.
      */
-    public BuildingBottomSheetInfo() { }
+    public BottomSheet() { }
 
     /**
      * Default constructor for inflating BottomSheetBehaviors from layout.
@@ -148,7 +148,7 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
      * @param context The {@link Context}.
      * @param attrs   The {@link AttributeSet}.
      */
-    public BuildingBottomSheetInfo(Context context, AttributeSet attrs ) {
+    public BottomSheet(Context context, AttributeSet attrs ) {
         super( context, attrs );
         TypedArray a = context.obtainStyledAttributes(attrs,
                 android.support.design.R.styleable.BottomSheetBehavior_Layout);
@@ -1146,24 +1146,24 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
     }
 
     /**
-     * A utility function to get the {@link BuildingBottomSheetInfo} associated with the {@code view}.
+     * A utility function to get the {@link BottomSheet} associated with the {@code view}.
      *
-     * @param view The {@link View} with {@link BuildingBottomSheetInfo}.
-     * @return The {@link BuildingBottomSheetInfo} associated with the {@code view}.
+     * @param view The {@link View} with {@link BottomSheet}.
+     * @return The {@link BottomSheet} associated with the {@code view}.
      */
     @SuppressWarnings("unchecked")
-    public static <V extends View> BuildingBottomSheetInfo<V> from(V view) {
+    public static <V extends View> BottomSheet<V> from(V view) {
         ViewGroup.LayoutParams params = view.getLayoutParams();
         if (!(params instanceof CoordinatorLayout.LayoutParams)) {
             throw new IllegalArgumentException("The view is not a child of CoordinatorLayout");
         }
         CoordinatorLayout.Behavior behavior = ((CoordinatorLayout.LayoutParams) params)
                 .getBehavior();
-        if (!(behavior instanceof BuildingBottomSheetInfo)) {
+        if (!(behavior instanceof BottomSheet)) {
             throw new IllegalArgumentException(
-                    "The view is not associated with BuildingBottomSheetInfo");
+                    "The view is not associated with BottomSheet");
         }
-        return (BuildingBottomSheetInfo<V>) behavior;
+        return (BottomSheet<V>) behavior;
     }
 
 }

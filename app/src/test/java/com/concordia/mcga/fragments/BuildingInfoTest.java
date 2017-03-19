@@ -11,7 +11,8 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.adapters.BuildingInformationArrayAdapter;
-import com.concordia.mcga.lib.BuildingBottomSheetInfo;
+import com.concordia.mcga.lib.BottomSheet;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +35,7 @@ import static org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startFr
 @Config(constants = BuildConfig.class)
 public class BuildingInfoTest {
     MainActivity mainActivity;
-    private BuildingBottomSheetInfo behavior = null;
+    private BottomSheet behavior = null;
     private ActivityController<MainActivity> controller;
     private final int IMAGES_PER_ROW = 4;
 
@@ -86,54 +87,19 @@ public class BuildingInfoTest {
 
 
     @Test
-    public void BottomSheetBuildingInfoFragment_ShouldNotBeNull_True(){
+    public void UIElements_ShouldNotBeNull_True(){
         assertNotNull(myFragment);
-    }
-
-    @Test
-    public void ExpandButton_ShouldNotBeNull_True(){
         assertNotNull(expandButton);
-    }
-
-    @Test
-    public void Address_ShouldNotBeNull_True(){
         assertNotNull(address);
-    }
-
-    @Test
-    public void ClosingTime_ShouldNotBeNull_True(){
         assertNotNull(closingTime);
-    }
-
-    @Test
-    public void OpeningTime_ShouldNotBeNull_True(){
         assertNotNull(openingTime);
-    }
-
-    @Test
-    public void List_ShouldNotBeNull_True(){
         assertNotNull(list);
-    }
-
-    @Test
-    public void View_ShouldNotBeNull_True(){
         assertNotNull(view);
-    }
-
-    @Test
-    public void CoordinatorLayout_ShouldNotBeNull_True(){
         assertNotNull(coordinatorLayout);
-    }
-
-    @Test
-    public void BottomSheet_ShouldNotBeNull_True(){
         assertNotNull(bottomSheet);
-    }
-
-    @Test
-    public void Adapter_ShouldNotBeNull_True(){
         assertNotNull(adapter);
     }
+
 
     //State Expanded = 4
     // State collapsed = 5
