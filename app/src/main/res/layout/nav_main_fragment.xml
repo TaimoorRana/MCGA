@@ -78,14 +78,5 @@
             android:textOff="@string/button_loyola"
             android:textOn="@string/button_SGW" />
 
-        <Button
-            android:id="@+id/viewSwitchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:elevation="20dp"
-            android:text="In/Out" />
-
     </RelativeLayout>
 </android.support.v7.widget.LinearLayoutCompat>

@@ -306,6 +306,63 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
+     *
+     * @param polygon
+     */
+    private void setBottomSheetContent(Polygon polygon){
+        /**
+         * ONLY FOR DEMO PURPOSES
+         */
+        Building building = Campus.SGW.getBuilding(polygon);
+        if(building == null){
+            building = Campus.LOY.getBuilding(polygon);
+        }
+        ((MainActivity) getActivity()).createToast(building.getShortName());
+        String buildingName = building.getShortName();
+        buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
+        buildingInfoFragment.clear();
+        // TEMPORARY
+        if (buildingName.equals("H")){
+            buildingInfoFragment.displayHBuildingAssociations();
+        }
+        else if (buildingName.equals("JM")){
+            buildingInfoFragment.displayMBBuildingAssociations();
+        }
+        buildingInfoFragment.collapse();
+
+
+        setNavigationPOI((Building) multiBuildingMap.get(polygon.getId()));
+    }
+
+    /**
+     *
+     * @param marker
+     */
+    private void setBottomSheetContent(Marker marker){
+        /**
+         * ONLY FOR DEMO PURPOSES
+         */
+        Building building = Campus.SGW.getBuilding(marker);
+        if(building == null){
+            building = Campus.LOY.getBuilding(marker);
+        }
+        ((MainActivity) getActivity()).createToast(building.getShortName());
+        String buildingName = building.getShortName();
+        buildingInfoFragment.setBuildingInformation(buildingName, "address", "7:00", "23:00");
+        buildingInfoFragment.clear();
+        // TEMPORARY
+        if (buildingName.equals("H")){
+            buildingInfoFragment.displayHBuildingAssociations();
+        }
+        else if (buildingName.equals("JM")){
+            buildingInfoFragment.displayMBBuildingAssociations();
+        }
+        buildingInfoFragment.collapse();
+
+        setNavigationPOI((Building) multiBuildingMap.get(marker.getId()));
+    }
+
+    /**
      * add markers and polygons overlay for each building
      */
     private void addBuildingMarkersAndPolygons() {
@@ -323,58 +380,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
-
-                /**
-                 * ONLY FOR DEMO PURPOSES
-                 */
-                Building building = Campus.SGW.getBuilding(polygon);
-                if(building == null){
-                    building = Campus.LOY.getBuilding(polygon);
-                }
-                ((MainActivity) getActivity()).createToast(building.getShortName());
-                String buildingName = building.getShortName();
-                buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
-                buildingInfoFragment.clear();
-                // TEMPORARY
-                if (buildingName.equals("H")){
-                    buildingInfoFragment.displayHBuildingAssociations();
-                }
-                else if (buildingName.equals("JM")){
-                    buildingInfoFragment.displayMBBuildingAssociations();
-                }
-                buildingInfoFragment.collapse();
-
-
-                setNavigationPOI((Building) multiBuildingMap.get(polygon.getId()));
+            setBottomSheetContent(polygon);
 
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-
-                /**
-                 * ONLY FOR DEMO PURPOSES
-                 */
-                Building building = Campus.SGW.getBuilding(marker);
-                if(building == null){
-                    building = Campus.LOY.getBuilding(marker);
-                }
-                ((MainActivity) getActivity()).createToast(building.getShortName());
-                String buildingName = building.getShortName();
-                buildingInfoFragment.setBuildingInformation(buildingName, "address", "7:00", "23:00");
-                buildingInfoFragment.clear();
-                // TEMPORARY
-                if (buildingName.equals("H")){
-                    buildingInfoFragment.displayHBuildingAssociations();
-                }
-                else if (buildingName.equals("JM")){
-                    buildingInfoFragment.displayMBBuildingAssociations();
-                }
-                buildingInfoFragment.collapse();
-
-                setNavigationPOI((Building) multiBuildingMap.get(marker.getId()));
-
+                setBottomSheetContent(marker);
                 return true;
             }
         });

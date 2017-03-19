@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -57,7 +58,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
     private CoordinatorLayout coordinatorLayout = null;
     private View bottomSheet = null;
 
-
+    private Button viewSwitchButton;
 
     ////////////////////////////////////////////////////////////
     // CLASS METHODS
@@ -83,6 +84,12 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         return view;
     }
 
+
+
+    public Button getViewSwitchButton() {
+        return viewSwitchButton;
+    }
+
     /**
      * Buttons are assigned their corresponding ID from thhe layout.xml file
      */
@@ -90,6 +97,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         expandButton = (ImageButton) view.findViewById(R.id.expandButton);
         expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
         expandButton.setOnClickListener(this);
+        viewSwitchButton = (Button) view.findViewById(R.id.viewSwitchButton);
     }
 
     /**
@@ -98,7 +106,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
     private void setupBottomSheetBehavior(){
         behavior = BuildingBottomSheetInfo.from(bottomSheet);
         behavior.setmType("building_information");
-        behavior.setState(BuildingBottomSheetInfo.STATE_COLLAPSED);
+        behavior.setState(BuildingBottomSheetInfo.STATE_HIDDEN);
     }
 
     /**
