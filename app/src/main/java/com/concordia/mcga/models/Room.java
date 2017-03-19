@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class Room extends IndoorPOI {
 
-    private int roomNumber;
+    private String roomNumber;
     private int floorNumber;
     private List<LatLng> polygonCoordinates;
 
@@ -29,14 +29,14 @@ public class Room extends IndoorPOI {
                 "} " + super.toString();
     }
 
-    public Room(LatLng mapCoordinates, String name, IndoorMapTile tile, int roomNumber, int floorNumber, List<LatLng> polygonCoordinates) {
+    public Room(LatLng mapCoordinates, String name, IndoorMapTile tile, String roomNumber, int floorNumber, List<LatLng> polygonCoordinates) {
         super(mapCoordinates, name, tile);
         this.roomNumber = roomNumber;
         this.floorNumber = floorNumber;
         this.polygonCoordinates = polygonCoordinates;
     }
 
-    public int getRoomNumber() {
+    public String getRoomNumber() {
         return roomNumber;
     }
 
@@ -48,7 +48,7 @@ public class Room extends IndoorPOI {
         return polygonCoordinates;
     }
 
-    public void setRoomNumber(int roomNumber) {
+    public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
 

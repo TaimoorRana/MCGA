@@ -36,7 +36,7 @@ public class RoomFactory {
         IndoorMapTile indoorMapTile = (IndoorMapTile) GSON.fromJson(res.getString(INDOORMAPTILE_COLUMN_INDEX), indoorTileType);
 
 
-        int room_number = res.getInt(ROOM_NUMBER_COLUMN_INDEX);
+        String room_number = res.getString(ROOM_NUMBER_COLUMN_INDEX);
         int floor_number = res.getInt(FLOOR_NUMBER_COLUMN_INDEX);
 
         Type latlngType = new TypeToken<List<LatLng>>() {}.getType();
