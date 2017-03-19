@@ -77,7 +77,7 @@ public class NavigationFragmentTest {
     @Before
     public void setUp() throws Exception {
         //Variable initialization fragment and activity
-        activity = Robolectric.buildActivity(MainActivity.class);
+        //activity = Robolectric.buildActivity(MainActivity.class);
         NavFragment = new NavigationFragment();
         context = (NavFragment.getActivity()).getBaseContext();
         startFragment(NavFragment, AppCompatActivity.class);
