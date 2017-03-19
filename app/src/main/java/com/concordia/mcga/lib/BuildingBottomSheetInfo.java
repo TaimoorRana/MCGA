@@ -951,6 +951,7 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
         @Override
         public void onViewReleased(View releasedChild, float xvel, float yvel ) {
             int top;
+            float epsilon = 0.00000001f;
             @State int targetState;
             if ( yvel < 0 ) { // Moving up
                 top = mMinOffset;
@@ -967,7 +968,7 @@ public class BuildingBottomSheetInfo<V extends View> extends CoordinatorLayout.B
                 }
             }
             else
-            if ( yvel == 0.f ) {
+            if ( Math.abs(yvel) < epsilon ) {
                 int currentTop = releasedChild.getTop();
                 if (Math.abs(currentTop - mMinOffset) < Math.abs(currentTop - mMaxOffset)) {
                     top = mMinOffset;

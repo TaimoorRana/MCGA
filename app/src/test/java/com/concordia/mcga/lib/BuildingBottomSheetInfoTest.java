@@ -154,6 +154,8 @@ public class BuildingBottomSheetInfoTest {
             }
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                //Defining abstract class. However we are not using it so there are
+                // No operations
             }
         });
         assertTrue(vector.get(1) != null);
