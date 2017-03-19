@@ -20048,6 +20048,32 @@ INSERT INTO `walkable_paths` VALUES ('H',4,350,1643);
 INSERT INTO `walkable_paths` VALUES ('H',4,351,1643);
 INSERT INTO `walkable_paths` VALUES ('H',4,352,1643);
 INSERT INTO `walkable_paths` VALUES ('H',4,353,1643);
+CREATE TABLE "room" (
+	`_id`	INTEGER,
+	`name`	TEXT,
+	`center_coordinate`	INTEGER,
+	`indoorMapTile`	TEXT,
+	`room_number`	INTEGER,
+	`building`	TEXT,
+	`floor_number`	INTEGER,
+	`polygon_coordinates`	TEXT,
+	PRIMARY KEY(`_id`)
+);
+INSERT INTO `room` VALUES (1,'H433','','{"coordinateX":353,"coordinateY":263}',433,'H',4,'[{"latitude":1968.82,"longitude":307.74,"mVersionCode":1},{"latitude":1968.82,"longitude":24.74,"mVersionCode":1},{"latitude":1688.82,"longitude":21.74,"mVersionCode":1},{"latitude":1688.82,"longitude":309.74,"mVersionCode":1},{"latitude":1968.82,"longitude":307.74,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (2,'H431',NULL,'{"coordinateX":353,"coordinateY":568}',431,'H',4,'[{"latitude":1686,"longitude":305,"mVersionCode":1},{"latitude":1686,"longitude":22,"mVersionCode":1},{"latitude":1397,"longitude":22,"mVersionCode":1},{"latitude":1397,"longitude":302,"mVersionCode":1},{"latitude":1686,"longitude":305,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (3,'H429',NULL,'{"coordinateX":353,"coordinateY":821}',429,'H',4,'[{"latitude":1394.1,"longitude":298.22,"mVersionCode":1},{"latitude":1394.1,"longitude":19.22,"mVersionCode":1},{"latitude":1147.1,"longitude":20.22,"mVersionCode":1},{"latitude":1147.1,"longitude":299.22,"mVersionCode":1},{"latitude":1394.1,"longitude":298.22,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (4,'H427',NULL,'{"coordinateX":353,"coordinateY":1061}',427,'H',4,'[{"latitude":1145.48,"longitude":302.9,"mVersionCode":1},{"latitude":1145.48,"longitude":13.9,"mVersionCode":1},{"latitude":904.48,"longitude":11.9,"mVersionCode":1},{"latitude":904.48,"longitude":305.9,"mVersionCode":1},{"latitude":1145.48,"longitude":302.9,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (5,'H423',NULL,'{"coordinateX":353,"coordinateY":1318}',423,'H',4,'[{"latitude":899.45,"longitude":301.35,"mVersionCode":1},{"latitude":899.45,"longitude":12.35,"mVersionCode":1},{"latitude":655.45,"longitude":14.35,"mVersionCode":1},{"latitude":655.45,"longitude":307.35,"mVersionCode":1},{"latitude":899.45,"longitude":301.35,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (6,'H421',NULL,'{"coordinateX":353,"coordinateY":1370}',421,'H',4,'[{"latitude":650.85,"longitude":304,"mVersionCode":1},{"latitude":650.85,"longitude":13,"mVersionCode":1},{"latitude":496.85,"longitude":12,"mVersionCode":1},{"latitude":496.85,"longitude":305,"mVersionCode":1},{"latitude":650.85,"longitude":304,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (7,'H419',NULL,'{"coordinateX":353,"coordinateY":1560}',419,'H',4,'[{"latitude":491.85,"longitude":310,"mVersionCode":1},{"latitude":491.85,"longitude":15,"mVersionCode":1},{"latitude":406.85,"longitude":11,"mVersionCode":1},{"latitude":406.85,"longitude":311,"mVersionCode":1},{"latitude":491.85,"longitude":310,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (8,'H417',NULL,'{"coordinateX":242,"coordinateY":1642}',417,'H',4,'[{"latitude":402,"longitude":230,"mVersionCode":1},{"latitude":402,"longitude":127,"mVersionCode":1},{"latitude":352,"longitude":128,"mVersionCode":1},{"latitude":352,"longitude":233,"mVersionCode":1},{"latitude":402,"longitude":230,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (9,'H415',NULL,'{"coordinateX":528,"coordinateY":1615}',415,'H',4,'[{"latitude":318.76,"longitude":543.66,"mVersionCode":1},{"latitude":318.76,"longitude":256.33,"mVersionCode":1},{"latitude":352.76,"longitude":255.66,"mVersionCode":1},{"latitude":356.76,"longitude":125.66,"mVersionCode":1},{"latitude":404.76,"longitude":119.66,"mVersionCode":1},{"latitude":400.76,"longitude":7.66,"mVersionCode":1},{"latitude":32.76,"longitude":19.66,"mVersionCode":1},{"latitude":30.76,"longitude":543.66,"mVersionCode":1},{"latitude":318.76,"longitude":543.66,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (10,'H411',NULL,'{"coordinateX":973,"coordinateY":1615}',411,'H',4,'[{"latitude":323.68,"longitude":985.82,"mVersionCode":1},{"latitude":323.68,"longitude":557.82,"mVersionCode":1},{"latitude":29.68,"longitude":557.82,"mVersionCode":1},{"latitude":29.68,"longitude":985.82,"mVersionCode":1},{"latitude":323.68,"longitude":985.82,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (11,'H407',NULL,'{"coordinateX":1470,"coordinateY":1615}',407,'H',4,'[{"latitude":298.19,"longitude":1487.2,"mVersionCode":1},{"latitude":298.19,"longitude":985.2,"mVersionCode":1},{"latitude":30.19,"longitude":985.2,"mVersionCode":1},{"latitude":30.19,"longitude":1487.2,"mVersionCode":1},{"latitude":298.19,"longitude":1487.2,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (12,'H405',NULL,'{"coordinateX":1470,"coordinateY":1615}',405,'H',4,'[{"latitude":351.66,"longitude":1444.76,"mVersionCode":1},{"latitude":349.66,"longitude":1288.76,"mVersionCode":1},{"latitude":307.66,"longitude":1287.76,"mVersionCode":1},{"latitude":304.66,"longitude":1455.76,"mVersionCode":1},{"latitude":351.66,"longitude":1444.76,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (13,'H403',NULL,'{"coordinateX":1523,"coordinateY":1615}',403,'H',4,'[{"latitude":350.63,"longitude":1684.42,"mVersionCode":1},{"latitude":350.63,"longitude":1493.42,"mVersionCode":1},{"latitude":12.63,"longitude":1493.42,"mVersionCode":1},{"latitude":12.63,"longitude":1742.42,"mVersionCode":1},{"latitude":212.63,"longitude":1742.42,"mVersionCode":1},{"latitude":291.63,"longitude":1682.42,"mVersionCode":1},{"latitude":350.63,"longitude":1684.42,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (14,'H401',NULL,'{"coordinateX":1970,"coordinateY":1615}',401,'H',4,'[{"latitude":351.3,"longitude":1985.28,"mVersionCode":1},{"latitude":351.3,"longitude":1830.28,"mVersionCode":1},{"latitude":292.3,"longitude":1830.28,"mVersionCode":1},{"latitude":292.3,"longitude":1803.28,"mVersionCode":1},{"latitude":214.3,"longitude":1744.28,"mVersionCode":1},{"latitude":20.3,"longitude":1744.28,"mVersionCode":1},{"latitude":20.3,"longitude":1985.28,"mVersionCode":1},{"latitude":351.3,"longitude":1985.28,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (15,'H400',NULL,'{"coordinateX":2017,"coordinateY":1615}',400,'H',4,'[{"latitude":314,"longitude":2182,"mVersionCode":1},{"latitude":314,"longitude":1985,"mVersionCode":1},{"latitude":24,"longitude":1985,"mVersionCode":1},{"latitude":24,"longitude":2182,"mVersionCode":1},{"latitude":314,"longitude":2182,"mVersionCode":1}]');
 CREATE TABLE `indoor_maps` (
 	`building`	TEXT,
 	`floor`	INTEGER,
@@ -20123,12 +20149,4 @@ INSERT INTO `building` VALUES (54,'Hingston Hall, wing HA','HC','{"latitude":45.
 INSERT INTO `building` VALUES (55,'Terrebonne Building','TA','{"latitude":45.459987,"longitude":-73.640898,"mVersionCode":1}','[{"latitude":45.45994,"longitude":-73.640868,"mVersionCode":1},{"latitude":45.459978,"longitude":-73.64097,"mVersionCode":1},{"latitude":45.460033,"longitude":-73.640929,"mVersionCode":1},{"latitude":45.459993,"longitude":-73.640827,"mVersionCode":1}]',2130903063,1,'LOY');
 CREATE TABLE android_metadata (locale TEXT);
 INSERT INTO `android_metadata` VALUES ('en_US');
-CREATE TABLE "room" (
-	`_id` INTEGER,
-       	`name` TEXT,
-       	`center_coordinate` INTEGER,
-       	`room_number` INTEGER,
-       	`building` TEXT,
-       	PRIMARY KEY(`_id`)
-);
 COMMIT;

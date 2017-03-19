@@ -185,8 +185,8 @@ public class IndoorMapFragment extends Fragment {
 
     @JavascriptInterface
     public void poiClicked(String poiName) {
-        IndoorPOI poiClicked = null;
         Log.d("PoiClickEvent", poiName);
+        IndoorPOI poiClicked = null;
         for (IndoorPOI poi : currentFloor.getIndoorPOIs()) {
             if (poi.getName().equalsIgnoreCase(poiName)) {
                 poiClicked = poi;

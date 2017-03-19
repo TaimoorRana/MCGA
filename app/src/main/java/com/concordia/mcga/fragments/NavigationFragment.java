@@ -156,9 +156,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             }
         });
 
-        //Hide Indoor Fragment
-        getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
-
         //Hide Fragments
         showTransportButton(false);
 
