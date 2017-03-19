@@ -27,20 +27,20 @@ public class SingleMapPathFinderUnitTest {
         List<IndoorMapTile> tiles = finder.shortestPath(start, dest);
 
         // Verify
-        Assert.assertEquals(1, tiles.get(0).getCoordinateX());
         Assert.assertEquals(1, tiles.get(0).getCoordinateY());
-        Assert.assertEquals(2, tiles.get(1).getCoordinateX());
-        Assert.assertEquals(1, tiles.get(1).getCoordinateY());
-        Assert.assertEquals(3, tiles.get(2).getCoordinateX());
-        Assert.assertEquals(1, tiles.get(2).getCoordinateY());
-        Assert.assertEquals(4, tiles.get(3).getCoordinateX());
-        Assert.assertEquals(1, tiles.get(3).getCoordinateY());
-        Assert.assertEquals(4, tiles.get(4).getCoordinateX());
-        Assert.assertEquals(2, tiles.get(4).getCoordinateY());
-        Assert.assertEquals(4, tiles.get(5).getCoordinateX());
-        Assert.assertEquals(3, tiles.get(5).getCoordinateY());
-        Assert.assertEquals(4, tiles.get(6).getCoordinateX());
+        Assert.assertEquals(1, tiles.get(0).getCoordinateX());
+        Assert.assertEquals(2, tiles.get(1).getCoordinateY());
+        Assert.assertEquals(1, tiles.get(1).getCoordinateX());
+        Assert.assertEquals(3, tiles.get(2).getCoordinateY());
+        Assert.assertEquals(1, tiles.get(2).getCoordinateX());
+        Assert.assertEquals(4, tiles.get(3).getCoordinateY());
+        Assert.assertEquals(1, tiles.get(3).getCoordinateX());
+        Assert.assertEquals(4, tiles.get(4).getCoordinateY());
+        Assert.assertEquals(2, tiles.get(4).getCoordinateX());
+        Assert.assertEquals(4, tiles.get(5).getCoordinateY());
+        Assert.assertEquals(3, tiles.get(5).getCoordinateX());
         Assert.assertEquals(4, tiles.get(6).getCoordinateY());
+        Assert.assertEquals(4, tiles.get(6).getCoordinateX());
     }
 
     @Test(expected = MCGAPathFindingException.class)
