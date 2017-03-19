@@ -33,6 +33,18 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom" />
 
+        <fragment
+            android:id="@+id/buildingInfoFragment"
+            android:name="com.concordia.mcga.fragments.BottomSheetBuildingInfoFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <fragment
+            android:id="@+id/directionsFragment"
+            android:name="com.concordia.mcga.fragments.BottomSheetDirectionsFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/mapCenterButton"
             android:layout_width="wrap_content"
@@ -53,6 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/mapCenterButton"
+            android:elevation="10dp"
             android:layout_alignParentEnd="true" />
 
         <ToggleButton
@@ -65,14 +78,5 @@
             android:textOff="@string/button_loyola"
             android:textOn="@string/button_SGW" />
 
-        <Button
-            android:id="@+id/viewSwitchButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:text="In/Out" />
-
     </RelativeLayout>
 </android.support.v7.widget.LinearLayoutCompat>
-
