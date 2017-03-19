@@ -23,7 +23,7 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String[]> {
     // INSTANCE VARIABLES
     ////////////////////////////////////////////////////////////
 
-    private final int IMAGES_PER_ROW = 4;
+    private final static int IMAGES_PER_ROW = 4;
 
     private final Context context;
     private List<String[]> rowImages = new ArrayList<String[]>();
