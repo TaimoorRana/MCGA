@@ -44,6 +44,7 @@ public class BuildingPopulateRoomsTest {
         Building building = new Building(new LatLng(0.0, 0.0), name, shortName,
                 new MarkerOptions());
 
+        
         // Iterate through the loop twice. Should get two rooms in the end
         Mockito.when(cursor.moveToNext()).thenAnswer(
                 new Answer() {
