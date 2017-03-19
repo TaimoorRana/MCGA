@@ -116,4 +116,36 @@ public class SingleMapPathFinderUnitTest {
         Assert.assertEquals(3, tiles.get(13).getCoordinateX());
         Assert.assertEquals(4, tiles.get(14).getCoordinateX());
     }
+
+    @Test
+    public void testToString(){
+        // Test Data
+        IndoorMapTile start = new IndoorMapTile(1, 1);
+        IndoorMapTile dest = new IndoorMapTile(4, 4);
+        TiledMap map = new TiledMap(10, 10);
+        for (int i = 0; i < 10; i++) {
+            if (i == 2) {
+                continue;
+            }
+            for (int j = 0; j < 10; j++) {
+                map.makeWalkable(new IndoorMapTile(i, j));
+            }
+        }
+        map.makeWalkable(new IndoorMapTile(2,8));
+        SingleMapPathFinder finder = new SingleMapPathFinder(map);
+
+        // Execute
+        String string = finder.toString();
+
+        Assert.assertEquals("..........\n"
+            + "..........\n"
+            + "        . \n"
+            + "..........\n"
+            + "..........\n"
+            + "..........\n"
+            + "..........\n"
+            + "..........\n"
+            + "..........\n"
+            + "..........\n", string);
+    }
 }
