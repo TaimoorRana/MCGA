@@ -20,15 +20,6 @@ public class Room extends IndoorPOI {
     private int floorNumber;
     private List<LatLng> polygonCoordinates;
 
-    @Override
-    public String toString() {
-        return "Room{" +
-                "roomNumber=" + roomNumber +
-                ", floorNumber=" + floorNumber +
-                ", polygonCoordinates=" + polygonCoordinates +
-                "} " + super.toString();
-    }
-
     public Room(LatLng mapCoordinates, String name, IndoorMapTile tile, String roomNumber, int floorNumber, List<LatLng> polygonCoordinates) {
         super(mapCoordinates, name, tile);
         this.roomNumber = roomNumber;
@@ -101,5 +92,14 @@ public class Room extends IndoorPOI {
                 .appendSuper(super.hashCode())
                 .append(roomNumber)
                 .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "roomNumber='" + roomNumber + '\'' +
+                ", floorNumber=" + floorNumber +
+                ", polygonCoordinates=" + polygonCoordinates +
+                "} " + super.toString();
     }
 }

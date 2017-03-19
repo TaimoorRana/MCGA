@@ -14,25 +14,21 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Floor;
-import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.IndoorMapTile;
+import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.Room;
 import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 public class IndoorMapFragment extends Fragment {
 
@@ -173,7 +169,7 @@ public class IndoorMapFragment extends Fragment {
                     currentFloor = h4Floor;
                     leafletView.evaluateJavascript("loadMap('H4')", null);
                     //leafletView.evaluateJavascript("addH4Markers()", null);
-                    leafletView.evaluateJavascript("addFloorPointsAndMarkers(" + h4Floor.getRoomsJSON().toString() +")", null);
+                    leafletView.evaluateJavascript("addFloorRooms(" + h4Floor.getRoomsJSON().toString() +")", null);
                 }
             }
         });
@@ -194,10 +190,10 @@ public class IndoorMapFragment extends Fragment {
         }
 
         Log.d("PoiClickEvent", "Poi is: " + poiClicked);
+        pushRoom((Room) poiClicked);
     }
 
-    @JavascriptInterface
-    public void pushRoom(String roomNumber) {
+    public void pushRoom(Room room) {
         if (indoorPoiStack.size() == 2) {
             indoorPoiStack.clear();
             leafletView.post(new Runnable() {
@@ -209,25 +205,12 @@ public class IndoorMapFragment extends Fragment {
         }
 
         if (indoorPoiStack.size() == 0) {
-            Toast.makeText(getContext(), "Start Room: " + roomNumber, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Start Room: " + room.getName(), Toast.LENGTH_SHORT).show();
         } else if (indoorPoiStack.size() == 1) {
-            Toast.makeText(getContext(), "Dest Room: " + roomNumber, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Dest Room: " + room.getName(), Toast.LENGTH_SHORT).show();
         }
 
-        switch (roomNumber) {
-            case "H423":
-                indoorPoiStack.add(H423);
-                break;
-            case "H436":
-                indoorPoiStack.add(H436);
-                break;
-            case "H433":
-                indoorPoiStack.add(H433);
-                break;
-            case "H401":
-                indoorPoiStack.add(H401);
-                break;
-        }
+        indoorPoiStack.add(room);
 
         if (indoorPoiStack.size() == 2) {
             generatePath(indoorPoiStack.get(0), indoorPoiStack.get(1));

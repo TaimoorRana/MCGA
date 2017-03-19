@@ -1,5 +1,7 @@
 package com.concordia.mcga.utilities.pathfinding;
 
+import android.util.Log;
+
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.PathFinderTile.Type;
@@ -76,20 +78,25 @@ public class SingleMapPathFinder {
      * @throws MCGAPathFindingException - Thrown if there exists no valid path between both points
      */
     public List<IndoorMapTile> shortestPathJunctions(IndoorMapTile start, IndoorMapTile dest) throws MCGAPathFindingException {
-        List<IndoorMapTile> pathTiles = new ArrayList<IndoorMapTile>(shortestPath(start, dest));
-        List<IndoorMapTile> pathTilesJunctions = new ArrayList<IndoorMapTile>();
+        List<IndoorMapTile> pathTiles = new ArrayList<>(shortestPath(start, dest));
+        List<IndoorMapTile> pathTilesJunctions = new ArrayList<>();
 
         IndoorMapTile firstPft = pathTiles.get(0);
         pathTilesJunctions.add(firstPft);
-        int curX = firstPft.getCoordinateX();
-        int curY = firstPft.getCoordinateY();
+        int lastX = firstPft.getCoordinateX();
+        int lastY = firstPft.getCoordinateY();
 
         for (int i = 1; i < pathTiles.size(); i++) {
             IndoorMapTile pft = pathTiles.get(i);
-            if (!(pft.getCoordinateX() == curX && pft.getCoordinateY() != curY) && !(pft.getCoordinateY() == curY && pft.getCoordinateX() != curX)) {
+            if (!(pft.getCoordinateX() == lastX && pft.getCoordinateY() != lastY) && !(pft.getCoordinateY() == lastY && pft.getCoordinateX() != lastX)) {
                 pathTilesJunctions.add(pft);
-                curX = pft.getCoordinateX();
-                curY = pft.getCoordinateY();
+                lastX = pft.getCoordinateX();
+                lastY = pft.getCoordinateY();
+            }
+
+            //If its the last one, always add it
+            if (i == pathTiles.size() - 1) {
+                pathTilesJunctions.add(pft);
             }
         }
 

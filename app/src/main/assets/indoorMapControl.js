@@ -12,6 +12,9 @@ var pathGroup;
 var curLatBound;
 var curLngBound;
 
+//Debug Flag
+var debug = false;
+
 function initmap() {
 	map = new L.Map('map', {
 		crs: L.CRS.Simple,
@@ -99,22 +102,37 @@ function drawWalkablePath(pointArray) {
 	}
 }
 
-function addFloorPointsAndMarkers(roomArray) {
+function addFloorRooms(roomArray) {
 	console.log(JSON.stringify(roomArray));
 
 	for (var i = 0; i < roomArray.length; i++) {
 		var room = roomArray[i];
 		var polygonBounds = [];
+
 		for (var j = 0; j < room.polygonCoords.length; j++) {
 			var coord = room.polygonCoords[j];
 			var bound = [coord.lat, coord.lng];
 			polygonBounds.push(bound);
 		}
 
-		var polygon = L.polygon(polygonBounds, {'roomName': room.roomName});
+		//Polygon Options
+        var polygonOptions = {
+            'roomName': room.roomName
+        };
+
+        if (!debug) {
+            polygonOptions.fillOpacity = 0;
+            polygonOptions.stroke = false;
+        }
+
+        //Create Polygon Object
+		var polygon = L.polygon(polygonBounds, polygonOptions);
+
+		//Add click listener to alert IndoorMapFragment when a room polygon is clicked
 		polygon.on('click', function(event) {
 			Android.poiClicked(event.target.options.roomName);
 		});
+
 		polygon.addTo(polygonGroup);
 	}
 }
