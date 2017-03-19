@@ -137,37 +137,6 @@ function addFloorRooms(roomArray) {
 	}
 }
 
-/*function addH4Markers() {
-	var H423 = {
-		'name': 'H423',
-		'coord': L.latLng([670, 348])
-	};
-	var H436 = {
-		'name': 'H436',
-		'coord': L.latLng([1402, 1214])
-	};
-	var H433 = {
-		'name': 'H433',
-		'coord': L.latLng([1929, 353])
-	};
-	var H401 = {
-		'name': 'H401',
-		'coord': L.latLng([387, 1961])
-	};
-
-	var points = [H423, H436, H433, H401];
-
-	for (var i = 0; i < points.length; i++) {
-		var point = points[i];
-		var marker = L.marker(point.coord, {
-			'name': point.name
-		}).on('click', function(ev) {
-			Android.pushRoom(this.options.name);
-		});
-		roomMarkerGroup.addLayer(marker);
-	}
-}*/
-
 //Clearing Functions
 function clearPathLayers() {
 	pathGroup.clearLayers();
