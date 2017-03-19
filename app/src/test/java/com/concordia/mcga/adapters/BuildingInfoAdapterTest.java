@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 
 @RunWith(RobolectricTestRunner.class)
+@Config(constants = BuildConfig.class)
 public class BuildingInfoAdapterTest {
 
     // Array Adapter

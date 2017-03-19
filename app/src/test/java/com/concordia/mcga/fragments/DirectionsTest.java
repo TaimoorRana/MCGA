@@ -32,6 +32,7 @@ import static org.robolectric.shadows.support.v4.SupportFragmentTestUtil.startFr
 
 
 @RunWith(RobolectricTestRunner.class)
+@Config(constants = BuildConfig.class)
 public class DirectionsTest {
     // Layout elements
     private TextView bottomSheetTextView;
