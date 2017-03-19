@@ -25,6 +25,14 @@ public class TiledMap {
     }
 
     /**
+     * Package visibility to allow for debugging
+     * @return allTiles
+     */
+    PathFinderTile[][] getAllTiles() {
+        return allTiles;
+    }
+
+    /**
      * Package visibility to allow for mockito testing
      */
     void setAllTiles(PathFinderTile[][] allTiles) {
