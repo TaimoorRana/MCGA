@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity" >
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,6 +24,7 @@
         </FrameLayout>
     </LinearLayout>
 
+
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"
         android:layout_height="match_parent"
@@ -32,6 +33,18 @@
         android:backgroundTint="@color/white"
         app:itemBackground="@color/white"
         app:itemTextColor="@color/black"
-        app:headerLayout="@layout/header"
+        app:headerLayout="@layout/sidebar_header"
         app:menu="@menu/drawer" />
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorlayout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".sample.MainActivity">
+
+    </android.support.design.widget.CoordinatorLayout>
+
 </android.support.v4.widget.DrawerLayout>
