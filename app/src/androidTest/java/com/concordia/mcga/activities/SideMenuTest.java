@@ -34,9 +34,6 @@ public class SideMenuTest {
 
     @Test
     public void sideMenuTest() {
-        // Added a sleep statement to match the app's execution delay.
-        // The recommended way to handle such scenarios is to use Espresso idling resources:
-        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -49,34 +46,8 @@ public class SideMenuTest {
                         isDisplayed()));
         imageButton.perform(click());
 
-        ViewInteraction frameLayout = onView(
-                allOf(withId(R.id.navigation_view),
-                        childAtPosition(
-                                allOf(withId(R.id.drawer),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                0),
-                        isDisplayed()));
-        frameLayout.check(matches(isDisplayed()));
-    }
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
+        ViewInteraction frame = onView(
+                allOf(withId(R.id.profile_image), isDisplayed()));
+        frame.check(matches(isDisplayed()));
     }
 }
