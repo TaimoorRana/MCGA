@@ -3,14 +3,12 @@ package com.concordia.mcga.utilities.pathfinding;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.PathFinderTile.Type;
-
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import org.json.JSONArray;
 
 /**
  * Pathfinding class, which runs the A* shortest pathfinding algorithm
@@ -140,5 +138,29 @@ public class SingleMapPathFinder {
                 }
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (PathFinderTile[] tiles : map.getAllTiles()) {
+            for (PathFinderTile tile : tiles){
+                if (tile == null){
+                    builder.append(" ");
+                } else if (Type.START.equals(tile.getTileType())) {
+                    builder.append("S");
+                } else if (Type.DESTINATION.equals(tile.getTileType())) {
+                    builder.append("D");
+                } else if (openSet.contains(tile)) {
+                    builder.append("o");
+                } else if (closedSet.contains(tile)) {
+                    builder.append("c");
+                } else {
+                    builder.append(".");
+                }
+            }
+            builder.append("\n");
+        }
+        return builder.toString();
     }
 }

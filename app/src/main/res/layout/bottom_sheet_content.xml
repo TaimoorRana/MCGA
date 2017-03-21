@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinatorlayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:elevation="100dp"
+    tools:context="com.concordia.mcga.activities.MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="710dp"
+        android:orientation="vertical"
+        app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
+        android:id="@+id/bottom_sheet"
+        app:layout_behavior="@string/BottomSheetBuildingInfo"
+        app:anchorPoint="@dimen/anchor_point"
+        app:behavior_hideable="true"
+        android:fitsSystemWindows="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="76dp"
+                    android:background="@color/place_autocomplete_search_hint"
+                    android:paddingTop="0dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        app:srcCompat="@drawable/ic_chevron_right_black_24dp"
+                        android:background="@android:color/transparent"
+                        android:id="@+id/nextButton"
+                        android:layout_weight="51.50"
+                        android:elevation="0dp"
+                        android:visibility="visible"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="39dp"
+                        app:srcCompat="@drawable/ic_chevron_left_black_24dp"
+                        android:background="@android:color/transparent"
+                        android:id="@+id/previousButton"
+                        android:layout_weight="1"
+                        android:layout_alignTop="@+id/nextButton"
+                        android:layout_alignParentStart="true" />
+
+                    <TextView
+                        android:id="@+id/bottom_sheet_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textColor="?android:attr/textColorPrimaryNoDisable"
+                        android:textSize="24sp"
+                        android:textAlignment="center"
+                        android:gravity="center"
+                        android:layout_weight="606.34"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentEnd="true" />
+
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:id="@+id/expandButton"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_above="@+id/nextButton" />
+
+                </RelativeLayout>
+
+
+                <android.support.design.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="575dp"
+                    android:background="@color/button_secondary_color">
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/list1"
+                    android:drawSelectorOnTop="false"
+                    android:textAlignment="center"
+                    android:background="@color/button_secondary_color"
+                    android:divider="@color/cast_expanded_controller_ad_label_background_color"
+                    android:dividerHeight="@dimen/button_internal_padding" />
+
+
+                </android.support.design.widget.CoordinatorLayout>
+
+            </LinearLayout>
+    </android.support.design.widget.AppBarLayout>
+
+
+    <!--</FrameLayout>-->
+    <!--<fragment-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:id="@+id/support_map"-->
+    <!--android:name="com.google.android.gms.maps.SupportMapFragment"/>-->
+
+
+</android.support.design.widget.CoordinatorLayout>
