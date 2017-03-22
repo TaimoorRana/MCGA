@@ -1,10 +1,8 @@
 package com.concordia.mcga.factories;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 
-import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.SmallBuilding;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -24,17 +22,11 @@ public class BuildingFactory {
     EDGE_COORDINATES_COLUMN_INDEX = 4, RESOURCE_IMAGE_COLUMN_INDEX = 5, IS_SMALL_BUILDING_COLUMN_INDEX = 6;
     private final static Gson GSON = new Gson();
     private static Resources resources;
-    private static Context context;
-
-    static {
-        context = MainActivity.getContext();
-        resources = context.getResources();
-    }
 
     /**
      * @param resources {@link Resources} object to get building marker icons from
      */
-    static void setResources(Resources resources) {
+    public static void setResources(Resources resources) {
         BuildingFactory.resources = resources;
     }
 
@@ -53,7 +45,7 @@ public class BuildingFactory {
         String name = res.getString(NAME_COLUMN_INDEX);
         String shortName = res.getString(SHORT_NAME_COLUMN_INDEX);
         Type type = new TypeToken<List<LatLng>>() {}.getType();
-        List<LatLng> edgeCoordinates = (List<LatLng>) GSON.fromJson(res.getString(EDGE_COORDINATES_COLUMN_INDEX), type);
+        List<LatLng> edgeCoordinates = GSON.fromJson(res.getString(EDGE_COORDINATES_COLUMN_INDEX), type);
 
         // 1 means that it is a small building
         if (res.getInt(IS_SMALL_BUILDING_COLUMN_INDEX) == 1){

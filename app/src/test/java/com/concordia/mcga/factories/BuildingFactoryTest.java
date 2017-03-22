@@ -20,7 +20,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, shadows = {ShadowBitmapDescriptorFactory.class, ShadowMainActivity.class})
+@Config(constants = BuildConfig.class, shadows = {
+        com.concordia.mcga.factories.ShadowBitmapDescriptorFactory.class,
+        com.concordia.mcga.factories.ShadowMainActivity.class})
 public class BuildingFactoryTest {
     private Gson gson = new Gson();
 

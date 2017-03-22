@@ -1,6 +1,5 @@
 package com.concordia.mcga.activities;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -9,20 +8,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import com.concordia.mcga.exceptions.MCGADatabaseException;
+import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
+
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
-    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getApplicationContext();
+        BuildingFactory.setResources(getApplicationContext().getResources());
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -99,13 +100,5 @@ public class MainActivity extends AppCompatActivity {
             throw new Error("Unable to create database");
         }
     }
-
-    /**
-     * @return activity context
-     */
-    public static Context getContext(){
-        return context;
-    }
-
 
 }
