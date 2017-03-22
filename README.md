@@ -6,7 +6,7 @@ SOEN 390 Winter 2017
 [![Build Status](https://travis-ci.org/Taimoorrana1/MCGA.svg?branch=master)](https://travis-ci.org/Taimoorrana1/MCGA)
 
 # About
-MCGA is a mobile Campus Guide application that is meant to help new incoming students navigate and familiarize themselves with Concordia University - Montréal’s two campuses. It is an project implemented using the Android platform.
+MCGA is a mobile Campus Guide application that is meant to help new incoming students navigate and familiarize themselves with Concordia University - Montréal’s two campuses. It is a project implemented using the Android platform.
 
 # Screenshots
 <img src="https://github.com/Taimoorrana1/MCGA/raw/readme-nice-nice/screenshots/screen.4.png" width="300" height="530">
