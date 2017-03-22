@@ -2,9 +2,10 @@ package com.concordia.mcga.utilities.pathfinding;
 
 
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
-
+import com.concordia.mcga.models.IndoorMapTile;
+import com.concordia.mcga.utilities.pathfinding.PathFinderTile;
+import com.concordia.mcga.utilities.pathfinding.TiledMap;
 import junit.framework.Assert;
-
 import org.junit.Test;
 import org.mockito.Mockito;
 

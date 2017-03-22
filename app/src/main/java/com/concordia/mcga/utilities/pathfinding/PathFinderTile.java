@@ -2,6 +2,7 @@ package com.concordia.mcga.utilities.pathfinding;
 
 import android.support.annotation.NonNull;
 
+import com.concordia.mcga.models.IndoorMapTile;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -93,7 +94,11 @@ public class PathFinderTile implements Comparable<PathFinderTile> {
 
     @Override
     public int compareTo(@NonNull PathFinderTile o) {
-        return this.getCost() - o.getCost();
+        int compare = this.getCost() - o.getCost();
+        if (compare == 0 && !this.equals(o)){
+            compare = -1;
+        }
+        return compare;
     }
 
     @Override
