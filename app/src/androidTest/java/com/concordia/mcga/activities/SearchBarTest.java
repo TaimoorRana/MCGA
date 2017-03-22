@@ -26,6 +26,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
@@ -56,6 +57,7 @@ public class SearchBarTest {
                                 0),
                         isDisplayed()));
         editText.check(matches(withText("Enter location...")));
+        assertNotNull(editText);
 
         ViewInteraction searchAutoComplete = onView(
                 allOf(withId(R.id.search_src_text),
@@ -63,6 +65,7 @@ public class SearchBarTest {
                                 withParent(withId(R.id.search_edit_frame)))),
                         isDisplayed()));
         searchAutoComplete.perform(replaceText("hall"), closeSoftKeyboard());
+        assertNotNull(searchAutoComplete);
 
         ViewInteraction editText2 = onView(
                 allOf(withId(R.id.search_src_text), withText("hall"),
@@ -74,6 +77,7 @@ public class SearchBarTest {
                                 0),
                         isDisplayed()));
         editText2.check(matches(withText("hall")));
+        assertNotNull(editText2);
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -90,6 +94,7 @@ public class SearchBarTest {
                                 withParent(withId(R.id.search_edit_frame)))),
                         isDisplayed()));
         searchAutoComplete2.perform(replaceText("notabuilding"), closeSoftKeyboard());
+        assertNotNull(searchAutoComplete2);
 
         ViewInteraction appCompatImageView = onView(
                 allOf(withId(R.id.search_close_btn), withContentDescription("Clear query"),
@@ -97,6 +102,7 @@ public class SearchBarTest {
                                 withParent(withId(R.id.search_edit_frame)))),
                         isDisplayed()));
         appCompatImageView.perform(click());
+        assertNotNull(appCompatImageView);
 
         ViewInteraction editText3 = onView(
                 allOf(withId(R.id.search_src_text), withText("Enter location..."),
@@ -108,7 +114,7 @@ public class SearchBarTest {
                                 0),
                         isDisplayed()));
         editText3.check(matches(withText("Enter location...")));
-
+        assertNotNull(editText3);
     }
 
     private static Matcher<View> childAtPosition(

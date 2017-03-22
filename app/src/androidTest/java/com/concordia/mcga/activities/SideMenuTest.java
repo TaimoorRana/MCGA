@@ -23,6 +23,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
@@ -44,10 +45,12 @@ public class SideMenuTest {
                 allOf(withContentDescription("Open sesame"),
                         withParent(withId(R.id.toolbar)),
                         isDisplayed()));
+        assertNotNull(imageButton);
         imageButton.perform(click());
 
         ViewInteraction frame = onView(
                 allOf(withId(R.id.profile_image), isDisplayed()));
+        assertNotNull(frame);
         frame.check(matches(isDisplayed()));
     }
 }
