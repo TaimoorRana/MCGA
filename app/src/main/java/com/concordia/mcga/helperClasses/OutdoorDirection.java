@@ -55,8 +55,8 @@ public class OutdoorDirection implements DirectionCallback {
     @Override
     public void onDirectionSuccess(Direction direction, String rawBody) {
         if (direction.isOK()) {
-            originMarker = map.addMarker(new MarkerOptions().position(origin));
-            destinationMarker = map.addMarker(new MarkerOptions().position(destination));
+           // originMarker = map.addMarker(new MarkerOptions().position(origin));
+           // destinationMarker = map.addMarker(new MarkerOptions().position(destination));
             Route route = direction.getRouteList().get(0);
             leg = route.getLegList().get(0);
             steps = leg.getStepList();
@@ -75,13 +75,13 @@ public class OutdoorDirection implements DirectionCallback {
 
     @Override
     public void onDirectionFailure(Throwable t) {
+        int x = 5;
     }
 
     /**
      * Makes a https request to get a direction from origin to destination with a specified transport mode.
      */
     public void requestDirection() {
-
         GoogleDirection.withServerKey(serverKey)
                 .from(origin)
                 .to(destination)
@@ -201,8 +201,6 @@ public class OutdoorDirection implements DirectionCallback {
         for (Polyline polyline : polylines) {
             polyline.remove();
         }
-        originMarker.remove();
-        destinationMarker.remove();
     }
 
     /**

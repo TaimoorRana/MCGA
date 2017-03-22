@@ -114,6 +114,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private POI location;
     private POI destination;
     private SearchState searchState;
+    //Outdoor direction
+    OutdoorDirection outdoorDirection = new OutdoorDirection();
 
     /**
      * Build alert dialog on fragment's activity
@@ -353,31 +355,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         map.setIndoorEnabled(false);
 
-        /*
-         * For Demo outdoor direction only
-         */
-        final OutdoorDirection outdoorDirection = new OutdoorDirection();
-        outdoorDirection.setContext(getActivity());
+        outdoorDirection.setContext(getActivity().getApplicationContext());
         outdoorDirection.setMap(map);
         outdoorDirection.setTransportMode(TransportMode.TRANSIT);
-        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                if(outdoorDirection.getOrigin() == null){
-                    outdoorDirection.setOrigin(latLng);
-                }else if(outdoorDirection.getDestination() == null){
-                    outdoorDirection.setDestination(latLng);
-                    outdoorDirection.requestDirection();
-                }
-                else{
-                    outdoorDirection.deleteDirection();
-                }
-            }
-        });
-
-        /*
-         * For Demo outdoor direction only
-         */
 
         //Map Customization
         applyCustomGoogleMapsStyle();
@@ -519,13 +499,50 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onPolygonClick(Polygon polygon) {
             setBottomSheetContent(polygon);
+                /*
+         * For Demo outdoor direction only
+         */
+                LatLng origin = null, destination = null;
+                Building buildingClicked;
+                if(outdoorDirection.getOrigin() == null){
+                    buildingClicked = Campus.SGW.getBuilding(polygon);
+                    origin = buildingClicked.getMapCoordinates();
+                    outdoorDirection.setOrigin(origin);
+                }else if(outdoorDirection.getDestination() == null){
+                    buildingClicked =Campus.SGW.getBuilding(polygon);
+                    destination = buildingClicked.getMapCoordinates();
+                    outdoorDirection.setDestination(destination);
+                    outdoorDirection.requestDirection();
+                }
+                else{
+                    outdoorDirection.deleteDirection();
+                }
 
+        /*
+         * For Demo outdoor direction only
+         */
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 setBottomSheetContent(marker);
+
+                LatLng origin = null, destination = null;
+                Building buildingClicked;
+                if(outdoorDirection.getOrigin() == null){
+                    buildingClicked = Campus.SGW.getBuilding(marker);
+                    origin = buildingClicked.getMapCoordinates();
+                    outdoorDirection.setOrigin(origin);
+                }else if(outdoorDirection.getDestination() == null){
+                    buildingClicked =Campus.SGW.getBuilding(marker);
+                    destination = buildingClicked.getMapCoordinates();
+                    outdoorDirection.setDestination(destination);
+                    outdoorDirection.requestDirection();
+                }
+                else{
+                    outdoorDirection.deleteDirection();
+                }
                 return true;
             }
         });
