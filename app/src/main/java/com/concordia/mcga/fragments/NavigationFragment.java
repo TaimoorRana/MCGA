@@ -202,7 +202,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View v) {
                 if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    if(alertGPS(mapFragment.getActivity())){
+                    if (alertGPS(mapFragment.getActivity())) {
                         Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
                     }
                 }
@@ -215,9 +215,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 }
                 onClose();
 
-                if(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen)){
-                    Log.d("GPS Locator","Successful");}
-                else {
+                if (locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen)) {
+                    Log.d("GPS Locator", "Successful");
+                } else {
                     Log.d("GPS Locator", "Fail");
                 }
 
@@ -247,14 +247,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         });
 
 
-
         //Set initial view type
         viewType = ViewType.OUTDOOR;
-        
+
         //Hide Fragments
 
         AppCompatImageButton locationCancelButton;
-        locationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
+        locationCancelButton = (AppCompatImageButton) toolbarView.findViewById(
                 R.id.search_location_button);
         locationCancelButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -270,7 +269,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         });
 
         AppCompatImageButton destinationCancelButton;
-        destinationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
+        destinationCancelButton = (AppCompatImageButton) toolbarView.findViewById(
                 R.id.search_destination_button);
         destinationCancelButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -291,7 +290,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         //Hide Fragments
         showTransportButton(true);
-
 
 
         // Set the building information bottomsheet to true
@@ -368,8 +366,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-
      * Shows or hides the bottom sheet building information fragment
+     *
      * @param isVisible
      */
     private void showBuildingInfoFragment(boolean isVisible) {
@@ -382,6 +380,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Shows or hides the directions bottom sheet fragment
+     *
      * @param isVisible
      */
     private void showDirectionsFragment(boolean isVisible) {
@@ -391,6 +390,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             getChildFragmentManager().beginTransaction().hide(directionsFragment).commit();
         }
     }
+
     /*
      * Shows or hides the indoor map, will hide the outdoormap if visible
      */
@@ -413,6 +413,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Shows or hides the transport button
+     *
      * @param isVisible
      */
     public void showTransportButton(boolean isVisible) {
@@ -425,26 +426,24 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     *
      * @param polygon
      */
-    private void setBottomSheetContent(Polygon polygon){
+    private void setBottomSheetContent(Polygon polygon) {
         /**
          * ONLY FOR DEMO PURPOSES
          */
-        Building building = Campus.SGW.getBuilding(polygon);
-        if(building == null){
-            building = Campus.LOY.getBuilding(polygon);
+        Building building = Campus.getBuilding(polygon);
+        if (building == null) {
+            building = Campus.getBuilding(polygon);
         }
         ((MainActivity) getActivity()).createToast(building.getShortName());
         String buildingName = building.getShortName();
         buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
         buildingInfoFragment.clear();
         // TEMPORARY
-        if (buildingName.equals("H")){
+        if (buildingName.equals("H")) {
             buildingInfoFragment.displayHBuildingAssociations();
-        }
-        else if (buildingName.equals("JM")){
+        } else if (buildingName.equals("JM")) {
             buildingInfoFragment.displayMBBuildingAssociations();
         }
         buildingInfoFragment.collapse();
@@ -454,26 +453,24 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     *
      * @param marker
      */
-    private void setBottomSheetContent(Marker marker){
+    private void setBottomSheetContent(Marker marker) {
         /**
          * ONLY FOR DEMO PURPOSES
          */
-        Building building = Campus.SGW.getBuilding(marker);
-        if(building == null){
-            building = Campus.LOY.getBuilding(marker);
+        Building building = Campus.getBuilding(marker);
+        if (building == null) {
+            building = Campus.getBuilding(marker);
         }
         ((MainActivity) getActivity()).createToast(building.getShortName());
         String buildingName = building.getShortName();
         buildingInfoFragment.setBuildingInformation(buildingName, "address", "7:00", "23:00");
         buildingInfoFragment.clear();
         // TEMPORARY
-        if (buildingName.equals("H")){
+        if (buildingName.equals("H")) {
             buildingInfoFragment.displayHBuildingAssociations();
-        }
-        else if (buildingName.equals("JM")){
+        } else if (buildingName.equals("JM")) {
             buildingInfoFragment.displayMBBuildingAssociations();
         }
         buildingInfoFragment.collapse();
@@ -497,8 +494,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onPolygonClick(Polygon polygon) {
                 setBottomSheetContent(polygon);
-                setupOutdoorDirection(polygon);
-
+                setupOriginAndDestinationForOutdoorDirection(polygon);
             }
         });
 
@@ -506,25 +502,27 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public boolean onMarkerClick(Marker marker) {
                 setBottomSheetContent(marker);
-                setupOutdoorDirection(marker);
+                setupOriginAndDestinationForOutdoorDirection(marker);
                 return true;
             }
         });
 
     }
 
-    private void setupOutdoorDirection(Object obj) {
-        LatLng origin, destination;
-        Building buildingClicked;
+    /**
+     * Sets up origin and destination coordinate for outdoor navigation
+     * If destination is setup, directions will be requested
+     *
+     * @param obj is a Marker or Polygon object that is use to find the building
+     */
+    private void setupOriginAndDestinationForOutdoorDirection(Object obj) {
+        Building buildingClicked = Campus.getBuilding(obj);
+        LatLng buildingCoordinate = buildingClicked.getMapCoordinates();
 
         if (outdoorDirection.getOrigin() == null) {
-            buildingClicked = Campus.SGW.getBuilding(obj);
-            origin = buildingClicked.getMapCoordinates();
-            outdoorDirection.setOrigin(origin);
+            outdoorDirection.setOrigin(buildingCoordinate);
         } else if (outdoorDirection.getDestination() == null) {
-            buildingClicked = Campus.SGW.getBuilding(obj);
-            destination = buildingClicked.getMapCoordinates();
-            outdoorDirection.setDestination(destination);
+            outdoorDirection.setDestination(buildingCoordinate);
             outdoorDirection.requestDirection();
         } else {
             outdoorDirection.deleteDirection();
@@ -749,7 +747,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                POI dest = (POI)poiSearchAdapter.getChild(groupPosition, childPosition);
+                POI dest = (POI) poiSearchAdapter.getChild(groupPosition, childPosition);
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(),
                         CAMPUS_DEFAULT_ZOOM_LEVEL));
 
@@ -762,6 +760,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Sets the navigation state and location/destination for internal use
+     *
      * @param dest The {@link POI} location to be added to the search state
      * @return Whether the state was updated or not
      */

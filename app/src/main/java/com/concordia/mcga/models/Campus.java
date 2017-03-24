@@ -59,31 +59,17 @@ public class Campus extends POI {
     }
 
     /**
-     * @return List of buildings in this campus
-     */
-    public List<Building> getBuildings() {
-        return buildings;
-    }
-
-    /**
-     *
-     * @return The abbreviated name of this campus
-     */
-    public String getShortName() {
-        return shortName;
-    }
-
-
-
-    /**
      *
      * @param object can be a marker object or polygon object to search for
      * @return return the building which contains this marker or polygon
      */
-    public Building getBuilding(Object object) {
+    public static Building getBuilding(Object object) {
+        List<Building> allBuildings = new ArrayList<>(Campus.SGW.getBuildings());
+        allBuildings.addAll(Campus.LOY.getBuildings());
+
         if (object instanceof Marker) {
             Marker marker = (Marker) object;
-            for (Building building : buildings) {
+            for (Building building : allBuildings) {
                 if (building.getMarker().getId().equalsIgnoreCase(marker.getId()))
                     return building;
             }
@@ -91,13 +77,27 @@ public class Campus extends POI {
 
         if (object instanceof Polygon) {
             Polygon polygon = (Polygon) object;
-            for (Building building : buildings) {
+            for (Building building : allBuildings) {
                 if (building.getPolygon().getId().equalsIgnoreCase(polygon.getId()))
                     return building;
             }
         }
 
         return null;
+    }
+
+    /**
+     * @return List of buildings in this campus
+     */
+    public List<Building> getBuildings() {
+        return buildings;
+    }
+
+    /**
+     * @return The abbreviated name of this campus
+     */
+    public String getShortName() {
+        return shortName;
     }
 
     public void addBuilding(Building building){
