@@ -2,6 +2,7 @@ package com.concordia.mcga.models;
 
 import android.database.Cursor;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.RoomFactory;
