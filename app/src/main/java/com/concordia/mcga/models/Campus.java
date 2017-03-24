@@ -1,6 +1,7 @@
 package com.concordia.mcga.models;
 
 import android.database.Cursor;
+
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
@@ -72,28 +73,30 @@ public class Campus extends POI {
         return shortName;
     }
 
-    /**
-     * @param polygon polygon object to search for
-     * @return return the building which contains this polygon
-     */
-    public Building getBuilding(Polygon polygon){
-        for (Building building : buildings) {
-            if(building.getPolygon().getId().equalsIgnoreCase(polygon.getId()))
-                return building;
-        }
-        return null;
-    }
+
 
     /**
      *
-     * @param marker marker object to search for
-     * @return return the building which contains this marker
+     * @param object can be a marker object or polygon object to search for
+     * @return return the building which contains this marker or polygon
      */
-    public Building getBuilding(Marker marker){
-        for (Building building : buildings) {
-            if(building.getMarker().getId().equalsIgnoreCase(marker.getId()))
-                return building;
+    public Building getBuilding(Object object) {
+        if (object instanceof Marker) {
+            Marker marker = (Marker) object;
+            for (Building building : buildings) {
+                if (building.getMarker().getId().equalsIgnoreCase(marker.getId()))
+                    return building;
+            }
         }
+
+        if (object instanceof Polygon) {
+            Polygon polygon = (Polygon) object;
+            for (Building building : buildings) {
+                if (building.getPolygon().getId().equalsIgnoreCase(polygon.getId()))
+                    return building;
+            }
+        }
+
         return null;
     }
 

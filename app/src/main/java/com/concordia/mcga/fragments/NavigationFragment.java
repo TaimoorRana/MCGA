@@ -68,6 +68,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     //Outdoor Map
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
+    //Outdoor direction
+    OutdoorDirection outdoorDirection = new OutdoorDirection();
     private LocationListener gpsListen = new LocationListener() {
         public void onLocationChanged(Location location) {
             //Method called when new location is found by the network
@@ -114,8 +116,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private POI location;
     private POI destination;
     private SearchState searchState;
-    //Outdoor direction
-    OutdoorDirection outdoorDirection = new OutdoorDirection();
 
     /**
      * Build alert dialog on fragment's activity
@@ -485,68 +485,50 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * add markers and polygons overlay for each building
      */
     private void addBuildingMarkersAndPolygons() {
-        final List<Building> sgwBuildings = Campus.SGW.getBuildings();
-        final List<Building> loyBuildings = Campus.LOY.getBuildings();
+        List<Building> allBuildings = new ArrayList<>();
+        allBuildings.addAll(Campus.SGW.getBuildings());
+        allBuildings.addAll(Campus.LOY.getBuildings());
 
-        for (Building building : sgwBuildings) {
+        for (Building building : allBuildings) {
             createBuildingMarkersAndPolygonOverlay(building);
         }
 
-        for (Building building : loyBuildings) {
-            createBuildingMarkersAndPolygonOverlay(building);
-        }
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
-            setBottomSheetContent(polygon);
-                /*
-         * For Demo outdoor direction only
-         */
-                LatLng origin = null, destination = null;
-                Building buildingClicked;
-                if(outdoorDirection.getOrigin() == null){
-                    buildingClicked = Campus.SGW.getBuilding(polygon);
-                    origin = buildingClicked.getMapCoordinates();
-                    outdoorDirection.setOrigin(origin);
-                }else if(outdoorDirection.getDestination() == null){
-                    buildingClicked =Campus.SGW.getBuilding(polygon);
-                    destination = buildingClicked.getMapCoordinates();
-                    outdoorDirection.setDestination(destination);
-                    outdoorDirection.requestDirection();
-                }
-                else{
-                    outdoorDirection.deleteDirection();
-                }
+                setBottomSheetContent(polygon);
+                setupOutdoorDirection(polygon);
 
-        /*
-         * For Demo outdoor direction only
-         */
             }
         });
+
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 setBottomSheetContent(marker);
-
-                LatLng origin = null, destination = null;
-                Building buildingClicked;
-                if(outdoorDirection.getOrigin() == null){
-                    buildingClicked = Campus.SGW.getBuilding(marker);
-                    origin = buildingClicked.getMapCoordinates();
-                    outdoorDirection.setOrigin(origin);
-                }else if(outdoorDirection.getDestination() == null){
-                    buildingClicked =Campus.SGW.getBuilding(marker);
-                    destination = buildingClicked.getMapCoordinates();
-                    outdoorDirection.setDestination(destination);
-                    outdoorDirection.requestDirection();
-                }
-                else{
-                    outdoorDirection.deleteDirection();
-                }
+                setupOutdoorDirection(marker);
                 return true;
             }
         });
 
+    }
+
+    private void setupOutdoorDirection(Object obj) {
+        LatLng origin, destination;
+        Building buildingClicked;
+
+        if (outdoorDirection.getOrigin() == null) {
+            buildingClicked = Campus.SGW.getBuilding(obj);
+            origin = buildingClicked.getMapCoordinates();
+            outdoorDirection.setOrigin(origin);
+        } else if (outdoorDirection.getDestination() == null) {
+            buildingClicked = Campus.SGW.getBuilding(obj);
+            destination = buildingClicked.getMapCoordinates();
+            outdoorDirection.setDestination(destination);
+            outdoorDirection.requestDirection();
+        } else {
+            outdoorDirection.deleteDirection();
+        }
     }
 
     /**
