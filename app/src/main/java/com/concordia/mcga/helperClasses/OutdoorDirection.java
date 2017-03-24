@@ -13,8 +13,6 @@ import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -33,7 +31,6 @@ public class OutdoorDirection implements DirectionCallback {
     private List<Polyline> polylines;
     private List<Step> steps;
     private List<String> instructions;
-    private Marker originMarker, destinationMarker;
     private Leg leg;
     private GoogleMap map;
     private Context context;
@@ -55,8 +52,6 @@ public class OutdoorDirection implements DirectionCallback {
     @Override
     public void onDirectionSuccess(Direction direction, String rawBody) {
         if (direction.isOK()) {
-           // originMarker = map.addMarker(new MarkerOptions().position(origin));
-           // destinationMarker = map.addMarker(new MarkerOptions().position(destination));
             Route route = direction.getRouteList().get(0);
             leg = route.getLegList().get(0);
             steps = leg.getStepList();
@@ -120,10 +115,6 @@ public class OutdoorDirection implements DirectionCallback {
         this.destination = destination;
     }
 
-    public String getServerKey() {
-        return serverKey;
-    }
-
     /**
      * @return Polylines that are drawn on the map
      */
@@ -131,44 +122,14 @@ public class OutdoorDirection implements DirectionCallback {
         return polylines;
     }
 
-    public void setPolylines(List<Polyline> polylines) {
-        this.polylines = polylines;
-    }
-
-    public Marker getOriginMarker() {
-        return originMarker;
-    }
-
-    public void setOriginMarker(Marker originMarker) {
-        this.originMarker = originMarker;
-    }
-
-    public Marker getDestinationMarker() {
-        return destinationMarker;
-    }
-
-    public void setDestinationMarker(Marker destinationMarker) {
-        this.destinationMarker = destinationMarker;
-    }
 
     public Leg getLeg() {
         return leg;
     }
 
-    public void setLeg(Leg leg) {
-        this.leg = leg;
-    }
-
-    public GoogleMap getMap() {
-        return map;
-    }
 
     public void setMap(GoogleMap map) {
         this.map = map;
-    }
-
-    public Context getContext() {
-        return context;
     }
 
     public void setContext(Context context) {
@@ -187,9 +148,6 @@ public class OutdoorDirection implements DirectionCallback {
         return steps;
     }
 
-    public void setSteps(List<Step> steps) {
-        this.steps = steps;
-    }
 
     /**
      * Deletes Markers and polylines.
