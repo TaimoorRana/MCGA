@@ -89,6 +89,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             case R.id.walkFAB:
                 this.transportType = Transportation.WALK;
                 swapIcons(Transportation.WALK.getIconID());
+
                 break;
             case R.id.bikeFAB:
                 this.transportType = Transportation.BIKE;

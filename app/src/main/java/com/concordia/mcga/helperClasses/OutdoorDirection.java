@@ -24,6 +24,7 @@ import java.util.List;
 
 public class OutdoorDirection implements DirectionCallback {
 
+    private static OutdoorDirection outdoorDirection;
     private final String serverKey = "AIzaSyBQrTXiam-OzDCfSgEct6FyOQWlDWFXp6Q";
     private final int transitPathWidth = 5;
     private final int transitPathColor = 0x80ed1026; // transparent red
@@ -38,12 +39,21 @@ public class OutdoorDirection implements DirectionCallback {
     private Context context;
     private String transportMode;
 
-    public OutdoorDirection() {
+    private OutdoorDirection() {
         polylines = new ArrayList<>();
         steps = new ArrayList<>();
         instructions = new ArrayList<>();
         transportMode = TransportMode.TRANSIT; // default transport mode
     }
+
+    public static OutdoorDirection getInstance() {
+        if (outdoorDirection == null) {
+            outdoorDirection = new OutdoorDirection();
+        }
+        return outdoorDirection;
+    }
+
+
 
     /**
      * Upon successful response from Google Direction Server, Create a path between the origin and destion
