@@ -14,10 +14,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.helperClasses.OutdoorDirection;
 import com.concordia.mcga.models.Transportation;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
 
+    OutdoorDirection outdoorDirection = OutdoorDirection.getInstance();
     //Floating Action Buttons
     private FloatingActionButton transportExpandFAB;
     private FloatingActionButton walkFAB;
@@ -25,14 +27,10 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private FloatingActionButton carFAB;
     private FloatingActionButton publicTransportFAB;
     private FloatingActionButton shuttleFAB;
-
-
     //Text Views
     private TextView walkTextView, bikeTextView, carTextView, publicTransportTextView, shuttleTextView;
-
     //Animations
     private Animation transport_fab_open, transport_fab_close, transport_textview_open, transport_textview_close;
-
     //State
     private boolean fabExpanded = false;
     private boolean shuttleVisible = true;
@@ -85,11 +83,15 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             case R.id.transportExpandFAB:
                 if (!isExpanded())
                     restorePreviousIcon();
+
+                walkTextView.setText(outdoorDirection.walkingTime);
+                bikeTextView.setText(outdoorDirection.bicycleTime);
+                carTextView.setText(outdoorDirection.drivingTime);
+                publicTransportTextView.setText(outdoorDirection.transitTime);
                 break;
             case R.id.walkFAB:
                 this.transportType = Transportation.WALK;
                 swapIcons(Transportation.WALK.getIconID());
-
                 break;
             case R.id.bikeFAB:
                 this.transportType = Transportation.BIKE;
@@ -187,7 +189,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private String formatTime(int hours, int minutes) {
         String time = null;
         if (hours > 0 && minutes > 0) {
-            time = hours + "h" + minutes + "m";
+            time = hours + "h " + minutes + "m";
         } else if (hours == 0) {
             time = minutes + "m";
         } else if (minutes == 0) {

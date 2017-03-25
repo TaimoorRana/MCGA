@@ -494,7 +494,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onPolygonClick(Polygon polygon) {
                 setBottomSheetContent(polygon);
-                outdoorDirection.setOriginAndDestination(polygon);
             }
         });
 
@@ -502,7 +501,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public boolean onMarkerClick(Marker marker) {
                 setBottomSheetContent(marker);
-                outdoorDirection.setOriginAndDestination(marker);
                 return true;
             }
         });
@@ -624,11 +622,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
             locationText.setText(location.getName());
+            outdoorDirection.setOrigin(location.getMapCoordinates());
         }
         if (destination != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
             destinationText.setText(destination.getName());
+            outdoorDirection.setDestination(destination.getMapCoordinates());
+            outdoorDirection.requestDirectionForAllTransport();
         }
 
         if (searchState == SearchState.NONE) {

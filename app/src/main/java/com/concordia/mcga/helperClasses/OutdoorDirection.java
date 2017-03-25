@@ -30,6 +30,7 @@ public class OutdoorDirection implements DirectionCallback {
     private final int transitPathColor = 0x80ed1026; // transparent red
     private final int walkingPathWidth = 3;
     private final int walkingPathColor = 0x801767e8; // transparent blue
+    public String walkingTime, drivingTime, transitTime, bicycleTime;
     private LatLng origin, destination;
     private List<Polyline> polylines;
     private List<Step> steps;
@@ -37,7 +38,7 @@ public class OutdoorDirection implements DirectionCallback {
     private Leg leg;
     private GoogleMap map;
     private Context context;
-    private String transportMode;
+    private String transportMode = "driving";
 
     private OutdoorDirection() {
         polylines = new ArrayList<>();
@@ -67,6 +68,22 @@ public class OutdoorDirection implements DirectionCallback {
             Route route = direction.getRouteList().get(0);
             leg = route.getLegList().get(0);
             steps = leg.getStepList();
+
+            switch (steps.get(0).getTravelMode()) {
+                case "DRIVING":
+                    drivingTime = getDuration();
+                    break;
+                case "WALKING":
+                    walkingTime = getDuration();
+                    break;
+                case "BICYCLING":
+                    bicycleTime = getDuration();
+                    break;
+                case "TRANSIT":
+                    transitTime = getDuration();
+                    break;
+            }
+
             ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline(
                     context,
                     steps,
@@ -87,13 +104,24 @@ public class OutdoorDirection implements DirectionCallback {
     /**
      * Makes a https request to get a direction from origin to destination with a specified transport mode.
      */
-    public void requestDirection() {
+    private void requestDirection() {
         GoogleDirection.withServerKey(serverKey)
                 .from(origin)
                 .to(destination)
                 .transportMode(transportMode)
                 .unit(Unit.METRIC)
                 .execute(this);
+    }
+
+    public void requestDirectionForAllTransport() {
+        setTransportMode("walking");
+        requestDirection();
+        setTransportMode("driving");
+        requestDirection();
+        setTransportMode("transit");
+        requestDirection();
+        setTransportMode("bicycling");
+        requestDirection();
     }
 
     /**
@@ -127,8 +155,10 @@ public class OutdoorDirection implements DirectionCallback {
      * @return Route total duration in "x hours y min" format
      */
     public String getDuration(){
+        if (leg == null) return "";
         return leg.getDuration().getText();
     }
+
 
     public LatLng getOrigin() {
         return origin;
