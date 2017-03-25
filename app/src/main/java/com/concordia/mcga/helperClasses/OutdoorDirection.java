@@ -84,16 +84,10 @@ public class OutdoorDirection implements DirectionCallback {
                     break;
             }
 
-            ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline(
-                    context,
-                    steps,
-                    transitPathWidth,
-                    transitPathColor,
-                    walkingPathWidth,
-                    walkingPathColor);
-            for (PolylineOptions polylineOption : polylineOptionList) {
-                polylines.add(map.addPolyline(polylineOption));
-            }
+            if (steps.get(0).getTravelMode().equalsIgnoreCase(transportMode))
+                drawPath();
+
+
         }
     }
 
@@ -122,6 +116,19 @@ public class OutdoorDirection implements DirectionCallback {
         requestDirection();
         setTransportMode("bicycling");
         requestDirection();
+    }
+
+    public void drawPath() {
+        ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline(
+                context,
+                steps,
+                transitPathWidth,
+                transitPathColor,
+                walkingPathWidth,
+                walkingPathColor);
+        for (PolylineOptions polylineOption : polylineOptionList) {
+            polylines.add(map.addPolyline(polylineOption));
+        }
     }
 
     /**
@@ -217,8 +224,10 @@ public class OutdoorDirection implements DirectionCallback {
     public void deleteDirection(){
         origin = null;
         destination = null;
-        for (Polyline polyline : polylines) {
-            polyline.remove();
+        if (polylines != null) {
+            for (Polyline polyline : polylines) {
+                polyline.remove();
+            }
         }
     }
 
