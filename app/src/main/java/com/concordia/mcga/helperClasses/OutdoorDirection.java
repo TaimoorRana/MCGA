@@ -11,6 +11,8 @@ import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.concordia.mcga.models.Building;
+import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -70,7 +72,6 @@ public class OutdoorDirection implements DirectionCallback {
 
     @Override
     public void onDirectionFailure(Throwable t) {
-        int x = 5;
     }
 
     /**
@@ -83,6 +84,26 @@ public class OutdoorDirection implements DirectionCallback {
                 .transportMode(transportMode)
                 .unit(Unit.METRIC)
                 .execute(this);
+    }
+
+    /**
+     * Sets up origin and destination coordinate for outdoor navigation
+     * If destination is setup, directions will be requested
+     *
+     * @param obj is a Marker or Polygon object that is use to find the building
+     */
+    public void setOriginAndDestination(Object obj) {
+        Building buildingClicked = Campus.getBuilding(obj);
+        LatLng buildingCoordinate = buildingClicked.getMapCoordinates();
+
+        if (getOrigin() == null) {
+            setOrigin(buildingCoordinate);
+        } else if (getDestination() == null) {
+            setDestination(buildingCoordinate);
+            requestDirection();
+        } else {
+            deleteDirection();
+        }
     }
 
     /**

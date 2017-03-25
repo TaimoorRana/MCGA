@@ -494,7 +494,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onPolygonClick(Polygon polygon) {
                 setBottomSheetContent(polygon);
-                setupOriginAndDestinationForOutdoorDirection(polygon);
+                outdoorDirection.setOriginAndDestination(polygon);
             }
         });
 
@@ -502,31 +502,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public boolean onMarkerClick(Marker marker) {
                 setBottomSheetContent(marker);
-                setupOriginAndDestinationForOutdoorDirection(marker);
+                outdoorDirection.setOriginAndDestination(marker);
                 return true;
             }
         });
 
-    }
-
-    /**
-     * Sets up origin and destination coordinate for outdoor navigation
-     * If destination is setup, directions will be requested
-     *
-     * @param obj is a Marker or Polygon object that is use to find the building
-     */
-    private void setupOriginAndDestinationForOutdoorDirection(Object obj) {
-        Building buildingClicked = Campus.getBuilding(obj);
-        LatLng buildingCoordinate = buildingClicked.getMapCoordinates();
-
-        if (outdoorDirection.getOrigin() == null) {
-            outdoorDirection.setOrigin(buildingCoordinate);
-        } else if (outdoorDirection.getDestination() == null) {
-            outdoorDirection.setDestination(buildingCoordinate);
-            outdoorDirection.requestDirection();
-        } else {
-            outdoorDirection.deleteDirection();
-        }
     }
 
     /**
