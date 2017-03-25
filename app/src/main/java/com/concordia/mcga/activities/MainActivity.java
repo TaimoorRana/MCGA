@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
 
         initDatabase();
+        openShuttleActivity();
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         navigationView.setNavigationItemSelectedListener(
