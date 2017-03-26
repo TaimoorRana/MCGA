@@ -1,7 +1,6 @@
 package com.concordia.mcga.models;
 
 import android.database.Cursor;
-
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
@@ -59,6 +58,21 @@ public class Campus extends POI {
     }
 
     /**
+     * @return List of buildings in this campus
+     */
+    public List<Building> getBuildings() {
+        return buildings;
+    }
+
+    /**
+     *
+     * @return The abbreviated name of this campus
+     */
+    public String getShortName() {
+        return shortName;
+    }
+
+    /**
      *
      * @param object can be a marker object or polygon object to search for
      * @return return the building which contains this marker or polygon
@@ -83,21 +97,6 @@ public class Campus extends POI {
             }
         }
         return null;
-    }
-
-    /**
-     * @return List of buildings in this campus
-     */
-    public List<Building> getBuildings() {
-        return buildings;
-    }
-
-    /**
-     *
-     * @return The abbreviated name of this campus
-     */
-    public String getShortName() {
-        return shortName;
     }
 
     public void addBuilding(Building building){
