@@ -67,7 +67,6 @@ public class OutdoorDirections {
 
     /**
      * Set destination for all transportation
-     *
      * @param destination
      */
     public void setDestination(LatLng destination) {
@@ -97,10 +96,16 @@ public class OutdoorDirections {
     }
 
     /**
+     * @param transportMode
      * @return The duration of the transportation mode
      */
-    public String getDuration() {
-        return selectedOutdoorDirection.getDuration();
+    public String getDuration(String transportMode) {
+        for (OutdoorDirection outdoorDirection : outdoorDirectionList) {
+            if (outdoorDirection.getTransportMode().equalsIgnoreCase(transportMode)) {
+                return outdoorDirection.getDuration();
+            }
+        }
+        return "";
     }
 
     /**
