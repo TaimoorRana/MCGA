@@ -149,18 +149,20 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     * @param map        object of the navigation fragment's
-     * @param activity   acquired with mapfragment.getActivity()
+     *
+     * @param map object of the navigation fragment's
+     * @param activity acquired with mapfragment.getActivity()
      * @param gpsmanager object of LocationManager (from android and not google maps)
-     * @param gpsListen  object from interface LocationListener (from android and not google maps)
+     * @param gpsListen object from interface LocationListener (from android and not google maps)
      * @return true if the operation is a success (if permission is acquired && a location was succesfully retrieved
-     * <p>
+     *
      * Method run to acquire user's location on a map, display it and update camera to it
      * if permission NOT found, request the permission
      * Enable GPS provider updates on locationmanager (requires permission check)
      * Enable Google Map layer over map object to display user's location on the map
      * Instantiate location with last known location of Network provider
      * if no location found, return false, otherwise, map centers on user's location
+     *
      */
 
     public static boolean locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
@@ -247,6 +249,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         });
 
 
+
         //Set initial view type
         viewType = ViewType.OUTDOOR;
 
@@ -290,6 +293,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         //Hide Fragments
         showTransportButton(true);
+
 
 
         // Set the building information bottomsheet to true
@@ -366,8 +370,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
+
      * Shows or hides the bottom sheet building information fragment
-     *
      * @param isVisible
      */
     private void showBuildingInfoFragment(boolean isVisible) {
@@ -380,7 +384,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Shows or hides the directions bottom sheet fragment
-     *
      * @param isVisible
      */
     private void showDirectionsFragment(boolean isVisible) {
@@ -390,7 +393,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             getChildFragmentManager().beginTransaction().hide(directionsFragment).commit();
         }
     }
-
     /*
      * Shows or hides the indoor map, will hide the outdoormap if visible
      */
@@ -413,7 +415,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Shows or hides the transport button
-     *
      * @param isVisible
      */
     public void showTransportButton(boolean isVisible) {
@@ -426,6 +427,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
+     *
      * @param polygon
      */
     private void setBottomSheetContent(Polygon polygon) {
@@ -453,6 +455,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
+     *
      * @param marker
      */
     private void setBottomSheetContent(Marker marker) {
@@ -496,7 +499,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 setBottomSheetContent(polygon);
             }
         });
-
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -504,7 +506,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 return true;
             }
         });
-
     }
 
     /**
@@ -525,6 +526,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         building.setPolygon(polygon);
         building.setMarker(marker);
     }
+
 
     /**
      * Applying custom google map style in order to get rid of unwanted POI and other information that is not useful to our application
@@ -741,7 +743,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Sets the navigation state and location/destination for internal use
-     *
      * @param dest The {@link POI} location to be added to the search state
      * @return Whether the state was updated or not
      */
@@ -775,6 +776,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         return viewType;
     }
 
+
     //Enum representing which map view is active
     private enum ViewType {
         INDOOR, OUTDOOR
@@ -783,7 +785,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private enum SearchState {
         NONE, LOCATION, DESTINATION, LOCATION_DESTINATION
     }
-
 
 }
 
