@@ -350,9 +350,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(false);
-
         map.setIndoorEnabled(false);
 
+        //initializing outdoor directions
         outdoorDirections.setContext(getActivity().getApplicationContext());
         outdoorDirections.setMap(map);
         outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
@@ -525,7 +525,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         building.setPolygon(polygon);
         building.setMarker(marker);
     }
-
 
     /**
      * Applying custom google map style in order to get rid of unwanted POI and other information that is not useful to our application
@@ -776,7 +775,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         return viewType;
     }
 
-
     //Enum representing which map view is active
     private enum ViewType {
         INDOOR, OUTDOOR
@@ -785,6 +783,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private enum SearchState {
         NONE, LOCATION, DESTINATION, LOCATION_DESTINATION
     }
+
 
 }
 

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class OutdoorDirection implements DirectionCallback {
+class OutdoorDirection implements DirectionCallback {
 
     private final String serverKey = "AIzaSyBQrTXiam-OzDCfSgEct6FyOQWlDWFXp6Q";
     private final int transitPathWidth = 5;
@@ -36,7 +36,7 @@ public class OutdoorDirection implements DirectionCallback {
     private Context context;
     private String transportMode = TransportMode.BICYCLING;
 
-    OutdoorDirection() {
+    public OutdoorDirection() {
         polylines = new ArrayList<>();
         steps = new ArrayList<>();
         instructions = new ArrayList<>();
@@ -92,7 +92,7 @@ public class OutdoorDirection implements DirectionCallback {
      * Deletes Markers and polylines.
      * sets origin and destionation to null
      */
-    void deleteDirection() {
+    public void deleteDirection() {
         origin = null;
         destination = null;
         if (polylines != null) {

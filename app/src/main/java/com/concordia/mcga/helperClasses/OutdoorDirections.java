@@ -19,6 +19,7 @@ public class OutdoorDirections {
     private List<OutdoorDirection> outdoorDirectionList;
     private List<String> transportModes;
     private String selectedTransportMode;
+    private OutdoorDirection selectedOutdoorDirection;
 
     private OutdoorDirections() {
         outdoorDirectionList = new ArrayList<>();
@@ -72,12 +73,7 @@ public class OutdoorDirections {
     }
 
     public String getDuration(String transportMode) {
-        for (OutdoorDirection outdoorDirection : outdoorDirectionList) {
-            if (outdoorDirection.getTransportMode().equalsIgnoreCase(transportMode)) {
-                return outdoorDirection.getDuration();
-            }
-        }
-        return "";
+        return selectedOutdoorDirection.getDuration();
     }
 
     public void deleteDirection() {
@@ -89,15 +85,26 @@ public class OutdoorDirections {
 
     public void setSelectedTransportMode(String selectedTransportMode) {
         this.selectedTransportMode = selectedTransportMode;
+        for (OutdoorDirection outdoorDirection : outdoorDirectionList) {
+            if (outdoorDirection.getTransportMode().equalsIgnoreCase(selectedTransportMode)) {
+                selectedOutdoorDirection = outdoorDirection;
+            }
+        }
     }
 
     public void drawPathForSelectedTransportMode() {
         for (OutdoorDirection outdoorDirection : outdoorDirectionList) {
             outdoorDirection.deleteDirection();
-            if (outdoorDirection.getTransportMode().equalsIgnoreCase(selectedTransportMode)) {
-                outdoorDirection.drawPath();
-            }
         }
+        selectedOutdoorDirection.drawPath();
+    }
+
+    public OutdoorDirection getDirectionObject(String transportMode) {
+        return selectedOutdoorDirection != null ? selectedOutdoorDirection : null;
+    }
+
+    public List<String> getInstructionsForSelectedTransportMode() {
+        return selectedOutdoorDirection.getInstructions();
     }
 
 
