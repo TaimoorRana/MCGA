@@ -38,9 +38,10 @@ public class OutdoorDirection implements DirectionCallback {
     private Leg leg;
     private GoogleMap map;
     private Context context;
-    private String transportMode = "driving";
+    private String transportMode = TransportMode.BICYCLING;
+    private List<OutdoorDirection> outdoorDirections;
 
-    private OutdoorDirection() {
+    public OutdoorDirection() {
         polylines = new ArrayList<>();
         steps = new ArrayList<>();
         instructions = new ArrayList<>();
@@ -69,24 +70,7 @@ public class OutdoorDirection implements DirectionCallback {
             leg = route.getLegList().get(0);
             steps = leg.getStepList();
 
-            switch (steps.get(0).getTravelMode()) {
-                case "DRIVING":
-                    drivingTime = getDuration();
-                    break;
-                case "WALKING":
-                    walkingTime = getDuration();
-                    break;
-                case "BICYCLING":
-                    bicycleTime = getDuration();
-                    break;
-                case "TRANSIT":
-                    transitTime = getDuration();
-                    break;
-            }
-
-            if (steps.get(0).getTravelMode().equalsIgnoreCase(transportMode))
-                drawPath();
-
+            drawPath();
 
         }
     }
@@ -98,7 +82,7 @@ public class OutdoorDirection implements DirectionCallback {
     /**
      * Makes a https request to get a direction from origin to destination with a specified transport mode.
      */
-    private void requestDirection() {
+    public void requestDirection() {
         GoogleDirection.withServerKey(serverKey)
                 .from(origin)
                 .to(destination)
@@ -108,13 +92,13 @@ public class OutdoorDirection implements DirectionCallback {
     }
 
     public void requestDirectionForAllTransport() {
-        setTransportMode("walking");
-        requestDirection();
-        setTransportMode("driving");
-        requestDirection();
-        setTransportMode("transit");
-        requestDirection();
-        setTransportMode("bicycling");
+//        setTransportMode(TransportMode.WALKING);
+//        requestDirection();
+//        setTransportMode(TransportMode.DRIVING);
+//        requestDirection();
+//        setTransportMode(TransportMode.TRANSIT);
+//        requestDirection();
+        setTransportMode(TransportMode.BICYCLING);
         requestDirection();
     }
 

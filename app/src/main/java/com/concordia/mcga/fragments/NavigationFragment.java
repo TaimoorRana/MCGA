@@ -41,7 +41,7 @@ import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.helperClasses.Observer;
-import com.concordia.mcga.helperClasses.OutdoorDirection;
+import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
@@ -69,7 +69,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     //Outdoor Map
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     //Outdoor direction
-    OutdoorDirection outdoorDirection = OutdoorDirection.getInstance();
+    OutdoorDirections outdoorDirections = OutdoorDirections.getInstance();
     private LocationListener gpsListen = new LocationListener() {
         public void onLocationChanged(Location location) {
             //Method called when new location is found by the network
@@ -353,9 +353,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         map.setIndoorEnabled(false);
 
-        outdoorDirection.setContext(getActivity().getApplicationContext());
-        outdoorDirection.setMap(map);
-        outdoorDirection.setTransportMode(TransportMode.TRANSIT);
+        outdoorDirections.setContext(getActivity().getApplicationContext());
+        outdoorDirections.setMap(map);
+        outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
 
         //Map Customization
         applyCustomGoogleMapsStyle();
@@ -617,20 +617,20 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 toolbarView.findViewById(R.id.search_location);
         LinearLayoutCompat destinationLayout = (LinearLayoutCompat)
                 toolbarView.findViewById(R.id.search_destination);
-        outdoorDirection.deleteDirection();
+        outdoorDirections.deleteDirection();
         if (location != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
             locationText.setText(location.getName());
 
-            outdoorDirection.setOrigin(location.getMapCoordinates());
+            outdoorDirections.setOrigin(location.getMapCoordinates());
         }
         if (destination != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
             destinationText.setText(destination.getName());
-            outdoorDirection.setDestination(destination.getMapCoordinates());
-            outdoorDirection.requestDirectionForAllTransport();
+            outdoorDirections.setDestination(destination.getMapCoordinates());
+            outdoorDirections.requestDirections();
         }
 
         if (searchState == SearchState.NONE) {

@@ -13,13 +13,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.helperClasses.OutdoorDirection;
+import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.models.Transportation;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
 
-    OutdoorDirection outdoorDirection = OutdoorDirection.getInstance();
+    OutdoorDirections outdoorDirections = OutdoorDirections.getInstance();
     //Floating Action Buttons
     private FloatingActionButton transportExpandFAB;
     private FloatingActionButton walkFAB;
@@ -84,10 +85,10 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
                 if (!isExpanded())
                     restorePreviousIcon();
 
-                walkTextView.setText(outdoorDirection.walkingTime);
-                bikeTextView.setText(outdoorDirection.bicycleTime);
-                carTextView.setText(outdoorDirection.drivingTime);
-                publicTransportTextView.setText(outdoorDirection.transitTime);
+                walkTextView.setText(outdoorDirections.getDuration(TransportMode.WALKING));
+                bikeTextView.setText(outdoorDirections.getDuration(TransportMode.BICYCLING));
+                carTextView.setText(outdoorDirections.getDuration(TransportMode.DRIVING));
+                publicTransportTextView.setText(outdoorDirections.getDuration(TransportMode.TRANSIT));
                 break;
             case R.id.walkFAB:
                 this.transportType = Transportation.WALK;
