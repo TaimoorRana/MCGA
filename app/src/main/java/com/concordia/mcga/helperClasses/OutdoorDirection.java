@@ -69,9 +69,6 @@ public class OutdoorDirection implements DirectionCallback {
             Route route = direction.getRouteList().get(0);
             leg = route.getLegList().get(0);
             steps = leg.getStepList();
-
-            drawPath();
-
         }
     }
 

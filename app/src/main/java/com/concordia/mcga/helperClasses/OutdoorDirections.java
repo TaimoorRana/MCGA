@@ -90,5 +90,14 @@ public class OutdoorDirections {
         this.selectedTransportMode = selectedTransportMode;
     }
 
+    public void drawPathForSelectedTransportMode() {
+        for (OutdoorDirection outdoorDirection : outdoorDirectionList) {
+            outdoorDirection.deleteDirection();
+            if (outdoorDirection.getTransportMode().equalsIgnoreCase(selectedTransportMode)) {
+                outdoorDirection.drawPath();
+            }
+        }
+    }
+
 
 }

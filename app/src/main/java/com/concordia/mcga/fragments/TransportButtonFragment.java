@@ -92,18 +92,26 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
                 break;
             case R.id.walkFAB:
                 this.transportType = Transportation.WALK;
+                outdoorDirections.setSelectedTransportMode(TransportMode.WALKING);
+                outdoorDirections.drawPathForSelectedTransportMode();
                 swapIcons(Transportation.WALK.getIconID());
                 break;
             case R.id.bikeFAB:
                 this.transportType = Transportation.BIKE;
+                outdoorDirections.setSelectedTransportMode(TransportMode.BICYCLING);
+                outdoorDirections.drawPathForSelectedTransportMode();
                 swapIcons(Transportation.BIKE.getIconID());
                 break;
             case R.id.carFAB:
                 this.transportType = Transportation.CAR;
+                outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
+                outdoorDirections.drawPathForSelectedTransportMode();
                 swapIcons(Transportation.CAR.getIconID());
                 break;
             case R.id.publicTransportFAB:
                 this.transportType = Transportation.PUBLIC_TRANSPORT;
+                outdoorDirections.setSelectedTransportMode(TransportMode.TRANSIT);
+                outdoorDirections.drawPathForSelectedTransportMode();
                 swapIcons(Transportation.PUBLIC_TRANSPORT.getIconID());
                 break;
             case R.id.shuttleFAB:
