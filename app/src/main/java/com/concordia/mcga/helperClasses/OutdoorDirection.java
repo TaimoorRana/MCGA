@@ -11,8 +11,6 @@ import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
-import com.concordia.mcga.models.Building;
-import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -24,13 +22,11 @@ import java.util.List;
 
 public class OutdoorDirection implements DirectionCallback {
 
-    private static OutdoorDirection outdoorDirection;
     private final String serverKey = "AIzaSyBQrTXiam-OzDCfSgEct6FyOQWlDWFXp6Q";
     private final int transitPathWidth = 5;
     private final int transitPathColor = 0x80ed1026; // transparent red
     private final int walkingPathWidth = 3;
     private final int walkingPathColor = 0x801767e8; // transparent blue
-    public String walkingTime, drivingTime, transitTime, bicycleTime;
     private LatLng origin, destination;
     private List<Polyline> polylines;
     private List<Step> steps;
@@ -39,23 +35,13 @@ public class OutdoorDirection implements DirectionCallback {
     private GoogleMap map;
     private Context context;
     private String transportMode = TransportMode.BICYCLING;
-    private List<OutdoorDirection> outdoorDirections;
 
-    public OutdoorDirection() {
+    OutdoorDirection() {
         polylines = new ArrayList<>();
         steps = new ArrayList<>();
         instructions = new ArrayList<>();
         transportMode = TransportMode.TRANSIT; // default transport mode
     }
-
-    public static OutdoorDirection getInstance() {
-        if (outdoorDirection == null) {
-            outdoorDirection = new OutdoorDirection();
-        }
-        return outdoorDirection;
-    }
-
-
 
     /**
      * Upon successful response from Google Direction Server, Create a path between the origin and destion
@@ -88,16 +74,6 @@ public class OutdoorDirection implements DirectionCallback {
                 .execute(this);
     }
 
-    public void requestDirectionForAllTransport() {
-//        setTransportMode(TransportMode.WALKING);
-//        requestDirection();
-//        setTransportMode(TransportMode.DRIVING);
-//        requestDirection();
-//        setTransportMode(TransportMode.TRANSIT);
-//        requestDirection();
-        setTransportMode(TransportMode.BICYCLING);
-        requestDirection();
-    }
 
     public void drawPath() {
         ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline(
@@ -113,23 +89,28 @@ public class OutdoorDirection implements DirectionCallback {
     }
 
     /**
-     * Sets up origin and destination coordinate for outdoor navigation
-     * If destination is setup, directions will be requested
-     *
-     * @param obj is a Marker or Polygon object that is use to find the building
+     * Deletes Markers and polylines.
+     * sets origin and destionation to null
      */
-    public void setOriginAndDestination(Object obj) {
-        Building buildingClicked = Campus.getBuilding(obj);
-        LatLng buildingCoordinate = buildingClicked.getMapCoordinates();
-
-        if (getOrigin() == null) {
-            setOrigin(buildingCoordinate);
-        } else if (getDestination() == null) {
-            setDestination(buildingCoordinate);
-            requestDirection();
-        } else {
-            deleteDirection();
+    void deleteDirection() {
+        origin = null;
+        destination = null;
+        if (polylines != null) {
+            for (Polyline polyline : polylines) {
+                polyline.remove();
+            }
         }
+    }
+
+    /**
+     * @return list of instructions to get from origin to destination
+     */
+    public List<String> getInstructions() {
+        instructions.clear();
+        for (Step step : steps) {
+            instructions.add(step.getHtmlInstruction());
+        }
+        return instructions;
     }
 
     /**
@@ -196,34 +177,6 @@ public class OutdoorDirection implements DirectionCallback {
     public List<Step> getSteps() {
         return steps;
     }
-
-
-    /**
-     * Deletes Markers and polylines.
-     * sets origin and destionation to null
-     */
-    public void deleteDirection(){
-        origin = null;
-        destination = null;
-        if (polylines != null) {
-            for (Polyline polyline : polylines) {
-                polyline.remove();
-            }
-        }
-    }
-
-    /**
-     * @return list of instructions to get from origin to destination
-     */
-    public List<String> getInstructions() {
-        instructions.clear();
-        for (Step step : steps) {
-            instructions.add(step.getHtmlInstruction());
-        }
-        return instructions;
-    }
-
-
 
     @Override
     public String toString() {
