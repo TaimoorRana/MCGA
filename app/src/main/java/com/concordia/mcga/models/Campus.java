@@ -82,7 +82,6 @@ public class Campus extends POI {
                     return building;
             }
         }
-
         return null;
     }
 
@@ -94,6 +93,7 @@ public class Campus extends POI {
     }
 
     /**
+     *
      * @return The abbreviated name of this campus
      */
     public String getShortName() {
