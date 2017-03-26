@@ -3,6 +3,7 @@ package com.concordia.mcga.fragments;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.shadows.ShadowOutdoorDirections;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +17,7 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, shadows = {ShadowOutdoorDirections.class})
 public class TransportButtonFragmentTest {
 
     private TransportButtonFragment transportButtonFragment;
@@ -100,5 +101,14 @@ public class TransportButtonFragmentTest {
     public void testTransportOptionClick() {
         transportButtonFragment.getWalkFAB().performClick();
         assertTrue(transportButtonFragment.getTransportType().equals(TransportMode.WALKING));
+    }
+
+    @Test
+    public void testDisplayAllTransportTime() {
+        transportButtonFragment.displayAllTransportTimes();
+        assertTrue(transportButtonFragment.getCarTextView().getText() == "1 minute");
+        assertTrue(transportButtonFragment.getPublicTransportTextView().getText() == "2 minutes");
+        assertTrue(transportButtonFragment.getBikeTextView().getText() == "3 minutes");
+        assertTrue(transportButtonFragment.getWalkTextView().getText() == "4 minutes");
     }
 }

@@ -117,7 +117,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     /**
      * Displays time for each transportation option
      */
-    private void displayAllTransportTimes() {
+    protected void displayAllTransportTimes() {
         walkTextView.setText(outdoorDirections.getDuration(TransportMode.WALKING));
         bikeTextView.setText(outdoorDirections.getDuration(TransportMode.BICYCLING));
         carTextView.setText(outdoorDirections.getDuration(TransportMode.DRIVING));
