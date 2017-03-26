@@ -35,7 +35,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     //State
     private boolean fabExpanded = false;
     private boolean shuttleVisible = true;
-    private Transportation transportType;
+    private String transportType;
 
     @Nullable
     @Override
@@ -71,8 +71,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         shuttleFAB.setOnClickListener(this);
 
         //Set initial transport type and icon
-        this.transportType = Transportation.PUBLIC_TRANSPORT;
-        swapIcons(Transportation.PUBLIC_TRANSPORT.getIconID());
+        this.transportType = TransportMode.TRANSIT;
+        swapIcons(Transportation.TRANSIT.getIconID());
 
         return view;
     }
@@ -82,44 +82,48 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         toggle();
         switch (clickedView.getId()) {
             case R.id.transportExpandFAB:
-                if (!isExpanded())
+                if (!isExpanded()) {
                     restorePreviousIcon();
-
-                walkTextView.setText(outdoorDirections.getDuration(TransportMode.WALKING));
-                bikeTextView.setText(outdoorDirections.getDuration(TransportMode.BICYCLING));
-                carTextView.setText(outdoorDirections.getDuration(TransportMode.DRIVING));
-                publicTransportTextView.setText(outdoorDirections.getDuration(TransportMode.TRANSIT));
+                }
+                displayAllTransportTimes();
                 break;
             case R.id.walkFAB:
-                this.transportType = Transportation.WALK;
-                outdoorDirections.setSelectedTransportMode(TransportMode.WALKING);
-                outdoorDirections.drawPathForSelectedTransportMode();
-                swapIcons(Transportation.WALK.getIconID());
+                this.transportType = TransportMode.WALKING;
+                swapIcons(Transportation.WALKING.getIconID());
                 break;
             case R.id.bikeFAB:
-                this.transportType = Transportation.BIKE;
-                outdoorDirections.setSelectedTransportMode(TransportMode.BICYCLING);
-                outdoorDirections.drawPathForSelectedTransportMode();
-                swapIcons(Transportation.BIKE.getIconID());
+                this.transportType = TransportMode.BICYCLING;
+                swapIcons(Transportation.BICYCLING.getIconID());
                 break;
             case R.id.carFAB:
-                this.transportType = Transportation.CAR;
-                outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
-                outdoorDirections.drawPathForSelectedTransportMode();
-                swapIcons(Transportation.CAR.getIconID());
+                this.transportType = TransportMode.DRIVING;
+                swapIcons(Transportation.DRIVING.getIconID());
                 break;
             case R.id.publicTransportFAB:
-                this.transportType = Transportation.PUBLIC_TRANSPORT;
-                outdoorDirections.setSelectedTransportMode(TransportMode.TRANSIT);
-                outdoorDirections.drawPathForSelectedTransportMode();
-                swapIcons(Transportation.PUBLIC_TRANSPORT.getIconID());
+                this.transportType = TransportMode.TRANSIT;
+                swapIcons(Transportation.TRANSIT.getIconID());
                 break;
             case R.id.shuttleFAB:
-                this.transportType = Transportation.SHUTTLE;
+                this.transportType = "shuttle";
                 swapIcons(Transportation.SHUTTLE.getIconID());
                 break;
         }
+        if (clickedView.getId() != R.id.transportExpandFAB) {
+            outdoorDirections.setSelectedTransportMode(transportType);
+            outdoorDirections.drawPathForSelectedTransportMode();
+        }
     }
+
+    /**
+     * Displays time for each transportation option
+     */
+    private void displayAllTransportTimes() {
+        walkTextView.setText(outdoorDirections.getDuration(TransportMode.WALKING));
+        bikeTextView.setText(outdoorDirections.getDuration(TransportMode.BICYCLING));
+        carTextView.setText(outdoorDirections.getDuration(TransportMode.DRIVING));
+        publicTransportTextView.setText(outdoorDirections.getDuration(TransportMode.TRANSIT));
+    }
+
 
     /**
      * Expands and retracts the transport option buttons, performed automatically when the expand button is clicked. Use this to expand
@@ -349,7 +353,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         return transport_textview_close;
     }
 
-    public Transportation getTransportType() {
+    public String getTransportType() {
         return transportType;
     }
 }
