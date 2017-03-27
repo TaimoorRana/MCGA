@@ -1,12 +1,14 @@
 package com.concordia.mcga.fragments;
 
 
+import android.support.annotation.Dimension;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.BuildingInformationArrayAdapter;
 import com.concordia.mcga.lib.BottomSheet;
@@ -60,6 +63,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
 
     private Button viewSwitchButton;
 
+    private int position;
     ////////////////////////////////////////////////////////////
     // CLASS METHODS
     ////////////////////////////////////////////////////////////
@@ -211,6 +215,20 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         behavior.setState(BottomSheet.STATE_EXPANDED);
     }
 
+    public void hide(){
+        behavior.setState(BottomSheet.STATE_HIDDEN);
+    }
+
+    public int getTop(){
+        int[] location = new int[2];
+        list.getLocationOnScreen(location);
+
+        int[] location2 = new int[2];
+
+       coordinatorLayout.getLocationOnScreen(location2);
+
+        return location[1] - 1200;
+    }
     /**
      * Obtains the state of the Bottom Sheet
      * 4 is expanded

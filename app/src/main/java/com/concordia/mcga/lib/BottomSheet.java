@@ -246,11 +246,11 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
 
         if (mType == "building_navigation") {
             mMinOffset = mParentHeight - child.getHeight() / 2 - child.getHeight() / 5 - child.getHeight() / 10;
-            mMaxOffset = mParentHeight - parent.getHeight() / 6;
+            mMaxOffset = mParentHeight - parent.getHeight() / 7;
         }
         else if(mType == "building_information"){
             mMinOffset = mParentHeight - child.getHeight() / 2;
-            mMaxOffset = mParentHeight - parent.getHeight() / 6;
+            mMaxOffset = mParentHeight - parent.getHeight() / 7;
         }
         else {
             mMinOffset = mParentHeight - child.getHeight() / 2;
@@ -513,7 +513,15 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
         }
         mNestedScrolled = true;
     }
+    private int current_top;
 
+    private void setCurrentTop(int i){
+        current_top = i;
+    }
+
+    public int getCurrentTop(){
+        return current_top;
+    }
     /**
      * @return True if nested scrolling
      */
