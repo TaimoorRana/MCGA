@@ -540,7 +540,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * If user presses "Enable GPS",  minimize application and prompt user to GPS Android window
      */
 
-    public static boolean alertGPS(final Activity activity) { //GPS detection method
+    public boolean alertGPS(final Activity activity) { //GPS detection method
         AlertDialog.Builder build = new AlertDialog.Builder(activity);
         build
                 .setTitle("GPS Detection Services")
@@ -581,7 +581,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      *
      */
 
-    public static boolean locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
+    public boolean locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
         if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return false;
