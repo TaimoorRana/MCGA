@@ -15,20 +15,21 @@
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:id="@+id/search_location"
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/search_location_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
                 android:text="@string/location_string"
                 android:textColor="@color/white"/>
 
             <android.support.v7.widget.LinearLayoutCompat
-                android:id="@+id/search_location"
-                android:gravity="center"
+                android:gravity="left"
+                android:paddingLeft="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -51,23 +52,24 @@
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/search_destination"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:orientation="horizontal">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/search_destination_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
                 android:text="@string/destination_string"
                 android:textColor="@color/white" />
 
                 <android.support.v7.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:id="@+id/search_destination" >
+                    android:gravity="left"
+                    android:paddingLeft="10dp"
+                    android:orientation="horizontal" >
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/search_destination_text"
                         android:layout_width="wrap_content"
