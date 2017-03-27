@@ -22,6 +22,7 @@ public class ShuttleActivity extends AppCompatActivity {
     final static int SGW_TO_LOY_FRI = 1;
     final static int LOY_TO_SGW_MOTH = 2;
     final static int LOY_TO_SGW_FRI = 3;
+    final static int SHUTTLE_TABLE_COLUMNS = 4;
     private String[][] shuttleSchedule;
     private TableLayout tableLayout;
     private Button sgwToLoyola;
@@ -93,9 +94,9 @@ public class ShuttleActivity extends AppCompatActivity {
             throw new Error("Could not connect to database");
         }
 
-        shuttleSchedule = new String[shuttleCursor.getCount()][4];
+        shuttleSchedule = new String[shuttleCursor.getCount()][SHUTTLE_TABLE_COLUMNS];
         for (int rowIndex = 0; shuttleCursor.moveToNext(); rowIndex++) {
-            for (int columnIndex = 0; columnIndex < 4; columnIndex++) {
+            for (int columnIndex = 0; columnIndex < SHUTTLE_TABLE_COLUMNS; columnIndex++) {
                 shuttleSchedule[rowIndex][columnIndex] = shuttleCursor.getString(columnIndex);
             }
         }
@@ -107,8 +108,7 @@ public class ShuttleActivity extends AppCompatActivity {
         tableLayout = (TableLayout) findViewById(R.id.shuttleTimeTable);
 
         for (int rowIndex = 0; rowIndex < shuttleSchedule.length; rowIndex++) {
-            TableRow tr = new TableRow(getApplicationContext());
-            tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+            TableRow tr = new TableRow(ShuttleActivity.this);
 
             if (rowIndex % 2 == 0) {
                 tr.setBackgroundColor(Color.LTGRAY);
@@ -119,7 +119,9 @@ public class ShuttleActivity extends AppCompatActivity {
             }
 
             for (int columnIndex = 0; columnIndex < shuttleSchedule[rowIndex].length; columnIndex++) {
-                TextView textview = new TextView(getApplicationContext());
+                TextView textview = new TextView(ShuttleActivity.this);
+                textview.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
+
                 textview.setText(shuttleSchedule[rowIndex][columnIndex]);
                 textview.setTextColor(Color.BLACK);
                 textview.setTextSize(16f);
@@ -131,7 +133,8 @@ public class ShuttleActivity extends AppCompatActivity {
         }
 
         tableLayout.setVisibility(View.VISIBLE);
-//        shuttleColumnToggleVisibility(true);
+        tableLayout.refreshDrawableState();
+        shuttleColumnToggleVisibility(true);
     }
 
 
