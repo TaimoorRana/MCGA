@@ -47,6 +47,8 @@ public class Campus extends POI {
         while (res.moveToNext()) {
             Building building = BuildingFactory.createBuilding(res);
             building.populateRooms();
+            building.populateFloors();
+            building.populateConnectedPOIs();
 
             if (res.getString(CAMPUS_COLUMN_INDEX).equalsIgnoreCase(SGW.getShortName())) {
                 SGW.buildings.add(building);
@@ -92,6 +94,19 @@ public class Campus extends POI {
     public Building getBuilding(Marker marker){
         for (Building building : buildings) {
             if(building.getMarker().getId().equalsIgnoreCase(marker.getId()))
+                return building;
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param shortName The short name of the building, eg: "H"
+     * @return  The building that that short name, if it exists else null
+     */
+    public Building getBuilding(String shortName){
+        for (Building building : buildings) {
+            if(building.getShortName().equalsIgnoreCase(shortName));
                 return building;
         }
         return null;

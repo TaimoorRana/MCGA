@@ -24,11 +24,11 @@ public class RoomFactoryTest {
         Cursor res = Mockito.mock(Cursor.class);
         LatLng latLng = new LatLng(0, 0);
         String name = "Testo";
-        int roomNumber = 12;
+        String roomNumber = "12";
 
         Mockito.when(res.getString(RoomFactory.CENTER_COORDINATE_COLUMN_INDEX)).thenReturn(gson.toJson(latLng));
         Mockito.when(res.getString(RoomFactory.NAME_COLUMN_INDEX)).thenReturn(name);
-        Mockito.when(res.getInt(RoomFactory.ROOM_NUMBER_COLUMN_INDEX)).thenReturn(roomNumber);
+        Mockito.when(res.getString(RoomFactory.ROOM_NUMBER_COLUMN_INDEX)).thenReturn(roomNumber);
 
         Room result = RoomFactory.createRoom(res);
 

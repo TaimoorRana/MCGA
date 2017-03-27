@@ -14,34 +14,36 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
+import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.Escalator;
 import com.concordia.mcga.models.Floor;
-import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.IndoorMapTile;
+import com.concordia.mcga.models.IndoorPOI;
+import com.concordia.mcga.models.Room;
+import com.concordia.mcga.utilities.pathfinding.MultiMapPathFinder;
 import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class IndoorMapFragment extends Fragment {
 
     //Components
     private WebView leafletView;
     private LinearLayout floorButtonContainer;
-    private Button testPathButton;
 
     //State
     private boolean pageLoaded = false;
     private boolean pathsDrawn = false;
-
-    //Test POIs for Demo
-    IndoorPOI H423 = new IndoorPOI(null, "H423", new IndoorMapTile(353, 1326));
-    IndoorPOI H436 = new IndoorPOI(null, "H436", new IndoorMapTile(1220, 594));
-    IndoorPOI H433 = new IndoorPOI(null, "H433", new IndoorMapTile(354, 57));
-    IndoorPOI H401 = new IndoorPOI(null, "H401", new IndoorMapTile(1972, 1616));
+    private Map<Integer, Floor> floorsLoaded;
+    private Floor currentFloor;
+    private Map<Floor, List<IndoorMapTile>> currentPathTiles;
     private ArrayList<IndoorPOI> indoorPoiStack;
 
     @Override
@@ -71,33 +73,53 @@ public class IndoorMapFragment extends Fragment {
         //Floor Select Spinner
         floorButtonContainer = (LinearLayout) view.findViewById(R.id.floorButtonContainer);
 
-        //Indoor POI Stack
-        indoorPoiStack = new ArrayList<IndoorPOI>();
+        //Init Attributes
+        indoorPoiStack = new ArrayList<>();
+        currentPathTiles = new HashMap<>();
+        floorsLoaded = new HashMap<>();
+
+        Campus.populateCampusesWithBuildings();
 
         return view;
+    }
+
+    private void test() {
+        Building hBuilding = null;
+        for (Building b : Campus.SGW.getBuildings()) {
+            if (b.getShortName().equalsIgnoreCase("h")) {
+                hBuilding = b;
+            }
+        }
+        for (Integer floorNum : hBuilding.getFloorMaps().keySet()) {
+            Floor floor = hBuilding.getFloorMaps().get(floorNum);
+            for (Escalator escalator : floor.getEscalators()) {
+                Log.d("Escalator", String.valueOf(escalator.getFloorNumber()));
+            }
+        }
     }
 
     public void generatePath(final IndoorPOI start, final IndoorPOI dest) {
         leafletView.post(new Runnable() {
             @Override
             public void run() {
-                Building hall = new Building(new LatLng(0,0), "Hall", "H", new MarkerOptions());
-                Floor H4 = hall.getFloorMap(4);
-                SingleMapPathFinder pf = new SingleMapPathFinder(H4.getMap());
-
                 ArrayList<IndoorMapTile> pathTilesJunctions = null;
+                MultiMapPathFinder pf = new MultiMapPathFinder();
 
                 try {
-                    pathTilesJunctions = (ArrayList<IndoorMapTile>) pf.shortestPathJunctions(start.getTile(), dest.getTile());
+                    currentPathTiles = pf.shortestPath(start, dest);
+                } catch (MCGAPathFindingException e) {
+                    e.printStackTrace();
+                }
 
-                    Iterator<IndoorMapTile> it2 = pathTilesJunctions.iterator();
-                    while (it2.hasNext()) {
-                        IndoorMapTile pft2 = it2.next();
-                        Log.d("JCT: ", pft2.toString());
+                try {
+                    pathTilesJunctions = (ArrayList<IndoorMapTile>) SingleMapPathFinder.shortestPathJunctions(currentPathTiles.get(currentFloor));
+
+                    for (IndoorMapTile tile : pathTilesJunctions) {
+                        Log.d("JCT: ", tile.toString());
                     }
 
                     if (pageLoaded)
-                        leafletView.evaluateJavascript("drawWalkablePath(" + pf.toJSONArray(pathTilesJunctions).toString() + ")", null);
+                        leafletView.evaluateJavascript("drawWalkablePath(" + SingleMapPathFinder.toJSONArray(pathTilesJunctions).toString() + ")", null);
                 } catch (MCGAPathFindingException e) {
                     e.printStackTrace();
                 }
@@ -105,19 +127,70 @@ public class IndoorMapFragment extends Fragment {
         });
     }
 
+    public void goToFloor() {
+
+    }
+
+    public void onFloorChange() {
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<IndoorMapTile> pathTilesJunctions = null;
+                if (currentPathTiles.get(currentFloor) != null) {
+                    try {
+                        pathTilesJunctions = (ArrayList<IndoorMapTile>) SingleMapPathFinder.shortestPathJunctions(currentPathTiles.get(currentFloor));
+
+                        if (pageLoaded)
+                            leafletView.evaluateJavascript("drawWalkablePath(" + SingleMapPathFinder.toJSONArray(pathTilesJunctions).toString() + ")", null);
+                    } catch (MCGAPathFindingException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    if (pageLoaded)
+                        leafletView.evaluateJavascript("clearPathLayers()", null);
+                }
+            }
+        });
+    }
+
     public void initializeHBuilding() {
-        leafletView.evaluateJavascript("loadMap('H4')", null);
-        leafletView.evaluateJavascript("addH4Markers()", null);
+        Building hBuilding = Campus.SGW.getBuilding("H");
+        floorsLoaded.put(1, hBuilding.getFloorMap(1));
+        floorsLoaded.put(2, hBuilding.getFloorMap(2));
+        floorsLoaded.put(4, hBuilding.getFloorMap(4));
+
+        if (pageLoaded) {
+            leafletView.evaluateJavascript("loadMap('H2')", null);
+            leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(2).getRoomsJSON().toString() + ")", null);
+        }
 
         //Add Floor Buttons
         Button h1 = new Button(getContext());
         h1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
-        h1.setText("1/2");
+        h1.setText("1");
         h1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (pageLoaded) {
-                    leafletView.evaluateJavascript("loadMap('H1-2')", null);
+                    currentFloor = floorsLoaded.get(1);
+                    leafletView.evaluateJavascript("loadMap('H1')", null);
+                    leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(1).getRoomsJSON().toString() + ")", null);
+                    onFloorChange();
+                }
+            }
+        });
+
+        Button h2 = new Button(getContext());
+        h2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
+        h2.setText("2");
+        h2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (pageLoaded) {
+                    currentFloor = floorsLoaded.get(2);
+                    leafletView.evaluateJavascript("loadMap('H2')", null);
+                    leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(2).getRoomsJSON().toString() + ")", null);
+                    onFloorChange();
                 }
             }
         });
@@ -129,19 +202,36 @@ public class IndoorMapFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (pageLoaded) {
+                    currentFloor = floorsLoaded.get(4);
                     leafletView.evaluateJavascript("loadMap('H4')", null);
-                    leafletView.evaluateJavascript("addH4Markers()", null);
+                    leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(4).getRoomsJSON().toString() + ")", null);
+                    onFloorChange();
                 }
             }
         });
 
         floorButtonContainer.addView(h4);
+        floorButtonContainer.addView(h2);
         floorButtonContainer.addView(h1);
     }
 
     @JavascriptInterface
-    public void pushRoom(String roomNumber) {
+    public void poiClicked(String poiName) {
+        Log.d("PoiClickEvent", poiName);
+        IndoorPOI poiClicked = null;
+        for (IndoorPOI poi : currentFloor.getIndoorPOIs()) {
+            if (poi.getName().equalsIgnoreCase(poiName)) {
+                poiClicked = poi;
+            }
+        }
+
+        Log.d("PoiClickEvent", "Poi is: " + poiClicked);
+        pushRoom((Room) poiClicked);
+    }
+
+    public void pushRoom(Room room) {
         if (indoorPoiStack.size() == 2) {
+            currentPathTiles.clear();
             indoorPoiStack.clear();
             leafletView.post(new Runnable() {
                 @Override
@@ -152,30 +242,15 @@ public class IndoorMapFragment extends Fragment {
         }
 
         if (indoorPoiStack.size() == 0) {
-            Toast.makeText(getContext(), "Start Room: " + roomNumber, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Start Room: " + room.getName(), Toast.LENGTH_SHORT).show();
         } else if (indoorPoiStack.size() == 1) {
-            Toast.makeText(getContext(), "Dest Room: " + roomNumber, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Dest Room: " + room.getName(), Toast.LENGTH_SHORT).show();
         }
 
-        switch (roomNumber) {
-            case "H423":
-                indoorPoiStack.add(H423);
-                break;
-            case "H436":
-                indoorPoiStack.add(H436);
-                break;
-            case "H433":
-                indoorPoiStack.add(H433);
-                break;
-            case "H401":
-                indoorPoiStack.add(H401);
-                break;
-        }
+        indoorPoiStack.add(room);
 
         if (indoorPoiStack.size() == 2) {
             generatePath(indoorPoiStack.get(0), indoorPoiStack.get(1));
         }
     }
-
-
 }
