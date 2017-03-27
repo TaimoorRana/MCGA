@@ -1,23 +1,28 @@
 package com.concordia.mcga.factories;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import android.content.res.Resources;
 import android.database.Cursor;
+
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.SmallBuilding;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, shadows = ShadowBitmapDescriptorFactory.class)
+@Config(constants = BuildConfig.class, shadows = {
+        com.concordia.mcga.factories.ShadowBitmapDescriptorFactory.class,
+        com.concordia.mcga.factories.ShadowMainActivity.class})
 public class BuildingFactoryTest {
     private Gson gson = new Gson();
 
@@ -34,6 +39,9 @@ public class BuildingFactoryTest {
         Mockito.when(res.getString(BuildingFactory.SHORT_NAME_COLUMN_INDEX)).thenReturn(shortName);
         Mockito.when(res.getString(BuildingFactory.NAME_COLUMN_INDEX)).thenReturn(name);
         Mockito.when(res.getInt(BuildingFactory.IS_SMALL_BUILDING_COLUMN_INDEX)).thenReturn(0);
+        Resources resources = Mockito.mock(Resources.class);
+        Mockito.when(resources.getIdentifier(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(1);
+        BuildingFactory.setResources(resources);
 
         // Execute
         Building result = BuildingFactory.createBuilding(res);
@@ -59,6 +67,9 @@ public class BuildingFactoryTest {
         Mockito.when(res.getString(BuildingFactory.SHORT_NAME_COLUMN_INDEX)).thenReturn(shortName);
         Mockito.when(res.getString(BuildingFactory.NAME_COLUMN_INDEX)).thenReturn(name);
         Mockito.when(res.getInt(BuildingFactory.IS_SMALL_BUILDING_COLUMN_INDEX)).thenReturn(1);
+        Resources resources = Mockito.mock(Resources.class);
+        Mockito.when(resources.getIdentifier(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(1);
+        BuildingFactory.setResources(resources);
 
         // Execute
         Building result = BuildingFactory.createBuilding(res);

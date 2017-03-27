@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <View android:background="@drawable/button_pressed"
+        android:layout_width = "match_parent"
+        android:layout_height="2dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="81dp">
+
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/cast_ic_notification_stop_live_stream"
+            android:id="@+id/buildingImage1"
+            android:layout_weight="0.1"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="35dp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/cast_ic_mini_controller_stop_large"
+            android:id="@+id/buildingImage2"
+            android:layout_weight="0.1"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/buildingImage1"
+            android:layout_marginStart="35dp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/cast_ic_mini_controller_stop_large"
+            android:id="@+id/buildingImage4"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="35dp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/cast_ic_mini_controller_play_large"
+            android:id="@+id/buildingImage3"
+            android:layout_weight="0.1"
+            android:layout_marginStart="37dp"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/buildingImage2" />
+    </RelativeLayout>
+
+</LinearLayout>
