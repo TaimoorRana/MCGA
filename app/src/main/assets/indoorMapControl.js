@@ -62,9 +62,8 @@ function loadMapImage(path, latBound, lngBound) {
 	map.fitBounds(bounds);
 }
 
-function loadMap(mapId, clearLayers = true) {
-    if (clearLayers)
-	    clearAllLayers();
+function loadMap(mapId) {
+	clearAllLayers();
 
 	switch (mapId) {
 		case "H1":

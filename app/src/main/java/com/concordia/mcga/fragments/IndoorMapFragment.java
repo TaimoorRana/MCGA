@@ -159,17 +159,10 @@ public class IndoorMapFragment extends Fragment {
         floorsLoaded.put(2, hBuilding.getFloorMap(2));
         floorsLoaded.put(4, hBuilding.getFloorMap(4));
 
-        //This is the default first floor shown for the building
-        leafletView.post(new Runnable() {
-            @Override
-            public void run() {
-                if (pageLoaded) {
-                    leafletView.evaluateJavascript("loadMap('H2')", null);
-                    leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(2).getRoomsJSON().toString() + ")", null);
-                }
-            }
-        });
-
+        if (pageLoaded) {
+            leafletView.evaluateJavascript("loadMap('H2')", null);
+            leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(2).getRoomsJSON().toString() + ")", null);
+        }
 
         //Add Floor Buttons
         Button h1 = new Button(getContext());
