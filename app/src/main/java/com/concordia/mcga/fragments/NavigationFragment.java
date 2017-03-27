@@ -184,7 +184,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     showIndoorMap();
                     campusButton.setVisibility(View.GONE);
                     viewSwitchButton.setText("GO OUTDOORS");
-                    showDirectionsFragment(true);
+                    //Commented this out because its annoying
+                    //showDirectionsFragment(true);
                     showBuildingInfoFragment(false);
                 } else {
                     showOutdoorMap();

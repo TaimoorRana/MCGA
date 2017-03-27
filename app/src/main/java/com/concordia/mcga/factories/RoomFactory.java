@@ -3,6 +3,8 @@ package com.concordia.mcga.factories;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.concordia.mcga.exceptions.MCGADatabaseException;
+import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.Room;
 import com.google.android.gms.maps.model.LatLng;
@@ -43,5 +45,21 @@ public class RoomFactory {
         List<LatLng> polygonCoordinates = (List<LatLng>) GSON.fromJson(res.getString(POLYGON_COORDINATE_COLUMN_INDEX), latlngType);
 
         return new Room(centerCoordinates, name, indoorMapTile, room_number, floor_number, polygonCoordinates);
+    }
+
+    public static Room createRoomById(int roomId) {
+        Cursor res = null;
+        Room room = null;
+        try {
+            res = DatabaseConnector.getInstance().getDb().rawQuery("select * from room WHERE _id = " + roomId, null);
+            if (res.moveToFirst()) {
+                room = createRoom(res);
+            }
+        } catch (MCGADatabaseException e) {
+            throw new Error("Database not initialized");
+        } finally {
+            res.close();
+        }
+        return room;
     }
 }

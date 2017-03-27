@@ -20101,6 +20101,8 @@ INSERT INTO `room` VALUES (39,'H486',NULL,'{"coordinateX":353,"coordinateY":1314
 INSERT INTO `room` VALUES (40,'H418',NULL,'{"coordinateX":353,"coordinateY":1314}','418','H',4,'[{"latitude":650,"longitude":568,"mVersionCode":1},{"latitude":650,"longitude":400,"mVersionCode":1},{"latitude":428,"longitude":400,"mVersionCode":1},{"latitude":428,"longitude":570,"mVersionCode":1},{"latitude":650,"longitude":568,"mVersionCode":1}]');
 INSERT INTO `room` VALUES (41,'H410',NULL,'{"coordinateX":882,"coordinateY":1615}','410','H',4,'[{"latitude":708,"longitude":898,"mVersionCode":1},{"latitude":710,"longitude":678,"mVersionCode":1},{"latitude":464,"longitude":684,"mVersionCode":1},{"latitude":466,"longitude":854,"mVersionCode":1},{"latitude":424,"longitude":854,"mVersionCode":1},{"latitude":424,"longitude":898,"mVersionCode":1},{"latitude":708,"longitude":898,"mVersionCode":1}]');
 INSERT INTO `room` VALUES (42,'H412',NULL,'{"coordinateX":842,"coordinateY":1615}','412','H',4,'[{"latitude":460,"longitude":852,"mVersionCode":1},{"latitude":460,"longitude":822,"mVersionCode":1},{"latitude":406,"longitude":818,"mVersionCode":1},{"latitude":406,"longitude":852,"mVersionCode":1},{"latitude":460,"longitude":852,"mVersionCode":1}]');
+INSERT INTO `room` VALUES (43,'Escalator Down',NULL,'{"coordinateX":1125,"coordinateY":594}','0','H',4,NULL);
+INSERT INTO `room` VALUES (44,'Escalator Down H4',NULL,'{"coordinateX":1426,"coordinateY":1845}','0','H',2,NULL);
 CREATE TABLE `indoor_maps` (
 	`building`	TEXT,
 	`floor`	INTEGER,
@@ -20110,6 +20112,21 @@ CREATE TABLE `indoor_maps` (
 INSERT INTO `indoor_maps` VALUES ('H',4,1989,2196);
 INSERT INTO `indoor_maps` VALUES ('H',2,2604,2356);
 INSERT INTO `indoor_maps` VALUES ('H',1,2823,2643);
+CREATE TABLE `connected_poi_links` (
+	`connectedPoiId`	INTEGER,
+	`indoorPoiId`	INTEGER
+);
+INSERT INTO `connected_poi_links` VALUES (1,43);
+INSERT INTO `connected_poi_links` VALUES (1,44);
+CREATE TABLE "connected_poi" (
+	`_id`	INTEGER,
+	`name`	TEXT,
+	`building`	TEXT,
+	`floor_number`	INTEGER,
+	`discriminator`	TEXT,
+	PRIMARY KEY(`_id`)
+);
+INSERT INTO `connected_poi` VALUES (1,'Escalator Down','H',4,'ESCALATOR');
 CREATE TABLE building(
  _id INTEGER PRIMARY KEY, 
  name TEXT,

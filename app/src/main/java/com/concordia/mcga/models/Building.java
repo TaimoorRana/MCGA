@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.concordia.mcga.exceptions.MCGADatabaseException;
+import com.concordia.mcga.factories.ConnectedPOIFactory;
 import com.concordia.mcga.factories.RoomFactory;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.factories.IndoorMapFactory;
@@ -32,6 +33,7 @@ public class Building extends POI implements Observer {
     private List<Room> rooms;
     private Polygon polygon;
     private Map<Integer, Floor> floorMaps;
+    private boolean connectedPoiRetrieved;
 
     /**
      *  returns a Building object
@@ -47,6 +49,7 @@ public class Building extends POI implements Observer {
         edgeCoordinateList = new ArrayList<>();
         floorMaps = new HashMap<>();
         rooms = new ArrayList<>();
+        connectedPoiRetrieved = false;
     }
 
     /**
@@ -86,6 +89,38 @@ public class Building extends POI implements Observer {
                 floor.getIndoorPOIs().add(room);
                 floorMaps.put(room.getFloorNumber(), floor);
             }
+        }
+    }
+
+    public void populateConnectedPOIs() {
+        final int BUILDING_COLUMN_INDEX = 2;
+        final int FLOOR_NUMBER_COLUMN_INDEX = 3;
+        Cursor res;
+
+        try {
+            if (connectedPoiRetrieved)  // if the building has already had its Connected POIs retrieved
+            {
+                return;
+            }
+            res = DatabaseConnector.getInstance().getDb().rawQuery("select * from connected_poi", null);
+        } catch (MCGADatabaseException e) {
+            throw new Error("Database not initialized");
+        }
+        while (res.moveToNext()) {
+            if (res.getString(BUILDING_COLUMN_INDEX).equals(getShortName())) {
+                addConnectedPOI(ConnectedPOIFactory.createConnectedPOI(res, this));
+            }
+        }
+        res.close();
+    }
+
+    private void addConnectedPOI(ConnectedPOI poi) {
+        if (poi instanceof Escalator) {
+            floorMaps.get(poi.getFloorNumber()).addEscalator((Escalator) poi);
+        } else if (poi instanceof Elevator) {
+            floorMaps.get(poi.getFloorNumber()).addElevator((Elevator) poi);
+        } else if (poi instanceof Staircase) {
+            floorMaps.get(poi.getFloorNumber()).addStaircase((Staircase) poi);
         }
     }
 

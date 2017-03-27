@@ -18,7 +18,8 @@ public class Floor {
     private List<Staircase> staircases;
     private List<Escalator> escalators;
 
-    public Floor(){}
+    public Floor() {
+    }
 
     public Floor(Building building, int floorNumber) {
         this.building = building;
@@ -84,6 +85,18 @@ public class Floor {
         return escalators;
     }
 
+    public void addElevator(Elevator elevator) {
+        elevators.add(elevator);
+    }
+
+    public void addStaircase(Staircase staircase) {
+        staircases.add(staircase);
+    }
+
+    public void addEscalator(Escalator escalator) {
+        escalators.add(escalator);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -97,16 +110,16 @@ public class Floor {
         Floor floor = (Floor) o;
 
         return new EqualsBuilder()
-            .append(floorNumber, floor.floorNumber)
-            .append(building, floor.building)
-            .isEquals();
+                .append(floorNumber, floor.floorNumber)
+                .append(building, floor.building)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-            .append(building)
-            .append(floorNumber)
-            .toHashCode();
+                .append(building)
+                .append(floorNumber)
+                .toHashCode();
     }
 }

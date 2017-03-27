@@ -19,6 +19,8 @@ import com.concordia.mcga.activities.R;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.ConnectedPOI;
+import com.concordia.mcga.models.Escalator;
 import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.IndoorPOI;
@@ -88,14 +90,18 @@ public class IndoorMapFragment extends Fragment {
     private void test() {
         Building hBuilding = null;
         for (Building b : Campus.SGW.getBuildings()) {
-            if(b.getShortName().equalsIgnoreCase("h")) {
+            if (b.getShortName().equalsIgnoreCase("h")) {
                 hBuilding = b;
             }
         }
         for (Integer floorNum : hBuilding.getFloorMaps().keySet()) {
             Floor floor = hBuilding.getFloorMaps().get(floorNum);
-            Room room = (Room) floor.getIndoorPOIs().get(0);
-            Log.d("JSON Room", room.toJson().toString());
+            //Room room = (Room) floor.getIndoorPOIs().get(0);
+            //Log.d("JSON Room", room.toJson().toString());
+            for (Escalator escalator : floor.getEscalators()) {
+                Log.d("Escalator", String.valueOf(escalator.getFloorNumber()));
+                Log.d("Flor Poi",  escalator.getFloorPOI(2).toString());
+            }
         }
     }
 
@@ -103,7 +109,7 @@ public class IndoorMapFragment extends Fragment {
         leafletView.post(new Runnable() {
             @Override
             public void run() {
-                Building hall = new Building(new LatLng(0,0), "Hall", "H", new MarkerOptions());
+                Building hall = new Building(new LatLng(0, 0), "Hall", "H", new MarkerOptions());
                 Floor H4 = hall.getFloorMap(4);
                 SingleMapPathFinder pf = new SingleMapPathFinder(H4.getMap());
 
@@ -169,7 +175,7 @@ public class IndoorMapFragment extends Fragment {
                     currentFloor = h4Floor;
                     leafletView.evaluateJavascript("loadMap('H4')", null);
                     //leafletView.evaluateJavascript("addH4Markers()", null);
-                    leafletView.evaluateJavascript("addFloorRooms(" + h4Floor.getRoomsJSON().toString() +")", null);
+                    leafletView.evaluateJavascript("addFloorRooms(" + h4Floor.getRoomsJSON().toString() + ")", null);
                 }
             }
         });
