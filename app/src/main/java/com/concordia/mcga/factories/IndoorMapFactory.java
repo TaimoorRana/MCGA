@@ -46,8 +46,7 @@ public class IndoorMapFactory {
             db = DatabaseConnector.getInstance().getDb();
             TiledMap map = createTiledMap(building, floorNumber, db);
             insertWalkablePaths(building, floorNumber, db, map);
-            Floor floor = new Floor();
-            floor.setFloorNumber(floorNumber);
+            Floor floor = new Floor(building, floorNumber);
             floor.setMap(map);
             return floor;
         } catch (MCGADatabaseException e) {

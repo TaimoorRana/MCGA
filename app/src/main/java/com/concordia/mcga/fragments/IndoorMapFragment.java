@@ -25,12 +25,16 @@ import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.Room;
+import com.concordia.mcga.utilities.pathfinding.MultiMapPathFinder;
 import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class IndoorMapFragment extends Fragment {
 
@@ -43,6 +47,7 @@ public class IndoorMapFragment extends Fragment {
     private boolean pageLoaded = false;
     private boolean pathsDrawn = false;
     private Floor currentFloor;
+    private Map<Floor, List<IndoorMapTile>> currentPathTiles;
 
     //Test POIs for Demo
     IndoorPOI H423 = new IndoorPOI(null, "H423", new IndoorMapTile(353, 1326));
@@ -79,7 +84,8 @@ public class IndoorMapFragment extends Fragment {
         floorButtonContainer = (LinearLayout) view.findViewById(R.id.floorButtonContainer);
 
         //Indoor POI Stack
-        indoorPoiStack = new ArrayList<IndoorPOI>();
+        indoorPoiStack = new ArrayList<>();
+        currentPathTiles = new HashMap<>();
 
         Campus.populateCampusesWithBuildings();
         test();
@@ -100,7 +106,7 @@ public class IndoorMapFragment extends Fragment {
             //Log.d("JSON Room", room.toJson().toString());
             for (Escalator escalator : floor.getEscalators()) {
                 Log.d("Escalator", String.valueOf(escalator.getFloorNumber()));
-                Log.d("Flor Poi",  escalator.getFloorPOI(2).toString());
+                Log.d("Flor Poi", escalator.getFloorPOI(2).toString());
             }
         }
     }
@@ -109,14 +115,20 @@ public class IndoorMapFragment extends Fragment {
         leafletView.post(new Runnable() {
             @Override
             public void run() {
-                Building hall = new Building(new LatLng(0, 0), "Hall", "H", new MarkerOptions());
-                Floor H4 = hall.getFloorMap(4);
-                SingleMapPathFinder pf = new SingleMapPathFinder(H4.getMap());
-
                 ArrayList<IndoorMapTile> pathTilesJunctions = null;
+                Floor floor1 = start.getFloor();
+                Floor floor2 = dest.getFloor();
+                //SingleMapPathFinder pf = new SingleMapPathFinder(H4.getMap());
+                MultiMapPathFinder pf = new MultiMapPathFinder();
 
                 try {
-                    pathTilesJunctions = (ArrayList<IndoorMapTile>) pf.shortestPathJunctions(start.getTile(), dest.getTile());
+                    currentPathTiles = pf.shortestPath(start, dest);
+                } catch (MCGAPathFindingException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    pathTilesJunctions = (ArrayList<IndoorMapTile>) SingleMapPathFinder.shortestPathJunctions(currentPathTiles.get(currentFloor));
 
                     Iterator<IndoorMapTile> it2 = pathTilesJunctions.iterator();
                     while (it2.hasNext()) {
@@ -125,9 +137,34 @@ public class IndoorMapFragment extends Fragment {
                     }
 
                     if (pageLoaded)
-                        leafletView.evaluateJavascript("drawWalkablePath(" + pf.toJSONArray(pathTilesJunctions).toString() + ")", null);
+                        leafletView.evaluateJavascript("drawWalkablePath(" + SingleMapPathFinder.toJSONArray(pathTilesJunctions).toString() + ")", null);
                 } catch (MCGAPathFindingException e) {
                     e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void onFloorChange() {
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<IndoorMapTile> pathTilesJunctions = null;
+                if (currentPathTiles.get(currentFloor.getFloorNumber()) != null) {
+                    try {
+                        pathTilesJunctions = (ArrayList<IndoorMapTile>) SingleMapPathFinder.shortestPathJunctions(currentPathTiles.get(currentFloor));
+
+                        Iterator<IndoorMapTile> it2 = pathTilesJunctions.iterator();
+                        while (it2.hasNext()) {
+                            IndoorMapTile pft2 = it2.next();
+                            Log.d("JCT: ", pft2.toString());
+                        }
+
+                        if (pageLoaded)
+                            leafletView.evaluateJavascript("drawWalkablePath(" + SingleMapPathFinder.toJSONArray(pathTilesJunctions).toString() + ")", null);
+                    } catch (MCGAPathFindingException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -146,12 +183,13 @@ public class IndoorMapFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (pageLoaded) {
-                    leafletView.evaluateJavascript("loadMap('H1')", null);
+                    leafletView.evaluateJavascript("loadMap('H1',false)", null);
                 }
             }
         });
 
         //Add Floor Buttons
+        final Floor h2Floor = hBuilding.getFloorMap(2);
         Button h2 = new Button(getContext());
         h2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
         h2.setText("2");
@@ -159,7 +197,10 @@ public class IndoorMapFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (pageLoaded) {
-                    leafletView.evaluateJavascript("loadMap('H2')", null);
+                    currentFloor = h2Floor;
+                    leafletView.evaluateJavascript("loadMap('H2',false)", null);
+                    leafletView.evaluateJavascript("addFloorRooms(" + h2Floor.getRoomsJSON().toString() + ")", null);
+                    onFloorChange();
                 }
             }
         });
@@ -173,9 +214,10 @@ public class IndoorMapFragment extends Fragment {
             public void onClick(View v) {
                 if (pageLoaded) {
                     currentFloor = h4Floor;
-                    leafletView.evaluateJavascript("loadMap('H4')", null);
+                    leafletView.evaluateJavascript("loadMap('H4',false)", null);
                     //leafletView.evaluateJavascript("addH4Markers()", null);
                     leafletView.evaluateJavascript("addFloorRooms(" + h4Floor.getRoomsJSON().toString() + ")", null);
+                    onFloorChange();
                 }
             }
         });

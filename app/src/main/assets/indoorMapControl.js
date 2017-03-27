@@ -61,8 +61,10 @@ function loadMapImage(path, latBound, lngBound) {
 	map.fitBounds(bounds);
 }
 
-function loadMap(mapId) {
-	clearAllLayers();
+function loadMap(mapId, clearLayers = true) {
+    if (clearLayers)
+	    clearAllLayers();
+
 	switch (mapId) {
 		case "H1":
 			loadMapImage('floormaps/H/1.png', 2643, 2823);

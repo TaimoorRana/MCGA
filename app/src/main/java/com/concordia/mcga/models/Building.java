@@ -84,7 +84,8 @@ public class Building extends POI implements Observer {
                 room.setFloor(floor);
                 floor.getIndoorPOIs().add(room);
             } else {
-                floor = new Floor(this, room.getFloorNumber());
+                floor = IndoorMapFactory.getInstance().createIndoorMap(this, room.getFloorNumber());
+                //floor = new Floor(this, room.getFloorNumber());
                 room.setFloor(floor);
                 floor.getIndoorPOIs().add(room);
                 floorMaps.put(room.getFloorNumber(), floor);
