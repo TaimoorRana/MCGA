@@ -109,6 +109,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/Fri"
                 android:layout_width="match_parent"
@@ -124,5 +125,14 @@
 
     </TableLayout>
 
+    <android.widget.LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:id="@+id/shuttleTimeTable"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.widget.LinearLayout>
 
 </android.widget.LinearLayout>
