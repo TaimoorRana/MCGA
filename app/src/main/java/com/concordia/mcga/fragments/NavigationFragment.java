@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -150,6 +149,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Check if GPS is enabled, if not, enable it
                 if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     if(alertGPS(mapFragment.getActivity())){
                         Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
@@ -162,8 +162,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO INDOORS");
                 }
-                onClose();
+                //Close Search Options
+                searchState = SearchState.NONE;
+                updateSearchUI();
+                //Close slider - To be done in MCGA-140
 
+                //Check if locate me is successful
                 if(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen)){
                     Log.d("GPS Locator","Successful");}
                 else {
