@@ -57,6 +57,7 @@ function loadMapImage(path, latBound, lngBound) {
 	var imageOptions = {
 		interactive: true
 	};
+
 	floormapGroup.addLayer(L.imageOverlay(path, bounds, imageOptions));
 	map.fitBounds(bounds);
 }
@@ -67,10 +68,10 @@ function loadMap(mapId, clearLayers = true) {
 
 	switch (mapId) {
 		case "H1":
-			loadMapImage('floormaps/H/1.png', 2643, 2823);
+			loadMapImage('floormaps/H/1.png', 2823, 2643);
 			break;
 		case "H2":
-			loadMapImage('floormaps/H/2.png', 2356, 2604);
+			loadMapImage('floormaps/H/2.png', 2604, 2356);
 			break;
 		case "H4":
 			loadMapImage('floormaps/H/4.png', 1989, 2196);
@@ -80,6 +81,8 @@ function loadMap(mapId, clearLayers = true) {
 
 //Path Drawing
 function drawWalkablePath(pointArray) {
+    clearPathLayers();
+
 	var points = [];
 
 	for (var i = 0; i < pointArray.length; i++) {
