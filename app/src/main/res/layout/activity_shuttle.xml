@@ -45,7 +45,7 @@
     <TableLayout
         android:id="@+id/tableShuttle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/toolbarShuttle"
         android:layout_marginTop="10dp">
 
@@ -101,10 +101,10 @@
             <TextView
                 android:id="@+id/MonThu"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="35dp"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:paddingTop="7dp"
+                android:paddingTop="8dp"
                 android:text="Mon-Thu"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -113,10 +113,10 @@
             <TextView
                 android:id="@+id/Fri"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="35dp"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:paddingTop="7dp"
+                android:paddingTop="8dp"
                 android:text="Friday"
                 android:textAlignment="center"
                 android:textColor="@color/white"
@@ -125,14 +125,22 @@
 
     </TableLayout>
 
-    <android.widget.LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:scrollbars="none">
 
-        <TableLayout
-            android:id="@+id/shuttleTimeTable"
+        <android.widget.LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </android.widget.LinearLayout>
+            android:layout_height="367dp"
+            android:layout_gravity="top">
+
+            <TableLayout
+                android:id="@+id/shuttleTimeTable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.widget.LinearLayout>
+    </ScrollView>
 
 </android.widget.LinearLayout>
