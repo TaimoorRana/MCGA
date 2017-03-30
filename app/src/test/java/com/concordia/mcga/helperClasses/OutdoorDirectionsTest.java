@@ -1,6 +1,7 @@
 package com.concordia.mcga.helperClasses;
 
 import com.akexorcist.googledirection.constant.TransportMode;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,7 @@ public class OutdoorDirectionsTest {
     @Before
     public void setup(){
         outdoorDirections = OutdoorDirections.getInstance();
+        outdoorDirections.setSelectedTransportMode(TransportMode.BICYCLING);
     }
 
     @Test
@@ -29,12 +31,23 @@ public class OutdoorDirectionsTest {
 
     @Test
     public void setSelectedTransportModeTest(){
-        outdoorDirections.setSelectedTransportMode("");
-        assertEquals(null,outdoorDirections.getSelectedTransportMode());
-
-        outdoorDirections.setSelectedTransportMode(TransportMode.BICYCLING);
         assertEquals("bicycling",outdoorDirections.getSelectedTransportMode());
     }
+
+    @Test
+    public void setOriginTest(){
+        LatLng origin =  new LatLng(45.0, 47.0);
+        outdoorDirections.setOrigin(origin);
+        assertEquals(origin,outdoorDirections.getDirectionObject().getOrigin());
+    }
+
+    @Test
+    public void setDestinationTest(){
+        LatLng destination =  new LatLng(44.0, 46.0);
+        outdoorDirections.setDestination(destination);
+        assertEquals(destination,outdoorDirections.getDirectionObject().getDestination());
+    }
+
 
 
 
