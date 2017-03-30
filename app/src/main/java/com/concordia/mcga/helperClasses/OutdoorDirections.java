@@ -18,7 +18,12 @@ public class OutdoorDirections {
     private final int TOTAL_OUTDOOR_DIRECTION = 4;
     private List<OutdoorDirection> outdoorDirectionList;
     private List<String> transportModes;
-    private String selectedTransportMode;
+
+    public String getSelectedTransportMode() {
+        return selectedTransportMode;
+    }
+
+    private String selectedTransportMode = null;
     private OutdoorDirection selectedOutdoorDirection;
 
     private OutdoorDirections() {
@@ -121,12 +126,14 @@ public class OutdoorDirections {
      * @param selectedTransportMode sets the transport mode the will be used to draw a path on the map
      */
     public void setSelectedTransportMode(String selectedTransportMode) {
-        this.selectedTransportMode = selectedTransportMode;
         for (OutdoorDirection outdoorDirection : outdoorDirectionList) {
             if (outdoorDirection.getTransportMode().equalsIgnoreCase(selectedTransportMode)) {
                 selectedOutdoorDirection = outdoorDirection;
+                this.selectedTransportMode = selectedTransportMode;
             }
         }
+
+
     }
 
     /**
