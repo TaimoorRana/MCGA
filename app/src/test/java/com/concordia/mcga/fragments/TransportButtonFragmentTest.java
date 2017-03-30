@@ -98,6 +98,32 @@ public class TransportButtonFragmentTest {
     }
 
     @Test
+    public void testDisableCarOption() {
+        //Make sure it's initially active
+        assertTrue(transportButtonFragment.isCarVisible());
+        assertTrue(transportButtonFragment.getCarFAB().isClickable());
+
+        //Disable it
+        transportButtonFragment.disableCar(true);
+
+        assertFalse(transportButtonFragment.isCarVisible());
+        assertFalse(transportButtonFragment.getCarFAB().isClickable());
+    }
+
+    @Test
+    public void testDisablePublicTransportOption() {
+        //Make sure it's initially active
+        assertTrue(transportButtonFragment.isPublicTransportVisible());
+        assertTrue(transportButtonFragment.getPublicTransportFAB().isClickable());
+
+        //Disable it
+        transportButtonFragment.disablePublicTransport(true);
+
+        assertFalse(transportButtonFragment.isPublicTransportVisible());
+        assertFalse(transportButtonFragment.getPublicTransportFAB().isClickable());
+    }
+
+    @Test
     public void testTransportOptionClick() {
         transportButtonFragment.getWalkFAB().performClick();
         assertTrue(transportButtonFragment.getTransportType().equals(TransportMode.WALKING));

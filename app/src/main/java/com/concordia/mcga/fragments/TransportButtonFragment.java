@@ -36,6 +36,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private boolean fabExpanded = false;
     private boolean shuttleVisible = true;
     private String transportType;
+    private boolean carVisible = true;
+    private boolean publicTransportVisible = true;
 
     @Nullable
     @Override
@@ -141,13 +143,16 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             bikeFAB.setClickable(false);
 
             carFAB.startAnimation(transport_fab_close);
-            carTextView.startAnimation(transport_textview_close);
-            carFAB.setClickable(false);
+            if (carVisible) {
+                carTextView.startAnimation(transport_textview_close);
+                carFAB.setClickable(false);
+            }
 
             publicTransportFAB.startAnimation(transport_fab_close);
-            publicTransportTextView.startAnimation(transport_textview_close);
-            publicTransportFAB.setClickable(false);
-
+            if (publicTransportVisible) {
+                publicTransportTextView.startAnimation(transport_textview_close);
+                publicTransportFAB.setClickable(false);
+            }
 
             shuttleFAB.startAnimation(transport_fab_close);
             if (shuttleVisible) {
@@ -167,13 +172,16 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             bikeFAB.setClickable(true);
 
             carFAB.startAnimation(transport_fab_open);
-            carTextView.startAnimation(transport_textview_open);
-            carFAB.setClickable(true);
+            if (carVisible) {
+                carTextView.startAnimation(transport_textview_open);
+                carFAB.setClickable(true);
+            }
 
             publicTransportFAB.startAnimation(transport_fab_open);
-            publicTransportTextView.startAnimation(transport_textview_open);
-            publicTransportFAB.setClickable(true);
-
+            if (publicTransportVisible) {
+                publicTransportTextView.startAnimation(transport_textview_open);
+                publicTransportFAB.setClickable(true);
+            }
 
             shuttleFAB.startAnimation(transport_fab_open);
             if (shuttleVisible) {
@@ -212,7 +220,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     /**
-     *  Disabled the shuttle transport option by greying it out and disable any click activity
+     *  Disables the shuttle transport option by greying it out and disable any click activity
      * @param isDisabled
      */
     public void disableShuttle(boolean isDisabled) {
@@ -224,6 +232,38 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             this.shuttleFAB.setClickable(true);
             this.shuttleFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorPrimary)));
             this.shuttleVisible = true;
+        }
+    }
+
+    /**
+     *  Disables the car option by greying it out and disable any click activity
+     * @param isDisabled
+     */
+    public void disableCar(boolean isDisabled) {
+        if (isDisabled) {
+            this.carFAB.setClickable(false);
+            this.carFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.grey)));
+            this.carVisible = false;
+        } else {
+            this.carFAB.setClickable(true);
+            this.carFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorPrimary)));
+            this.carVisible = true;
+        }
+    }
+
+    /**
+     *  Disables the public transport option by greying it out and disable any click activity
+     * @param isDisabled
+     */
+    public void disablePublicTransport(boolean isDisabled) {
+        if (isDisabled) {
+            this.publicTransportFAB.setClickable(false);
+            this.publicTransportFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.grey)));
+            this.publicTransportVisible = false;
+        } else {
+            this.publicTransportFAB.setClickable(true);
+            this.publicTransportFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorPrimary)));
+            this.publicTransportVisible = true;
         }
     }
 
@@ -292,6 +332,21 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     public boolean isShuttleVisible() {
         return shuttleVisible;
     }
+
+    /**
+     * @return True if the shuttle icon is active
+     */
+    public boolean isCarVisible() {
+        return carVisible;
+    }
+
+    /**
+     * @return True if the public transport icon is active
+     */
+    public boolean isPublicTransportVisible() {
+        return publicTransportVisible;
+    }
+
 
     public FloatingActionButton getTransportExpandFAB() {
         return transportExpandFAB;
