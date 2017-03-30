@@ -20,7 +20,6 @@ import com.concordia.mcga.models.Transportation;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
 
-    OutdoorDirections outdoorDirections = OutdoorDirections.getInstance();
     //Floating Action Buttons
     private FloatingActionButton transportExpandFAB;
     private FloatingActionButton walkFAB;
@@ -38,6 +37,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private String transportType;
     private boolean carVisible = true;
     private boolean publicTransportVisible = true;
+    //Outdoor directions
+    private OutdoorDirections outdoorDirections = OutdoorDirections.getInstance();
 
     @Nullable
     @Override

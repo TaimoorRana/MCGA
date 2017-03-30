@@ -77,7 +77,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     //Outdoor Map
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     //Outdoor direction
-    OutdoorDirections outdoorDirections = OutdoorDirections.getInstance();
+    private OutdoorDirections outdoorDirections = OutdoorDirections.getInstance();
     private LocationListener gpsListen = new LocationListener() {
         public void onLocationChanged(Location location) {
             //Method called when new location is found by the network
@@ -308,6 +308,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         //initializing outdoor directions
         outdoorDirections.setContext(getActivity().getApplicationContext());
+        outdoorDirections.setServerKey(getResources().getString(R.string.google_maps_key));
         outdoorDirections.setMap(map);
         outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
 

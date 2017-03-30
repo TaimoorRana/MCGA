@@ -15,25 +15,19 @@ import java.util.List;
 
 public class OutdoorDirections {
     private static OutdoorDirections outdoorDirections;
-    private final int TOTAL_OUTDOOR_DIRECTION = 4;
     private List<OutdoorDirection> outdoorDirectionList;
-    private List<String> transportModes;
-
-    public String getSelectedTransportMode() {
-        return selectedTransportMode;
-    }
-
     private String selectedTransportMode = null;
     private OutdoorDirection selectedOutdoorDirection;
 
     private OutdoorDirections() {
         outdoorDirectionList = new ArrayList<>();
-        transportModes = new ArrayList<String>() {{
+        List<String> transportModes = new ArrayList<String>() {{
             add(TransportMode.BICYCLING);
             add(TransportMode.DRIVING);
             add(TransportMode.TRANSIT);
             add(TransportMode.WALKING);
         }};
+        int TOTAL_OUTDOOR_DIRECTION = 4;
         for (int i = 0; i < TOTAL_OUTDOOR_DIRECTION; i++) {
             outdoorDirectionList.add(new OutdoorDirection());
             outdoorDirectionList.get(i).setTransportMode(transportModes.get(i));
@@ -161,5 +155,14 @@ public class OutdoorDirections {
         return selectedOutdoorDirection.getInstructions();
     }
 
+    public String getSelectedTransportMode() {
+        return selectedTransportMode;
+    }
+
+    public void setServerKey(String serverKey){
+        for (OutdoorDirection outdoorDirection : outdoorDirectionList) {
+            outdoorDirection.setServerKey(serverKey);
+        }
+    }
 
 }

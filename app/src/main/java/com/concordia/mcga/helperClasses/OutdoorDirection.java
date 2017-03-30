@@ -11,6 +11,8 @@ import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.concordia.mcga.activities.R;
+import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -21,8 +23,7 @@ import java.util.List;
 
 
 class OutdoorDirection implements DirectionCallback {
-
-    private final String serverKey = "AIzaSyBQrTXiam-OzDCfSgEct6FyOQWlDWFXp6Q";
+    private String serverKey;
     private final int transitPathWidth = 5;
     private final int transitPathColor = 0x80ed1026; // transparent red
     private final int walkingPathWidth = 3;
@@ -60,6 +61,11 @@ class OutdoorDirection implements DirectionCallback {
 
     @Override
     public void onDirectionFailure(Throwable t) {
+        try {
+            throw new MCGAPathFindingException(t.getMessage());
+        } catch (MCGAPathFindingException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -114,13 +120,6 @@ class OutdoorDirection implements DirectionCallback {
     }
 
     /**
-     * @return Route total distance in "x KM" format
-     */
-    public String getDistance(){
-        return leg.getDistance().getText();
-    }
-
-    /**
      * @return Route total duration in "x hours y min" format
      */
     public String getDuration(){
@@ -145,19 +144,6 @@ class OutdoorDirection implements DirectionCallback {
         this.destination = destination;
     }
 
-    /**
-     * @return Polylines that are drawn on the map
-     */
-    public List<Polyline> getPolylines() {
-        return polylines;
-    }
-
-
-    public Leg getLeg() {
-        return leg;
-    }
-
-
     public void setMap(GoogleMap map) {
         this.map = map;
     }
@@ -174,8 +160,9 @@ class OutdoorDirection implements DirectionCallback {
         this.transportMode = transportMode;
     }
 
-    public List<Step> getSteps() {
-        return steps;
+
+    public void setServerKey(String serverKey) {
+        this.serverKey = serverKey;
     }
 
     @Override

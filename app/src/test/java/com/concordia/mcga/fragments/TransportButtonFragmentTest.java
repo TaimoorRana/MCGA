@@ -41,7 +41,6 @@ public class TransportButtonFragmentTest {
         //Text View
         assertNotNull(transportButtonFragment.getWalkTextView());
         assertNotNull(transportButtonFragment.getBikeTextView());
-        assertNotNull(transportButtonFragment.getBikeTextView());
         assertNotNull(transportButtonFragment.getCarTextView());
         assertNotNull(transportButtonFragment.getPublicTransportTextView());
         assertNotNull(transportButtonFragment.getShuttleTextView());
@@ -52,7 +51,7 @@ public class TransportButtonFragmentTest {
         assertNotNull(transportButtonFragment.getTransport_textview_open());
         assertNotNull(transportButtonFragment.getTransport_textview_close());
 
-        assertTrue(transportButtonFragment.getTransportType() == TransportMode.TRANSIT);
+        assertTrue(transportButtonFragment.getTransportType().equalsIgnoreCase(TransportMode.TRANSIT));
     }
 
     @Test
@@ -132,9 +131,9 @@ public class TransportButtonFragmentTest {
     @Test
     public void testDisplayAllTransportTime() {
         transportButtonFragment.displayAllTransportTimes();
-        assertTrue(transportButtonFragment.getCarTextView().getText() == "1 minute");
-        assertTrue(transportButtonFragment.getPublicTransportTextView().getText() == "2 minutes");
-        assertTrue(transportButtonFragment.getBikeTextView().getText() == "3 minutes");
-        assertTrue(transportButtonFragment.getWalkTextView().getText() == "4 minutes");
+        assertTrue(transportButtonFragment.getCarTextView().getText().equals("1 minute"));
+        assertTrue(transportButtonFragment.getPublicTransportTextView().getText().equals("2 minutes"));
+        assertTrue(transportButtonFragment.getBikeTextView().getText().equals("3 minutes"));
+        assertTrue(transportButtonFragment.getWalkTextView().getText().equals("4 minutes"));
     }
 }

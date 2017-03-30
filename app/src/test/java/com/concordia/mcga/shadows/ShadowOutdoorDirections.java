@@ -23,7 +23,8 @@ public class ShadowOutdoorDirections {
                 return "3 minutes";
             case TransportMode.WALKING:
                 return "4 minutes";
+            default:
+                return "";
         }
-        return "";
     }
 }

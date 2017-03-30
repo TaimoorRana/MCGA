@@ -16,17 +16,23 @@ import static org.junit.Assert.*;
 
 @RunWith(JUnit4.class)
 public class OutdoorDirectionsTest {
-    OutdoorDirections outdoorDirections;
+    private OutdoorDirections outdoorDirections;
+    private LatLng origin, destination;
 
     @Before
-    public void setup(){
+    public void setUp(){
         outdoorDirections = OutdoorDirections.getInstance();
         outdoorDirections.setSelectedTransportMode(TransportMode.BICYCLING);
+        origin =  new LatLng(45.0, 47.0);
+        outdoorDirections.setOrigin(origin);
+        destination =  new LatLng(44.0, 46.0);
+        outdoorDirections.setDestination(destination);
+        outdoorDirections.requestDirections();
     }
 
     @Test
     public void createOutdoorDirectionsTest(){
-        assertNotEquals(null,outdoorDirections);
+        assertNotNull(outdoorDirections);
     }
 
     @Test
@@ -36,17 +42,14 @@ public class OutdoorDirectionsTest {
 
     @Test
     public void setOriginTest(){
-        LatLng origin =  new LatLng(45.0, 47.0);
-        outdoorDirections.setOrigin(origin);
         assertEquals(origin,outdoorDirections.getDirectionObject().getOrigin());
     }
 
     @Test
     public void setDestinationTest(){
-        LatLng destination =  new LatLng(44.0, 46.0);
-        outdoorDirections.setDestination(destination);
         assertEquals(destination,outdoorDirections.getDirectionObject().getDestination());
     }
+
 
 
 
