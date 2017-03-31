@@ -9,12 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OutdoorDirections {
-    private static OutdoorDirections outdoorDirections;
     private List<OutdoorPath> outdoorPathList;
     private String selectedTransportMode = null;
     private OutdoorPath selectedOutdoorPath;
 
-    private OutdoorDirections() {
+    public OutdoorDirections() {
         outdoorPathList = new ArrayList<>();
         List<String> transportModes = new ArrayList<String>() {{
             add(MCGATransportMode.BICYCLING);
@@ -28,15 +27,6 @@ public class OutdoorDirections {
         }
     }
 
-    /**
-     * @return the instance of this class (Singleton Pattern)
-     */
-    public static OutdoorDirections getInstance() {
-        if (outdoorDirections == null) {
-            outdoorDirections = new OutdoorDirections();
-        }
-        return outdoorDirections;
-    }
 
     /**
      * Request directions for all transportation

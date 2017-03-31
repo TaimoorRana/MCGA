@@ -38,7 +38,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private boolean carVisible = true;
     private boolean publicTransportVisible = true;
     //Outdoor directions
-    private OutdoorDirections outdoorDirections = OutdoorDirections.getInstance();
+    private OutdoorDirections outdoorDirections;
 
     @Nullable
     @Override
@@ -411,5 +411,9 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
 
     public String getTransportType() {
         return transportType;
+    }
+
+    public void setOutdoorDirections(OutdoorDirections outdoorDirections) {
+        this.outdoorDirections = outdoorDirections;
     }
 }
