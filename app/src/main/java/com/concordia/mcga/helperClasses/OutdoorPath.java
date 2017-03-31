@@ -85,7 +85,9 @@ public class OutdoorPath implements DirectionCallback {
      * Draws the path on the map
      */
     public void drawPath() {
-
+        if(origin == null || destination == null){
+            return;
+        }
 
         ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline(
                 context,
@@ -135,9 +137,7 @@ public class OutdoorPath implements DirectionCallback {
     }
 
     public void setOrigin(LatLng origin) {
-        if (origin != null) {
             this.origin = origin;
-        }
     }
 
     public LatLng getDestination() {
@@ -145,9 +145,7 @@ public class OutdoorPath implements DirectionCallback {
     }
 
     public void setDestination(LatLng destination) {
-        if (destination != null) {
             this.destination = destination;
-        }
     }
 
     public void setMap(GoogleMap map) {

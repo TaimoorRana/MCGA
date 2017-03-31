@@ -637,12 +637,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     toolbarView.findViewById(R.id.search_location_text);
             locationText.setText(location.getName());
             outdoorDirections.setOrigin(location.getMapCoordinates());
+        }else{
+            outdoorDirections.setOrigin(null);
         }
+
         if (destination != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
             destinationText.setText(destination.getName());
             outdoorDirections.setDestination(destination.getMapCoordinates());
+        }else{
+            outdoorDirections.setDestination(null);
         }
 
         outdoorDirections.deleteDirection();
