@@ -674,7 +674,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         } else {
             searchDialog.show();
             for (int i = 0; i < poiSearchAdapter.getGroupCount(); i++) {
-                searchList.expandGroup(i);
+                if (i != POISearchAdapter.MY_LOCATION_GROUP_POSITION) {
+                    searchList.expandGroup(i);
+                }
             }
         }
     }
@@ -749,6 +751,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 setNavigationPOI(dest);
                 onClose();
                 return true;
+            }
+        });
+
+        searchList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (groupPosition == POISearchAdapter.MY_LOCATION_GROUP_POSITION) {
+                    // TODO: setNavigationPOI on the location from LocateMe in this block
+                    return true;
+                }
+                return false;
             }
         });
     }

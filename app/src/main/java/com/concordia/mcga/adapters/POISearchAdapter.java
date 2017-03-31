@@ -2,10 +2,13 @@ package com.concordia.mcga.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
@@ -13,8 +16,10 @@ import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.POI;
 import com.concordia.mcga.models.Room;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -25,15 +30,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class POISearchAdapter extends BaseExpandableListAdapter {
     private Context context;
 
-    public static final int SGW_INDEX = 0;
-    public static final int LOY_INDEX = 1;
-
     private Campus sgw;
     private Campus loyola;
 
+    private List<POI> locationList;
     private List<Building> sgwFilteredList;
     private List<Building> loyolaFilteredList;
     private List<Room> roomFilteredList;
+
+    public final POI locationPlaceholder = new POI(new LatLng(0,0), "Placeholder");
+    public static final int MY_LOCATION_GROUP_POSITION = 0;
 
     private List<List> masterList;
 
@@ -50,6 +56,9 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         this.sgwFilteredList = new ArrayList<>();
         this.loyolaFilteredList = new ArrayList<>();
         this.roomFilteredList = new ArrayList<>();
+        this.locationList = new LinkedList<>();
+
+        locationList.add(locationPlaceholder);
 
         this.masterList = new ArrayList<>();
     }
@@ -123,15 +132,18 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         int resId;
 
         List group = (List) getGroup(groupPosition);
-        if (group.equals(sgwFilteredList)) {
+        if (group == sgwFilteredList) {
             title = "Sir George Williams";
             resId = R.mipmap.ic_sgw_campus;
-        } else if (group.equals(loyolaFilteredList)) {
+        } else if (group == loyolaFilteredList) {
             title = "Loyola";
             resId = R.mipmap.ic_loy_campus;
-        } else {
+        } else if (group == roomFilteredList){
             title = "Classrooms";
             resId = R.mipmap.ic_classroom;
+        } else { // if (group == locationList) {
+            title = "My Location";
+            resId = R.drawable.ic_my_location_black_24dp;
         }
 
         if (view == null) {
@@ -161,23 +173,22 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean b, View view,
                              ViewGroup viewGroup) {
-
         POI poi = (POI)getChild(groupPosition, childPosition);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
 
-        if (poi == null) {
-            return null;
+        if (poi == null || poi == locationPlaceholder) {
+            view = layoutInflater.inflate(R.layout.poi_search_empty_row, null);
+        } else {
+            if (view == null) {
+                view = layoutInflater.inflate(R.layout.poi_search_child_row, null);
+            }
+
+            TextView buildingRow = (TextView) view.findViewById(R.id.childText);
+            int backgroundColor = (childPosition % 2) == 0 ? Color.WHITE : Color.LTGRAY;
+            view.setBackgroundColor(backgroundColor);
+            buildingRow.setText(poi.getName());
         }
-
-        if (view == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(
-                    Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.poi_search_child_row, null);
-        }
-
-        TextView buildingRow = (TextView) view.findViewById(R.id.childText);
-        int backgroundColor = (childPosition % 2) == 0 ? Color.WHITE : Color.LTGRAY;
-        view.setBackgroundColor(backgroundColor);
-        buildingRow.setText(poi.getName());
 
         return view;
     }
@@ -201,6 +212,9 @@ public class POISearchAdapter extends BaseExpandableListAdapter {
         masterList.clear();
 
         if (!query.isEmpty()) {
+            // Always add a group for the "locate me" list item. Using a dummy list
+            masterList.add(locationList);
+
             // Get matching SGW buildings
             if (sgw.getName().toLowerCase().contains(query) ||
                     sgw.getShortName().toLowerCase().contains(query)) {
