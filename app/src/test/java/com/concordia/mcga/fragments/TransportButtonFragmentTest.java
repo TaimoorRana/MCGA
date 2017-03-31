@@ -1,8 +1,8 @@
 package com.concordia.mcga.fragments;
 
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.concordia.mcga.shadows.ShadowOutdoorDirections;
 
 import org.junit.Before;
@@ -51,7 +51,7 @@ public class TransportButtonFragmentTest {
         assertNotNull(transportButtonFragment.getTransport_textview_open());
         assertNotNull(transportButtonFragment.getTransport_textview_close());
 
-        assertTrue(transportButtonFragment.getTransportType().equalsIgnoreCase(TransportMode.TRANSIT));
+        assertTrue(transportButtonFragment.getTransportType().equalsIgnoreCase(MCGATransportMode.TRANSIT));
     }
 
     @Test
@@ -125,7 +125,7 @@ public class TransportButtonFragmentTest {
     @Test
     public void testTransportOptionClick() {
         transportButtonFragment.getWalkFAB().performClick();
-        assertTrue(transportButtonFragment.getTransportType().equals(TransportMode.WALKING));
+        assertTrue(transportButtonFragment.getTransportType().equals(MCGATransportMode.WALKING));
     }
 
     @Test

@@ -1,9 +1,9 @@
 package com.concordia.mcga.fragments;
-import com.concordia.mcga.activities.MainActivity;
+
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,10 +18,10 @@ import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatImageButton;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -37,6 +37,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 
 import com.akexorcist.googledirection.constant.TransportMode;
+import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.helperClasses.Observer;
@@ -65,15 +66,6 @@ import static android.content.Context.LOCATION_SERVICE;
 public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         OnCameraIdleListener, Subject, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
-    //Enum representing which map view is active
-    private enum ViewType {
-        INDOOR, OUTDOOR
-    }
-
-    private enum SearchState {
-        NONE, LOCATION, DESTINATION, LOCATION_DESTINATION
-    }
-
     //Outdoor Map
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     //Outdoor direction
@@ -96,25 +88,18 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
     private Map<String, Object> multiBuildingMap = new HashMap<>();
-
     //State
     private ViewType viewType;
     private Campus currentCampus = Campus.SGW;
-
     private boolean indoorMapVisible = false;
     private boolean outdoorMapVisible = false;
-
-
     //Fragments
     private LinearLayoutCompat parentLayout;
     private SupportMapFragment mapFragment;
     private TransportButtonFragment transportButtonFragment;
     private IndoorMapFragment indoorMapFragment;
-
     private BottomSheetDirectionsFragment directionsFragment;
     private BottomSheetBuildingInfoFragment buildingInfoFragment;
-
-
     //View Components
     private View rootView;
     private View toolbarView;
@@ -123,17 +108,80 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private FloatingActionButton mapCenterButton;
     //GPS attributes
     private LocationManager gpsmanager; //LocationManager instance to check gps activity
-
-
     // Search components
     private SearchView search;
     private POISearchAdapter poiSearchAdapter;
     private ExpandableListView searchList;
     private Dialog searchDialog;
-
     private POI location;
     private POI destination;
     private SearchState searchState;
+
+    /**
+     * Build alert dialog on fragment's activity
+     * Shown iff (gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER) is false
+     * Prompt user to enable the GPS
+     * If user presses "Enable GPS",  minimize application and prompt user to GPS Android window
+     */
+
+    public static boolean alertGPS(final Activity activity) { //GPS detection method
+        AlertDialog.Builder build = new AlertDialog.Builder(activity);
+        build
+                .setTitle("GPS Detection Services")
+                .setMessage("GPS is disabled in your device. Enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Enable GPS",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                activity.startActivity(i);
+                            }
+                        });
+        build.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = build.create();
+        alert.show();
+        return true;
+    }
+
+    /**
+     * @param map        object of the navigation fragment's
+     * @param activity   acquired with mapfragment.getActivity()
+     * @param gpsmanager object of LocationManager (from android and not google maps)
+     * @param gpsListen  object from interface LocationListener (from android and not google maps)
+     * @return true if the operation is a success (if permission is acquired && a location was succesfully retrieved
+     * <p>
+     * Method run to acquire user's location on a map, display it and update camera to it
+     * if permission NOT found, request the permission
+     * Enable GPS provider updates on locationmanager (requires permission check)
+     * Enable Google Map layer over map object to display user's location on the map
+     * Instantiate location with last known location of Network provider
+     * if no location found, return false, otherwise, map centers on user's location
+     */
+
+    public static boolean locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
+        if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            return false;
+        } else {
+            gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1500, 2, gpsListen); //Enable Network Provider updates
+            map.setMyLocationEnabled(true); //Enable Google Map layer over mapFragment
+            Location location = gpsmanager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); //Force Network provider due to GPS problems with different phone brands
+            if (location != null) {
+                double latitude = location.getLatitude(); //Getting latitude of the current location
+                double longitude = location.getLongitude(); // Getting longitude of the current location
+                LatLng myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 16f));//Camera Update method
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -414,9 +462,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         /**
          * ONLY FOR DEMO PURPOSES
          */
-        Building building = Campus.SGW.getBuilding(marker);
+        Building building = Campus.getBuilding(marker);
         if(building == null){
-            building = Campus.LOY.getBuilding(marker);
+            building = Campus.getBuilding(marker);
         }
         ((MainActivity) getActivity()).createToast(building.getShortName());
         String buildingName = building.getShortName();
@@ -535,76 +583,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    /**
-     * Build alert dialog on fragment's activity
-     * Shown iff (gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER) is false
-     * Prompt user to enable the GPS
-     * If user presses "Enable GPS",  minimize application and prompt user to GPS Android window
-     */
-
-    public static boolean alertGPS(final Activity activity) { //GPS detection method
-        AlertDialog.Builder build = new AlertDialog.Builder(activity);
-        build
-                .setTitle("GPS Detection Services")
-                .setMessage("GPS is disabled in your device. Enable it?")
-                .setCancelable(false)
-                .setPositiveButton("Enable GPS",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                activity.startActivity(i);
-                            }
-                        });
-        build.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = build.create();
-        alert.show();
-        return true;
-    }
-
-    /**
-     *
-     * @param map object of the navigation fragment's
-     * @param activity acquired with mapfragment.getActivity()
-     * @param gpsmanager object of LocationManager (from android and not google maps)
-     * @param gpsListen object from interface LocationListener (from android and not google maps)
-     * @return true if the operation is a success (if permission is acquired && a location was succesfully retrieved
-     *
-     * Method run to acquire user's location on a map, display it and update camera to it
-     * if permission NOT found, request the permission
-     * Enable GPS provider updates on locationmanager (requires permission check)
-     * Enable Google Map layer over map object to display user's location on the map
-     * Instantiate location with last known location of Network provider
-     * if no location found, return false, otherwise, map centers on user's location
-     *
-     */
-
-    public static boolean locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
-        if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return false;
-        } else {
-            gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1500, 2, gpsListen); //Enable Network Provider updates
-            map.setMyLocationEnabled(true); //Enable Google Map layer over mapFragment
-            Location location = gpsmanager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); //Force Network provider due to GPS problems with different phone brands
-            if (location != null) {
-                double latitude = location.getLatitude(); //Getting latitude of the current location
-                double longitude = location.getLongitude(); // Getting longitude of the current location
-                LatLng myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 16f));//Camera Update method
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-    }
-
-
     // Bug in API, onClose doesn't get called. Use this manually
     @Override
     public boolean onClose() {
@@ -640,12 +618,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 toolbarView.findViewById(R.id.search_location);
         LinearLayoutCompat destinationLayout = (LinearLayoutCompat)
                 toolbarView.findViewById(R.id.search_destination);
-        outdoorDirections.deleteDirection();
         if (location != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
             locationText.setText(location.getName());
-
             outdoorDirections.setOrigin(location.getMapCoordinates());
         }
         if (destination != null) {
@@ -653,8 +629,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     toolbarView.findViewById(R.id.search_destination_text);
             destinationText.setText(destination.getName());
             outdoorDirections.setDestination(destination.getMapCoordinates());
+        }
+
+        outdoorDirections.deleteDirection();
+        if (location != null && destination != null) {
             outdoorDirections.requestDirections();
         }
+
 
         if (searchState == SearchState.NONE) {
             locationLayout.setVisibility(View.GONE);
@@ -790,15 +771,22 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         return indoorMapVisible;
     }
 
-
-
-
     public boolean isOutdoorMapVisible() {
         return outdoorMapVisible;
     }
 
     public ViewType getViewType() {
         return viewType;
+    }
+
+
+    //Enum representing which map view is active
+    private enum ViewType {
+        INDOOR, OUTDOOR
+    }
+
+    private enum SearchState {
+        NONE, LOCATION, DESTINATION, LOCATION_DESTINATION
     }
 
 }

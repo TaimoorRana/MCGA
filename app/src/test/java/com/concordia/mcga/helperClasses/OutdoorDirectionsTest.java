@@ -1,6 +1,5 @@
 package com.concordia.mcga.helperClasses;
 
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;
@@ -8,11 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import static org.junit.Assert.*;
-
-/**
- * Created by taimoorrana on 2017-03-30.
- */
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(JUnit4.class)
 public class OutdoorDirectionsTest {
@@ -22,7 +18,7 @@ public class OutdoorDirectionsTest {
     @Before
     public void setUp(){
         outdoorDirections = OutdoorDirections.getInstance();
-        outdoorDirections.setSelectedTransportMode(TransportMode.BICYCLING);
+        outdoorDirections.setSelectedTransportMode(MCGATransportMode.BICYCLING);
         origin =  new LatLng(45.0, 47.0);
         outdoorDirections.setOrigin(origin);
         destination =  new LatLng(44.0, 46.0);

@@ -13,8 +13,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.models.Transportation;
 
@@ -74,7 +74,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         shuttleFAB.setOnClickListener(this);
 
         //Set initial transport type and icon
-        this.transportType = TransportMode.TRANSIT;
+        this.transportType = MCGATransportMode.TRANSIT;
         swapIcons(Transportation.TRANSIT.getIconID());
 
         return view;
@@ -91,23 +91,23 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
                 displayAllTransportTimes();
                 break;
             case R.id.walkFAB:
-                this.transportType = TransportMode.WALKING;
+                this.transportType = MCGATransportMode.WALKING;
                 swapIcons(Transportation.WALKING.getIconID());
                 break;
             case R.id.bikeFAB:
-                this.transportType = TransportMode.BICYCLING;
+                this.transportType = MCGATransportMode.BICYCLING;
                 swapIcons(Transportation.BICYCLING.getIconID());
                 break;
             case R.id.carFAB:
-                this.transportType = TransportMode.DRIVING;
+                this.transportType = MCGATransportMode.DRIVING;
                 swapIcons(Transportation.DRIVING.getIconID());
                 break;
             case R.id.publicTransportFAB:
-                this.transportType = TransportMode.TRANSIT;
+                this.transportType = MCGATransportMode.TRANSIT;
                 swapIcons(Transportation.TRANSIT.getIconID());
                 break;
             case R.id.shuttleFAB:
-                this.transportType = "shuttle";
+                this.transportType = MCGATransportMode.SHUTTLE;
                 swapIcons(Transportation.SHUTTLE.getIconID());
                 break;
         }
@@ -121,10 +121,10 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
      * Displays time for each transportation option
      */
     protected void displayAllTransportTimes() {
-        walkTextView.setText(outdoorDirections.getDuration(TransportMode.WALKING));
-        bikeTextView.setText(outdoorDirections.getDuration(TransportMode.BICYCLING));
-        carTextView.setText(outdoorDirections.getDuration(TransportMode.DRIVING));
-        publicTransportTextView.setText(outdoorDirections.getDuration(TransportMode.TRANSIT));
+        walkTextView.setText(outdoorDirections.getDuration(MCGATransportMode.WALKING));
+        bikeTextView.setText(outdoorDirections.getDuration(MCGATransportMode.BICYCLING));
+        carTextView.setText(outdoorDirections.getDuration(MCGATransportMode.DRIVING));
+        publicTransportTextView.setText(outdoorDirections.getDuration(MCGATransportMode.TRANSIT));
     }
 
 

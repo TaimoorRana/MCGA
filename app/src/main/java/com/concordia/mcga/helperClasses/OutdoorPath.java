@@ -1,9 +1,11 @@
 package com.concordia.mcga.helperClasses;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.TransitMode;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.constant.Unit;
 import com.akexorcist.googledirection.model.Direction;
@@ -11,8 +13,6 @@ import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
-import com.concordia.mcga.activities.R;
-import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -21,13 +21,16 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-
-class OutdoorDirection implements DirectionCallback {
-    private String serverKey;
+/**
+ * @Link{OutdoorPath} connects to the Google Directions API in out to find paths between POI
+ * Please refer to http://www.akexorcist.com/2015/12/google-direction-library-for-android-en.html
+ */
+public class OutdoorPath implements DirectionCallback {
     private final int transitPathWidth = 5;
     private final int transitPathColor = 0x80ed1026; // transparent red
     private final int walkingPathWidth = 3;
     private final int walkingPathColor = 0x801767e8; // transparent blue
+    private String serverKey;
     private LatLng origin, destination;
     private List<Polyline> polylines;
     private List<Step> steps;
@@ -35,9 +38,9 @@ class OutdoorDirection implements DirectionCallback {
     private Leg leg;
     private GoogleMap map;
     private Context context;
-    private String transportMode = TransportMode.BICYCLING;
+    private String transportMode;
 
-    public OutdoorDirection() {
+    public OutdoorPath() {
         polylines = new ArrayList<>();
         steps = new ArrayList<>();
         instructions = new ArrayList<>();
@@ -61,11 +64,7 @@ class OutdoorDirection implements DirectionCallback {
 
     @Override
     public void onDirectionFailure(Throwable t) {
-        try {
-            throw new MCGAPathFindingException(t.getMessage());
-        } catch (MCGAPathFindingException e) {
-            e.printStackTrace();
-        }
+        Log.e("Path Error:", "Unable to get directions");
     }
 
     /**
@@ -76,12 +75,18 @@ class OutdoorDirection implements DirectionCallback {
                 .from(origin)
                 .to(destination)
                 .transportMode(transportMode)
+                .transitMode(TransitMode.BUS)
+                .transitMode(TransitMode.SUBWAY)
                 .unit(Unit.METRIC)
                 .execute(this);
     }
 
-
+    /**
+     * Draws the path on the map
+     */
     public void drawPath() {
+
+
         ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline(
                 context,
                 steps,
@@ -99,8 +104,6 @@ class OutdoorDirection implements DirectionCallback {
      * sets origin and destionation to null
      */
     public void deleteDirection() {
-        origin = null;
-        destination = null;
         if (polylines != null) {
             for (Polyline polyline : polylines) {
                 polyline.remove();
@@ -112,7 +115,6 @@ class OutdoorDirection implements DirectionCallback {
      * @return list of instructions to get from origin to destination
      */
     public List<String> getInstructions() {
-        instructions.clear();
         for (Step step : steps) {
             instructions.add(step.getHtmlInstruction());
         }
@@ -122,7 +124,7 @@ class OutdoorDirection implements DirectionCallback {
     /**
      * @return Route total duration in "x hours y min" format
      */
-    public String getDuration(){
+    public String getDuration() {
         if (leg == null) return "";
         return leg.getDuration().getText();
     }
@@ -133,7 +135,9 @@ class OutdoorDirection implements DirectionCallback {
     }
 
     public void setOrigin(LatLng origin) {
-        this.origin = origin;
+        if (origin != null) {
+            this.origin = origin;
+        }
     }
 
     public LatLng getDestination() {
@@ -141,7 +145,9 @@ class OutdoorDirection implements DirectionCallback {
     }
 
     public void setDestination(LatLng destination) {
-        this.destination = destination;
+        if (destination != null) {
+            this.destination = destination;
+        }
     }
 
     public void setMap(GoogleMap map) {
@@ -167,7 +173,7 @@ class OutdoorDirection implements DirectionCallback {
 
     @Override
     public String toString() {
-        return "OutdoorDirection{" +
+        return "OutdoorPath{" +
                 "origin=" + origin +
                 ", destination=" + destination +
                 ", transportMode='" + transportMode + '\'' +
