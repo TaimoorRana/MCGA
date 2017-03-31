@@ -755,7 +755,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 if (groupPosition == POISearchAdapter.MY_LOCATION_GROUP_POSITION) {
-                    // TODO: setNavigationPOI on the location from LocateMe in this block
+                    POI myPOI = new POI(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen), getString(R.string.my_location_string));
+                    setNavigationPOI(myPOI);
+                    onClose();
                     return true;
                 }
                 return false;
