@@ -104,9 +104,7 @@ public class OutdoorDirections {
      * Deletes all previous path, if any exists and draws a path for the selected mode of transportation
      */
     public void drawPathForSelectedTransportMode() {
-        for (OutdoorPath outdoorPath : outdoorPathList) {
-            outdoorPath.deleteDirection();
-        }
+        deleteDirection();
         selectedOutdoorPath.drawPath();
     }
 
