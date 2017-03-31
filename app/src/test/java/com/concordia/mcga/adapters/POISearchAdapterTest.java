@@ -81,19 +81,19 @@ public class POISearchAdapterTest {
     public void checkFilter() throws Exception {
         searchAdapter.filterData("H");
 
-        assertEquals(searchAdapter.getChildrenCount(0), 1);
-        assertNotNull(searchAdapter.getGroup(0));
-        assertEquals(searchAdapter.getChild(0, 0), fakeH);
+        assertEquals(searchAdapter.getChildrenCount(1), 1);
+        assertNotNull(searchAdapter.getGroup(1));
+        assertEquals(searchAdapter.getChild(1, 0), fakeH);
 
-        assertEquals(searchAdapter.getGroupCount(), 1);
+        assertEquals(searchAdapter.getGroupCount(), 2);
 
         searchAdapter.filterData("X");
 
-        assertEquals(searchAdapter.getChildrenCount(0), 1);
-        assertNotNull(searchAdapter.getGroup(0));
-        assertEquals(searchAdapter.getChild(0, 0), fakeX);
+        assertEquals(searchAdapter.getChildrenCount(1), 1);
+        assertNotNull(searchAdapter.getGroup(1));
+        assertEquals(searchAdapter.getChild(1, 0), fakeX);
 
-        assertEquals(searchAdapter.getGroupCount(), 1);
+        assertEquals(searchAdapter.getGroupCount(), 2);
 
         searchAdapter.filterData("");
         assertEquals(searchAdapter.getGroupCount(), 0);
@@ -102,14 +102,14 @@ public class POISearchAdapterTest {
     @Test
     public void checkViews() throws Exception {
         searchAdapter.filterData("SGW");
-        View view = searchAdapter.getGroupView(0, false, null, null);
+        View view = searchAdapter.getGroupView(1, false, null, null);
         assertNotNull(view);
 
         searchAdapter.filterData("LOY");
-        view = searchAdapter.getGroupView(0, false, null, null);
+        view = searchAdapter.getGroupView(1, false, null, null);
         assertNotNull(view);
 
-        view = searchAdapter.getChildView(0, 0, false, null, null);
+        view = searchAdapter.getChildView(1, 0, false, null, null);
         assertNotNull(view);
     }
 }
