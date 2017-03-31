@@ -2,13 +2,10 @@ package com.concordia.mcga.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
