@@ -163,13 +163,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     viewSwitchButton.setText("GO INDOORS");
                 }
                 onClose();
-
-                if(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen)){
-                    Log.d("GPS Locator","Successful");}
-                else {
-                    Log.d("GPS Locator", "Fail");
-                }
-
+                //Camera Movement
+                camMove(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen));
             }
         });
 
@@ -577,10 +572,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      *
      */
 
-    public static boolean locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
+    public LatLng locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
         if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return false;
+            return null;
         } else {
             gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1500, 2, gpsListen); //Enable Network Provider updates
             map.setMyLocationEnabled(true); //Enable Google Map layer over mapFragment
@@ -589,13 +584,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 double latitude = location.getLatitude(); //Getting latitude of the current location
                 double longitude = location.getLongitude(); // Getting longitude of the current location
                 LatLng myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 16f));//Camera Update method
-                return true;
+                return myPosition;
             }
-            else{
-                    return false;
-            }
+            else
+                return null;
         }
+    }
+
+    public void camMove(LatLng MyPos){
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(MyPos, 16f));//Camera Update method
     }
 
 
