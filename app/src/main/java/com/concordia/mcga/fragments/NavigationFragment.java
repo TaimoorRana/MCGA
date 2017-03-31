@@ -637,20 +637,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         if (location != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
-            if (location instanceof Building) {
-                locationText.setText(((Building) location).getShortName());
-            } else {
-                locationText.setText(location.getName());
-            }
+            setDisplayName(location, locationText);
         }
         if (destination != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
-            if (destination instanceof Building) {
-                destinationText.setText(((Building) destination).getShortName());
-            } else {
-                destinationText.setText(destination.getName());
-            }
+            setDisplayName(destination, destinationText);
         }
 
         if (searchState == SearchState.NONE) {
@@ -687,6 +679,21 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             for (int i = 0; i < poiSearchAdapter.getGroupCount(); i++) {
                 searchList.expandGroup(i);
             }
+        }
+    }
+
+    /**
+     * Sets the display name for a label from a POI.
+     * If the POI is a building, use the short name instead of the long one ("H" vs. "Hall")
+     * Else, use the full POI name
+     * @param poi Point of interest to display on the text view
+     * @param textView Text view to set text on
+     */
+    private void setDisplayName(POI poi, AppCompatTextView textView) {
+        if (poi instanceof Building) {
+            textView.setText(((Building) poi).getShortName());
+        } else {
+            textView.setText(poi.getName());
         }
     }
 
