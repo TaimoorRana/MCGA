@@ -13,34 +13,37 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
-import com.concordia.mcga.models.Escalator;
 import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.Room;
 import com.concordia.mcga.utilities.pathfinding.MultiMapPathFinder;
 import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
+import com.jcabi.aspects.Timeable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class IndoorMapFragment extends Fragment {
 
     //Components
     private WebView leafletView;
     private LinearLayout floorButtonContainer;
+    private ProgressBar pathProgressBar;
 
     //State
     private boolean pageLoaded = false;
-    private boolean pathsDrawn = false;
+    private boolean pathGenerating = false;
     private Map<Integer, Floor> floorsLoaded;
     private Floor currentFloor;
     private Map<Floor, List<IndoorMapTile>> currentPathTiles;
@@ -73,6 +76,10 @@ public class IndoorMapFragment extends Fragment {
         //Floor Select Spinner
         floorButtonContainer = (LinearLayout) view.findViewById(R.id.floorButtonContainer);
 
+        //Progress Bar
+        pathProgressBar = (ProgressBar) view.findViewById(R.id.pathProgressBar);
+        pathProgressBar.setVisibility(View.GONE);
+
         //Init Attributes
         indoorPoiStack = new ArrayList<>();
         currentPathTiles = new HashMap<>();
@@ -83,74 +90,34 @@ public class IndoorMapFragment extends Fragment {
         return view;
     }
 
-    private void test() {
-        Building hBuilding = null;
-        for (Building b : Campus.SGW.getBuildings()) {
-            if (b.getShortName().equalsIgnoreCase("h")) {
-                hBuilding = b;
-            }
-        }
-        for (Integer floorNum : hBuilding.getFloorMaps().keySet()) {
-            Floor floor = hBuilding.getFloorMaps().get(floorNum);
-            for (Escalator escalator : floor.getEscalators()) {
-                Log.d("Escalator", String.valueOf(escalator.getFloorNumber()));
-            }
-        }
-    }
-
     public void generatePath(final IndoorPOI start, final IndoorPOI dest) {
+        Thread generatePathThread = null;
+
+        if (!pathGenerating) {
+            generatePathThread = new Thread(new GeneratePath(start, dest));
+        }
+
+        generatePathThread.start();
+    }
+
+    public void drawCurrentWalkablePath() {
+        pathGenerating = false;
         leafletView.post(new Runnable() {
             @Override
             public void run() {
-                ArrayList<IndoorMapTile> pathTilesJunctions = null;
-                MultiMapPathFinder pf = new MultiMapPathFinder();
-
-                try {
-                    currentPathTiles = pf.shortestPath(start, dest);
-                } catch (MCGAPathFindingException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    pathTilesJunctions = (ArrayList<IndoorMapTile>) SingleMapPathFinder.shortestPathJunctions(currentPathTiles.get(currentFloor));
-
-                    for (IndoorMapTile tile : pathTilesJunctions) {
-                        Log.d("JCT: ", tile.toString());
-                    }
-
-                    if (pageLoaded)
-                        leafletView.evaluateJavascript("drawWalkablePath(" + SingleMapPathFinder.toJSONArray(pathTilesJunctions).toString() + ")", null);
-                } catch (MCGAPathFindingException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    public void goToFloor() {
-
-    }
-
-    public void onFloorChange() {
-        leafletView.post(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<IndoorMapTile> pathTilesJunctions = null;
                 if (currentPathTiles.get(currentFloor) != null) {
-                    try {
-                        pathTilesJunctions = (ArrayList<IndoorMapTile>) SingleMapPathFinder.shortestPathJunctions(currentPathTiles.get(currentFloor));
-
-                        if (pageLoaded)
-                            leafletView.evaluateJavascript("drawWalkablePath(" + SingleMapPathFinder.toJSONArray(pathTilesJunctions).toString() + ")", null);
-                    } catch (MCGAPathFindingException e) {
-                        e.printStackTrace();
-                    }
+                    if (pageLoaded)
+                        leafletView.evaluateJavascript("drawWalkablePath(" + SingleMapPathFinder.toJSONArray(currentPathTiles.get(currentFloor)).toString() + ")", null);
                 } else {
                     if (pageLoaded)
                         leafletView.evaluateJavascript("clearPathLayers()", null);
                 }
             }
         });
+    }
+
+    public void onFloorChange() {
+        drawCurrentWalkablePath();
     }
 
     public void initializeHBuilding() {
@@ -230,6 +197,7 @@ public class IndoorMapFragment extends Fragment {
     }
 
     public void pushRoom(Room room) {
+        boolean doAdd = true;
         if (indoorPoiStack.size() == 2) {
             currentPathTiles.clear();
             indoorPoiStack.clear();
@@ -243,14 +211,106 @@ public class IndoorMapFragment extends Fragment {
 
         if (indoorPoiStack.size() == 0) {
             Toast.makeText(getContext(), "Start Room: " + room.getName(), Toast.LENGTH_SHORT).show();
-        } else if (indoorPoiStack.size() == 1) {
+        } else if (indoorPoiStack.size() == 1 && !indoorPoiStack.get(0).equals(room)) {
             Toast.makeText(getContext(), "Dest Room: " + room.getName(), Toast.LENGTH_SHORT).show();
+        } else {
+            doAdd = false;
         }
 
-        indoorPoiStack.add(room);
+        if (doAdd)
+            indoorPoiStack.add(room);
 
         if (indoorPoiStack.size() == 2) {
-            generatePath(indoorPoiStack.get(0), indoorPoiStack.get(1));
+            IndoorPOI startTemp = indoorPoiStack.get(0);
+            IndoorPOI endTemp = indoorPoiStack.get(1);
+            generatePath(startTemp, endTemp);
+        }
+    }
+
+
+    public void setCurrentPathTiles(Map<Floor, List<IndoorMapTile>> currentPathTiles) {
+        this.currentPathTiles = currentPathTiles;
+    }
+
+    private void showProgressBar(boolean isVisible) {
+        if (isVisible) {
+            pathProgressBar.post(new Runnable() {
+                @Override
+                public void run() {
+                    pathProgressBar.setVisibility(View.VISIBLE);
+                }
+            });
+        } else {
+            pathProgressBar.post(new Runnable() {
+                @Override
+                public void run() {
+                    pathProgressBar.setVisibility(View.GONE);
+                }
+            });
+        }
+    }
+
+
+    private class GeneratePath implements Runnable {
+
+        private final IndoorPOI start;
+        private final IndoorPOI dest;
+
+        public GeneratePath(IndoorPOI start, IndoorPOI dest) {
+            this.start = start;
+            this.dest = dest;
+            pathGenerating = true;
+
+            showProgressBar(true);
+            populateTiledMaps();
+        }
+
+        public void populateTiledMaps() {
+            if (this.start.getFloor().equals(this.dest.getFloor())) {
+                this.start.getFloor().populateTiledMap();
+            } else {
+                this.start.getFloor().populateTiledMap();
+                this.dest.getFloor().populateTiledMap();
+            }
+
+        }
+
+        public void depopulateTiledMaps() {
+            if (this.start.getFloor().equals(this.dest.getFloor())) {
+                this.start.getFloor().clearTiledMap();
+            } else {
+                this.start.getFloor().clearTiledMap();
+                this.dest.getFloor().clearTiledMap();
+            }
+
+        }
+
+        @Override
+        @Timeable(limit = 6, unit = TimeUnit.SECONDS)
+        public void run() {
+            MultiMapPathFinder pf = new MultiMapPathFinder();
+            Map<Floor, List<IndoorMapTile>> pathTiles;
+            Map<Floor, List<IndoorMapTile>> pathTilesJunctions = new HashMap<>();
+            try {
+                pathTiles = pf.shortestPath(start, dest);
+
+                for (Map.Entry<Floor, List<IndoorMapTile>> pair : pathTiles.entrySet()) {
+                    pathTilesJunctions.put(pair.getKey(), SingleMapPathFinder.shortestPathJunctions(pair.getValue()));
+                }
+
+            } catch (MCGAPathFindingException e) {
+                e.printStackTrace();
+            }
+            setCurrentPathTiles(pathTilesJunctions);
+
+            Log.d("Thread", "Finished generating path");
+
+            pathTiles = null;
+            pathTilesJunctions = null;
+            depopulateTiledMaps();
+            showProgressBar(false);
+            drawCurrentWalkablePath();
         }
     }
 }
+

@@ -112,6 +112,7 @@ public class Building extends POI implements Observer {
                 addConnectedPOI(ConnectedPOIFactory.createConnectedPOI(res, this));
             }
         }
+        connectedPoiRetrieved = true;
         res.close();
     }
 

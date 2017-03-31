@@ -1,5 +1,10 @@
 package com.concordia.mcga.models;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.concordia.mcga.exceptions.MCGADatabaseException;
+import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.utilities.pathfinding.TiledMap;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -10,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Floor {
+    private final static int X_COORDINATE_INDEX = 2, Y_COORDINATE_INDEX = 3,
+            MAP_HEIGHT_INDEX = 2, MAP_WIDTH_INDEX = 3;
     private Building building;
     private TiledMap map;
     private int floorNumber;
@@ -95,6 +102,58 @@ public class Floor {
 
     public void addEscalator(Escalator escalator) {
         escalators.add(escalator);
+    }
+
+    public void populateTiledMap() {
+        SQLiteDatabase db;
+        TiledMap map = null;
+        try {
+            db = DatabaseConnector.getInstance().getDb();
+            map = createTiledMap(building, floorNumber, db);
+            insertWalkablePaths(building, floorNumber, db, map);
+
+        } catch (MCGADatabaseException e) {
+            e.printStackTrace();
+        }
+
+        setMap(map);
+    }
+
+    public void clearTiledMap() {
+        map = null;
+    }
+
+
+    private void insertWalkablePaths(Building building, int floorNumber, SQLiteDatabase db,
+                                     TiledMap map) throws MCGADatabaseException {
+        Cursor walkablePathCursor = db
+                .rawQuery(
+                        "SELECT building, floor, x_coordinate, y_coordinate FROM walkable_paths WHERE building = ? AND floor = ?",
+                        new String[]{building.getShortName(), String.valueOf(floorNumber)});
+
+        while (walkablePathCursor.moveToNext()) {
+            map.makeWalkable(new IndoorMapTile(walkablePathCursor.getInt(X_COORDINATE_INDEX),
+                    walkablePathCursor.getInt(Y_COORDINATE_INDEX)));
+        }
+        walkablePathCursor.close();
+    }
+
+    private TiledMap createTiledMap(Building building, int floorNumber, SQLiteDatabase db)
+            throws MCGADatabaseException {
+        Cursor indoorMapCursor = db
+                .rawQuery(
+                        "SELECT building, floor, map_height, map_width FROM indoor_maps WHERE building = ? AND floor = ?",
+                        new String[]{building.getShortName(), String.valueOf(floorNumber)});
+        TiledMap map;
+        if (indoorMapCursor.moveToNext()) {
+            map = new TiledMap(indoorMapCursor.getInt(MAP_WIDTH_INDEX),
+                    indoorMapCursor.getInt(MAP_HEIGHT_INDEX));
+            indoorMapCursor.close();
+        } else {
+            indoorMapCursor.close();
+            throw new MCGADatabaseException("No Floor Record Found");
+        }
+        return map;
     }
 
     @Override

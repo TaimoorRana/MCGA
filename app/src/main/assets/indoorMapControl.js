@@ -107,7 +107,6 @@ function drawWalkablePath(pointArray) {
 }
 
 function addFloorRooms(roomArray) {
-	console.log(JSON.stringify(roomArray));
 
 	for (var i = 0; i < roomArray.length; i++) {
 		var room = roomArray[i];

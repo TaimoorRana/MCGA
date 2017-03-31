@@ -30,6 +30,15 @@
             </LinearLayout>
         </ScrollView>
 
+        <ProgressBar
+            android:id="@+id/pathProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:theme="@style/PathProgressBar">
+
+        </ProgressBar>
+
     </RelativeLayout>
 
 
