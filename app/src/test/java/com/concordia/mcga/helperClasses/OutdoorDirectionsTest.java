@@ -17,7 +17,7 @@ public class OutdoorDirectionsTest {
 
     @Before
     public void setUp(){
-        outdoorDirections = OutdoorDirections.getInstance();
+        outdoorDirections = new OutdoorDirections();
         outdoorDirections.setSelectedTransportMode(MCGATransportMode.BICYCLING);
         origin =  new LatLng(45.0, 47.0);
         outdoorDirections.setOrigin(origin);

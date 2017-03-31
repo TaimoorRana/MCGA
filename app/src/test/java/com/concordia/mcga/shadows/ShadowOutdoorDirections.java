@@ -1,6 +1,6 @@
 package com.concordia.mcga.shadows;
 
-import com.akexorcist.googledirection.constant.TransportMode;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
 
 import org.robolectric.annotation.Implementation;
@@ -15,13 +15,13 @@ public class ShadowOutdoorDirections {
     @Implementation
     public String getDuration(String transportMode) {
         switch (transportMode) {
-            case TransportMode.DRIVING:
+            case MCGATransportMode.DRIVING:
                 return "1 minute";
-            case TransportMode.TRANSIT:
+            case MCGATransportMode.TRANSIT:
                 return "2 minutes";
-            case TransportMode.BICYCLING:
+            case MCGATransportMode.BICYCLING:
                 return "3 minutes";
-            case TransportMode.WALKING:
+            case MCGATransportMode.WALKING:
                 return "4 minutes";
             default:
                 return "";
