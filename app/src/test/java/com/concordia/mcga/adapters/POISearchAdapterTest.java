@@ -8,6 +8,8 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.IndoorMapTile;
+import com.concordia.mcga.models.Room;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -18,6 +20,8 @@ import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -29,16 +33,22 @@ public class POISearchAdapterTest {
     private POISearchAdapter searchAdapter;
     private Campus fakeSgw, fakeLoyola;
     private Building fakeH, fakeX;
+    private int fakeHNum, fakeSNum;
+    private View fakeEmptyView;
 
     @Before
     public void setUp() throws Exception {
         // Fake context
         Context context;
 
+        // Fake rooms
+        Room fakeR, fakeS;
+
         context = Mockito.mock(Context.class);
         LayoutInflater fakeInflater = Mockito.mock(LayoutInflater.class);
         View fakeGroupView = Mockito.mock(View.class);
         View fakeChildView = Mockito.mock(View.class);
+        fakeEmptyView = Mockito.mock(View.class);
         CircleImageView fakeImage = Mockito.mock(CircleImageView.class);
         TextView fakeText = Mockito.mock(TextView.class);
 
@@ -48,6 +58,7 @@ public class POISearchAdapterTest {
 
         when(fakeInflater.inflate(R.layout.poi_search_group_row, null)).thenReturn(fakeGroupView);
         when(fakeInflater.inflate(R.layout.poi_search_child_row, null)).thenReturn(fakeChildView);
+        when(fakeInflater.inflate(R.layout.poi_search_empty_row, null)).thenReturn(fakeEmptyView);
         when(context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).thenReturn(fakeInflater);
 
         // Use a bit of reflection to get access to the private constructor
@@ -62,6 +73,17 @@ public class POISearchAdapterTest {
         fakeLoyola = constructor.newInstance(new LatLng(0.0, 0.0), "FakeLOY", "FLOY");
         fakeX = new Building(new LatLng(0.0, 0.0), "FakeX", "FX", new MarkerOptions());
         fakeLoyola.addBuilding(fakeX);
+
+        fakeHNum = 123;
+        fakeSNum = 456;
+        fakeR = new Room(new LatLng(0.0, 0.0), "FakeR", new IndoorMapTile(0, 0), fakeHNum);
+        fakeS = new Room(new LatLng(0.0, 0.0), "FakeSRoom", new IndoorMapTile(0, 0), fakeSNum);
+
+        // Use reflection to add room to building
+        Field field = Building.class.getDeclaredField("rooms");
+        field.setAccessible(true);
+        field.set(fakeH, Arrays.asList(fakeR));
+        field.set(fakeX, Arrays.asList(fakeS));
 
         searchAdapter = new POISearchAdapter(context, fakeSgw, fakeLoyola);
     }
@@ -81,19 +103,19 @@ public class POISearchAdapterTest {
     public void checkFilter() throws Exception {
         searchAdapter.filterData("H");
 
-        assertEquals(searchAdapter.getChildrenCount(0), 1);
-        assertNotNull(searchAdapter.getGroup(0));
-        assertEquals(searchAdapter.getChild(0, 0), fakeH);
+        assertEquals(searchAdapter.getChildrenCount(1), 1);
+        assertNotNull(searchAdapter.getGroup(1));
+        assertEquals(searchAdapter.getChild(1, 0), fakeH);
 
-        assertEquals(searchAdapter.getGroupCount(), 1);
+        assertEquals(searchAdapter.getGroupCount(), 2);
 
         searchAdapter.filterData("X");
 
-        assertEquals(searchAdapter.getChildrenCount(0), 1);
-        assertNotNull(searchAdapter.getGroup(0));
-        assertEquals(searchAdapter.getChild(0, 0), fakeX);
+        assertEquals(searchAdapter.getChildrenCount(1), 1);
+        assertNotNull(searchAdapter.getGroup(1));
+        assertEquals(searchAdapter.getChild(1, 0), fakeX);
 
-        assertEquals(searchAdapter.getGroupCount(), 1);
+        assertEquals(searchAdapter.getGroupCount(), 2);
 
         searchAdapter.filterData("");
         assertEquals(searchAdapter.getGroupCount(), 0);
@@ -102,14 +124,48 @@ public class POISearchAdapterTest {
     @Test
     public void checkViews() throws Exception {
         searchAdapter.filterData("SGW");
-        View view = searchAdapter.getGroupView(0, false, null, null);
+        View view = searchAdapter.getGroupView(1, false, null, null);
         assertNotNull(view);
 
         searchAdapter.filterData("LOY");
-        view = searchAdapter.getGroupView(0, false, null, null);
+        view = searchAdapter.getGroupView(1, false, null, null);
         assertNotNull(view);
 
-        view = searchAdapter.getChildView(0, 0, false, null, null);
+        view = searchAdapter.getChildView(1, 0, false, null, null);
         assertNotNull(view);
+    }
+
+    @Test
+    public void checkRooms() throws Exception {
+        searchAdapter.filterData("FakeR");
+        View view = searchAdapter.getGroupView(1, false, null, null);
+        assertNotNull(view);
+
+        Room room = (Room)searchAdapter.getChild(1, 0);
+        assertEquals(room.getRoomNumber(), fakeHNum);
+
+        searchAdapter.filterData("FakeSRoom");
+        View view2 = searchAdapter.getGroupView(1, false, null, null);
+        assertNotNull(view2);
+
+        Room room2 = (Room)searchAdapter.getChild(1, 0);
+        assertEquals(room2.getRoomNumber(), fakeSNum);
+
+    }
+
+    @Test
+    public void checkMyLocationItem() throws Exception {
+        searchAdapter.filterData("location");
+        View view = searchAdapter.getGroupView(0, false, null, null);
+        assertNotNull(view);
+
+        View placeholderView = searchAdapter.getChildView(0, 0, false, null, null);
+        assertEquals(placeholderView, fakeEmptyView);
+    }
+
+    @Test
+    public void checkIsChildSelectable() throws Exception {
+        boolean selectable = searchAdapter.isChildSelectable(0, 0);
+        assertTrue(selectable);
     }
 }
