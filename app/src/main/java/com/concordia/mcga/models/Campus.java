@@ -73,26 +73,28 @@ public class Campus extends POI {
     }
 
     /**
-     * @param polygon polygon object to search for
-     * @return return the building which contains this polygon
-     */
-    public Building getBuilding(Polygon polygon){
-        for (Building building : buildings) {
-            if(building.getPolygon().getId().equalsIgnoreCase(polygon.getId()))
-                return building;
-        }
-        return null;
-    }
-
-    /**
      *
-     * @param marker marker object to search for
-     * @return return the building which contains this marker
+     * @param object can be a marker object or polygon object to search for
+     * @return return the building which contains this marker or polygon
      */
-    public Building getBuilding(Marker marker){
-        for (Building building : buildings) {
-            if(building.getMarker().getId().equalsIgnoreCase(marker.getId()))
-                return building;
+    public static Building getBuilding(Object object) {
+        List<Building> allBuildings = new ArrayList<>(Campus.SGW.getBuildings());
+        allBuildings.addAll(Campus.LOY.getBuildings());
+
+        if (object instanceof Marker) {
+            Marker marker = (Marker) object;
+            for (Building building : allBuildings) {
+                if (building.getMarker().getId().equalsIgnoreCase(marker.getId()))
+                    return building;
+            }
+        }
+
+        if (object instanceof Polygon) {
+            Polygon polygon = (Polygon) object;
+            for (Building building : allBuildings) {
+                if (building.getPolygon().getId().equalsIgnoreCase(polygon.getId()))
+                    return building;
+            }
         }
         return null;
     }

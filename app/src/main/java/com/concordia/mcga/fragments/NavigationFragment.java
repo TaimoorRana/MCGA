@@ -1,9 +1,9 @@
 package com.concordia.mcga.fragments;
-import com.concordia.mcga.activities.MainActivity;
+
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,10 +18,10 @@ import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatImageButton;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatImageButton;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -36,9 +36,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
+import com.akexorcist.googledirection.constant.TransportMode;
+import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.helperClasses.Observer;
+import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
@@ -74,6 +77,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     //Outdoor Map
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
+    //Outdoor direction
+    private OutdoorDirections outdoorDirections = new OutdoorDirections();
     private LocationListener gpsListen = new LocationListener() {
         public void onLocationChanged(Location location) {
             //Method called when new location is found by the network
@@ -92,25 +97,18 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
     private Map<String, Object> multiBuildingMap = new HashMap<>();
-
     //State
     private ViewType viewType;
     private Campus currentCampus = Campus.SGW;
-
     private boolean indoorMapVisible = false;
     private boolean outdoorMapVisible = false;
-
-
     //Fragments
     private LinearLayoutCompat parentLayout;
     private SupportMapFragment mapFragment;
     private TransportButtonFragment transportButtonFragment;
     private IndoorMapFragment indoorMapFragment;
-
     private BottomSheetDirectionsFragment directionsFragment;
     private BottomSheetBuildingInfoFragment buildingInfoFragment;
-
-
     //View Components
     private View rootView;
     private View toolbarView;
@@ -119,14 +117,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private FloatingActionButton mapCenterButton;
     //GPS attributes
     private LocationManager gpsmanager; //LocationManager instance to check gps activity
-
-
     // Search components
     private SearchView search;
     private POISearchAdapter poiSearchAdapter;
     private ExpandableListView searchList;
     private Dialog searchDialog;
-
     private POI location;
     private POI destination;
     private SearchState searchState;
@@ -198,7 +193,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         //Set initial view type
         viewType = ViewType.OUTDOOR;
-        
+
         //Hide Fragments
 
         AppCompatImageButton locationCancelButton;
@@ -300,6 +295,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         //Settings
         map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.setIndoorEnabled(false);
+
+        //initializing outdoor directions
+        transportButtonFragment.setOutdoorDirections(outdoorDirections);
+        outdoorDirections.setContext(getActivity().getApplicationContext());
+        outdoorDirections.setServerKey(getResources().getString(R.string.google_maps_key));
+        outdoorDirections.setMap(map);
+        outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
 
         //Map Customization
         applyCustomGoogleMapsStyle();
@@ -374,9 +377,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         /**
          * ONLY FOR DEMO PURPOSES
          */
-        Building building = Campus.SGW.getBuilding(polygon);
-        if(building == null){
-            building = Campus.LOY.getBuilding(polygon);
+        Building building = Campus.getBuilding(polygon);
+        if (building == null) {
+            building = Campus.getBuilding(polygon);
         }
         ((MainActivity) getActivity()).createToast(building.getShortName());
         String buildingName = building.getShortName();
@@ -403,19 +406,18 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         /**
          * ONLY FOR DEMO PURPOSES
          */
-        Building building = Campus.SGW.getBuilding(marker);
+        Building building = Campus.getBuilding(marker);
         if(building == null){
-            building = Campus.LOY.getBuilding(marker);
+            building = Campus.getBuilding(marker);
         }
         ((MainActivity) getActivity()).createToast(building.getShortName());
         String buildingName = building.getShortName();
         buildingInfoFragment.setBuildingInformation(buildingName, "address", "7:00", "23:00");
         buildingInfoFragment.clear();
         // TEMPORARY
-        if (buildingName.equals("H")){
+        if (buildingName.equals("H")) {
             buildingInfoFragment.displayHBuildingAssociations();
-        }
-        else if (buildingName.equals("JM")){
+        } else if (buildingName.equals("JM")) {
             buildingInfoFragment.displayMBBuildingAssociations();
         }
         buildingInfoFragment.collapse();
@@ -427,21 +429,18 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * add markers and polygons overlay for each building
      */
     private void addBuildingMarkersAndPolygons() {
-        final List<Building> sgwBuildings = Campus.SGW.getBuildings();
-        final List<Building> loyBuildings = Campus.LOY.getBuildings();
+        List<Building> allBuildings = new ArrayList<>();
+        allBuildings.addAll(Campus.SGW.getBuildings());
+        allBuildings.addAll(Campus.LOY.getBuildings());
 
-        for (Building building : sgwBuildings) {
+        for (Building building : allBuildings) {
             createBuildingMarkersAndPolygonOverlay(building);
         }
 
-        for (Building building : loyBuildings) {
-            createBuildingMarkersAndPolygonOverlay(building);
-        }
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
-            setBottomSheetContent(polygon);
-
+                setBottomSheetContent(polygon);
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -592,7 +591,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 return true;
             }
             else{
-                    return false;
+                return false;
             }
         }
     }
@@ -633,17 +632,28 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 toolbarView.findViewById(R.id.search_location);
         LinearLayoutCompat destinationLayout = (LinearLayoutCompat)
                 toolbarView.findViewById(R.id.search_destination);
-
         if (location != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
             setDisplayName(location, locationText);
+            outdoorDirections.setOrigin(location.getMapCoordinates());
+        }else{
+            outdoorDirections.setOrigin(null);
         }
         if (destination != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
             setDisplayName(destination, destinationText);
+            outdoorDirections.setDestination(destination.getMapCoordinates());
+        }else{
+            outdoorDirections.setDestination(null);
         }
+
+        outdoorDirections.deleteDirection();
+        if (location != null && destination != null) {
+            outdoorDirections.requestDirections();
+        }
+
 
         if (searchState == SearchState.NONE) {
             locationLayout.setVisibility(View.GONE);
