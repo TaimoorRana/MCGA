@@ -632,16 +632,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         if (location != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
-            locationText.setText(location.getName());
+            setDisplayName(location, locationText);
             outdoorDirections.setOrigin(location.getMapCoordinates());
         }else{
             outdoorDirections.setOrigin(null);
         }
-
         if (destination != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
-            destinationText.setText(destination.getName());
+            setDisplayName(destination, destinationText);
             outdoorDirections.setDestination(destination.getMapCoordinates());
         }else{
             outdoorDirections.setDestination(null);
@@ -657,17 +656,21 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter location...");
+            search.setVisibility(View.VISIBLE);
         } else if (searchState == SearchState.LOCATION) {
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter destination...");
+            search.setVisibility(View.VISIBLE);
         } else if (searchState == SearchState.DESTINATION) {
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setQueryHint("Enter location...");
+            search.setVisibility(View.VISIBLE);
         } else { // searchState == SearchState.LOCATION_DESTINATION
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.VISIBLE);
+            search.setVisibility(View.GONE);
             search.setQueryHint("Search...");
         }
     }
@@ -685,6 +688,21 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     searchList.expandGroup(i);
                 }
             }
+        }
+    }
+
+    /**
+     * Sets the display name for a label from a POI.
+     * If the POI is a building, use the short name instead of the long one ("H" vs. "Hall")
+     * Else, use the full POI name
+     * @param poi Point of interest to display on the text view
+     * @param textView Text view to set text on
+     */
+    private void setDisplayName(POI poi, AppCompatTextView textView) {
+        if (poi instanceof Building) {
+            textView.setText(((Building) poi).getShortName());
+        } else {
+            textView.setText(poi.getName());
         }
     }
 
