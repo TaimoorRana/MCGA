@@ -5,9 +5,9 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/groupImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:paddingStart="30dp"
+        android:paddingLeft="5dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         />
 
     <TextView
@@ -15,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
+        android:layout_gravity="center_vertical"
         android:text="@string/app_name"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold"/>
