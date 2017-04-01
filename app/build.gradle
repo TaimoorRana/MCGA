@@ -41,6 +41,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'com.akexorcist:googledirectionlibrary:1.0.4'
     compile 'org.apache.commons:commons-lang3:3.5'
     compile 'com.google.android.gms:play-services:9.6.0'
     testCompile 'junit:junit:4.12'
