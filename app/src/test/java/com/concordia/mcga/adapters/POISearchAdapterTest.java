@@ -34,13 +34,15 @@ public class POISearchAdapterTest {
     private Campus fakeSgw, fakeLoyola;
     private Building fakeH, fakeX;
     private int fakeHNum, fakeSNum;
-    private Room fakeR, fakeS;
     private View fakeEmptyView;
 
     @Before
     public void setUp() throws Exception {
         // Fake context
         Context context;
+
+        // Fake rooms
+        Room fakeR, fakeS;
 
         context = Mockito.mock(Context.class);
         LayoutInflater fakeInflater = Mockito.mock(LayoutInflater.class);
