@@ -16,40 +16,35 @@ public class OutdoorDirectionsTest {
     private LatLng origin, destination;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         outdoorDirections = new OutdoorDirections();
         outdoorDirections.setSelectedTransportMode(MCGATransportMode.BICYCLING);
-        origin =  new LatLng(45.0, 47.0);
+        origin = new LatLng(45.0, 47.0);
         outdoorDirections.setOrigin(origin);
-        destination =  new LatLng(44.0, 46.0);
+        destination = new LatLng(44.0, 46.0);
         outdoorDirections.setDestination(destination);
         outdoorDirections.requestDirections();
     }
 
     @Test
-    public void createOutdoorDirectionsTest(){
+    public void createOutdoorDirectionsTest() {
         assertNotNull(outdoorDirections);
     }
 
     @Test
-    public void setSelectedTransportModeTest(){
-        assertEquals("bicycling",outdoorDirections.getSelectedTransportMode());
+    public void setSelectedTransportModeTest() {
+        assertEquals("bicycling", outdoorDirections.getSelectedTransportMode());
     }
 
     @Test
-    public void setOriginTest(){
-        assertEquals(origin,outdoorDirections.getDirectionObject().getOrigin());
+    public void setOriginTest() {
+        assertEquals(origin, outdoorDirections.getDirectionObject().getOrigin());
     }
 
     @Test
-    public void setDestinationTest(){
-        assertEquals(destination,outdoorDirections.getDirectionObject().getDestination());
+    public void setDestinationTest() {
+        assertEquals(destination, outdoorDirections.getDirectionObject().getDestination());
     }
-
-
-
-
-
 
 
 }

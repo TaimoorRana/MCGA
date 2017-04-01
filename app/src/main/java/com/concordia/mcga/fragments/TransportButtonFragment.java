@@ -253,7 +253,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     /**
-     *  Disables the public transport option by greying it out and disable any click activity
+     * Disables the public transport option by greying it out and disable any click activity
+     *
      * @param isDisabled
      */
     public void disablePublicTransport(boolean isDisabled) {
