@@ -163,7 +163,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View v) {
                 if (bottomSheetBuilding != null) {
+                    // set the navigation POI and hide the bar
                     setNavigationPOI(bottomSheetBuilding);
+                    showBuildingInfoFragment(false);
                 }
             }
         });
@@ -335,13 +337,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                         }
                         if ((buildingInfoShown)) {
                             mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight());
+                            navigateDestinationButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + navigateDestinationButton.getHeight());
                         }
                         else if (!outdoors){
                             mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight());
+                            navigateDestinationButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + navigateDestinationButton.getHeight());
                         }
                         else
                         {
                             mapCenterButton.setY(parentLayout.getHeight() - toolbarView.getHeight() - mapCenterButton.getHeight());
+                            navigateDestinationButton.setY(parentLayout.getHeight() - toolbarView.getHeight() - navigateDestinationButton.getHeight());
                         }
 
                     } catch (Exception e) {
