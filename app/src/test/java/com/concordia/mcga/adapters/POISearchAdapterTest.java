@@ -21,6 +21,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -33,7 +34,7 @@ public class POISearchAdapterTest {
     private POISearchAdapter searchAdapter;
     private Campus fakeSgw, fakeLoyola;
     private Building fakeH, fakeX;
-    private int fakeHNum, fakeSNum;
+    private String fakeHNum, fakeSNum;
     private View fakeEmptyView;
 
     @Before
@@ -74,10 +75,10 @@ public class POISearchAdapterTest {
         fakeX = new Building(new LatLng(0.0, 0.0), "FakeX", "FX", new MarkerOptions());
         fakeLoyola.addBuilding(fakeX);
 
-        fakeHNum = 123;
-        fakeSNum = 456;
-        fakeR = new Room(new LatLng(0.0, 0.0), "FakeR", new IndoorMapTile(0, 0), fakeHNum);
-        fakeS = new Room(new LatLng(0.0, 0.0), "FakeSRoom", new IndoorMapTile(0, 0), fakeSNum);
+        fakeHNum = "123";
+        fakeSNum = "456";
+        fakeR = new Room(new LatLng(0.0, 0.0), "FakeR", new IndoorMapTile(0, 0), fakeHNum, 1, new ArrayList<LatLng>());
+        fakeS = new Room(new LatLng(0.0, 0.0), "FakeSRoom", new IndoorMapTile(0, 0), fakeSNum, 1, new ArrayList<LatLng>());
 
         // Use reflection to add room to building
         Field field = Building.class.getDeclaredField("rooms");
