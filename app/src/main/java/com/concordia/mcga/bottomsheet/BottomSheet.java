@@ -1000,6 +1000,7 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
                 setStateInternal(targetState);
             }
         }
+        
 
         /**
          * Restrict the motion of the dragged child view along the vertical axis.

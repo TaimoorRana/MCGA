@@ -210,7 +210,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO INDOORS");
                     showDirectionsFragment(false);
-                    showBuildingInfoFragment(true);
+                    showBuildingInfoFragment(false);
                 }
             }
         });
@@ -268,7 +268,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         // Set the building information bottomsheet to true
         // When the app starts
         // Set the directions one to false
-        showBuildingInfoFragment(true);
+        showBuildingInfoFragment(false);
         showDirectionsFragment(false);
 
         //Hide Fragments
@@ -437,7 +437,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         buildingInfoFragment.setBuildingName(name);
         //buildingInfoFragment.setBuildingInformation(name, "add", "7:00", "23:00");
         buildingInfoFragment.updateBottomSheet();
-
+        showBuildingInfoFragment(true);
 
 
         setNavigationPOI((Building) multiBuildingMap.get(polygon.getId()));
@@ -462,7 +462,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         buildingInfoFragment.setBuildingName(name);
         //buildingInfoFragment.setBuildingInformation(name, "add", "7:00", "23:00");
         buildingInfoFragment.updateBottomSheet();
-
+        showBuildingInfoFragment(true);
         parentLayout.invalidate();
         setNavigationPOI((Building) multiBuildingMap.get(marker.getId()));
 
