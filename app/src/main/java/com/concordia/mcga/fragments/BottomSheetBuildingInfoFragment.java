@@ -60,6 +60,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
 
     private Button viewSwitchButton;
 
+    private int listHeight;
 
     private String buildingName = "";
     ////////////////////////////////////////////////////////////
@@ -130,6 +131,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         closingTime = (TextView) view.findViewById(R.id.closingTime);
         openingTime = (TextView) view.findViewById(R.id.openingTime);
         list = (ListView) view.findViewById(R.id.list1);
+        listHeight = list.getHeight();
     }
 
     /**
@@ -238,7 +240,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         int[] location = new int[2];
         list.getLocationOnScreen(location);
 
-        return (location[1] - list.getHeight() - bottom_sheet_title.getHeight());
+        return (location[1] - listHeight - bottom_sheet_title.getHeight());
     }
 
     /**

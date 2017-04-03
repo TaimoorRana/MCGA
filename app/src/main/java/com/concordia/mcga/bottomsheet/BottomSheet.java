@@ -250,7 +250,7 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
         }
         else if(mType == "building_information"){
             mMinOffset = mParentHeight - child.getHeight()/2 - child.getHeight() / 4;
-            mMaxOffset = mParentHeight - child.getHeight() / 2 + child.getHeight() / 5;
+            mMaxOffset = mParentHeight - child.getHeight() / 2 + child.getHeight() / 4 + child.getHeight() / 12;
         }
         else {
             mMinOffset = mParentHeight - child.getHeight() / 2;

@@ -28,12 +28,13 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="75dp" />
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#00FFFFFF"
+            android:id="@+id/linearList"
             android:orientation="vertical">
 
             <LinearLayout
@@ -166,6 +167,7 @@
             <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="575dp"
+                android:id="@+id/coordinatorList"
                 android:background="@color/button_secondary_color">
 
                 <ListView
