@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/spotTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textStyle="bold" />
+
+    <android.support.v7.widget.AppCompatRatingBar
+        android:id="@+id/spotRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/ratingBarStyleSmall"
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:rating="5.0"
+        android:isIndicator="true" />
+
+    <TextView
+        android:id="@+id/spotAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/spotDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:typeface="normal" />
+</LinearLayout>
