@@ -335,14 +335,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                         } catch (Exception e) {
                         }
                         if ((buildingInfoShown)) {
-                            mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight() + navToolBar.getHeight());
+                            mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight());
                         }
                         else if (!outdoors){
-                            mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight() + navToolBar.getHeight());
+                            mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight());
                         }
                         else
                         {
-                            mapCenterButton.setY(parentLayout.getHeight() - toolbarView.getHeight() - mapCenterButton.getHeight() - navToolBar.getHeight());
+                            mapCenterButton.setY(parentLayout.getHeight() - toolbarView.getHeight() - mapCenterButton.getHeight());
                         }
 
                     } catch (Exception e) {

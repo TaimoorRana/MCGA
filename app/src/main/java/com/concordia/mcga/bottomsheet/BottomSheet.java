@@ -245,12 +245,12 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
         mParentHeight = parent.getHeight();
 
         if (mType == "building_navigation") {
-            mMinOffset = mParentHeight - child.getHeight() / 2 - child.getHeight() / 5 - child.getHeight() / 10;
+            mMinOffset = mParentHeight - child.getHeight() / 2 - child.getHeight()/5 - child.getHeight() / 40;
             mMaxOffset = mParentHeight - parent.getHeight() / 7;
         }
         else if(mType == "building_information"){
             mMinOffset = mParentHeight - child.getHeight()/2 - child.getHeight() / 4;
-            mMaxOffset = mParentHeight - child.getHeight() / 2 + child.getHeight() / 5 + child.getHeight() / 30;
+            mMaxOffset = mParentHeight - child.getHeight() / 2 + child.getHeight() / 5;
         }
         else {
             mMinOffset = mParentHeight - child.getHeight() / 2;
@@ -1000,7 +1000,7 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
                 setStateInternal(targetState);
             }
         }
-        
+
 
         /**
          * Restrict the motion of the dragged child view along the vertical axis.
