@@ -169,13 +169,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     viewSwitchButton.setText("GO INDOORS");
                 }
                 onClose();
-
-                if(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen)){
-                    Log.d("GPS Locator","Successful");}
-                else {
-                    Log.d("GPS Locator", "Fail");
-                }
-
+                //Camera Movement
+                camMove(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen));
             }
         });
 
@@ -586,10 +581,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      *
      */
 
-    public static boolean locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
+    public LatLng locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
         if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return false;
+            return null;
         } else {
             gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1500, 2, gpsListen); //Enable Network Provider updates
             map.setMyLocationEnabled(true); //Enable Google Map layer over mapFragment
@@ -598,13 +593,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 double latitude = location.getLatitude(); //Getting latitude of the current location
                 double longitude = location.getLongitude(); // Getting longitude of the current location
                 LatLng myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 16f));//Camera Update method
-                return true;
+                return myPosition;
             }
-            else{
-                return false;
-            }
+            else
+                return null;
         }
+    }
+
+    public void camMove(LatLng MyPos){
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(MyPos, 16f));//Camera Update method
     }
 
 
@@ -646,16 +643,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         if (location != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
-            locationText.setText(location.getName());
+            setDisplayName(location, locationText);
             outdoorDirections.setOrigin(location.getMapCoordinates());
         }else{
             outdoorDirections.setOrigin(null);
         }
-
         if (destination != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
-            destinationText.setText(destination.getName());
+            setDisplayName(destination, destinationText);
             outdoorDirections.setDestination(destination.getMapCoordinates());
         }else{
             outdoorDirections.setDestination(null);
@@ -671,17 +667,21 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter location...");
+            search.setVisibility(View.VISIBLE);
         } else if (searchState == SearchState.LOCATION) {
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter destination...");
+            search.setVisibility(View.VISIBLE);
         } else if (searchState == SearchState.DESTINATION) {
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setQueryHint("Enter location...");
+            search.setVisibility(View.VISIBLE);
         } else { // searchState == SearchState.LOCATION_DESTINATION
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.VISIBLE);
+            search.setVisibility(View.GONE);
             search.setQueryHint("Search...");
         }
     }
@@ -695,8 +695,25 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         } else {
             searchDialog.show();
             for (int i = 0; i < poiSearchAdapter.getGroupCount(); i++) {
-                searchList.expandGroup(i);
+                if (i != POISearchAdapter.MY_LOCATION_GROUP_POSITION) {
+                    searchList.expandGroup(i);
+                }
             }
+        }
+    }
+
+    /**
+     * Sets the display name for a label from a POI.
+     * If the POI is a building, use the short name instead of the long one ("H" vs. "Hall")
+     * Else, use the full POI name
+     * @param poi Point of interest to display on the text view
+     * @param textView Text view to set text on
+     */
+    private void setDisplayName(POI poi, AppCompatTextView textView) {
+        if (poi instanceof Building) {
+            textView.setText(((Building) poi).getShortName());
+        } else {
+            textView.setText(poi.getName());
         }
     }
 
@@ -770,6 +787,19 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 setNavigationPOI(dest);
                 onClose();
                 return true;
+            }
+        });
+
+        searchList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                if (groupPosition == POISearchAdapter.MY_LOCATION_GROUP_POSITION) {
+                    POI myPOI = new POI(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen), getString(R.string.my_location_string));
+                    setNavigationPOI(myPOI);
+                    onClose();
+                    return true;
+                }
+                return false;
             }
         });
     }
