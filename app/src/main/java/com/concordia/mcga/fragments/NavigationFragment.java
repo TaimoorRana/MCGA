@@ -276,7 +276,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         searchState = SearchState.NONE;
         updateSearchUI();
 
-
+        buildingInfoFragment.updateBottomSheet();
+        
         return parentLayout;
     }
 
