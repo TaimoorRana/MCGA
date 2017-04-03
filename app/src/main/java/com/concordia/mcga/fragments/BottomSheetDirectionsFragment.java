@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
-import com.concordia.mcga.lib.BottomSheet;
+import com.concordia.mcga.bottomsheet.BottomSheet;
 
 import java.util.ArrayList;
 import java.util.List;

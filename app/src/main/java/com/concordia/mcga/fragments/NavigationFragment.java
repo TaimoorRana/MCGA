@@ -109,7 +109,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private boolean indoorMapVisible = false;
     private boolean outdoorMapVisible = false;
 
-    private String buildingName = "";
+
 
     //Fragments
     private RelativeLayout parentLayout;
@@ -284,37 +284,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         searchState = SearchState.NONE;
         updateSearchUI();
 
-        bottomSheetFragment = parentLayout.findViewById(R.id.buildingInfoFragment);
-        coordinatorLayout = (CoordinatorLayout) bottomSheetFragment.findViewById(R.id.coordinatorlayout);
-        //listView = (ListView) coordinatorLayout.findViewById(R.id.list1);
 
-        //Thread
-        Thread thread = new Thread(){
-            @Override
-            public void run(){
-                try{
-                    while(true) {
-                        sleep(20);
-
-                        int y = 0;
-                        try {
-                            if (outdoors) {
-                                y = buildingInfoFragment.getTop();
-                            }else{
-                                y = directionsFragment.getTop();
-                            }
-                        }
-                        catch(Exception e){
-                        }
-                        mapCenterButton.setY(y);
-                    }
-                }
-                catch(Exception e){
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
         return parentLayout;
     }
 
@@ -343,6 +313,33 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         });
         //Show outdoor map on start
         showOutdoorMap();
+
+        //Thread
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                while(true) {
+                    try {
+                        sleep(20);
+                        int y = 0;
+                        try {
+                            if (outdoors) {
+                                y = buildingInfoFragment.getTop();
+
+
+                            } else {
+                                y = directionsFragment.getTop();
+                            }
+                        } catch (Exception e) {
+                        }
+                        mapCenterButton.setY(y);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        thread.start();
     }
 
     @Override
@@ -437,27 +434,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
         ((MainActivity) getActivity()).createToast(building.getShortName());
         String name = building.getShortName();
-        setBuildingName(name);
-        buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
-
-        updateBottomSheet();
+        buildingInfoFragment.setBuildingName(name);
+        //buildingInfoFragment.setBuildingInformation(name, "add", "7:00", "23:00");
+        buildingInfoFragment.updateBottomSheet();
 
 
 
         setNavigationPOI((Building) multiBuildingMap.get(polygon.getId()));
+        parentLayout.postInvalidate();
     }
 
-    public void updateBottomSheet(){
-        // TEMPORARY
-        buildingInfoFragment.clear();
-        if (buildingName.equals("H")){
-            buildingInfoFragment.displayHBuildingAssociations();
-        }
-        else if (buildingName.equals("JM")){
-            buildingInfoFragment.displayMBBuildingAssociations();
-        }
-        buildingInfoFragment.collapse();
-    }
+
     /**
      *
      * @param marker
@@ -472,18 +459,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
         ((MainActivity) getActivity()).createToast(building.getShortName());
         String name = building.getShortName();
-        setBuildingName(name);
-        buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
+        buildingInfoFragment.setBuildingName(name);
+        //buildingInfoFragment.setBuildingInformation(name, "add", "7:00", "23:00");
+        buildingInfoFragment.updateBottomSheet();
 
-        updateBottomSheet();
-
-
+        parentLayout.invalidate();
         setNavigationPOI((Building) multiBuildingMap.get(marker.getId()));
+
     }
 
-    private void setBuildingName(String name){
-        buildingName = name;
-    }
     /**
      * add markers and polygons overlay for each building
      */
@@ -721,38 +705,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             destinationLayout.setVisibility(View.VISIBLE);
             search.setQueryHint("Search...");
         }
-        // UPDATE BOTTOM SHEET
-
-        updateBottomSheet();
-
-        int state = buildingInfoFragment.getState();
-        setBuildingInformation();
-        if (state == 5){
-            buildingInfoFragment.collapse();
-        }
-        else if (state ==4){
-            buildingInfoFragment.expand();
-        }
-        else{
-            buildingInfoFragment.hide();
-        }
     }
 
 
-    /**
-     * Sets the correct information in the bottomsheet depending on the building's name
-     */
-    private void setBuildingInformation(){
-        buildingInfoFragment.setBuildingInformation(buildingName, "address", "7:00", "23:00");
-        buildingInfoFragment.clear();
-        // TEMPORARY
-        if (buildingInfoFragment.equals("H")){
-            buildingInfoFragment.displayHBuildingAssociations();
-        }
-        else if (buildingName.equals("JM")){
-            buildingInfoFragment.displayMBBuildingAssociations();
-        }
-    }
 
 
     /**

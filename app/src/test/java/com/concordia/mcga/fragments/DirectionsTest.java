@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
-import com.concordia.mcga.lib.BottomSheet;
+import com.concordia.mcga.bottomsheet.BottomSheet;
 
 import org.junit.Before;
 import org.junit.Test;

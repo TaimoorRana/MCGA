@@ -6,30 +6,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:elevation="100dp"
+    android:fitsSystemWindows="false"
+    android:elevation="1dp"
+    android:background="#00FFFFFF"
     tools:context="com.concordia.mcga.activities.MainActivity">
+
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="710dp"
+        android:layout_height="wrap_content"
+        app:elevation="0dp"
         android:orientation="vertical"
         app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
         android:id="@+id/bottom_sheet"
         app:layout_behavior="@string/BottomSheetBuildingInfo"
         app:anchorPoint="@dimen/anchor_point"
+        android:background="#00FFFFFF"
+        android:fitsSystemWindows="false"
         app:behavior_hideable="true"
-        android:fitsSystemWindows="true">
+        android:outlineProvider="none">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="75dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#00FFFFFF"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="vertical"
-                android:layout_height="76dp"
+                android:layout_height="75dp"
                 android:background="@color/place_autocomplete_search_hint"
                 android:paddingTop="0dp"
                 android:paddingStart="16dp"

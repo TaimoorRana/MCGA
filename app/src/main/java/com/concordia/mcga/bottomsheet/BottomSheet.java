@@ -1,4 +1,4 @@
-package com.concordia.mcga.lib;
+package com.concordia.mcga.bottomsheet;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -101,7 +101,7 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
     private int mMinOffset;
     private int mMaxOffset;
 
-    private static final int DEFAULT_ANCHOR_POINT = 700;
+    private static final int DEFAULT_ANCHOR_POINT = 400;
     private int mAnchorPoint;
 
     private boolean mHideable;
@@ -249,8 +249,8 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
             mMaxOffset = mParentHeight - parent.getHeight() / 7;
         }
         else if(mType == "building_information"){
-            mMinOffset = mParentHeight - child.getHeight() / 2;
-            mMaxOffset = mParentHeight - parent.getHeight() / 7;
+            mMinOffset = mParentHeight - child.getHeight()/2 - child.getHeight() / 4;
+            mMaxOffset = mParentHeight - child.getHeight() / 2 + child.getHeight() / 5 + child.getHeight() / 30;
         }
         else {
             mMinOffset = mParentHeight - child.getHeight() / 2;
@@ -555,7 +555,7 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
         if ( scrollVelocity > mMinimumVelocity) {
             if ( mLastStableState == STATE_COLLAPSED ) {
                 // Fling from collapsed to anchor
-                top = mMinOffset;
+                top = getmMinOffset();
                 targetState = STATE_EXPANDED;
             }
             else
@@ -575,7 +575,7 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
             if ( scrollVelocity < -mMinimumVelocity ) {
                 if ( mLastStableState == STATE_EXPANDED ) {
                     // Fling to from expanded to anchor
-                    top = mMaxOffset;
+                    top = getmMaxOffset();
                     targetState = STATE_COLLAPSED;
                 }
                 else
@@ -606,8 +606,8 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
                 }
                 // Snap back to the anchor
                 else {
-                    top = mMinOffset;
-                    targetState = STATE_EXPANDED;
+                    top = mAnchorPoint;
+                    targetState = STATE_COLLAPSED;
                 }
             }
 
@@ -782,7 +782,7 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
         else
         if (mHideable && state == STATE_HIDDEN) {
             if (mType == "building_information") {
-                top_position = mParentHeight;
+                top_position = mMaxOffset;
             }else {
                 top_position = mMaxOffset;
             }
@@ -795,6 +795,9 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
         }
     }
 
+    public int getmParentHeight(){
+        return mParentHeight;
+    }
     /**
      * Gets the current state of the bottom sheet.
      *
@@ -968,8 +971,8 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
             else
             if ( mHideable  &&  shouldHide(releasedChild, yvel) ) {
                 if (mType == "building_information"){
-                    top = mParentHeight;
-                    targetState = STATE_HIDDEN;
+                    top = mParentHeight - 75; // need to make this relative
+                    targetState = STATE_COLLAPSED;
                 }else {
                     top = mMaxOffset;
                     targetState = STATE_COLLAPSED;
