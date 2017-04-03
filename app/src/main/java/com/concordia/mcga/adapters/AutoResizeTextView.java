@@ -55,21 +55,39 @@ public class AutoResizeTextView extends TextView {
     private boolean mEnableSizeCache = true;
     private boolean mInitiallized;
 
+    /**
+     * Constructor
+     * @param context
+     */
     public AutoResizeTextView(Context context) {
         super(context);
         initialize();
     }
 
+    /**
+     * Constructor
+     * @param context
+     * @param attrs attributes
+     */
     public AutoResizeTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize();
     }
 
+    /**
+     * Constructor
+     * @param context
+     * @param attrs attributes
+     * @param defStyle custom style
+     */
     public AutoResizeTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         initialize();
     }
 
+    /**
+     * Initialize default text box paramaters
+     */
     private void initialize() {
         mPaint = new TextPaint(getPaint());
         mMaxTextSize = getTextSize();
@@ -82,12 +100,21 @@ public class AutoResizeTextView extends TextView {
         mInitiallized = true;
     }
 
+    /**
+     * Override the method to write text
+     * @param text represented as a string
+     * @param type
+     */
     @Override
     public void setText(final CharSequence text, BufferType type) {
         super.setText(text, type);
         adjustTextSize(text.toString());
     }
 
+    /**
+     * Overrite text Size method
+     * @param size
+     */
     @Override
     public void setTextSize(float size) {
         mMaxTextSize = size;
@@ -95,6 +122,10 @@ public class AutoResizeTextView extends TextView {
         adjustTextSize(getText().toString());
     }
 
+    /**
+     * Sets maximum amount of lines possible in the textbox
+     * @param maxlines
+     */
     @Override
     public void setMaxLines(int maxlines) {
         super.setMaxLines(maxlines);
@@ -102,10 +133,16 @@ public class AutoResizeTextView extends TextView {
         reAdjust();
     }
 
+    /**
+     * @return maximum amount of lines a textbox can have
+     */
     public int getMaxLines() {
         return mMaxLines;
     }
 
+    /**
+     * Sets maximum amount of lines to 1
+     */
     @Override
     public void setSingleLine() {
         super.setSingleLine();
@@ -113,6 +150,10 @@ public class AutoResizeTextView extends TextView {
         reAdjust();
     }
 
+    /**
+     * Setting this to false will allow for an infinite amount of lines in a textbox
+     * @param singleLine
+     */
     @Override
     public void setSingleLine(boolean singleLine) {
         super.setSingleLine(singleLine);
@@ -124,6 +165,10 @@ public class AutoResizeTextView extends TextView {
         reAdjust();
     }
 
+    /**
+     * Sets user defined amount of lines per text box
+     * @param lines
+     */
     @Override
     public void setLines(int lines) {
         super.setLines(lines);
@@ -131,6 +176,11 @@ public class AutoResizeTextView extends TextView {
         reAdjust();
     }
 
+    /**
+     * Sets size of text
+     * @param unit
+     * @param size
+     */
     @Override
     public void setTextSize(int unit, float size) {
         Context c = getContext();
@@ -146,6 +196,11 @@ public class AutoResizeTextView extends TextView {
         adjustTextSize(getText().toString());
     }
 
+    /**
+     * Sets spacing between lines
+     * @param add
+     * @param mult
+     */
     @Override
     public void setLineSpacing(float add, float mult) {
         super.setLineSpacing(add, mult);
@@ -163,10 +218,17 @@ public class AutoResizeTextView extends TextView {
         reAdjust();
     }
 
+    /**
+     * Readjust dynamically the text
+     */
     private void reAdjust() {
         adjustTextSize(getText().toString());
     }
 
+    /**
+     * Adjust textSize depending on string length
+     * @param string
+     */
     private void adjustTextSize(String string) {
         if (!mInitiallized) {
             return;
@@ -184,6 +246,9 @@ public class AutoResizeTextView extends TextView {
                         mSizeTester, mAvailableSpaceRect));
     }
 
+    /**
+     * Tests to see if size is ok
+     */
     private final SizeTester mSizeTester = new SizeTester() {
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @Override
@@ -224,20 +289,6 @@ public class AutoResizeTextView extends TextView {
         }
     };
 
-    /**
-     * Enables or disables size caching, enabling it will improve performance
-     * where you are animating a value inside TextView. This stores the font
-     * size against getText().length() Be careful though while enabling it as 0
-     * takes more space than 1 on some fonts and so on.
-     *
-     * @param enable
-     *            enable font size caching
-     */
-    public void enableSizeCache(boolean enable) {
-        mEnableSizeCache = enable;
-        mTextCachedSizes.clear();
-        adjustTextSize(getText().toString());
-    }
 
     private int efficientTextSizeSearch(int start, int end,
                                         SizeTester sizeTester, RectF availableSpace) {
@@ -280,6 +331,13 @@ public class AutoResizeTextView extends TextView {
 
     }
 
+    /**
+     * Override textChanged listener
+     * @param text
+     * @param start
+     * @param before
+     * @param after
+     */
     @Override
     protected void onTextChanged(final CharSequence text, final int start,
                                  final int before, final int after) {
@@ -287,6 +345,13 @@ public class AutoResizeTextView extends TextView {
         reAdjust();
     }
 
+    /**
+     * Override size changed listener
+     * @param width
+     * @param height
+     * @param oldwidth
+     * @param oldheight
+     */
     @Override
     protected void onSizeChanged(int width, int height, int oldwidth,
                                  int oldheight) {
