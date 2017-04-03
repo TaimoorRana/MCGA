@@ -127,6 +127,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     private Button viewSwitchButton;
     private FloatingActionButton mapCenterButton;
+    private FloatingActionButton navigateDestinationButton;
     //GPS attributes
     private LocationManager gpsmanager; //LocationManager instance to check gps activity
     // Search components
@@ -136,6 +137,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private Dialog searchDialog;
     private POI location;
     private POI destination;
+    private POI bottomSheetBuilding;
     private SearchState searchState;
 
     private boolean outdoors = true;
@@ -156,6 +158,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         buildingInfoFragment = (BottomSheetBuildingInfoFragment) getChildFragmentManager().findFragmentById(R.id.buildingInfoFragment);
 
         //Init View Components
+        navigateDestinationButton = (FloatingActionButton) parentLayout.findViewById(R.id.navigateDestinationButton);
+        navigateDestinationButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bottomSheetBuilding != null) {
+                    setNavigationPOI(bottomSheetBuilding);
+                }
+            }
+        });
+
         mapCenterButton = (FloatingActionButton) parentLayout.findViewById(R.id.mapCenterButton);
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -448,8 +460,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         buildingInfoFragment.updateBottomSheet();
         showBuildingInfoFragment(true);
 
-
-        setNavigationPOI((Building) multiBuildingMap.get(polygon.getId()));
+        bottomSheetBuilding = (Building)multiBuildingMap.get(polygon.getId());
         parentLayout.postInvalidate();
     }
 
@@ -474,8 +485,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         buildingInfoFragment.updateBottomSheet();
         showBuildingInfoFragment(true);
         parentLayout.invalidate();
-        setNavigationPOI((Building) multiBuildingMap.get(marker.getId()));
 
+        bottomSheetBuilding = (Building)multiBuildingMap.get(marker.getId());
     }
 
     /**
