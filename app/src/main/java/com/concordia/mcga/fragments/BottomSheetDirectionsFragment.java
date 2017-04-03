@@ -70,6 +70,14 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         setupAdapter();
         setupButtonListeners();
 
+        addDirection("direction", "up");
+        addDirection("direction", "up");
+        addDirection("direction", "up");
+        addDirection("direction", "up");
+        addDirection("direction", "up");
+        addDirection("direction snidal snidal snidal snidal snidal", "up");
+        updateDirections();
+
         return view;
     }
 
