@@ -219,11 +219,12 @@ public class AutoResizeTextView extends TextView {
     }
 
     /**
-     * Readjust dynamically the text
+     * Readjust dynamically the text using an element of type Text and converting it to String
      */
     private void reAdjust() {
         adjustTextSize(getText().toString());
     }
+
 
     /**
      * Adjust textSize depending on string length
@@ -233,21 +234,24 @@ public class AutoResizeTextView extends TextView {
         if (!mInitiallized) {
             return;
         }
+
+        // text begins at the maximum size
         int startSize = (int) mMinTextSize;
-        int heightLimit = getMeasuredHeight() - getCompoundPaddingBottom()
-                - getCompoundPaddingTop();
-        mWidthLimit = getMeasuredWidth() - getCompoundPaddingLeft()
-                - getCompoundPaddingRight();
+        int heightLimit = getMeasuredHeight() - getCompoundPaddingBottom() - getCompoundPaddingTop();
+        mWidthLimit = getMeasuredWidth() - getCompoundPaddingLeft() - getCompoundPaddingRight();
+
+        // Get the limits on arbituary point. --> bottom right of rectangle
         mAvailableSpaceRect.right = mWidthLimit;
         mAvailableSpaceRect.bottom = heightLimit;
-        super.setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                efficientTextSizeSearch(startSize, (int) mMaxTextSize,
-                        mSizeTester, mAvailableSpaceRect));
+
+        // Text
+        // Best Text size
+        super.setTextSize(TypedValue.COMPLEX_UNIT_PX, efficientTextSizeSearch(startSize, (int) mMaxTextSize, mSizeTester, mAvailableSpaceRect));
     }
 
     /**
      * Tests to see if size is ok
+     * The binary search uses this method repeatedly
      */
     private final SizeTester mSizeTester = new SizeTester() {
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -290,8 +294,16 @@ public class AutoResizeTextView extends TextView {
     };
 
 
-    private int efficientTextSizeSearch(int start, int end,
-                                        SizeTester sizeTester, RectF availableSpace) {
+    /**
+     * Uses binary search to find most optimal text size
+     * It will return the biggest fittable text size
+     * @param start Starting size of text --> biggest one
+     * @param end End size of text --> starts with biggest one and gets reduced through binary search
+     * @param sizeTester
+     * @param availableSpace
+     * @return
+     */
+    private int efficientTextSizeSearch(int start, int end, SizeTester sizeTester, RectF availableSpace) {
         if (!mEnableSizeCache) {
             return binarySearch(start, end, sizeTester, availableSpace);
         }
@@ -306,13 +318,24 @@ public class AutoResizeTextView extends TextView {
         return size;
     }
 
-    private static int binarySearch(int start, int end, SizeTester sizeTester,
-                                    RectF availableSpace) {
+    /**
+     * Binary search verifies best text size
+     * @param start
+     * @param end
+     * @param sizeTester
+     * @param availableSpace
+     * @return
+     */
+    private static int binarySearch(int start, int end, SizeTester sizeTester, RectF availableSpace) {
         int lastBest = start;
         int lo = start;
         int hi = end - 1;
         int mid = 0;
+
+        // Binary search
         while (lo <= hi) {
+            // >>> is a bitshift operator
+            // Returns correct answer in Log(N) time
             mid = (lo + hi) >>> 1;
             int midValCmp = sizeTester.onTestSize(mid, availableSpace);
             if (midValCmp < 0) {
