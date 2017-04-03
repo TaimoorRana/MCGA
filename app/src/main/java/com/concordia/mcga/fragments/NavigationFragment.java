@@ -37,6 +37,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
+
+import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.POISearchAdapter;
@@ -155,6 +157,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
         directionsFragment = (BottomSheetDirectionsFragment) getChildFragmentManager().findFragmentById(R.id.directionsFragment);
         buildingInfoFragment = (BottomSheetBuildingInfoFragment) getChildFragmentManager().findFragmentById(R.id.buildingInfoFragment);
+
         //Init View Components
         mapCenterButton = (FloatingActionButton) parentLayout.findViewById(R.id.mapCenterButton);
         mapCenterButton.setOnClickListener(new OnClickListener() {
@@ -355,7 +358,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorDirections.setContext(getActivity().getApplicationContext());
         outdoorDirections.setServerKey(getResources().getString(R.string.google_maps_key));
         outdoorDirections.setMap(map);
-        //outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
+        outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
 
         //Map Customization
         applyCustomGoogleMapsStyle();
@@ -443,7 +446,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         ((MainActivity) getActivity()).createToast(building.getShortName());
         String name = building.getShortName();
         buildingInfoFragment.setBuildingName(name);
-        //buildingInfoFragment.setBuildingInformation(name, "add", "7:00", "23:00");
+        buildingInfoFragment.setBuildingInformation(name, "add", "7:00", "23:00");
         buildingInfoFragment.updateBottomSheet();
         showBuildingInfoFragment(true);
 
@@ -469,7 +472,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         String name = building.getShortName();
         buildingInfoFragment.setBuildingName(name);
-        //buildingInfoFragment.setBuildingInformation(name, "add", "7:00", "23:00");
+        buildingInfoFragment.setBuildingInformation(name, "add", "7:00", "23:00");
         buildingInfoFragment.updateBottomSheet();
         showBuildingInfoFragment(true);
         parentLayout.invalidate();
