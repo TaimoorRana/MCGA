@@ -335,7 +335,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                         } catch (Exception e) {
                         }
                         if (buildingInfoShown) {
-                            mapCenterButton.setY(y);
+                            mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight() + navToolBar.getHeight());
                         }else{
                             mapCenterButton.setY(parentLayout.getHeight() - toolbarView.getHeight() - mapCenterButton.getHeight() - navToolBar.getHeight());
                         }
