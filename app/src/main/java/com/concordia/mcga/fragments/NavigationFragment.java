@@ -109,6 +109,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private boolean indoorMapVisible = false;
     private boolean outdoorMapVisible = false;
 
+    private boolean buildingInfoShown = false;
 
 
     //Fragments
@@ -126,6 +127,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private View rootView;
     private View toolbarView;
     private Button campusButton;
+    private View navToolBar;
+
     private Button viewSwitchButton;
     private FloatingActionButton mapCenterButton;
     //GPS attributes
@@ -154,7 +157,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         parentLayout = (RelativeLayout) inflater.inflate(R.layout.nav_main_fragment, container, false);
         rootView = parentLayout.findViewById(R.id.navigationMain);
         toolbarView = parentLayout.findViewById(R.id.nav_toolbar);
-
+        navToolBar = parentLayout.findViewById(R.id.toolbar);
 
         //Init Fragments
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
@@ -326,13 +329,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                             if (outdoors) {
                                 y = buildingInfoFragment.getTop();
 
-
                             } else {
                                 y = directionsFragment.getTop();
                             }
                         } catch (Exception e) {
                         }
-                        mapCenterButton.setY(y);
+                        if (buildingInfoShown) {
+                            mapCenterButton.setY(y);
+                        }else{
+                            mapCenterButton.setY(parentLayout.getHeight() - toolbarView.getHeight() - mapCenterButton.getHeight() - navToolBar.getHeight());
+                        }
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -368,9 +375,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         if (isVisible) {
             getChildFragmentManager().beginTransaction().show(buildingInfoFragment).commit();
             outdoors = true;
+            buildingInfoShown = true;
         } else {
             getChildFragmentManager().beginTransaction().hide(buildingInfoFragment).commit();
             outdoors = false;
+            buildingInfoShown = false;
         }
     }
 

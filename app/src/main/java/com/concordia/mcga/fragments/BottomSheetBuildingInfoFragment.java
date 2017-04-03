@@ -238,10 +238,6 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         int[] location = new int[2];
         list.getLocationOnScreen(location);
 
-        int[] location2 = new int[2];
-
-       coordinatorLayout.getLocationOnScreen(location2);
-
         return location[1] - 1200;
     }
 
