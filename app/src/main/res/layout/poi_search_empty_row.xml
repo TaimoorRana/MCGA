@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/childText"
@@ -12,8 +13,6 @@
         android:layout_alignParentTop="true"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="7dp"
-        android:paddingBottom="7dp"
         android:text="@string/app_name"
-        android:textAppearance="?android:attr/textAppearanceListItem"/>
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 </LinearLayout>
