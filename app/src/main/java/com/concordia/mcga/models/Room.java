@@ -10,22 +10,27 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public class Room extends IndoorPOI {
+
+    public enum RoomIcon {
+        NONE,
+        WASHROOM_MALE,
+        WASHROOM_FEMALE
+    }
 
     private String roomNumber;
     private int floorNumber;
     private List<LatLng> polygonCoordinates;
+    private RoomIcon roomIcon;
 
-    public Room(LatLng mapCoordinates, String name, IndoorMapTile tile, String roomNumber, int floorNumber, List<LatLng> polygonCoordinates) {
+    public Room(LatLng mapCoordinates, String name, IndoorMapTile tile, String roomNumber, int floorNumber, List<LatLng> polygonCoordinates, RoomIcon roomIcon) {
         super(mapCoordinates, name, tile);
         this.roomNumber = roomNumber;
         this.floorNumber = floorNumber;
         this.polygonCoordinates = polygonCoordinates;
+        this.roomIcon = roomIcon;
     }
 
     public String getRoomNumber() {
@@ -42,6 +47,14 @@ public class Room extends IndoorPOI {
 
     public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
+    }
+
+    public RoomIcon getRoomIcon() {
+        return roomIcon;
+    }
+
+    public void setRoomIcon(RoomIcon roomIcon) {
+        this.roomIcon = roomIcon;
     }
 
     public JSONObject toJson() {
@@ -63,6 +76,7 @@ public class Room extends IndoorPOI {
             json.put("yCoordinate", this.getTile().getCoordinateY());
             json.put("floorNumber", this.getFloor().getFloorNumber());
             json.put("polygonCoords", polygonCoordArray);
+            json.put("roomIcon", this.getRoomIcon().toString());
         } catch (JSONException e) {
             Log.e("IndoorMapTile Error", Log.getStackTraceString(e));
         }

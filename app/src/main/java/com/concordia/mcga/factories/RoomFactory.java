@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class RoomFactory {
     public final static int NAME_COLUMN_INDEX = 1, CENTER_COORDINATE_COLUMN_INDEX = 2, INDOORMAPTILE_COLUMN_INDEX = 3,
-            ROOM_NUMBER_COLUMN_INDEX = 4, FLOOR_NUMBER_COLUMN_INDEX = 6, POLYGON_COORDINATE_COLUMN_INDEX = 7;
+            ROOM_NUMBER_COLUMN_INDEX = 4, FLOOR_NUMBER_COLUMN_INDEX = 6, POLYGON_COORDINATE_COLUMN_INDEX = 7, ROOM_ICON_COLUMN_INDEX = 8;
     private final static Gson GSON = new Gson();
 
     /**
@@ -44,7 +44,10 @@ public class RoomFactory {
         Type latlngType = new TypeToken<List<LatLng>>() {}.getType();
         List<LatLng> polygonCoordinates = (List<LatLng>) GSON.fromJson(res.getString(POLYGON_COORDINATE_COLUMN_INDEX), latlngType);
 
-        return new Room(centerCoordinates, name, indoorMapTile, room_number, floor_number, polygonCoordinates);
+        String room_icon = res.getString(ROOM_ICON_COLUMN_INDEX);
+        Room.RoomIcon roomIcon = Room.RoomIcon.valueOf(room_icon);
+
+        return new Room(centerCoordinates, name, indoorMapTile, room_number, floor_number, polygonCoordinates, roomIcon);
     }
 
     public static Room createRoomById(int roomId) {

@@ -108,17 +108,17 @@ function drawWalkablePath(pointArray) {
 
 function addFloorRooms(roomArray) {
 
-	for (var i = 0; i < roomArray.length; i++) {
-		var room = roomArray[i];
-		var polygonBounds = [];
+    for (var i = 0; i < roomArray.length; i++) {
+        var room = roomArray[i];
+        var polygonBounds = [];
 
-		for (var j = 0; j < room.polygonCoords.length; j++) {
-			var coord = room.polygonCoords[j];
-			var bound = [coord.lat, coord.lng];
-			polygonBounds.push(bound);
-		}
+        for (var j = 0; j < room.polygonCoords.length; j++) {
+            var coord = room.polygonCoords[j];
+            var bound = [coord.lat, coord.lng];
+            polygonBounds.push(bound);
+        }
 
-		//Polygon Options
+        //Polygon Options
         var polygonOptions = {
             'roomName': room.roomName
         };
@@ -129,16 +129,64 @@ function addFloorRooms(roomArray) {
         }
 
         //Create Polygon Object
-		var polygon = L.polygon(polygonBounds, polygonOptions);
+        var polygon = L.polygon(polygonBounds, polygonOptions);
 
-		//Add click listener to alert IndoorMapFragment when a room polygon is clicked
-		polygon.on('click', function(event) {
-			Android.poiClicked(event.target.options.roomName);
-		});
+        var hasIcon = false;
+        var iconMarker;
+        switch (room.roomIcon) {
+            case "NONE":
+                break;
+            case "WASHROOM_MALE":
+                hasIcon = true;
+                iconMarker = maleWashroomIcon(polygon.getBounds().getCenter(), room.roomName);
+                break;
+            case "WASHROOM_FEMALE":
+                hasIcon = true;
+                iconMarker = femaleWashroomIcon(polygon.getBounds().getCenter(), room.roomName);
+                break;
+        }
 
-		polygon.addTo(polygonGroup);
-	}
+        if (hasIcon) {
+            iconMarker.on('click', function(event) {
+                Android.poiClicked(event.target.options.roomName);
+            })
+            iconMarker.addTo(roomMarkerGroup);
+        }
+
+        //Add click listener to alert IndoorMapFragment when a room polygon is clicked
+        polygon.on('click', function(event) {
+            Android.poiClicked(event.target.options.roomName);
+        });
+
+        polygon.addTo(polygonGroup);
+    }
 }
+
+
+function maleWashroomIcon(point, roomName) {
+    var maleWashroom = L.icon({
+        iconUrl: 'images/washroom-male.png',
+
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, 0]
+    });
+
+    return L.marker(point, { icon: maleWashroom, "roomName": roomName });
+}
+
+function femaleWashroomIcon(point, roomName) {
+    var femaleWashroom = L.icon({
+        iconUrl: 'images/washroom-female.png',
+
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, 0]
+    });
+
+    return L.marker(point, { icon: femaleWashroom, "roomName": roomName });
+}
+
 
 //Clearing Functions
 function clearPathLayers() {
