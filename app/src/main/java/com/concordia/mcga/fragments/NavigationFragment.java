@@ -15,7 +15,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.design.widget.CoordinatorLayout;
+
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -139,9 +139,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private SearchState searchState;
 
     private boolean outdoors = true;
-
-    private View bottomSheetFragment;
-    private CoordinatorLayout coordinatorLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -277,7 +274,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         updateSearchUI();
 
         buildingInfoFragment.updateBottomSheet();
-        
+
         return parentLayout;
     }
 
