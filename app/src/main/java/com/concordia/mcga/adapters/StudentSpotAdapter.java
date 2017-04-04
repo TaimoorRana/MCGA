@@ -47,7 +47,7 @@ public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
                 getItem(position).getMapCoordinates()));
         description.setText(getItem(position).getDescription());
         image.setImageResource(getItem(position).getResId());
-        rating.setRating(getItem(position).getRating().getRatingVal());
+        rating.setRating(getItem(position).getRating());
 
         return spotRow;
     }
