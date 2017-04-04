@@ -126,7 +126,7 @@ public class Building extends POI implements Observer {
         res.close();
     }
 
-    private void addConnectedPOI(ConnectedPOI poi) {
+    public void addConnectedPOI(ConnectedPOI poi) {
         if (poi instanceof Escalator) {
             floorMaps.get(poi.getFloorNumber()).addEscalator((Escalator) poi);
         } else if (poi instanceof Elevator) {
@@ -163,6 +163,22 @@ public class Building extends POI implements Observer {
      */
     public List<Room> getRooms() {
         return rooms;
+    }
+
+    /**
+     *
+     * @return Flag to check whether the building has had its connected POIs retrieved
+     */
+    public boolean isConnectedPoiRetrieved() {
+        return connectedPoiRetrieved;
+    }
+
+    /**
+     * Flag to check whether the building has had its connected POIs retrieved
+     * @param connectedPoiRetrieved
+     */
+    public void setConnectedPoiRetrieved(boolean connectedPoiRetrieved) {
+        this.connectedPoiRetrieved = connectedPoiRetrieved;
     }
 
     /**
