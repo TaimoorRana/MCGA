@@ -22,10 +22,12 @@ public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
     private final DecimalFormat df = new DecimalFormat(".##");
     private LatLng currentCoordinates;
 
-    public StudentSpotAdapter(Context context, List<StudentSpot> spots) {
+    public StudentSpotAdapter(Context context, List<StudentSpot> spots, LatLng currentCoordinates) {
         super(context, R.layout.student_spot_row, spots);
         this.context = context;
         this.spots = spots;
+        // Set coordinates when initializing student spot. This happens when the fragment is opened
+        this.currentCoordinates = currentCoordinates;
     }
 
     @Override
