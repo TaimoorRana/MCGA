@@ -2,70 +2,79 @@ package com.concordia.mcga.models;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-import com.concordia.mcga.activities.BuildConfig;
+import com.concordia.mcga.factories.RoomFactory;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
-import com.concordia.mcga.models.Building;
+import com.concordia.mcga.models.Room.RoomIcon;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.junit.Rule;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.rule.PowerMockRule;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
+import org.powermock.modules.junit4.PowerMockRunner;
 
-import static junit.framework.Assert.assertTrue;
-
-@RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
-@PowerMockIgnore({ "org.mockito.*", "org.robolectric.*", "android.*" })
-@PrepareForTest(DatabaseConnector.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({DatabaseConnector.class, RoomFactory.class})
 public class BuildingPopulateRoomsTest {
-    @Rule
-    public PowerMockRule rule = new PowerMockRule();
+    private Building building;
+    private Cursor cursor;
+    private SQLiteDatabase database;
+    private Room room = new Room(new LatLng(0, 0), "TEST", new IndoorMapTile(0, 0), "A", 1,
+        new ArrayList<LatLng>(), RoomIcon.NONE);
+    private DatabaseConnector databaseConnector;
+    @Before
+    public void setUp() throws Exception{
+        // Setup mock
+        databaseConnector = Mockito.mock(DatabaseConnector.class);
+        PowerMockito.mockStatic(DatabaseConnector.class);
+        Mockito.when(DatabaseConnector.getInstance()).thenReturn(databaseConnector);
+        DatabaseConnector.setDatabaseConnector(databaseConnector);
+        Mockito.when(databaseConnector.getDb()).thenReturn(database);
+        cursor = Mockito.mock(Cursor.class);
+        database = Mockito.mock(SQLiteDatabase.class);
+        Mockito.when(database.rawQuery("select * from room", null)).thenReturn(cursor, cursor);
+        building = Mockito.spy(Building.class);
+    }
 
     @Test
-    public void testFactory() throws Exception  {
-        String name = "Builderooni";
-        String shortName = "BD";
+    public void testPopulateRooms_emptyRooms() throws Exception  {
+        // Test data
+        List<Room> rooms = new ArrayList<>();
+        building.setRooms(rooms);
+        building.setShortName("SHORT");
+        // Mock
+        PowerMockito.mockStatic(RoomFactory.class);
+        Mockito.when(RoomFactory.createRoom(cursor)).thenReturn(room);
+        Mockito.when(cursor.moveToNext()).thenReturn(true,true,false);
+        Mockito.when(cursor.getString(Mockito.anyInt())).thenReturn("SHORT");
+        Mockito.when(databaseConnector.getDb()).thenReturn(database);
 
-        PowerMockito.mockStatic(DatabaseConnector.class);
-        Cursor cursor = Mockito.mock(Cursor.class);
-        DatabaseConnector connector = Mockito.mock(DatabaseConnector.class);
-        SQLiteDatabase db = Mockito.mock(SQLiteDatabase.class);
-        Building building = new Building(new LatLng(0.0, 0.0), name, shortName,
-                new MarkerOptions());
-
-        // Iterate through the loop twice. Should get two rooms in the end
-        Mockito.when(cursor.moveToNext()).thenAnswer(
-                new Answer() {
-                    private int count = 0;
-
-                    public Object answer(InvocationOnMock invocation) {
-                        if (count++ < 2) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                });
-
-        Mockito.when(cursor.getString(7)).thenReturn(name);
-        Mockito.when(connector.getDb()).thenReturn(db);
-        Mockito.when(db.rawQuery("select * from room", null)).thenReturn(cursor);
-
-        Mockito.when(DatabaseConnector.getInstance()).thenReturn(connector);
-
-        // Populate fake rooms and verify that two exist
+        // Execute
         building.populateRooms();
-        assertTrue(building.getRooms().size() == 2);
+
+        // Verify
+        Mockito.verify(database, Mockito.times(1)).rawQuery("select * from room", null);
+        Mockito.verify(cursor, Mockito.times(3)).moveToNext();
+        PowerMockito.verifyStatic(Mockito.times(2));
+        RoomFactory.createRoom(cursor);
+    }
+
+    @Test
+    public void testPopulateRooms_fullRooms() throws Exception  {
+        // Test data
+        List<Room> rooms = new ArrayList<>();
+        rooms.add(room);
+        building.setRooms(rooms);
+
+        // Execute
+        building.populateRooms();
+
+        // Verify
+        Mockito.verify(cursor, Mockito.times(0)).moveToNext();
+        Mockito.verify(database, Mockito.times(0)).rawQuery("select * from room", null);
+
     }
 }

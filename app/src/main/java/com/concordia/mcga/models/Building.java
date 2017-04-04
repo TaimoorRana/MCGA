@@ -2,13 +2,11 @@ package com.concordia.mcga.models;
 
 import android.database.Cursor;
 import android.graphics.Color;
-import android.util.Log;
-
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.ConnectedPOIFactory;
+import com.concordia.mcga.factories.IndoorMapFactory;
 import com.concordia.mcga.factories.RoomFactory;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
-import com.concordia.mcga.factories.IndoorMapFactory;
 import com.concordia.mcga.helperClasses.Observer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -50,6 +48,18 @@ public class Building extends POI implements Observer {
         floorMaps = new HashMap<>();
         rooms = new ArrayList<>();
         connectedPoiRetrieved = false;
+    }
+
+    /**
+     * Used for Testing purposes only
+     */
+    Building(){super(new LatLng(0,0),"TEST");};
+
+    /**
+     * Setter used for testing purposes
+     */
+    void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
 
     /**
