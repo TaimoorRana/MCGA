@@ -17,30 +17,23 @@ public class IndoorDirections {
     private static List<String> imageList = new ArrayList<String>();
 
 
-    // Act as a state machine
-    Map<String, Integer> state = new HashMap<String, Integer>();
 
-    int orientation;
 
-    private static final String UNDEF_ORIENTATION = "UNDEF";
-    private static final String NORTH_ORIENTATION = "NORTH";
-    private static final String EAST_ORIENTATION = "EAST";
-    private static final String SOUTH_ORIENTATION = "SOUTH";
-    private static final String WEST_ORIENTATION = "WEST";
 
+
+    private static final int UNDEF_ORIENTATION = 0;
+    private static final int NORTH_ORIENTATION = 1;
+    private static final int EAST_ORIENTATION = 2;
+    private static final int SOUTH_ORIENTATION = 3;
+    private static final int WEST_ORIENTATION = 4;
+
+    private int orientation = UNDEF_ORIENTATION;
     ///////////////
     // Main Code //
     ///////////////
 
 
     public IndoorDirections(){
-        state.put("UNDEF", 0);
-        state.put("NORTH", 1);
-        state.put("EAST", 2);
-        state.put("SOUTH", 3);
-        state.put("WEST", 4);
-
-        orientation = state.get(UNDEF_ORIENTATION);
     }
 
     public static void clear(){
@@ -51,6 +44,7 @@ public class IndoorDirections {
     public static void setDirections(List<IndoorMapTile> tiles){
         String currentDirection = "";
         int distance = 0;
+        String turn = "";
 
         try {
             int previousCoordinateX = tiles.get(0).getCoordinateX();
@@ -84,5 +78,89 @@ public class IndoorDirections {
             // Do nothing
         }
     }
-    
+
+    private void setOrientation(int orientation){
+        this.orientation = orientation;
+    }
+
+
+    private int getNextOrientation(int x1, int x2, int y1, int y2){
+        // going right
+        if (x1 < x2){
+            
+        }
+
+        // going left
+        else if (x1 > x2){
+
+        }
+
+        // going down
+        else if (y1 < y2){
+
+        }
+
+        // going up
+        else if (y1 > y2){
+
+        }
+        else{
+            //this should never happen
+        }
+        return orientation;
+    }
+
+    private void goClockWise(){
+        switch (orientation){
+            case UNDEF_ORIENTATION:
+                // Should not happen
+                break;
+
+            case NORTH_ORIENTATION:
+                orientation = EAST_ORIENTATION;
+                break;
+
+            case EAST_ORIENTATION:
+                orientation = SOUTH_ORIENTATION;
+                break;
+
+            case SOUTH_ORIENTATION:
+                orientation = WEST_ORIENTATION;
+                break;
+
+            case WEST_ORIENTATION:
+                orientation = NORTH_ORIENTATION;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void goCounterClockWise(){
+        switch (orientation){
+            case UNDEF_ORIENTATION:
+                // Should not happen
+                break;
+
+            case NORTH_ORIENTATION:
+                orientation = WEST_ORIENTATION;
+                break;
+
+            case EAST_ORIENTATION:
+                orientation = NORTH_ORIENTATION;
+                break;
+
+            case SOUTH_ORIENTATION:
+                orientation = EAST_ORIENTATION;
+                break;
+
+            case WEST_ORIENTATION:
+                orientation = SOUTH_ORIENTATION;
+                break;
+
+            default:
+                break;
+        }
+    }
 }
