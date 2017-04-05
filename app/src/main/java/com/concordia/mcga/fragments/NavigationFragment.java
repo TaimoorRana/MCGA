@@ -402,6 +402,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         if (isVisible) {
             getChildFragmentManager().beginTransaction().show(buildingInfoFragment).commit();
             outdoors = true;
+            // this boolean exist because it is not in the directions fragment
+            // Creates 4 combinations between buildingInfoShown and outdoors
             buildingInfoShown = true;
         } else {
             getChildFragmentManager().beginTransaction().hide(buildingInfoFragment).commit();
