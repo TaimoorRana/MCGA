@@ -2,8 +2,6 @@ package com.concordia.mcga.activities;
 
 import android.app.Activity;
 
-import com.concordia.mcga.models.StudentSpot;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
