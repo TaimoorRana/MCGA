@@ -35,7 +35,7 @@ public class StudentSpotActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.spotToolbar);
         setSupportActionBar(toolbar);
 
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_white_black_24dp);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
