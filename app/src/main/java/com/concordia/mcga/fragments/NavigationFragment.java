@@ -185,6 +185,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit(); //To be removed after Outside transportation Google API incorporation
                     campusButton.setVisibility(View.VISIBLE);
                     viewSwitchButton.setText("GO INDOORS");
+                    showDirectionsFragment(false);
                 }
                 onClose();
                 //Camera Movement
@@ -317,7 +318,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         });
         //Show outdoor map on start
         showOutdoorMap();
+        relativeButtonThread();
 
+    }
+
+    /**
+     * Positions the Locate Me button as well as the
+     * Directions button relative to the bottomsheet at all times
+     */
+    private void relativeButtonThread(){
         //Thread
         Thread thread = new Thread(){
             @Override
@@ -336,12 +345,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                         } catch (Exception e) {
                         }
                         if ((buildingInfoShown)) {
-                            mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight());
-                            navigateDestinationButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + navigateDestinationButton.getHeight());
+                            mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight() + mapCenterButton.getHeight()/ 3);
+                            navigateDestinationButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + navigateDestinationButton.getHeight() + navigateDestinationButton.getHeight()/3);
                         }
                         else if (!outdoors){
-                            mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight());
-                            navigateDestinationButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + navigateDestinationButton.getHeight());
+                            mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight()+ mapCenterButton.getHeight()/ 3);
+                            navigateDestinationButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + navigateDestinationButton.getHeight() + navigateDestinationButton.getHeight()/3);
                         }
                         else
                         {
@@ -357,6 +366,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         };
         thread.start();
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
