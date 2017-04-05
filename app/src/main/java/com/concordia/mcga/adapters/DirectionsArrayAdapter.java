@@ -85,6 +85,7 @@ public class DirectionsArrayAdapter extends ArrayAdapter<String> {
 
                     case "destination":
                         imageView.setImageResource(R.drawable.ic_add_location_black_24dp);
+                        break;
 
                     case "None":
                         break;

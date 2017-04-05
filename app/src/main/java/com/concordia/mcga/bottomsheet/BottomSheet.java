@@ -971,7 +971,7 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
             else
             if ( mHideable  &&  shouldHide(releasedChild, yvel) ) {
                 if (mType == "building_information"){
-                    top = mParentHeight - 75; // need to make this relative
+                    top = mParentHeight; // need to make this relative
                     targetState = STATE_COLLAPSED;
                 }else {
                     top = mMaxOffset;
