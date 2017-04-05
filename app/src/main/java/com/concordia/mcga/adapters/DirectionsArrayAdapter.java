@@ -80,7 +80,7 @@ public class DirectionsArrayAdapter extends ArrayAdapter<String> {
                         break;
 
                     case "left":
-                        imageView.setImageResource(R.drawable.ic_arrow_back_black_24dp);
+                        imageView.setImageResource(R.drawable.ic_arrow_white_black_24dp);
                         break;
 
                     case "destination":

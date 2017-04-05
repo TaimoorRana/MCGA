@@ -1,5 +1,6 @@
 package com.concordia.mcga.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -12,7 +13,6 @@ import android.widget.Toast;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.fragments.NavigationFragment;
-import com.concordia.mcga.fragments.StudentSpotFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 
 import java.io.IOException;
@@ -63,10 +63,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
                             return true;
                         case R.id.student_spots:
-                            StudentSpotFragment studentSpotFragment = new StudentSpotFragment();
-                            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                            fragmentTransaction.replace(R.id.frame, studentSpotFragment, "STUDENT_SPOT").addToBackStack(null);
-                            fragmentTransaction.commit();
+                            openSpotActivity();
                             Toast.makeText(getApplicationContext(), "Student Spots", Toast.LENGTH_SHORT).show();
                             return true;
                         case R.id.about:
@@ -105,6 +102,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException ioe) {
             throw new Error("Unable to create database");
         }
+    }
+
+    public void openSpotActivity() {
+        Intent intent = new Intent(MainActivity.this, StudentSpotActivity.class);
+        startActivity(intent);
     }
 
 }
