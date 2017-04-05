@@ -3,6 +3,7 @@ package com.concordia.mcga.models;
 import com.concordia.mcga.activities.BuildConfig;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,7 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 
 @RunWith(RobolectricTestRunner.class)
@@ -30,19 +31,28 @@ public class RoomTest {
     private IndoorMapTile mapTile = new IndoorMapTile(0, 0);
     private Room.RoomIcon roomIcon = Room.RoomIcon.NONE;
     private int floorNumber = 1;
-
-    private String expectedOutput = "{\"xCoordinate\":0,\"polygonCoords\":[{\"lng\":10,\"lat\":5}],\"roomIcon\":\"NONE\",\"yCoordinate\":0,\"floorNumber\":1,\"roomName\":\"Testo\"}";
-
-    @Test
-    public void testRoom_toJson() {
+    
+    @Before
+    public void setUp() {
         LatLng coord = new LatLng(5,10);
         polygonCoords.add(coord);
         room = new Room(latLng, name, mapTile, roomNumber, floorNumber, polygonCoords, roomIcon);
 
         floor = new Floor(null, floorNumber);
         room.setFloor(floor);
+    }
 
+    @Test
+    public void testRoom_toJson() {
         JSONObject json = room.toJson();
-        assertEquals(json.toString(), expectedOutput);
+        try {
+            assertNotNull(json.get("roomName"));
+            assertNotNull(json.get("xCoordinate"));
+            assertNotNull(json.get("yCoordinate"));
+            assertNotNull(json.get("floorNumber"));
+            assertNotNull(json.get("polygonCoords"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
