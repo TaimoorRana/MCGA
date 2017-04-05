@@ -2,8 +2,8 @@ package com.concordia.mcga.models;
 
 import android.database.Cursor;
 import android.graphics.Color;
-
 import com.concordia.mcga.exceptions.MCGADatabaseException;
+import com.concordia.mcga.factories.ConnectedPOIFactory;
 import com.concordia.mcga.factories.IndoorMapFactory;
 import com.concordia.mcga.factories.RoomFactory;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
@@ -34,6 +34,7 @@ public class Building extends POI implements Observer {
     private Polygon polygon;
     private Map<Integer, Floor> floorMaps;
     private Set<Portal> portals;
+    private boolean connectedPoiRetrieved;
 
     /**
      *  returns a Building object
@@ -49,13 +50,26 @@ public class Building extends POI implements Observer {
         edgeCoordinateList = new ArrayList<>();
         floorMaps = new HashMap<>();
         rooms = new ArrayList<>();
+        connectedPoiRetrieved = false;
+    }
+
+    /**
+     * Used for Testing purposes only
+     */
+    Building(){super(new LatLng(0,0),"TEST");};
+
+    /**
+     * Setter used for testing purposes
+     */
+    void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
 
     /**
      *  Populate this Building object with rooms retrieved via database.
      */
     public void populateRooms() {
-        final int BUILDING_COLUMN_INDEX = 7;
+        final int BUILDING_COLUMN_INDEX = 5;
         Cursor res;
 
         try {
@@ -68,11 +82,61 @@ public class Building extends POI implements Observer {
             throw new Error("Database not initialized");
         }
         while (res.moveToNext()) {
-            if (res.getString(BUILDING_COLUMN_INDEX).equals(getName())) {
+            if (res.getString(BUILDING_COLUMN_INDEX).equals(getShortName())) {
                 rooms.add(RoomFactory.createRoom(res));
             }
         }
         res.close();
+    }
+
+    public void populateFloors() {
+        for (Room room : rooms) {
+            Floor floor = null;
+            if (floorMaps.containsKey(room.getFloorNumber())) {
+                floor = floorMaps.get(room.getFloorNumber());
+                room.setFloor(floor);
+                floor.getIndoorPOIs().add(room);
+            } else {
+                floor = IndoorMapFactory.getInstance().createIndoorMap(this, room.getFloorNumber());
+                //floor = new Floor(this, room.getFloorNumber());
+                room.setFloor(floor);
+                floor.getIndoorPOIs().add(room);
+                floorMaps.put(room.getFloorNumber(), floor);
+            }
+        }
+    }
+
+    public void populateConnectedPOIs() {
+        final int BUILDING_COLUMN_INDEX = 2;
+        final int FLOOR_NUMBER_COLUMN_INDEX = 3;
+        Cursor res;
+
+        try {
+            if (connectedPoiRetrieved)  // if the building has already had its Connected POIs retrieved
+            {
+                return;
+            }
+            res = DatabaseConnector.getInstance().getDb().rawQuery("select * from connected_poi", null);
+        } catch (MCGADatabaseException e) {
+            throw new Error("Database not initialized");
+        }
+        while (res.moveToNext()) {
+            if (res.getString(BUILDING_COLUMN_INDEX).equals(getShortName())) {
+                addConnectedPOI(ConnectedPOIFactory.createConnectedPOI(res, this));
+            }
+        }
+        connectedPoiRetrieved = true;
+        res.close();
+    }
+
+    public void addConnectedPOI(ConnectedPOI poi) {
+        if (poi instanceof Escalator) {
+            floorMaps.get(poi.getFloorNumber()).addEscalator((Escalator) poi);
+        } else if (poi instanceof Elevator) {
+            floorMaps.get(poi.getFloorNumber()).addElevator((Elevator) poi);
+        } else if (poi instanceof Staircase) {
+            floorMaps.get(poi.getFloorNumber()).addStaircase((Staircase) poi);
+        }
     }
 
     /**
@@ -89,11 +153,35 @@ public class Building extends POI implements Observer {
     }
 
     /**
+     *
+     * @return Map of all floor maps
+     */
+    public Map<Integer, Floor> getFloorMaps() {
+        return floorMaps;
+    }
+
+    /**
      * Get all the rooms belonging to this building
      * @return List of all the rooms associated with this building
      */
     public List<Room> getRooms() {
         return rooms;
+    }
+
+    /**
+     *
+     * @return Flag to check whether the building has had its connected POIs retrieved
+     */
+    public boolean isConnectedPoiRetrieved() {
+        return connectedPoiRetrieved;
+    }
+
+    /**
+     * Flag to check whether the building has had its connected POIs retrieved
+     * @param connectedPoiRetrieved
+     */
+    public void setConnectedPoiRetrieved(boolean connectedPoiRetrieved) {
+        this.connectedPoiRetrieved = connectedPoiRetrieved;
     }
 
     /**

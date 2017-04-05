@@ -1,39 +1,39 @@
 package com.concordia.mcga.adapters;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.Room;
+import com.concordia.mcga.models.Room.RoomIcon;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
+import de.hdodenhof.circleimageview.CircleImageView;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.util.Arrays;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
-
 @RunWith(RobolectricTestRunner.class)
 public class POISearchAdapterTest {
     private POISearchAdapter searchAdapter;
     private Campus fakeSgw, fakeLoyola;
     private Building fakeH, fakeX;
-    private int fakeHNum, fakeSNum;
+    private String fakeHNum, fakeSNum;
     private View fakeEmptyView;
 
     @Before
@@ -74,10 +74,11 @@ public class POISearchAdapterTest {
         fakeX = new Building(new LatLng(0.0, 0.0), "FakeX", "FX", new MarkerOptions());
         fakeLoyola.addBuilding(fakeX);
 
-        fakeHNum = 123;
-        fakeSNum = 456;
-        fakeR = new Room(new LatLng(0.0, 0.0), "FakeR", new IndoorMapTile(0, 0), fakeHNum);
-        fakeS = new Room(new LatLng(0.0, 0.0), "FakeSRoom", new IndoorMapTile(0, 0), fakeSNum);
+        fakeHNum = "123";
+        fakeSNum = "456";
+        fakeS = new Room(new LatLng(0.0, 0.0), "FakeSRoom", new IndoorMapTile(0, 0), fakeSNum, 1, new ArrayList<LatLng>(), RoomIcon.NONE);
+        fakeR = new Room(new LatLng(0.0, 0.0), "FakeR", new IndoorMapTile(0, 0), fakeHNum, 1, new ArrayList<LatLng>(),
+            RoomIcon.NONE);
 
         // Use reflection to add room to building
         Field field = Building.class.getDeclaredField("rooms");
