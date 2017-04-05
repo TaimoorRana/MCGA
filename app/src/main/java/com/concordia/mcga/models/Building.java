@@ -4,19 +4,21 @@ import android.database.Cursor;
 import android.graphics.Color;
 
 import com.concordia.mcga.exceptions.MCGADatabaseException;
+import com.concordia.mcga.factories.IndoorMapFactory;
 import com.concordia.mcga.factories.RoomFactory;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
-import com.concordia.mcga.factories.IndoorMapFactory;
 import com.concordia.mcga.helperClasses.Observer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Building extends POI implements Observer {
     private final static int strokeColor = Color.YELLOW;
@@ -31,6 +33,7 @@ public class Building extends POI implements Observer {
     private List<Room> rooms;
     private Polygon polygon;
     private Map<Integer, Floor> floorMaps;
+    private Set<Portal> portals;
 
     /**
      *  returns a Building object
@@ -206,4 +209,11 @@ public class Building extends POI implements Observer {
         return marker;
     }
 
+    public Set<Portal> getPortals() {
+        return portals;
+    }
+
+    void setPortals(Set<Portal> portals) {
+        this.portals = portals;
+    }
 }
