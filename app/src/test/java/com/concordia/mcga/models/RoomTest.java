@@ -33,19 +33,15 @@ public class RoomTest {
 
     private String expectedOutput = "{\"xCoordinate\":0,\"polygonCoords\":[{\"lng\":10,\"lat\":5}],\"roomIcon\":\"NONE\",\"yCoordinate\":0,\"floorNumber\":1,\"roomName\":\"Testo\"}";
 
-    @Before
-    public void setUp() {
+    @Test
+    public void testRoom_toJson() {
         LatLng coord = new LatLng(5,10);
         polygonCoords.add(coord);
         room = new Room(latLng, name, mapTile, roomNumber, floorNumber, polygonCoords, roomIcon);
 
         floor = new Floor(null, floorNumber);
         room.setFloor(floor);
-    }
 
-
-    @Test
-    public void testRoom_toJson() {
         JSONObject json = room.toJson();
         assertEquals(json.toString(), expectedOutput);
     }
