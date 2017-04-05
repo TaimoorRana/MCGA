@@ -1,5 +1,6 @@
 package com.concordia.mcga.activities;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,12 +11,15 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.concordia.mcga.adapters.StudentSpotAdapter;
 import com.concordia.mcga.factories.StudentSpotFactory;
 import com.concordia.mcga.models.StudentSpot;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -60,8 +64,20 @@ public class StudentSpotActivity extends AppCompatActivity {
             spots = StudentSpotFactory.getInstance().getStudentSpots(this.getResources());
 
             adapter = new StudentSpotAdapter(this, spots, myLocation);
-            ListView list = (ListView) findViewById(R.id.spotList);
+            final ListView list = (ListView) findViewById(R.id.spotList);
             list.setAdapter(adapter);
+
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    StudentSpot spot = (StudentSpot)list.getItemAtPosition(position);
+                    Intent intent = new Intent();
+                    intent.putExtra("spot", new Gson().toJson(spot));
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+
+
         }
     }
 

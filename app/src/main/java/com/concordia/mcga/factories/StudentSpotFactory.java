@@ -53,6 +53,10 @@ public class StudentSpotFactory {
         return studentSpots;
     }
 
+    /**
+     * Creates student spots from database. Should only ever be called once from singleton getter
+     * @param resources Android resources to properly get student spot image id
+     */
     private void getAllStudentSpots(Resources resources) {
         studentSpots = new ArrayList<>();
 

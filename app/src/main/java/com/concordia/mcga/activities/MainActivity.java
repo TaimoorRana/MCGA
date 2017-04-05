@@ -3,6 +3,7 @@ package com.concordia.mcga.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,8 @@ import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
+import com.concordia.mcga.models.StudentSpot;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 
@@ -104,9 +107,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void openSpotActivity() {
-        Intent intent = new Intent(MainActivity.this, StudentSpotActivity.class);
-        startActivity(intent);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass it along to the NavigationFragment,
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
+    /**
+     * Opens the spot activity and requests a result, to be returned to onActivityResult and
+     * propagated to the fragments
+     */
+    public void openSpotActivity() {
+        Intent intent = new Intent(MainActivity.this, StudentSpotActivity.class);
+        startActivityForResult(intent, 1);
+    }
 }

@@ -46,6 +46,7 @@ import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.POI;
+import com.concordia.mcga.models.StudentSpot;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -55,12 +56,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback,
@@ -283,6 +286,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            String json = data.getExtras().getString("spot");
+            StudentSpot spot = new Gson().fromJson(json, StudentSpot.class);
+            setNavigationPOI(spot, true);
+        }
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnCameraIdleListener(this);
@@ -390,7 +404,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         buildingInfoFragment.collapse();
 
 
-        setNavigationPOI((Building) multiBuildingMap.get(polygon.getId()));
+        setNavigationPOI((Building) multiBuildingMap.get(polygon.getId()), false);
     }
 
     /**
@@ -417,7 +431,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
         buildingInfoFragment.collapse();
 
-        setNavigationPOI((Building) multiBuildingMap.get(marker.getId()));
+        setNavigationPOI((Building) multiBuildingMap.get(marker.getId()), false);
     }
 
     /**
@@ -773,7 +787,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(),
                         CAMPUS_DEFAULT_ZOOM_LEVEL));
 
-                setNavigationPOI(dest);
+                setNavigationPOI(dest, false);
                 onClose();
                 return true;
             }
@@ -784,7 +798,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 if (groupPosition == POISearchAdapter.MY_LOCATION_GROUP_POSITION) {
                     POI myPOI = new POI(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen), getString(R.string.my_location_string));
-                    setNavigationPOI(myPOI);
+                    setNavigationPOI(myPOI, false);
                     onClose();
                     return true;
                 }
@@ -796,15 +810,26 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     /**
      * Sets the navigation state and location/destination for internal use
      * @param dest The {@link POI} location to be added to the search state
+     * @param forceDestination Whether or not to force the passed POI be accepted as a destination
      * @return Whether the state was updated or not
      */
-    private boolean setNavigationPOI(POI dest) {
+    private boolean setNavigationPOI(POI dest, boolean forceDestination) {
         if (searchState == SearchState.NONE) {
-            location = dest;
-            searchState = SearchState.LOCATION;
+            if (!forceDestination) {
+                location = dest;
+                searchState = SearchState.LOCATION;
+            } else {
+                destination = dest;
+                searchState = SearchState.DESTINATION;
+            }
         } else if (searchState == SearchState.DESTINATION) {
-            location = dest;
-            searchState = SearchState.LOCATION_DESTINATION;
+            if (!forceDestination) {
+                location = dest;
+                searchState = SearchState.LOCATION_DESTINATION;
+            } else {
+                destination = dest;
+                searchState = SearchState.DESTINATION;
+            }
         } else if (searchState == SearchState.LOCATION) {
             destination = dest;
             searchState = SearchState.LOCATION_DESTINATION;
