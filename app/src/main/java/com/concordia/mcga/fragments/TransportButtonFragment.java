@@ -14,6 +14,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
+import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.models.Transportation;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
@@ -25,18 +27,18 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private FloatingActionButton carFAB;
     private FloatingActionButton publicTransportFAB;
     private FloatingActionButton shuttleFAB;
-
-
     //Text Views
     private TextView walkTextView, bikeTextView, carTextView, publicTransportTextView, shuttleTextView;
-
     //Animations
     private Animation transport_fab_open, transport_fab_close, transport_textview_open, transport_textview_close;
-
     //State
     private boolean fabExpanded = false;
     private boolean shuttleVisible = true;
-    private Transportation transportType;
+    private String transportType;
+    private boolean carVisible = true;
+    private boolean publicTransportVisible = true;
+    //Outdoor directions
+    private OutdoorDirections outdoorDirections;
 
     @Nullable
     @Override
@@ -72,8 +74,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         shuttleFAB.setOnClickListener(this);
 
         //Set initial transport type and icon
-        this.transportType = Transportation.PUBLIC_TRANSPORT;
-        swapIcons(Transportation.PUBLIC_TRANSPORT.getIconID());
+        this.transportType = MCGATransportMode.TRANSIT;
+        swapIcons(Transportation.TRANSIT.getIconID());
 
         return view;
     }
@@ -83,31 +85,48 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         toggle();
         switch (clickedView.getId()) {
             case R.id.transportExpandFAB:
-                if (!isExpanded())
+                if (!isExpanded()) {
                     restorePreviousIcon();
+                }
+                displayAllTransportTimes();
                 break;
             case R.id.walkFAB:
-                this.transportType = Transportation.WALK;
-                swapIcons(Transportation.WALK.getIconID());
+                this.transportType = MCGATransportMode.WALKING;
+                swapIcons(Transportation.WALKING.getIconID());
                 break;
             case R.id.bikeFAB:
-                this.transportType = Transportation.BIKE;
-                swapIcons(Transportation.BIKE.getIconID());
+                this.transportType = MCGATransportMode.BICYCLING;
+                swapIcons(Transportation.BICYCLING.getIconID());
                 break;
             case R.id.carFAB:
-                this.transportType = Transportation.CAR;
-                swapIcons(Transportation.CAR.getIconID());
+                this.transportType = MCGATransportMode.DRIVING;
+                swapIcons(Transportation.DRIVING.getIconID());
                 break;
             case R.id.publicTransportFAB:
-                this.transportType = Transportation.PUBLIC_TRANSPORT;
-                swapIcons(Transportation.PUBLIC_TRANSPORT.getIconID());
+                this.transportType = MCGATransportMode.TRANSIT;
+                swapIcons(Transportation.TRANSIT.getIconID());
                 break;
             case R.id.shuttleFAB:
-                this.transportType = Transportation.SHUTTLE;
+                this.transportType = MCGATransportMode.SHUTTLE;
                 swapIcons(Transportation.SHUTTLE.getIconID());
                 break;
         }
+        if (clickedView.getId() != R.id.transportExpandFAB) {
+            outdoorDirections.setSelectedTransportMode(transportType);
+            outdoorDirections.drawPathForSelectedTransportMode();
+        }
     }
+
+    /**
+     * Displays time for each transportation option
+     */
+    protected void displayAllTransportTimes() {
+        walkTextView.setText(outdoorDirections.getDuration(MCGATransportMode.WALKING));
+        bikeTextView.setText(outdoorDirections.getDuration(MCGATransportMode.BICYCLING));
+        carTextView.setText(outdoorDirections.getDuration(MCGATransportMode.DRIVING));
+        publicTransportTextView.setText(outdoorDirections.getDuration(MCGATransportMode.TRANSIT));
+    }
+
 
     /**
      * Expands and retracts the transport option buttons, performed automatically when the expand button is clicked. Use this to expand
@@ -125,13 +144,16 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             bikeFAB.setClickable(false);
 
             carFAB.startAnimation(transport_fab_close);
-            carTextView.startAnimation(transport_textview_close);
-            carFAB.setClickable(false);
+            if (carVisible) {
+                carTextView.startAnimation(transport_textview_close);
+                carFAB.setClickable(false);
+            }
 
             publicTransportFAB.startAnimation(transport_fab_close);
-            publicTransportTextView.startAnimation(transport_textview_close);
-            publicTransportFAB.setClickable(false);
-
+            if (publicTransportVisible) {
+                publicTransportTextView.startAnimation(transport_textview_close);
+                publicTransportFAB.setClickable(false);
+            }
 
             shuttleFAB.startAnimation(transport_fab_close);
             if (shuttleVisible) {
@@ -151,13 +173,16 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             bikeFAB.setClickable(true);
 
             carFAB.startAnimation(transport_fab_open);
-            carTextView.startAnimation(transport_textview_open);
-            carFAB.setClickable(true);
+            if (carVisible) {
+                carTextView.startAnimation(transport_textview_open);
+                carFAB.setClickable(true);
+            }
 
             publicTransportFAB.startAnimation(transport_fab_open);
-            publicTransportTextView.startAnimation(transport_textview_open);
-            publicTransportFAB.setClickable(true);
-
+            if (publicTransportVisible) {
+                publicTransportTextView.startAnimation(transport_textview_open);
+                publicTransportFAB.setClickable(true);
+            }
 
             shuttleFAB.startAnimation(transport_fab_open);
             if (shuttleVisible) {
@@ -196,7 +221,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     /**
-     *  Disabled the shuttle transport option by greying it out and disable any click activity
+     *  Disables the shuttle transport option by greying it out and disable any click activity
      * @param isDisabled
      */
     public void disableShuttle(boolean isDisabled) {
@@ -208,6 +233,38 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             this.shuttleFAB.setClickable(true);
             this.shuttleFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorPrimary)));
             this.shuttleVisible = true;
+        }
+    }
+
+    /**
+     *  Disables the car option by greying it out and disable any click activity
+     * @param isDisabled
+     */
+    public void disableCar(boolean isDisabled) {
+        if (isDisabled) {
+            this.carFAB.setClickable(false);
+            this.carFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.grey)));
+            this.carVisible = false;
+        } else {
+            this.carFAB.setClickable(true);
+            this.carFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorPrimary)));
+            this.carVisible = true;
+        }
+    }
+
+    /**
+     *  Disables the public transport option by greying it out and disable any click activity
+     * @param isDisabled
+     */
+    public void disablePublicTransport(boolean isDisabled) {
+        if (isDisabled) {
+            this.publicTransportFAB.setClickable(false);
+            this.publicTransportFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.grey)));
+            this.publicTransportVisible = false;
+        } else {
+            this.publicTransportFAB.setClickable(true);
+            this.publicTransportFAB.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorPrimary)));
+            this.publicTransportVisible = true;
         }
     }
 
@@ -277,6 +334,21 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         return shuttleVisible;
     }
 
+    /**
+     * @return True if the shuttle icon is active
+     */
+    public boolean isCarVisible() {
+        return carVisible;
+    }
+
+    /**
+     * @return True if the public transport icon is active
+     */
+    public boolean isPublicTransportVisible() {
+        return publicTransportVisible;
+    }
+
+
     public FloatingActionButton getTransportExpandFAB() {
         return transportExpandFAB;
     }
@@ -337,7 +409,11 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         return transport_textview_close;
     }
 
-    public Transportation getTransportType() {
+    public String getTransportType() {
         return transportType;
+    }
+
+    public void setOutdoorDirections(OutdoorDirections outdoorDirections) {
+        this.outdoorDirections = outdoorDirections;
     }
 }

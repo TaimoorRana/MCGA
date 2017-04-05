@@ -2,7 +2,9 @@ package com.concordia.mcga.fragments;
 
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.models.Transportation;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
+import com.concordia.mcga.helperClasses.OutdoorDirections;
+import com.concordia.mcga.shadows.ShadowOutdoorDirections;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +18,7 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, shadows = {ShadowOutdoorDirections.class})
 public class TransportButtonFragmentTest {
 
     private TransportButtonFragment transportButtonFragment;
@@ -25,6 +27,7 @@ public class TransportButtonFragmentTest {
     public void setUp() {
         transportButtonFragment = new TransportButtonFragment();
         SupportFragmentTestUtil.startVisibleFragment(transportButtonFragment);
+        transportButtonFragment.setOutdoorDirections(new OutdoorDirections());
     }
 
     @Test
@@ -40,7 +43,6 @@ public class TransportButtonFragmentTest {
         //Text View
         assertNotNull(transportButtonFragment.getWalkTextView());
         assertNotNull(transportButtonFragment.getBikeTextView());
-        assertNotNull(transportButtonFragment.getBikeTextView());
         assertNotNull(transportButtonFragment.getCarTextView());
         assertNotNull(transportButtonFragment.getPublicTransportTextView());
         assertNotNull(transportButtonFragment.getShuttleTextView());
@@ -51,7 +53,7 @@ public class TransportButtonFragmentTest {
         assertNotNull(transportButtonFragment.getTransport_textview_open());
         assertNotNull(transportButtonFragment.getTransport_textview_close());
 
-        assertTrue(transportButtonFragment.getTransportType() == Transportation.PUBLIC_TRANSPORT);
+        assertTrue(transportButtonFragment.getTransportType().equalsIgnoreCase(MCGATransportMode.TRANSIT));
     }
 
     @Test
@@ -97,8 +99,43 @@ public class TransportButtonFragmentTest {
     }
 
     @Test
+    public void testDisableCarOption() {
+        //Make sure it's initially active
+        assertTrue(transportButtonFragment.isCarVisible());
+        assertTrue(transportButtonFragment.getCarFAB().isClickable());
+
+        //Disable it
+        transportButtonFragment.disableCar(true);
+
+        assertFalse(transportButtonFragment.isCarVisible());
+        assertFalse(transportButtonFragment.getCarFAB().isClickable());
+    }
+
+    @Test
+    public void testDisablePublicTransportOption() {
+        //Make sure it's initially active
+        assertTrue(transportButtonFragment.isPublicTransportVisible());
+        assertTrue(transportButtonFragment.getPublicTransportFAB().isClickable());
+
+        //Disable it
+        transportButtonFragment.disablePublicTransport(true);
+
+        assertFalse(transportButtonFragment.isPublicTransportVisible());
+        assertFalse(transportButtonFragment.getPublicTransportFAB().isClickable());
+    }
+
+    @Test
     public void testTransportOptionClick() {
         transportButtonFragment.getWalkFAB().performClick();
-        assertTrue(transportButtonFragment.getTransportType().equals(Transportation.WALK));
+        assertTrue(transportButtonFragment.getTransportType().equals(MCGATransportMode.WALKING));
+    }
+
+    @Test
+    public void testDisplayAllTransportTime() {
+        transportButtonFragment.displayAllTransportTimes();
+        assertTrue(transportButtonFragment.getCarTextView().getText().equals("1 minute"));
+        assertTrue(transportButtonFragment.getPublicTransportTextView().getText().equals("2 minutes"));
+        assertTrue(transportButtonFragment.getBikeTextView().getText().equals("3 minutes"));
+        assertTrue(transportButtonFragment.getWalkTextView().getText().equals("4 minutes"));
     }
 }

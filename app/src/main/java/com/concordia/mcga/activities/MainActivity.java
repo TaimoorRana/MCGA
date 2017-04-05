@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         initDatabase();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.bringToFront();
+
         navigationView.setNavigationItemSelectedListener(
             new NavigationView.OnNavigationItemSelectedListener() {
                 @Override
