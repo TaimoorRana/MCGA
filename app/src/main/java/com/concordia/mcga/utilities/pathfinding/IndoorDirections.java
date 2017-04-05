@@ -3,22 +3,12 @@ package com.concordia.mcga.utilities.pathfinding;
 import com.concordia.mcga.models.IndoorMapTile;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-/**
- * Created by root on 4/3/17.
- */
 
 public class IndoorDirections {
 
     private static List<String> directionsList = new ArrayList<String>();
     private static List<String> imageList = new ArrayList<String>();
-
-
-
-
 
 
     private static final int UNDEF_ORIENTATION = 0;
@@ -36,39 +26,41 @@ public class IndoorDirections {
     public IndoorDirections(){
     }
 
-    public static void clear(){
+    public  void clear(){
         directionsList.clear();
     }
 
 
-    public static void setDirections(List<IndoorMapTile> tiles){
-        String currentDirection = "";
+    public String[][] setDirections(List<IndoorMapTile> tiles){
+        String currentDirection = null;
         int distance = 0;
         String turn = "";
+        String image = "";
 
+        // Size -1 because we don't need directions to the first point
+        String[][] returnString = new String[tiles.size() - 1][2];
+
+        int x1, x2, y1, y2;
         try {
             int previousCoordinateX = tiles.get(0).getCoordinateX();
             int previousCoordinateY = tiles.get(0).getCoordinateY();
 
             for (int i = 1; i < tiles.size(); i++) {
-                if (tiles.get(i).getCoordinateX() < previousCoordinateX){
-                    distance = Math.abs(tiles.get(i).getCoordinateX() - previousCoordinateX);
+                x1 = previousCoordinateX;
+                x2 = tiles.get(i).getCoordinateX();
+                y1 = previousCoordinateY;
+                y2 = tiles.get(i).getCoordinateY();
 
-                }
-                else if (tiles.get(i).getCoordinateX() > previousCoordinateX){
-                    distance = Math.abs(tiles.get(i).getCoordinateX() - previousCoordinateX);
-                }
+                turn = getTurn(x1, x2, y1, y2);
+                distance = MeasureDistance(x1, x2, y1, y2);
+                image = getImage();
 
-                else if (tiles.get(i).getCoordinateY() < previousCoordinateY){
-                    distance = Math.abs(tiles.get(i).getCoordinateY() - previousCoordinateY);
-                }
+                // Format looks like: Turn Right In 200U ; where 'U' is for Unit
+                currentDirection = "Turn " + turn + " In " + distance + "U";
 
-                else if (tiles.get(i).getCoordinateY() > previousCoordinateY){
-                    distance = Math.abs(tiles.get(i).getCoordinateY() - previousCoordinateY);
-                }
-                else{
-                    // Straight line. Problem in junction points given
-                }
+                // Update 2D array
+                returnString[i - 1][0] = currentDirection;
+                returnString[i - 1][1] = image;
 
                 // Update previous directions to the current ones
                 previousCoordinateX = tiles.get(i).getCoordinateX();
@@ -77,37 +69,133 @@ public class IndoorDirections {
         }catch(Exception e){
             // Do nothing
         }
+
+        return returnString;
     }
 
     private void setOrientation(int orientation){
         this.orientation = orientation;
     }
 
+    private String getImage(){
+        // IDEALLY THIS SHOULD BE IN THE DATABASE
+        String img = null;
+        switch(orientation){
+            case NORTH_ORIENTATION:
+                img = "up";
+                break;
+
+            case SOUTH_ORIENTATION:
+                img = "down";
+                break;
+
+            case EAST_ORIENTATION:
+                img = "right";
+                break;
+
+            case WEST_ORIENTATION:
+                img = "west";
+                break;
+
+            default:
+                break;
+        }
+
+        return img;
+    }
+
+    private String getTurn(int x1, int x2, int y1, int y2){
+        String turn;
+        if (getNextOrientation(x1, x2, y1, y2) == 1){
+            turn = "Right";
+        }
+        else{
+            turn = "left";
+        }
+        return turn;
+    }
+
+    private int MeasureDistance(int x1, int x2, int y1, int y2){
+        int distance = 0;
+        if (x2 < x1){
+            distance = Math.abs(x1 - x2);
+
+        }
+        else if (x2 > x1){
+            distance = Math.abs(x1 - x2);
+        }
+
+        else if (y2 < y1){
+            distance = Math.abs(y1 - y2);
+        }
+
+        else if (y2 > y1){
+            distance = Math.abs(y1 - y2);
+        }
+        else{
+            // Straight line. Problem in junction points given
+        }
+        return distance;
+    }
 
     private int getNextOrientation(int x1, int x2, int y1, int y2){
+        int goRight = 0;
+
         // going right
         if (x1 < x2){
-            
+            // Facing north
+            if (orientation == NORTH_ORIENTATION){
+                goClockWise();
+                goRight = 1;
+            }
+            //Facing south
+            else{
+                goCounterClockWise();
+            }
         }
 
         // going left
         else if (x1 > x2){
-
+            // Facing north
+            if (orientation == NORTH_ORIENTATION){
+                goCounterClockWise();
+            }
+            //Facing south
+            else{
+                goClockWise();
+                goRight = 1;
+            }
         }
 
         // going down
         else if (y1 < y2){
-
+            // Facing East
+            if (orientation == EAST_ORIENTATION){
+                goClockWise();
+                goRight = 1;
+            }
+            // Facing West
+            else{
+                goCounterClockWise();
+            }
         }
 
         // going up
         else if (y1 > y2){
-
+            // Facing East
+            if (orientation == EAST_ORIENTATION){
+                goCounterClockWise();
+            }
+            // Facing West
+            else{
+                goClockWise();
+                goRight = 1;
+            }
         }
         else{
             //this should never happen
         }
-        return orientation;
+        return goRight;
     }
 
     private void goClockWise(){
