@@ -43,24 +43,9 @@ public class IndoorMapFactory {
      * the building/floorNumber combination does not exist in the database
      */
     public Floor createIndoorMap(Building building, int floorNumber) {
-        SQLiteDatabase db = null;
-        try {
-            db = DatabaseConnector.getInstance().getDb();
-            //This is left in here for historical reference.
-            //TiledMap map = createTiledMap(building, floorNumber, db);
-            //insertWalkablePaths(building, floorNumber, db, map);
-            Floor floor = new Floor(building, floorNumber);
-            //floor.setMap(map);
-            return floor;
-        } catch (MCGADatabaseException e) {
-            e.printStackTrace();
-        } finally {
-            if (db != null) {
-                db.close();
-            }
-        }
-        return null;
+        return new Floor(building, floorNumber);
     }
+
 
     /**
      * Inserts all valid walkable paths from the database into the given <b>map</b>
@@ -68,12 +53,15 @@ public class IndoorMapFactory {
      *
      * @param building    Building where the map is located in
      * @param floorNumber floorNumber that the map is representing
-     * @param db          DB object
      * @param map         object to modify with walkable paths
      * @throws MCGADatabaseException
      */
-    void insertWalkablePaths(Building building, int floorNumber, SQLiteDatabase db,
-                             TiledMap map) throws MCGADatabaseException {
+    public void insertWalkablePaths(Building building, int floorNumber,
+                                    TiledMap map) throws MCGADatabaseException {
+        SQLiteDatabase db = null;
+
+        db = DatabaseConnector.getInstance().getDb();
+
         Cursor walkablePathCursor = db
                 .rawQuery(
                         "SELECT building, floor, x_coordinate, y_coordinate FROM walkable_paths WHERE building = ? AND floor = ?",
@@ -84,6 +72,11 @@ public class IndoorMapFactory {
                     walkablePathCursor.getInt(Y_COORDINATE_INDEX)));
         }
         walkablePathCursor.close();
+
+        if (db != null) {
+            db.close();
+        }
+
     }
 
     /**
@@ -92,17 +85,21 @@ public class IndoorMapFactory {
      *
      * @param building    the building where the map is located
      * @param floorNumber the floor number
-     * @param db          Database object
      * @return TiledMap of the appropriate size
      * @throws MCGADatabaseException
      */
-    TiledMap createTiledMap(Building building, int floorNumber, SQLiteDatabase db)
+    public TiledMap createTiledMap(Building building, int floorNumber)
             throws MCGADatabaseException {
+        SQLiteDatabase db = null;
+        TiledMap map = null;
+
+        db = DatabaseConnector.getInstance().getDb();
+
         Cursor indoorMapCursor = db
                 .rawQuery(
                         "SELECT building, floor, map_height, map_width FROM indoor_maps WHERE building = ? AND floor = ?",
                         new String[]{building.getShortName(), String.valueOf(floorNumber)});
-        TiledMap map;
+
         if (indoorMapCursor.moveToNext()) {
             map = new TiledMap(indoorMapCursor.getInt(MAP_WIDTH_INDEX),
                     indoorMapCursor.getInt(MAP_HEIGHT_INDEX));
@@ -111,6 +108,11 @@ public class IndoorMapFactory {
             indoorMapCursor.close();
             throw new MCGADatabaseException("No Floor Record Found");
         }
+
+        if (db != null) {
+            db.close();
+        }
         return map;
     }
+
 }
