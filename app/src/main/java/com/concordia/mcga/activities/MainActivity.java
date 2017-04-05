@@ -15,8 +15,6 @@ import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
-import com.concordia.mcga.models.StudentSpot;
-import com.google.gson.Gson;
 
 import java.io.IOException;
 
