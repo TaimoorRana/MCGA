@@ -11,6 +11,8 @@ import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
 import com.concordia.mcga.lib.BottomSheet;
+import com.concordia.mcga.models.IndoorMapTile;
+import com.concordia.mcga.utilities.pathfinding.IndoorDirections;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -288,5 +290,34 @@ public class DirectionsTest {
         myFragment.updateDirections();
 
         assertTrue(array.size() == 0);
+    }
+
+    @Test
+    public void UpdateDirections_FromList_True(){
+        IndoorMapTile tile1 = new IndoorMapTile(0, 0);
+        IndoorMapTile tile2 = new IndoorMapTile(10, 0);
+        IndoorMapTile tile3 = new IndoorMapTile(10, 12);
+        IndoorMapTile tile4 = new IndoorMapTile(16, 12);
+        IndoorMapTile tile5 = new IndoorMapTile(5, 32);
+
+        List<IndoorMapTile> listTiles = new ArrayList<IndoorMapTile>();
+        listTiles.add(tile1);
+        listTiles.add(tile2);
+        listTiles.add(tile3);
+        listTiles.add(tile4);
+        listTiles.add(tile5);
+
+        myFragment.addJointPoints(listTiles);
+
+        List<String> direction = myFragment.getCompleteDirectionsList();
+        List<String> img = myFragment.getCompleteDirectionsList();
+
+        assertTrue(direction.get(0).equals("Turn Left In 10u"));
+        assertTrue(direction.get(1).equals("Turn Left In 12u"));
+        assertTrue(img.get(1).equals("left"));
+        assertTrue(direction.get(2).equals("Turn Left In 6u"));
+        assertTrue(img.get(0).equals("down"));
+        assertTrue(direction.get(3).equals("Turn Right In 11u"));
+        assertTrue(img.get(3).equals("left"));
     }
 }

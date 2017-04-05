@@ -196,6 +196,19 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     // This List stores all the directions
     ///////////////////////////////////////
 
+    /**
+     * Adds directions from a list of joint points
+     * @param tiles
+     */
+    public void addJointPoints(List<IndoorMapTile> tiles){
+        IndoorDirections indoorDirections = new IndoorDirections();
+        String[][] direction = indoorDirections.getDirections(tiles);
+
+        for (int i = 0; i < direction.length; i++){
+            addDirection(direction[i][0], direction[i][1]);
+        }
+        updateDirections();
+    }
 
     /**
      * Add Directions to the list Dynamically
@@ -302,6 +315,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
             setTextDirections("Directions");
         }
     }
+
 
 
     ////////////////////////////////////
