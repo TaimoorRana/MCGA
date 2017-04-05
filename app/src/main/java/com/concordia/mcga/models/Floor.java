@@ -101,14 +101,12 @@ public class Floor {
         escalators.add(escalator);
     }
 
-    public void populateTiledMap() {
+    public void populateTiledMap() throws MCGADatabaseException {
         TiledMap map = null;
-        try {
-            map = IndoorMapFactory.getInstance().createTiledMap(building, floorNumber);
-            IndoorMapFactory.getInstance().insertWalkablePaths(building, floorNumber, map);
-        } catch (MCGADatabaseException e) {
-            e.printStackTrace();
-        }
+
+        map = IndoorMapFactory.getInstance().createTiledMap(building, floorNumber);
+        IndoorMapFactory.getInstance().insertWalkablePaths(building, floorNumber, map);
+
         setMap(map);
     }
 

@@ -327,7 +327,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
     /*
      * Shows or hides the indoor map, will hide the outdoormap if visible
->>>>>>> 2a9cc3b2b5dc50c85939732f9bdbf8a56e7a32d5
      */
     public void showIndoorMap() {
         outdoorMapVisible = false;
@@ -355,13 +354,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      */
     public void showTransportButton(boolean isVisible) {
         if (isVisible) {
-            transportButtonVisible = true;
             getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit();
         } else {
-            transportButtonVisible = false;
             getChildFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
 
         }
+        transportButtonVisible = isVisible;
     }
 
     /**

@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
@@ -95,9 +96,9 @@ public class IndoorMapFragment extends Fragment {
 
         if (!pathGenerating) {
             generatePathThread = new Thread(new GeneratePath(start, dest));
+            generatePathThread.start();
         }
 
-        generatePathThread.start();
     }
 
     public void drawCurrentWalkablePath() {
@@ -262,10 +263,14 @@ public class IndoorMapFragment extends Fragment {
             pathGenerating = true;
 
             showProgressBar(true);
-            populateTiledMaps();
+            try {
+                populateTiledMaps();
+            } catch (MCGADatabaseException e) {
+                Thread.currentThread().interrupt();
+            }
         }
 
-        public void populateTiledMaps() {
+        public void populateTiledMaps() throws MCGADatabaseException {
             if (this.start.getFloor().equals(this.dest.getFloor())) {
                 this.start.getFloor().populateTiledMap();
             } else {
