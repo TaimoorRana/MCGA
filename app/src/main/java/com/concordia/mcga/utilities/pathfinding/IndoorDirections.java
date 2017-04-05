@@ -1,12 +1,9 @@
 package com.concordia.mcga.utilities.pathfinding;
 
-import android.util.Log;
-
 import com.concordia.mcga.models.IndoorMapTile;
 
 import java.util.List;
 
-import static android.content.ContentValues.TAG;
 
 public class IndoorDirections {
 
