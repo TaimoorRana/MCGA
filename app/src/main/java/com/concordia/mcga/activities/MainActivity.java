@@ -13,12 +13,18 @@ import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
+import com.concordia.mcga.models.IndoorPOI;
+import com.concordia.mcga.models.POI;
+import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private GlobalPathFinder finder;
+    private NavigationFragment navigationFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        NavigationFragment navigationFragment = new NavigationFragment();
+        navigationFragment = new NavigationFragment();
 
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame, navigationFragment, "MAIN_NAV");
@@ -100,6 +106,21 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException ioe) {
             throw new Error("Unable to create database");
         }
+    }
+
+    public void generatePath(POI start, POI dest) {
+        finder = new GlobalPathFinder(this, start, dest);
+
+        Thread finderThread = new Thread(finder);
+        finderThread.start();
+    }
+
+    public void notifyPathfindingComplete(){
+        finder.getOutdoorDirections().drawPathForSelectedTransportMode();
+    }
+
+    public NavigationFragment getNavigationFragment() {
+        return navigationFragment;
     }
 
 }
