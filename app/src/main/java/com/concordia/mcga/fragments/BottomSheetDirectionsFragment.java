@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
 import com.concordia.mcga.lib.BottomSheet;
+import com.concordia.mcga.models.IndoorMapTile;
+import com.concordia.mcga.utilities.pathfinding.IndoorDirections;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,14 +72,38 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         setupAdapter();
         setupButtonListeners();
 
-        addDirection("direction", "up");
-        addDirection("direction", "up");
-        addDirection("direction", "up");
-        addDirection("direction", "up");
-        addDirection("direction", "up");
-        addDirection("direction snidal snidal snidal snidal snidal", "up");
-        updateDirections();
+        //////////////////////
+        // For testing only //
+        //////////////////////
 
+        IndoorMapTile tile1 = new IndoorMapTile(0, 0);
+        IndoorMapTile tile2 = new IndoorMapTile(10, 0);
+        IndoorMapTile tile3 = new IndoorMapTile(10, 12);
+        IndoorMapTile tile4 = new IndoorMapTile(16, 12);
+        IndoorMapTile tile5 = new IndoorMapTile(5, 32);
+
+        List<IndoorMapTile> listTiles = new ArrayList<IndoorMapTile>();
+        listTiles.add(tile1);
+        listTiles.add(tile2);
+        listTiles.add(tile3);
+        listTiles.add(tile4);
+        listTiles.add(tile5);
+
+        IndoorDirections indoorDirections = new IndoorDirections();
+        String[][] stringArray;
+        stringArray = indoorDirections.getDirections(listTiles);
+
+        for (int i = 0; i < stringArray.length; i++){
+            addDirection(stringArray[i][0], stringArray[i][1]);
+        }
+
+        addDirection("You Have Reached Your Destination", "destination");
+
+        //////////////////
+        //  END OF TEST //
+        //////////////////
+
+        updateDirections();
         return view;
     }
 

@@ -1,8 +1,12 @@
 package com.concordia.mcga.utilities.pathfinding;
 
+import android.util.Log;
+
 import com.concordia.mcga.models.IndoorMapTile;
 
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class IndoorDirections {
 
@@ -12,7 +16,8 @@ public class IndoorDirections {
     private static final int SOUTH_ORIENTATION = 3;
     private static final int WEST_ORIENTATION = 4;
 
-    private int orientation = UNDEF_ORIENTATION;
+    private int orientation;
+
     ///////////////
     // Main Code //
     ///////////////
@@ -21,6 +26,7 @@ public class IndoorDirections {
      * Constructor
      */
     public IndoorDirections(){
+        orientation = UNDEF_ORIENTATION;
     }
 
     /**
@@ -43,6 +49,9 @@ public class IndoorDirections {
             int previousCoordinateX = tiles.get(0).getCoordinateX();
             int previousCoordinateY = tiles.get(0).getCoordinateY();
 
+            // Inittial orientation
+            initOrientation(tiles.get(0).getCoordinateX(), tiles.get(1).getCoordinateX(), tiles.get(0).getCoordinateY(), tiles.get(1).getCoordinateY());
+
             for (int i = 1; i < tiles.size(); i++) {
                 x1 = previousCoordinateX;
                 x2 = tiles.get(i).getCoordinateX();
@@ -54,7 +63,7 @@ public class IndoorDirections {
                 image = getImage();
 
                 // Format looks like: Turn Right In 200U ; where 'U' is for Unit
-                currentDirection = "Turn " + turn + " In " + distance + "U";
+                currentDirection = "Turn " + turn + " In " + distance + "u";
 
                 // Update 2D array
                 returnString[i - 1][0] = currentDirection;
@@ -76,29 +85,25 @@ public class IndoorDirections {
      * @return images which should be shown to the user. Will display an arrow
      */
     private String getImage(){
-        // IDEALLY THIS SHOULD BE IN THE DATABASE
+
         String img = null;
+        // IDEALLY THIS SHOULD BE IN THE DATABASE
         switch(orientation){
             case NORTH_ORIENTATION:
-                img = "up";
-                break;
+                return "up";
 
             case SOUTH_ORIENTATION:
-                img = "down";
-                break;
+                return "down";
 
             case EAST_ORIENTATION:
-                img = "right";
-                break;
+                return "right";
 
             case WEST_ORIENTATION:
-                img = "left";
-                break;
+                return "left";
 
             default:
                 break;
         }
-
         return img;
     }
 
@@ -163,7 +168,6 @@ public class IndoorDirections {
      */
     private int getNextOrientation(int x1, int x2, int y1, int y2){
         int goRight = 0;
-
         // going right
         if (x1 < x2){
             // Facing north
@@ -279,5 +283,26 @@ public class IndoorDirections {
             default:
                 break;
         }
+    }
+
+    /**
+     * Since orientation is originally undefined, we need to define it for the first point
+     * @param x1 previous x coordinate
+     * @param x2 current x coordinate
+     * @param y1 previous y coordinate
+     * @param y2 current y coordinate
+     */
+    private void initOrientation(int x1, int x2, int y1, int y2){
+        if (x1 < x2)
+            orientation = EAST_ORIENTATION;
+
+        else if (x1 > x2)
+            orientation = WEST_ORIENTATION;
+
+        else if (y1 < y2)
+            orientation = SOUTH_ORIENTATION;
+
+        else if (y1 > y2)
+            orientation = NORTH_ORIENTATION;
     }
 }
