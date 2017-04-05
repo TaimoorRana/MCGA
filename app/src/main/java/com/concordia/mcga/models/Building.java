@@ -2,6 +2,7 @@ package com.concordia.mcga.models;
 
 import android.database.Cursor;
 import android.graphics.Color;
+
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.ConnectedPOIFactory;
 import com.concordia.mcga.factories.IndoorMapFactory;
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,13 +34,15 @@ public class Building extends POI implements Observer {
     private Polygon polygon;
     private Map<Integer, Floor> floorMaps;
     private boolean connectedPoiRetrieved;
+    private IndoorPOI defaultPortal;
 
     /**
-     *  returns a Building object
+     * returns a Building object
+     *
      * @param centerCoordinate Center of the building
-     * @param name Full name of the building
-     * @param shortName Short name of the building
-     * @param markerOptions Building's icon
+     * @param name             Full name of the building
+     * @param shortName        Short name of the building
+     * @param markerOptions    Building's icon
      */
     public Building(LatLng centerCoordinate, String name, String shortName, MarkerOptions markerOptions) {
         super(centerCoordinate, name);
@@ -53,7 +57,11 @@ public class Building extends POI implements Observer {
     /**
      * Used for Testing purposes only
      */
-    Building(){super(new LatLng(0,0),"TEST");};
+    Building() {
+        super(new LatLng(0, 0), "TEST");
+    }
+
+    ;
 
     /**
      * Setter used for testing purposes
@@ -63,7 +71,7 @@ public class Building extends POI implements Observer {
     }
 
     /**
-     *  Populate this Building object with rooms retrieved via database.
+     * Populate this Building object with rooms retrieved via database.
      */
     public void populateRooms() {
         final int BUILDING_COLUMN_INDEX = 5;
@@ -95,10 +103,14 @@ public class Building extends POI implements Observer {
                 floor.getIndoorPOIs().add(room);
             } else {
                 floor = IndoorMapFactory.getInstance().createIndoorMap(this, room.getFloorNumber());
-                //floor = new Floor(this, room.getFloorNumber());
                 room.setFloor(floor);
                 floor.getIndoorPOIs().add(room);
                 floorMaps.put(room.getFloorNumber(), floor);
+            }
+
+            //TODO: FIX
+            if (room.getName().equals("H225")) {
+                this.defaultPortal = room;
             }
         }
     }
@@ -137,12 +149,11 @@ public class Building extends POI implements Observer {
     }
 
     /**
-     *
      * @return Floor maps for the given floor Number
      */
     public Floor getFloorMap(int floorNumber) {
         Floor returnMap = floorMaps.get(floorNumber);
-        if (returnMap == null){
+        if (returnMap == null) {
             returnMap = IndoorMapFactory.getInstance().createIndoorMap(this, floorNumber);
             floorMaps.put(floorNumber, returnMap);
         }
@@ -150,7 +161,6 @@ public class Building extends POI implements Observer {
     }
 
     /**
-     *
      * @return Map of all floor maps
      */
     public Map<Integer, Floor> getFloorMaps() {
@@ -159,6 +169,7 @@ public class Building extends POI implements Observer {
 
     /**
      * Get all the rooms belonging to this building
+     *
      * @return List of all the rooms associated with this building
      */
     public List<Room> getRooms() {
@@ -166,7 +177,6 @@ public class Building extends POI implements Observer {
     }
 
     /**
-     *
      * @return Flag to check whether the building has had its connected POIs retrieved
      */
     public boolean isConnectedPoiRetrieved() {
@@ -175,6 +185,7 @@ public class Building extends POI implements Observer {
 
     /**
      * Flag to check whether the building has had its connected POIs retrieved
+     *
      * @param connectedPoiRetrieved
      */
     public void setConnectedPoiRetrieved(boolean connectedPoiRetrieved) {
@@ -183,6 +194,7 @@ public class Building extends POI implements Observer {
 
     /**
      * Setter for floorMaps
+     *
      * @param floorMaps
      */
     public void setFloorMaps(Map<Integer, Floor> floorMaps) {
@@ -197,7 +209,6 @@ public class Building extends POI implements Observer {
     }
 
     /**
-     *
      * @param shortName set building short name
      */
     public void setShortName(String shortName) {
@@ -205,7 +216,6 @@ public class Building extends POI implements Observer {
     }
 
     /**
-     *
      * @param edgeCoordinates Edge coordinates of the building
      * @return the building object
      */
@@ -215,12 +225,11 @@ public class Building extends POI implements Observer {
     }
 
     /**
-     *
      * @return PolygonOptions object
      */
-    public PolygonOptions getPolygonOverlayOptions(){
+    public PolygonOptions getPolygonOverlayOptions() {
 
-        if(edgeCoordinateList.isEmpty()){
+        if (edgeCoordinateList.isEmpty()) {
             return null;
         }
 
@@ -231,14 +240,13 @@ public class Building extends POI implements Observer {
         }
 
         polygonOptions.strokeColor(strokeColor)
-                    .strokeWidth(strokeWidth)
-                    .fillColor(fillColor);
+                .strokeWidth(strokeWidth)
+                .fillColor(fillColor);
 
         return polygonOptions;
     }
 
     /**
-     *
      * @return Return MarkerOptions object used for the building icon
      */
     public MarkerOptions getMarkerOptions() {
@@ -246,7 +254,6 @@ public class Building extends POI implements Observer {
     }
 
     /**
-     *
      * @param marker set building Marker object
      */
     public void setMarker(Marker marker) {
@@ -255,6 +262,7 @@ public class Building extends POI implements Observer {
 
     /**
      * Depending the map's current zoom level, The marker visibility will turn on or off
+     *
      * @param mapZoomLevel map's current zoom level
      */
     @Override
@@ -267,7 +275,6 @@ public class Building extends POI implements Observer {
     }
 
     /**
-     *
      * @return List of edges of this building
      */
     public List<LatLng> getEdgeCoordinateList() {
@@ -275,23 +282,26 @@ public class Building extends POI implements Observer {
     }
 
     /**
-     *
      * @param resourceImageId Icon's resource id
      */
     public void setResourceImageId(int resourceImageId) {
         this.resourceImageId = resourceImageId;
     }
 
-    public void setPolygon(Polygon polygon){
+    public void setPolygon(Polygon polygon) {
         this.polygon = polygon;
     }
 
-    public Polygon getPolygon(){
+    public Polygon getPolygon() {
         return polygon;
     }
 
-    public Marker getMarker(){
+    public Marker getMarker() {
         return marker;
+    }
+
+    public IndoorPOI getDefaultPortal() {
+        return defaultPortal;
     }
 
 }
