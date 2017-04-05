@@ -13,13 +13,14 @@ import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
+import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
-
+    private GlobalPathFinder finder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,4 +103,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void notifyPathfindingComplete(){
+
+    }
 }
