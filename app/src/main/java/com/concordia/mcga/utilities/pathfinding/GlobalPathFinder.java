@@ -1,5 +1,6 @@
 package com.concordia.mcga.utilities.pathfinding;
 
+import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.POI;
@@ -11,15 +12,22 @@ import java.util.Map;
 public class GlobalPathFinder implements Runnable {
     private final POI startPOI;
     private final POI destPOI;
-
-    GlobalPathFinder(POI startPOI, POI destPOI){
+    private MainActivity activity;
+    /**
+     * @param activity reference to the MainActivity
+     * @param startPOI
+     * @param destPOI
+     */
+    GlobalPathFinder(MainActivity activity, POI startPOI, POI destPOI){
         this.startPOI = startPOI;
         this.destPOI = destPOI;
+        this.activity = activity;
     }
 
     @Override
     public void run() {
-
+        // LOGIC HERE
+        activity.notifyPathfindingComplete();
     }
 
     /**
@@ -52,5 +60,13 @@ public class GlobalPathFinder implements Runnable {
      */
     public LatLng[] getOutDoorCoordinates() {
         return null;
+    }
+
+    public POI getStartPOI() {
+        return startPOI;
+    }
+
+    public POI getDestPOI() {
+        return destPOI;
     }
 }
