@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Floor {
-    private final static int X_COORDINATE_INDEX = 2, Y_COORDINATE_INDEX = 3,
-            MAP_HEIGHT_INDEX = 2, MAP_WIDTH_INDEX = 3;
     private Building building;
     private TiledMap map;
     private int floorNumber;

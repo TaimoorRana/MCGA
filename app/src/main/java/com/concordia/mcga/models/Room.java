@@ -78,7 +78,7 @@ public class Room extends IndoorPOI {
             json.put("polygonCoords", polygonCoordArray);
             json.put("roomIcon", this.getRoomIcon().toString());
         } catch (JSONException e) {
-            Log.e("IndoorMapTile Error", Log.getStackTraceString(e));
+            Log.e("JSON Error", Log.getStackTraceString(e));
         }
         return json;
     }
