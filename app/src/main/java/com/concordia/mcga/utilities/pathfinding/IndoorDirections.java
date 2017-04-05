@@ -2,14 +2,9 @@ package com.concordia.mcga.utilities.pathfinding;
 
 import com.concordia.mcga.models.IndoorMapTile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IndoorDirections {
-
-    private static List<String> directionsList = new ArrayList<String>();
-    private static List<String> imageList = new ArrayList<String>();
-
 
     private static final int UNDEF_ORIENTATION = 0;
     private static final int NORTH_ORIENTATION = 1;
@@ -22,26 +17,29 @@ public class IndoorDirections {
     // Main Code //
     ///////////////
 
-
+    /**
+     * Constructor
+     */
     public IndoorDirections(){
     }
 
-    public  void clear(){
-        directionsList.clear();
-    }
-
-
-    public String[][] setDirections(List<IndoorMapTile> tiles){
+    /**
+     * Get list of directions for the user
+     * @param tiles
+     * @return String to tell user what to do as well as an image
+     */
+    public String[][] getDirections(List<IndoorMapTile> tiles){
         String currentDirection = null;
         int distance = 0;
-        String turn = "";
-        String image = "";
+        String turn = null;
+        String image = null;
 
         // Size -1 because we don't need directions to the first point
         String[][] returnString = new String[tiles.size() - 1][2];
 
         int x1, x2, y1, y2;
         try {
+            // set initial coordinates once
             int previousCoordinateX = tiles.get(0).getCoordinateX();
             int previousCoordinateY = tiles.get(0).getCoordinateY();
 
@@ -73,10 +71,10 @@ public class IndoorDirections {
         return returnString;
     }
 
-    private void setOrientation(int orientation){
-        this.orientation = orientation;
-    }
-
+    /**
+     *
+     * @return images which should be shown to the user. Will display an arrow
+     */
     private String getImage(){
         // IDEALLY THIS SHOULD BE IN THE DATABASE
         String img = null;
@@ -94,7 +92,7 @@ public class IndoorDirections {
                 break;
 
             case WEST_ORIENTATION:
-                img = "west";
+                img = "left";
                 break;
 
             default:
@@ -104,17 +102,33 @@ public class IndoorDirections {
         return img;
     }
 
+    /**
+     * Tell user to turn left or right depending on the way they are facing
+     * @param x1 previous x coordinate
+     * @param x2 current x coordinate
+     * @param y1 previous y coordinate
+     * @param y2 current y coordinate
+     * @return String 'Left' or 'Right'
+     */
     private String getTurn(int x1, int x2, int y1, int y2){
         String turn;
         if (getNextOrientation(x1, x2, y1, y2) == 1){
             turn = "Right";
         }
         else{
-            turn = "left";
+            turn = "Left";
         }
         return turn;
     }
 
+    /**
+     * Measures distance to the next joint point
+     * @param x1 previous x coordinate
+     * @param x2 current x coordinate
+     * @param y1 previous y coordinate
+     * @param y2 current y coordinate
+     * @return distance measured in undefined unit 'U'
+     */
     private int MeasureDistance(int x1, int x2, int y1, int y2){
         int distance = 0;
         if (x2 < x1){
@@ -138,6 +152,15 @@ public class IndoorDirections {
         return distance;
     }
 
+
+    /**
+     * Will retrieve the next orientation of the user
+     * @param x1 previous x coordinate
+     * @param x2 current x coordinate
+     * @param y1 previous y coordinate
+     * @param y2 current y coordinate
+     * @return 1 if the user must go right or 0 if he must go left at the join point
+     */
     private int getNextOrientation(int x1, int x2, int y1, int y2){
         int goRight = 0;
 
@@ -198,6 +221,9 @@ public class IndoorDirections {
         return goRight;
     }
 
+    /**
+     * Changes the orientation of the user by 90 degrees clockwise
+     */
     private void goClockWise(){
         switch (orientation){
             case UNDEF_ORIENTATION:
@@ -225,6 +251,9 @@ public class IndoorDirections {
         }
     }
 
+    /**
+     * changes the orientation of the user by 90 degrees counterclockwise
+     */
     private void goCounterClockWise(){
         switch (orientation){
             case UNDEF_ORIENTATION:
