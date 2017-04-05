@@ -12,7 +12,8 @@ import android.annotation.TargetApi;
         import android.text.StaticLayout;
         import android.text.TextPaint;
         import android.util.AttributeSet;
-        import android.util.SparseIntArray;
+import android.util.Size;
+import android.util.SparseIntArray;
         import android.util.TypedValue;
         import android.widget.TextView;
 
@@ -250,6 +251,16 @@ public class AutoResizeTextView extends TextView {
     }
 
     /**
+     * Method only used for testing, the verify that the Size algorithm works*
+     * @param suggestedSize
+     * @param availableSPace
+     * @return -1 for to small and 1 for too big
+     */
+    public int getmSizeTester(int suggestedSize, RectF availableSPace){
+        return mSizeTester.onTestSize(suggestedSize, availableSPace);
+    }
+
+    /**
      * Tests to see if size is ok
      * The binary search uses this method repeatedly
      */
@@ -384,4 +395,5 @@ public class AutoResizeTextView extends TextView {
             reAdjust();
         }
     }
+
 }
