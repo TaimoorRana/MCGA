@@ -85,7 +85,7 @@ public class OutdoorPath implements DirectionCallback {
      * Draws the path on the map
      */
     public void drawPath() {
-        if(origin == null || destination == null){
+        if (origin == null || destination == null) {
             return;
         }
 
@@ -137,7 +137,7 @@ public class OutdoorPath implements DirectionCallback {
     }
 
     public void setOrigin(LatLng origin) {
-            this.origin = origin;
+        this.origin = origin;
     }
 
     public LatLng getDestination() {
@@ -145,7 +145,7 @@ public class OutdoorPath implements DirectionCallback {
     }
 
     public void setDestination(LatLng destination) {
-            this.destination = destination;
+        this.destination = destination;
     }
 
     public void setMap(GoogleMap map) {

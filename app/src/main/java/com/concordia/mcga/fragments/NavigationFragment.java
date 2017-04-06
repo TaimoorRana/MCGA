@@ -1,9 +1,9 @@
 package com.concordia.mcga.fragments;
-
-import android.app.Activity;
+import com.concordia.mcga.activities.MainActivity;
 import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,10 +18,10 @@ import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -37,7 +37,6 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 
 import com.akexorcist.googledirection.constant.TransportMode;
-import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.helperClasses.Observer;
@@ -97,9 +96,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
     private Map<String, Object> multiBuildingMap = new HashMap<>();
+
     //State
     private ViewType viewType;
     private Campus currentCampus = Campus.SGW;
+
     private boolean indoorMapVisible = false;
     private boolean outdoorMapVisible = false;
     private boolean transportButtonVisible = false;
@@ -109,8 +110,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private SupportMapFragment mapFragment;
     private TransportButtonFragment transportButtonFragment;
     private IndoorMapFragment indoorMapFragment;
+
     private BottomSheetDirectionsFragment directionsFragment;
     private BottomSheetBuildingInfoFragment buildingInfoFragment;
+
+
     //View Components
     private View rootView;
     private View toolbarView;
@@ -119,11 +123,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private FloatingActionButton mapCenterButton;
     //GPS attributes
     private LocationManager gpsmanager; //LocationManager instance to check gps activity
+
+
     // Search components
     private SearchView search;
     private POISearchAdapter poiSearchAdapter;
     private ExpandableListView searchList;
     private Dialog searchDialog;
+
     private POI location;
     private POI destination;
     private SearchState searchState;
@@ -433,7 +440,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
-                setBottomSheetContent(polygon);
+            setBottomSheetContent(polygon);
+
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -627,12 +635,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 toolbarView.findViewById(R.id.search_location);
         LinearLayoutCompat destinationLayout = (LinearLayoutCompat)
                 toolbarView.findViewById(R.id.search_destination);
+
         if (location != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
             setDisplayName(location, locationText);
             outdoorDirections.setOrigin(location.getMapCoordinates());
-        }else{
+        } else {
             outdoorDirections.setOrigin(null);
         }
         if (destination != null) {
@@ -640,7 +649,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     toolbarView.findViewById(R.id.search_destination_text);
             setDisplayName(destination, destinationText);
             outdoorDirections.setDestination(destination.getMapCoordinates());
-        }else{
+        } else {
             outdoorDirections.setDestination(null);
         }
 
