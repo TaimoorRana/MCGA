@@ -12,6 +12,10 @@ public class OutdoorDirections {
     private List<OutdoorPath> outdoorPathList;
     private String selectedTransportMode = null;
     private OutdoorPath selectedOutdoorPath;
+    private LatLng origin, destination;
+    private GoogleMap map;
+    private String serverKey;
+    private Context context;
 
     public OutdoorDirections() {
         outdoorPathList = new ArrayList<>();
@@ -37,12 +41,26 @@ public class OutdoorDirections {
         }
     }
 
+    public void requestDirection(LatLng origin,LatLng destination,String transportMode){
+        OutdoorPath outdoorPath = new OutdoorPath();
+        outdoorPath.setContext(context);
+        outdoorPath.setMap(map);
+        outdoorPath.setServerKey(serverKey);
+        outdoorPath.setOrigin(origin);
+        outdoorPath.setDestination(destination);
+        outdoorPath.setTransportMode(transportMode);
+        outdoorPath.setPathSelected(true);
+        outdoorPath.requestDirection();
+        selectedOutdoorPath = outdoorPath;
+    }
+
     /**
      * Set origin for all transportation
      *
      * @param origin
      */
     public void setOrigin(LatLng origin) {
+        this.origin = origin;
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setOrigin(origin);
         }
@@ -53,6 +71,7 @@ public class OutdoorDirections {
      * @param destination
      */
     public void setDestination(LatLng destination) {
+        this.destination = destination;
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setDestination(destination);
         }
@@ -63,6 +82,7 @@ public class OutdoorDirections {
      * @param map will be used to draw paths on
      */
     public void setMap(GoogleMap map) {
+        this.map = map;
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setMap(map);
         }
@@ -73,6 +93,7 @@ public class OutdoorDirections {
      * @param context
      */
     public void setContext(Context context) {
+        this.context = context;
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setContext(context);
         }
@@ -134,6 +155,7 @@ public class OutdoorDirections {
         for (OutdoorPath outdoorPath : outdoorPathList) {
             if (outdoorPath.getTransportMode().equalsIgnoreCase(selectedTransportMode)) {
                 selectedOutdoorPath = outdoorPath;
+                selectedOutdoorPath.setPathSelected(true);
                 this.selectedTransportMode = selectedTransportMode;
             }
         }
@@ -142,6 +164,7 @@ public class OutdoorDirections {
     }
 
     public void setServerKey(String serverKey){
+        this.serverKey = serverKey;
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setServerKey(serverKey);
         }

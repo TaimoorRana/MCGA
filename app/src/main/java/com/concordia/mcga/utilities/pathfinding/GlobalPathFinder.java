@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
+import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.IndoorPOI;
@@ -27,7 +29,7 @@ public class GlobalPathFinder implements Runnable {
      * @param startPOI
      * @param destPOI
      */
-    GlobalPathFinder(MainActivity activity, POI startPOI, POI destPOI) {
+    public GlobalPathFinder(MainActivity activity, POI startPOI, POI destPOI) {
         this.startPOI = startPOI;
         this.destPOI = destPOI;
         this.activity = activity;
@@ -84,9 +86,8 @@ public class GlobalPathFinder implements Runnable {
     }
 
     private void externalOnlyNavigation() {
-        outdoorCoordinates = new LatLng[2];
-        outdoorCoordinates[0] = startPOI.getMapCoordinates();
-        outdoorCoordinates[1] = destPOI.getMapCoordinates();
+        OutdoorDirections outdoorDirections = activity.getNavigationFragment().getOutdoorDirections();
+        outdoorDirections.requestDirection(startPOI.getMapCoordinates(),destPOI.getMapCoordinates(),MCGATransportMode.TRANSIT);
     }
 
     private void differentBuildingNavigation() throws MCGAPathFindingException {

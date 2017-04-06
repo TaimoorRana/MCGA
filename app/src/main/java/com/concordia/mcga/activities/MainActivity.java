@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private GlobalPathFinder finder;
+    private NavigationFragment navigationFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        NavigationFragment navigationFragment = new NavigationFragment();
+        navigationFragment = new NavigationFragment();
 
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.frame, navigationFragment, "MAIN_NAV");
@@ -103,7 +104,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void notifyPathfindingComplete(){
+    public NavigationFragment getNavigationFragment() {
+        return navigationFragment;
+    }
 
+    public void notifyPathfindingComplete(){
     }
 }

@@ -46,6 +46,7 @@ import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.POI;
+import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -291,7 +292,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorDirections.setContext(getActivity().getApplicationContext());
         outdoorDirections.setServerKey(getResources().getString(R.string.google_maps_key));
         outdoorDirections.setMap(map);
-        outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
 
         //Map Customization
         applyCustomGoogleMapsStyle();
@@ -647,6 +647,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorDirections.deleteDirection();
         if (location != null && destination != null) {
             outdoorDirections.requestDirections();
+            GlobalPathFinder globalPathFinder = new GlobalPathFinder((MainActivity)getActivity(),location,destination);
+            globalPathFinder.run();
         }
 
 
@@ -826,6 +828,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     public ViewType getViewType() {
         return viewType;
+    }
+
+    public OutdoorDirections getOutdoorDirections() {
+        return outdoorDirections;
     }
 
 }
