@@ -3,15 +3,11 @@ package com.concordia.mcga.utilities.pathfinding;
 import android.util.Log;
 
 import com.concordia.mcga.activities.MainActivity;
-import com.concordia.mcga.activities.R;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
-import com.concordia.mcga.helperClasses.MCGATransportMode;
-import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.POI;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -21,30 +17,21 @@ public class GlobalPathFinder implements Runnable {
     private final POI startPOI;
     private final POI destPOI;
     private MainActivity activity;
-    private GoogleMap map;
     private Map<Floor, List<IndoorMapTile>> startBuildingDirections;
     private Map<Floor, List<IndoorMapTile>> destBuildingDirections;
     private LatLng[] outdoorCoordinates;
     private MultiMapPathFinder indoorPathFinder;
-    private OutdoorDirections outdoorDirections;
-    private String transportMode;
 
     /**
      * @param activity reference to the MainActivity
-     * @param map reference to google maps
      * @param startPOI
      * @param destPOI
-     * @param transportMode One of the transport mode available in MCGATransport class
      */
-    public GlobalPathFinder(MainActivity activity, GoogleMap map, POI startPOI, POI destPOI, String transportMode) {
+    GlobalPathFinder(MainActivity activity, POI startPOI, POI destPOI) {
         this.startPOI = startPOI;
         this.destPOI = destPOI;
         this.activity = activity;
-        this.map = map;
-        this.transportMode = transportMode;
         indoorPathFinder = new MultiMapPathFinder();
-        outdoorDirections = new OutdoorDirections();
-        setUpOutdoorDirections();
     }
 
     @Override
@@ -97,7 +84,9 @@ public class GlobalPathFinder implements Runnable {
     }
 
     private void externalOnlyNavigation() {
-        outdoorDirections.requestDirection(startPOI.getMapCoordinates(),destPOI.getMapCoordinates(), transportMode);
+        outdoorCoordinates = new LatLng[2];
+        outdoorCoordinates[0] = startPOI.getMapCoordinates();
+        outdoorCoordinates[1] = destPOI.getMapCoordinates();
     }
 
     private void differentBuildingNavigation() throws MCGAPathFindingException {
@@ -124,13 +113,6 @@ public class GlobalPathFinder implements Runnable {
 
     }
 
-    private void setUpOutdoorDirections() {
-        outdoorDirections.setContext(activity);
-        outdoorDirections.setServerKey(activity.getResources().getString(R.string.google_maps_key));
-        outdoorDirections.setMap(map);
-        outdoorDirections.setSelectedTransportMode(transportMode);
-    }
-
     /**
      * Returns building directions for the indoor start building
      *
@@ -155,13 +137,6 @@ public class GlobalPathFinder implements Runnable {
      */
     public Map<Floor, List<IndoorMapTile>> getDestBuildingDirections() {
         return destBuildingDirections;
-    }
-
-    /**
-     * @return OutdoorDirections that is used to draw path between two outdoor POIs
-     */
-    public OutdoorDirections getOutdoorDirections(){
-        return outdoorDirections;
     }
 
     /**
