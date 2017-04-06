@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
@@ -226,6 +227,11 @@ public class IndoorMapFragment extends Fragment {
             IndoorPOI endTemp = indoorPoiStack.get(1);
             generatePath(startTemp, endTemp);
         }
+    }
+
+    public void onRoomSearch() {
+        Log.d("IndoorMapFragment", "On room search " + ((MainActivity)
+                getActivity()).getDestination().getName());
     }
 
 

@@ -46,6 +46,7 @@ import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.POI;
+import com.concordia.mcga.models.Room;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -71,7 +72,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         INDOOR, OUTDOOR
     }
 
-    private enum SearchState {
+    public enum SearchState {
         NONE, LOCATION, DESTINATION, LOCATION_DESTINATION
     }
 
@@ -124,7 +125,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private POISearchAdapter poiSearchAdapter;
     private ExpandableListView searchList;
     private Dialog searchDialog;
-    private POI location;
     private POI destination;
     private SearchState searchState;
 
@@ -200,8 +200,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         locationCancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                location = null;
-                if (destination == null) {
+                ((MainActivity)getActivity()).setLocation(null);
+                if (((MainActivity)getActivity()).getDestination() == null) {
                     searchState = SearchState.NONE;
                 } else {
                     searchState = SearchState.DESTINATION;
@@ -216,8 +216,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         destinationCancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                destination = null;
-                if (location == null) {
+                ((MainActivity)getActivity()).setDestination(null);
+                if (((MainActivity)getActivity()).getLocation() == null) {
                     searchState = SearchState.NONE;
                 } else {
                     searchState = SearchState.LOCATION;
@@ -299,6 +299,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         addBuildingMarkersAndPolygons();
 
         updateCampus();
+    }
+
+    private void onRoomSearch() {
+        if (outdoorMapVisible) {
+            showIndoorMap();
+        }
+
+        indoorMapFragment.onRoomSearch();
     }
 
     /**
@@ -627,25 +635,28 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 toolbarView.findViewById(R.id.search_location);
         LinearLayoutCompat destinationLayout = (LinearLayoutCompat)
                 toolbarView.findViewById(R.id.search_destination);
-        if (location != null) {
+        if (((MainActivity)getActivity()).getLocation() != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
-            setDisplayName(location, locationText);
-            outdoorDirections.setOrigin(location.getMapCoordinates());
+            setDisplayName(((MainActivity)getActivity()).getLocation(), locationText);
+            outdoorDirections.setOrigin(((MainActivity)getActivity()).getLocation()
+                    .getMapCoordinates());
         }else{
             outdoorDirections.setOrigin(null);
         }
-        if (destination != null) {
+        if (((MainActivity)getActivity()).getDestination() != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
-            setDisplayName(destination, destinationText);
-            outdoorDirections.setDestination(destination.getMapCoordinates());
+            setDisplayName(((MainActivity)getActivity()).getDestination(), destinationText);
+            outdoorDirections.setDestination(((MainActivity)getActivity()).getDestination()
+                    .getMapCoordinates());
         }else{
             outdoorDirections.setDestination(null);
         }
 
         outdoorDirections.deleteDirection();
-        if (location != null && destination != null) {
+        if (((MainActivity)getActivity()).getLocation() != null &&
+                ((MainActivity)getActivity()).getDestination() != null) {
             outdoorDirections.requestDirections();
         }
 
@@ -767,11 +778,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                POI dest = (POI)poiSearchAdapter.getChild(groupPosition, childPosition);
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(),
-                        CAMPUS_DEFAULT_ZOOM_LEVEL));
+                POI poi = (POI)poiSearchAdapter.getChild(groupPosition, childPosition);
 
-                setNavigationPOI(dest);
+                if (!(poi instanceof Room)) {
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(poi.getMapCoordinates(),
+                            CAMPUS_DEFAULT_ZOOM_LEVEL));
+                } else {
+                    onRoomSearch();
+                }
+
+                setNavigationPOI(poi);
                 onClose();
                 return true;
             }
@@ -798,13 +814,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      */
     private boolean setNavigationPOI(POI dest) {
         if (searchState == SearchState.NONE) {
-            location = dest;
+            ((MainActivity)getActivity()).setLocation(dest);
             searchState = SearchState.LOCATION;
         } else if (searchState == SearchState.DESTINATION) {
-            location = dest;
+            ((MainActivity)getActivity()).setLocation(dest);
             searchState = SearchState.LOCATION_DESTINATION;
         } else if (searchState == SearchState.LOCATION) {
-            destination = dest;
+            ((MainActivity)getActivity()).setDestination(dest);
             searchState = SearchState.LOCATION_DESTINATION;
         } else { // if searchState == SearchState.LOCATION_DESTINATION
             return false;
