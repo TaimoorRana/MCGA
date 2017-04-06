@@ -89,7 +89,6 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
     }
 
     public void updateBottomSheet(){
-        // TEMPORARY
         clear();
         if (buildingName.equals("H")) {
             displayHBuildingAssociations();
@@ -295,7 +294,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
      * then catched exception
      * @param image
      */
-    public synchronized void addImages(String[] image){
+    public void addImages(String[] image){
         try {
             String[] temp = new String[IMAGES_PER_ROW];
             for (int i = 0; i < image.length; i++){

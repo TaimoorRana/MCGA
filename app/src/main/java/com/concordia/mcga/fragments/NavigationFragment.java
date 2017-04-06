@@ -459,6 +459,19 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
+     * Updates Bottomsheet displaying information about a building
+     * once the user taps on a building
+     * @param buildingName
+     */
+    private void updateBuildingInfoSheet(String buildingName){
+        buildingInfoFragment.setBuildingName(buildingName);
+        buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
+        buildingInfoFragment.updateBottomSheet();
+        showBuildingInfoFragment(true);
+        parentLayout.postInvalidate();
+    }
+
+    /**
      *
      * @param polygon
      */
@@ -472,13 +485,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
         ((MainActivity) getActivity()).createToast(building.getShortName());
         String name = building.getShortName();
-        buildingInfoFragment.setBuildingName(name);
-        buildingInfoFragment.setBuildingInformation(name, "add", "7:00", "23:00");
-        buildingInfoFragment.updateBottomSheet();
-        showBuildingInfoFragment(true);
-
+        updateBuildingInfoSheet(name);
         bottomSheetBuilding = (Building)multiBuildingMap.get(polygon.getId());
-        parentLayout.postInvalidate();
+
     }
 
 
@@ -497,13 +506,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         ((MainActivity) getActivity()).createToast(building.getShortName());
 
         String name = building.getShortName();
-        buildingInfoFragment.setBuildingName(name);
-        buildingInfoFragment.setBuildingInformation(name, "add", "7:00", "23:00");
-        buildingInfoFragment.updateBottomSheet();
-        showBuildingInfoFragment(true);
-        parentLayout.invalidate();
-
+        updateBuildingInfoSheet(name);
         bottomSheetBuilding = (Building)multiBuildingMap.get(marker.getId());
+
     }
 
     /**
