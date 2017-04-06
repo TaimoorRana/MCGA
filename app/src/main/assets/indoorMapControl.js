@@ -187,6 +187,18 @@ function femaleWashroomIcon(point, roomName) {
     return L.marker(point, { icon: femaleWashroom, "roomName": roomName });
 }
 
+//Utility Functions
+function panTo(x, y) {
+    map.panTo(L.latLng(curLatBound - y, x));
+}
+
+function panToMap(x, y, mapId) {
+    console.log("x: " + x);
+    console.log("y: " + y);
+    console.log("m: " + mapId);
+    loadMap(mapId);
+    map.panTo(L.latLng(curLatBound - y, x));
+}
 
 //Clearing Functions
 function clearPathLayers() {

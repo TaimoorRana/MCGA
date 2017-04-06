@@ -147,7 +147,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View v) {
                 if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    if(alertGPS(mapFragment.getActivity())){
+                    if (alertGPS(mapFragment.getActivity())) {
                         Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
                     }
                 }
@@ -188,20 +188,19 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         });
 
 
-
         //Set initial view type
         viewType = ViewType.OUTDOOR;
 
         //Hide Fragments
 
         AppCompatImageButton locationCancelButton;
-        locationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
+        locationCancelButton = (AppCompatImageButton) toolbarView.findViewById(
                 R.id.search_location_button);
         locationCancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).setLocation(null);
-                if (((MainActivity)getActivity()).getDestination() == null) {
+                ((MainActivity) getActivity()).setLocation(null);
+                if (((MainActivity) getActivity()).getDestination() == null) {
                     searchState = SearchState.NONE;
                 } else {
                     searchState = SearchState.DESTINATION;
@@ -211,13 +210,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         });
 
         AppCompatImageButton destinationCancelButton;
-        destinationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
+        destinationCancelButton = (AppCompatImageButton) toolbarView.findViewById(
                 R.id.search_destination_button);
         destinationCancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).setDestination(null);
-                if (((MainActivity)getActivity()).getLocation() == null) {
+                ((MainActivity) getActivity()).setDestination(null);
+                if (((MainActivity) getActivity()).getLocation() == null) {
                     searchState = SearchState.NONE;
                 } else {
                     searchState = SearchState.LOCATION;
@@ -324,6 +323,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Shows or hides the directions bottom sheet fragment
+     *
      * @param isVisible
      */
     private void showDirectionsFragment(boolean isVisible) {
@@ -333,6 +333,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             getChildFragmentManager().beginTransaction().hide(directionsFragment).commit();
         }
     }
+
     /*
      * Shows or hides the indoor map, will hide the outdoormap if visible
      */
@@ -358,6 +359,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Shows or hides the transport button
+     *
      * @param isVisible
      */
     public void showTransportButton(boolean isVisible) {
@@ -371,10 +373,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     *
      * @param polygon
      */
-    private void setBottomSheetContent(Polygon polygon){
+    private void setBottomSheetContent(Polygon polygon) {
         /**
          * ONLY FOR DEMO PURPOSES
          */
@@ -387,10 +388,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
         buildingInfoFragment.clear();
         // TEMPORARY
-        if (buildingName.equals("H")){
+        if (buildingName.equals("H")) {
             buildingInfoFragment.displayHBuildingAssociations();
-        }
-        else if (buildingName.equals("JM")){
+        } else if (buildingName.equals("JM")) {
             buildingInfoFragment.displayMBBuildingAssociations();
         }
         buildingInfoFragment.collapse();
@@ -400,15 +400,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     *
      * @param marker
      */
-    private void setBottomSheetContent(Marker marker){
+    private void setBottomSheetContent(Marker marker) {
         /**
          * ONLY FOR DEMO PURPOSES
          */
         Building building = Campus.getBuilding(marker);
-        if(building == null){
+        if (building == null) {
             building = Campus.getBuilding(marker);
         }
         ((MainActivity) getActivity()).createToast(building.getShortName());
@@ -560,20 +559,18 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-     *
-     * @param map object of the navigation fragment's
-     * @param activity acquired with mapfragment.getActivity()
+     * @param map        object of the navigation fragment's
+     * @param activity   acquired with mapfragment.getActivity()
      * @param gpsmanager object of LocationManager (from android and not google maps)
-     * @param gpsListen object from interface LocationListener (from android and not google maps)
+     * @param gpsListen  object from interface LocationListener (from android and not google maps)
      * @return true if the operation is a success (if permission is acquired && a location was succesfully retrieved
-     *
+     * <p>
      * Method run to acquire user's location on a map, display it and update camera to it
      * if permission NOT found, request the permission
      * Enable GPS provider updates on locationmanager (requires permission check)
      * Enable Google Map layer over map object to display user's location on the map
      * Instantiate location with last known location of Network provider
      * if no location found, return false, otherwise, map centers on user's location
-     *
      */
 
     public LatLng locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
@@ -589,13 +586,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 double longitude = location.getLongitude(); // Getting longitude of the current location
                 LatLng myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
                 return myPosition;
-            }
-            else
+            } else
                 return null;
         }
     }
 
-    public void camMove(LatLng MyPos){
+    public void camMove(LatLng MyPos) {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(MyPos, 16f));//Camera Update method
     }
 
@@ -635,28 +631,28 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 toolbarView.findViewById(R.id.search_location);
         LinearLayoutCompat destinationLayout = (LinearLayoutCompat)
                 toolbarView.findViewById(R.id.search_destination);
-        if (((MainActivity)getActivity()).getLocation() != null) {
+        if (((MainActivity) getActivity()).getLocation() != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
-            setDisplayName(((MainActivity)getActivity()).getLocation(), locationText);
-            outdoorDirections.setOrigin(((MainActivity)getActivity()).getLocation()
+            setDisplayName(((MainActivity) getActivity()).getLocation(), locationText);
+            outdoorDirections.setOrigin(((MainActivity) getActivity()).getLocation()
                     .getMapCoordinates());
-        }else{
+        } else {
             outdoorDirections.setOrigin(null);
         }
-        if (((MainActivity)getActivity()).getDestination() != null) {
+        if (((MainActivity) getActivity()).getDestination() != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
-            setDisplayName(((MainActivity)getActivity()).getDestination(), destinationText);
-            outdoorDirections.setDestination(((MainActivity)getActivity()).getDestination()
+            setDisplayName(((MainActivity) getActivity()).getDestination(), destinationText);
+            outdoorDirections.setDestination(((MainActivity) getActivity()).getDestination()
                     .getMapCoordinates());
-        }else{
+        } else {
             outdoorDirections.setDestination(null);
         }
 
         outdoorDirections.deleteDirection();
-        if (((MainActivity)getActivity()).getLocation() != null &&
-                ((MainActivity)getActivity()).getDestination() != null) {
+        if (((MainActivity) getActivity()).getLocation() != null &&
+                ((MainActivity) getActivity()).getDestination() != null) {
             outdoorDirections.requestDirections();
         }
 
@@ -704,7 +700,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * Sets the display name for a label from a POI.
      * If the POI is a building, use the short name instead of the long one ("H" vs. "Hall")
      * Else, use the full POI name
-     * @param poi Point of interest to display on the text view
+     *
+     * @param poi      Point of interest to display on the text view
      * @param textView Text view to set text on
      */
     private void setDisplayName(POI poi, AppCompatTextView textView) {
@@ -778,7 +775,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                POI poi = (POI)poiSearchAdapter.getChild(groupPosition, childPosition);
+                POI poi = (POI) poiSearchAdapter.getChild(groupPosition, childPosition);
+
+                setNavigationPOI(poi);
 
                 if (!(poi instanceof Room)) {
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(poi.getMapCoordinates(),
@@ -787,7 +786,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     onRoomSearch();
                 }
 
-                setNavigationPOI(poi);
                 onClose();
                 return true;
             }
@@ -809,18 +807,19 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     /**
      * Sets the navigation state and location/destination for internal use
+     *
      * @param dest The {@link POI} location to be added to the search state
      * @return Whether the state was updated or not
      */
     private boolean setNavigationPOI(POI dest) {
         if (searchState == SearchState.NONE) {
-            ((MainActivity)getActivity()).setLocation(dest);
+            ((MainActivity) getActivity()).setLocation(dest);
             searchState = SearchState.LOCATION;
         } else if (searchState == SearchState.DESTINATION) {
-            ((MainActivity)getActivity()).setLocation(dest);
+            ((MainActivity) getActivity()).setLocation(dest);
             searchState = SearchState.LOCATION_DESTINATION;
         } else if (searchState == SearchState.LOCATION) {
-            ((MainActivity)getActivity()).setDestination(dest);
+            ((MainActivity) getActivity()).setDestination(dest);
             searchState = SearchState.LOCATION_DESTINATION;
         } else { // if searchState == SearchState.LOCATION_DESTINATION
             return false;
@@ -838,7 +837,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         return outdoorMapVisible;
     }
 
-    public boolean isTransportButtonVisible() { return transportButtonVisible; }
+    public boolean isTransportButtonVisible() {
+        return transportButtonVisible;
+    }
 
     public ViewType getViewType() {
         return viewType;
