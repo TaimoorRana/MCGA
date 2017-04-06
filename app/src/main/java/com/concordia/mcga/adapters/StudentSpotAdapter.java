@@ -33,6 +33,11 @@ public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
         this.context = context;
         // Set coordinates when initializing student spot. This happens when the fragment is opened
         this.currentCoordinates = currentCoordinates;
+        
+        // Set distance
+        for (StudentSpot i: spots) {
+            i.setLastKnownDistance(getDistance(currentCoordinates, i.getMapCoordinates()));
+        }
     }
 
     /**
@@ -56,13 +61,14 @@ public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
         ImageView image = (ImageView) spotRow.findViewById(R.id.spotImage);
         RatingBar rating = (RatingBar) spotRow.findViewById(R.id.spotRating);
 
-        name.setText(getItem(position).getName());
-        address.setText(getItem(position).getAddress());
-        distance.setText(getFormattedDistance(currentCoordinates,
-                getItem(position).getMapCoordinates()));
-        description.setText(getItem(position).getDescription());
-        image.setImageResource(getItem(position).getResId());
-        rating.setRating(getItem(position).getRating());
+        StudentSpot item = getItem(position);
+
+        name.setText(item.getName());
+        address.setText(item.getAddress());
+        distance.setText(df.format(item.getLastKnownDistance()));
+        description.setText(item.getDescription());
+        image.setImageResource(item.getResId());
+        rating.setRating(item.getRating());
 
         return spotRow;
     }
@@ -73,7 +79,7 @@ public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
      * @param end Second coordinate to compare, as a LatLng
      * @return Formatted string indicating distance
      */
-    private String getFormattedDistance(LatLng start, LatLng end) {
+    private double getDistance(LatLng start, LatLng end) {
         final int radius = 6371;
 
         double lat  = Math.toRadians(end.latitude - start.latitude);
@@ -83,8 +89,6 @@ public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
                 + Math.cos(Math.toRadians(start.latitude)) * Math.cos(Math.toRadians(end.latitude))
                 * Math.sin(lon / 2) * Math.sin(lon / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = radius * c * 1000;
-
-        return df.format(distance) + " m";
+        return radius * c * 1000;
     }
 }

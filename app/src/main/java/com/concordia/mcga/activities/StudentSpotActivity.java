@@ -20,6 +20,7 @@ import com.concordia.mcga.models.StudentSpot;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class StudentSpotActivity extends AppCompatActivity {
@@ -63,6 +64,13 @@ public class StudentSpotActivity extends AppCompatActivity {
             spots = StudentSpotFactory.getInstance().getStudentSpots(this.getResources());
 
             adapter = new StudentSpotAdapter(this, spots, myLocation);
+            adapter.sort(new Comparator<StudentSpot>() {
+                @Override
+                public int compare(StudentSpot o1, StudentSpot o2) {
+                    return Double.compare(o1.getLastKnownDistance(), o2.getLastKnownDistance());
+                }
+            });
+
             final ListView list = (ListView) findViewById(R.id.spotList);
             list.setAdapter(adapter);
 

@@ -21000,6 +21000,14 @@ INSERT INTO `walkable_paths` VALUES ('H',4,350,1643);
 INSERT INTO `walkable_paths` VALUES ('H',4,351,1643);
 INSERT INTO `walkable_paths` VALUES ('H',4,352,1643);
 INSERT INTO `walkable_paths` VALUES ('H',4,353,1643);
+CREATE TABLE `student_spots` ( `name` TEXT, `rating` REAL, `center_coordinate` TEXT, `address` TEXT, `description` TEXT, `resource_image` TEXT );
+INSERT INTO `student_spots` VALUES ('Boustan',4.0,'{"latitude":45.498020,"longitude":-73.577895,"mVersionCode":1}','2020 Crescent St','Lebanese, fast-food','ic_boustan');
+INSERT INTO `student_spots` VALUES ('A&W',3.0,'{"latitude":45.496004,"longitude":-73.578834,"mVersionCode":1}','1540 Boulevard de Maisonneuve O','American, fast-food','ic_aw');
+INSERT INTO `student_spots` VALUES ('Don Taco',5.0,'{"latitude":45.497289,"longitude":-73.578932,"mVersionCode":1}','1853 Saint-Catherine St','Mexican, coffee, study spot','ic_dontaco');
+INSERT INTO `student_spots` VALUES ('Moose Bawr',4.0,'{"latitude":45.493559,"longitude":-73.579718,"mVersionCode":1}','1817 Saint-Catherine St W','Bar, popcorn, study spot','ic_moosebawr');
+INSERT INTO `student_spots` VALUES ('Cafe Myriade',3.0,'{"latitude":45.496073,"longitude":-73.577937,"mVersionCode":1}','1432 Mackay St','Coffee, study spot','ic_myriade');
+INSERT INTO `student_spots` VALUES ('Eggspectation',2.0,'{"latitude":45.498750,"longitude":-73.577026,"mVersionCode":1}','1313 De Maisonneuve West','Breakfast, eggs','ic_eggspectations');
+INSERT INTO `student_spots` VALUES ('Fiddler''s Green',3.0,'{"latitude":45.495952,"longitude":-73.575381,"mVersionCode":1}','1224 Bishop St','Bar, Irish, Mac & cheese','ic_fiddlers');
 CREATE TABLE "room" (
 	`_id` INTEGER,
        	`name` TEXT,
@@ -21081,7 +21089,6 @@ INSERT INTO `building` VALUES (52,'Hingston Hall, wing HB','HB','{"latitude":45.
 INSERT INTO `building` VALUES (53,'Hingston Hall, wing HA','HA','{"latitude":45.459769,"longitude":-73.642045,"mVersionCode":1}','[{"latitude":45.459594,"longitude":-73.642021,"mVersionCode":1},{"latitude":45.459692,"longitude":-73.642269,"mVersionCode":1},{"latitude":45.459863,"longitude":-73.642132,"mVersionCode":1},{"latitude":45.459963,"longitude":-73.642007,"mVersionCode":1},{"latitude":45.459893,"longitude":-73.64183,"mVersionCode":1},{"latitude":45.459782,"longitude":-73.641918,"mVersionCode":1},{"latitude":45.459768,"longitude":-73.641882,"mVersionCode":1}]','ic_ha_building',1,'LOY');
 INSERT INTO `building` VALUES (54,'Hingston Hall, wing HC','HC','{"latitude":45.459458,"longitude":-73.641224,"mVersionCode":1}','[{"latitude":45.459253,"longitude":-73.641071,"mVersionCode":1},{"latitude":45.459277,"longitude":-73.641133,"mVersionCode":1},{"latitude":45.459261,"longitude":-73.641145,"mVersionCode":1},{"latitude":45.459395,"longitude":-73.641496,"mVersionCode":1},{"latitude":45.45941,"longitude":-73.641485,"mVersionCode":1},{"latitude":45.459431,"longitude":-73.641542,"mVersionCode":1},{"latitude":45.459676,"longitude":-73.641352,"mVersionCode":1},{"latitude":45.459652,"longitude":-73.641289,"mVersionCode":1},{"latitude":45.459663,"longitude":-73.641281,"mVersionCode":1},{"latitude":45.459528,"longitude":-73.640932,"mVersionCode":1},{"latitude":45.459514,"longitude":-73.640943,"mVersionCode":1},{"latitude":45.459492,"longitude":-73.640883,"mVersionCode":1}]','ic_hc_building',0,'LOY');
 INSERT INTO `building` VALUES (55,'Terrebonne Building','TA','{"latitude":45.459987,"longitude":-73.640898,"mVersionCode":1}','[{"latitude":45.45994,"longitude":-73.640868,"mVersionCode":1},{"latitude":45.459978,"longitude":-73.64097,"mVersionCode":1},{"latitude":45.460033,"longitude":-73.640929,"mVersionCode":1},{"latitude":45.459993,"longitude":-73.640827,"mVersionCode":1}]','ic_ta_building',1,'LOY');
-CREATE TABLE `student_spots` ( `name` TEXT, `rating` REAL, `center_coordinate` TEXT, `address` TEXT, `description` TEXT, `resource_image` TEXT );
 CREATE TABLE android_metadata (locale TEXT);
 INSERT INTO `android_metadata` VALUES ('en_US');
 COMMIT;

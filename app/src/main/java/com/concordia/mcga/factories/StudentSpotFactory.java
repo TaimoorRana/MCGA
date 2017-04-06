@@ -62,7 +62,7 @@ public class StudentSpotFactory {
             String name = res.getString(NAME_COLUMN_INDEX);
             String description = res.getString(DESCRIPTION_COLUMN_INDEX);
             String address = res.getString(ADDRESS_COLUMN_INDEX);
-            int resId = resources.getIdentifier(resourceName,"drawable","com.concordia.mcga");
+            int resId = resources.getIdentifier(resourceName,"mipmap","com.concordia.mcga");
             float rating = res.getFloat(RATING_COLUMN_INDEX);
             LatLng centerCoordinates = GSON.fromJson(
                     res.getString(COORDINATE_COLUMN_INDEX), LatLng.class);

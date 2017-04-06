@@ -7,6 +7,7 @@ public class StudentSpot extends POI {
     private String description;
     private String address;
     private int resId;
+    private double lastKnownDistance;
 
     /**
      * Each student spot comprises a coordinate, name, rating, description, address, and image
@@ -56,5 +57,13 @@ public class StudentSpot extends POI {
 
     public void setResId(int resId) {
         this.resId = resId;
+    }
+
+    public double getLastKnownDistance() {
+        return lastKnownDistance;
+    }
+
+    public void setLastKnownDistance(double lastKnownDistance) {
+        this.lastKnownDistance = lastKnownDistance;
     }
 }
