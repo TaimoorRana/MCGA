@@ -63,6 +63,8 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
     private int listHeight;
 
     private String buildingName = "";
+
+    private static final String HALL = "H", JMSB = "JM";
     ////////////////////////////////////////////////////////////
     // CLASS METHODS
     ////////////////////////////////////////////////////////////
@@ -90,9 +92,9 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
 
     public void updateBottomSheet(){
         clear();
-        if (buildingName.equals("H")) {
+        if (buildingName.equals(HALL)) {
             displayHBuildingAssociations();
-        } else if (buildingName.equals("JM")) {
+        } else if (buildingName.equals(JMSB)) {
             displayMBBuildingAssociations();
         }
         collapse();
