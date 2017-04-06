@@ -36,7 +36,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.POISearchAdapter;
@@ -46,7 +45,6 @@ import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.POI;
-import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -647,8 +645,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorDirections.deleteDirection();
         if (location != null && destination != null) {
             outdoorDirections.requestDirections();
-            GlobalPathFinder globalPathFinder = new GlobalPathFinder((MainActivity)getActivity(),location,destination);
-            globalPathFinder.run();
         }
 
 

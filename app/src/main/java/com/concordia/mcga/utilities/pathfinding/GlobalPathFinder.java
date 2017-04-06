@@ -3,6 +3,7 @@ package com.concordia.mcga.utilities.pathfinding;
 import android.util.Log;
 
 import com.concordia.mcga.activities.MainActivity;
+import com.concordia.mcga.activities.R;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
@@ -10,6 +11,7 @@ import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.POI;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -19,21 +21,28 @@ public class GlobalPathFinder implements Runnable {
     private final POI startPOI;
     private final POI destPOI;
     private MainActivity activity;
+    private GoogleMap map;
     private Map<Floor, List<IndoorMapTile>> startBuildingDirections;
     private Map<Floor, List<IndoorMapTile>> destBuildingDirections;
     private LatLng[] outdoorCoordinates;
     private MultiMapPathFinder indoorPathFinder;
+    private OutdoorDirections outdoorDirections;
 
     /**
      * @param activity reference to the MainActivity
+     * @param map reference to google maps
      * @param startPOI
      * @param destPOI
+     * @param transportMode One of the transport mode available in MCGATransport class
      */
-    public GlobalPathFinder(MainActivity activity, POI startPOI, POI destPOI) {
+    public GlobalPathFinder(MainActivity activity, GoogleMap map, POI startPOI, POI destPOI, String transportMode) {
         this.startPOI = startPOI;
         this.destPOI = destPOI;
         this.activity = activity;
+        this.map = map;
         indoorPathFinder = new MultiMapPathFinder();
+        outdoorDirections = new OutdoorDirections();
+        setUpOutdoorDirections(activity, map, transportMode);
     }
 
     @Override
@@ -54,7 +63,7 @@ public class GlobalPathFinder implements Runnable {
             } else if (destPOI instanceof IndoorPOI) {
                 outdoorToIndoorNavigation();
             } else { // Both POIs are external
-                externalOnlyNavigation();
+                externalOnlyNavigation(MCGATransportMode.TRANSIT);
             }
         } catch (MCGAPathFindingException e) {
             Log.e(this.getClass().getName(), "ERROR generating navigation path");
@@ -85,9 +94,8 @@ public class GlobalPathFinder implements Runnable {
 
     }
 
-    private void externalOnlyNavigation() {
-        OutdoorDirections outdoorDirections = activity.getNavigationFragment().getOutdoorDirections();
-        outdoorDirections.requestDirection(startPOI.getMapCoordinates(),destPOI.getMapCoordinates(),MCGATransportMode.TRANSIT);
+    private void externalOnlyNavigation(String transportMode) {
+        outdoorDirections.requestDirection(startPOI.getMapCoordinates(),destPOI.getMapCoordinates(), transportMode);
     }
 
     private void differentBuildingNavigation() throws MCGAPathFindingException {
@@ -112,6 +120,13 @@ public class GlobalPathFinder implements Runnable {
 
         startBuildingDirections = indoorPathFinder.shortestPath(startIndoorPOI, destIndoorPOI);
 
+    }
+
+    private void setUpOutdoorDirections(MainActivity activity, GoogleMap map, String transportMode) {
+        outdoorDirections.setContext(activity);
+        outdoorDirections.setServerKey(activity.getResources().getString(R.string.google_maps_key));
+        outdoorDirections.setMap(map);
+        outdoorDirections.setSelectedTransportMode(transportMode);
     }
 
     /**

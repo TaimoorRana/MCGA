@@ -104,9 +104,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public NavigationFragment getNavigationFragment() {
-        return navigationFragment;
-    }
 
     public void notifyPathfindingComplete(){
     }
