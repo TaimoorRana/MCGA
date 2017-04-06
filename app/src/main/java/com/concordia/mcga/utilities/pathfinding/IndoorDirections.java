@@ -92,7 +92,7 @@ public class IndoorDirections {
      *
      * @return images which should be shown to the user. Will display an arrow
      */
-    private String getImage(){
+    private String getImage() throws MCGAJunctionPointException{
 
         // IDEALLY THIS SHOULD BE IN THE DATABASE
         switch(orientation){
@@ -108,8 +108,8 @@ public class IndoorDirections {
             case WEST_ORIENTATION:
                 return "left";
 
-            default:
-                break;
+            case UNDEF_ORIENTATION:
+                throw new MCGAJunctionPointException("Undefined point of reference exception");
         }
         return null;
     }
