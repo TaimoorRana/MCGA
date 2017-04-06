@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import java.lang.reflect.Method;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,6 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.when;
-
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
@@ -35,6 +35,7 @@ public class StudentSpotAdapterTest {
         List<StudentSpot> fakeSpots = new ArrayList<>();
         StudentSpot fakeSpot = Mockito.mock(StudentSpot.class);
         when(fakeSpot.getMapCoordinates()).thenReturn(spotLocation);
+        when(fakeSpot.getLastKnownDistance()).thenReturn(111194.93); // hand calculated
         fakeSpots.add(fakeSpot);
 
         adapter = new StudentSpotAdapter(RuntimeEnvironment.application, fakeSpots, adapterLocation);
@@ -50,12 +51,12 @@ public class StudentSpotAdapterTest {
         View view = adapter.getView(0, null, null);
         TextView label = (TextView) view.findViewById(R.id.spotDistance);
 
-        Method distanceStringer = StudentSpotAdapter.class.getDeclaredMethod("getFormattedDistance",
+        Method distanceStringer = StudentSpotAdapter.class.getDeclaredMethod("getDistance",
                 LatLng.class, LatLng.class);
         distanceStringer.setAccessible(true);
-        String expectedDistanceText = (String) distanceStringer.invoke(adapter, adapterLocation, spotLocation);
+        double expectedDistance = (double) distanceStringer.invoke(adapter, adapterLocation, spotLocation);
 
-        assertEquals(expectedDistanceText, label.getText());
+        assertEquals(new DecimalFormat(".##").format(expectedDistance) + " m", label.getText());
     }
 
 }
