@@ -105,6 +105,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private Campus currentCampus = Campus.SGW;
     private boolean indoorMapVisible = false;
     private boolean outdoorMapVisible = false;
+    private boolean transportButtonVisible = false;
+
     //Fragments
     private LinearLayoutCompat parentLayout;
     private SupportMapFragment mapFragment;
@@ -175,7 +177,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     showIndoorMap();
                     campusButton.setVisibility(View.GONE);
                     viewSwitchButton.setText("GO OUTDOORS");
-                    showDirectionsFragment(true);
+                    //Commented this out because its annoying
+                    //showDirectionsFragment(true);
                     showBuildingInfoFragment(false);
                 } else {
                     showOutdoorMap();
@@ -226,23 +229,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             }
         });
 
-        //Hide Indoor Fragment
-
-        getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
-
         //Hide Fragments
-        showTransportButton(true);
-
-
+        showTransportButton(false);
 
         // Set the building information bottomsheet to true
         // When the app starts
         // Set the directions one to false
         showBuildingInfoFragment(true);
         showDirectionsFragment(false);
-
-        //Hide Fragments
-        showTransportButton(true);
 
         setupSearchAttributes();
         setupSearchList();
@@ -322,8 +316,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     /**
-
-     * Shows or hides the bottom sheet building information fragment
+     * Shows or hides the indoor map, will hide the outdoormap and transport button if visible
+     *
      * @param isVisible
      */
     private void showBuildingInfoFragment(boolean isVisible) {
@@ -352,6 +346,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorMapVisible = false;
         indoorMapVisible = true;
         viewType = ViewType.INDOOR;
+        if (transportButtonVisible) {
+            showTransportButton(false);
+        }
         getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
     }
 
@@ -376,6 +373,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             getChildFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
 
         }
+        transportButtonVisible = isVisible;
     }
 
     /**
@@ -845,12 +843,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         return indoorMapVisible;
     }
 
-
-
-
     public boolean isOutdoorMapVisible() {
         return outdoorMapVisible;
     }
+
+    public boolean isTransportButtonVisible() { return transportButtonVisible; }
 
     public ViewType getViewType() {
         return viewType;
