@@ -78,6 +78,9 @@ public class IndoorDirections {
         }catch(ArrayIndexOutOfBoundsException e){
             Log.e(TAG, "Exception: " + Log.getStackTraceString(e));
         }
+        catch(MCGAJunctionPointException e){
+            Log.e(TAG, "Exception: " + Log.getStackTraceString(e));
+        }
         catch (Exception e){
             Log.e(TAG, "Exception: " + Log.getStackTraceString(e));
         }
@@ -242,9 +245,6 @@ public class IndoorDirections {
             case WEST_ORIENTATION:
                 orientation = NORTH_ORIENTATION;
                 break;
-
-            default:
-                break;
         }
     }
 
@@ -271,9 +271,6 @@ public class IndoorDirections {
             case WEST_ORIENTATION:
                 orientation = SOUTH_ORIENTATION;
                 break;
-
-            default:
-                break;
         }
     }
 
@@ -284,7 +281,7 @@ public class IndoorDirections {
      * @param y1 previous y coordinate
      * @param y2 current y coordinate
      */
-    private void initOrientation(int x1, int x2, int y1, int y2){
+    private void initOrientation(int x1, int x2, int y1, int y2) throws MCGAJunctionPointException{
         if (x1 < x2)
             orientation = EAST_ORIENTATION;
 
@@ -296,5 +293,8 @@ public class IndoorDirections {
 
         else if (y1 > y2)
             orientation = NORTH_ORIENTATION;
+        else{
+            throw new MCGAJunctionPointException("Orientation is Undefined Exception");
+        }
     }
 }
