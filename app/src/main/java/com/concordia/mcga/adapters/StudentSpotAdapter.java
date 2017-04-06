@@ -65,7 +65,7 @@ public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
 
         name.setText(item.getName());
         address.setText(item.getAddress());
-        distance.setText(df.format(item.getLastKnownDistance()));
+        distance.setText(df.format(item.getLastKnownDistance()) + " m");
         description.setText(item.getDescription());
         image.setImageResource(item.getResId());
         rating.setRating(item.getRating());
