@@ -230,8 +230,7 @@ public class IndoorMapFragment extends Fragment {
     }
 
     public void onRoomSearch() {
-        Log.d("IndoorMapFragment", "On room search " + ((MainActivity)
-                getActivity()).getDestination().getName());
+        Log.d("IndoorMapFragment", "On room search ");
     }
 
 
