@@ -26,6 +26,8 @@ import java.util.List;
 public class StudentSpotActivity extends AppCompatActivity {
     private List<StudentSpot> spots;
     private StudentSpotAdapter adapter;
+    private LocationManager gpsManager;
+    private LocationListener gpsListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,9 +47,8 @@ public class StudentSpotActivity extends AppCompatActivity {
         });
 
         // Get location
-        LocationManager gpsManager = (LocationManager) this.
-                getSystemService(LOCATION_SERVICE);
-        LocationListener gpsListener = new LocationListener() {
+        gpsManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        gpsListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {}
             @Override
@@ -57,7 +58,31 @@ public class StudentSpotActivity extends AppCompatActivity {
             @Override
             public void onProviderDisabled(String provider) {}
         };
-        LatLng myLocation = getLocation(gpsManager, gpsListener);
+
+        if (!gpsManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Intent gpsOptionsIntent = new Intent(
+                    android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(gpsOptionsIntent);
+        } else {
+            setUpList();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!gpsManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            // User didn't choose to enable gps. Just leave the view fam
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+        else {
+            setUpList();
+        }
+    }
+
+    private void setUpList() {
+        LatLng myLocation = getLocation();
 
         if (myLocation != null) {
             // Populate adapter
@@ -76,25 +101,24 @@ public class StudentSpotActivity extends AppCompatActivity {
 
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    StudentSpot spot = (StudentSpot)list.getItemAtPosition(position);
+                    StudentSpot spot = (StudentSpot) list.getItemAtPosition(position);
                     Intent intent = new Intent();
                     intent.putExtra("spot", new Gson().toJson(spot));
                     setResult(RESULT_OK, intent);
                     finish();
                 }
             });
-
-
+        } else {
+            setResult(RESULT_CANCELED);
+            finish();
         }
     }
 
     /**
      * Get the location from Android.
-     * @param gpsManager Android Location manager
-     * @param gpsListener Android location listener
      * @return LatLng indicating position at time of polling
      */
-    private LatLng getLocation(LocationManager gpsManager, LocationListener gpsListener) {
+    private LatLng getLocation() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return null;
