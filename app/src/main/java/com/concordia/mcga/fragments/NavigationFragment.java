@@ -165,7 +165,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 if (bottomSheetBuilding != null) {
                     // set the navigation POI and hide the bar
                     setNavigationPOI(bottomSheetBuilding);
-                    showBuildingInfoFragment(false);
                 }
             }
         });
@@ -350,12 +349,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                         }
                         else if (!outdoors){
                             mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight()+ mapCenterButton.getHeight()/ 3);
-                            navigateDestinationButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + navigateDestinationButton.getHeight() + navigateDestinationButton.getHeight()/3);
                         }
                         else
                         {
                             mapCenterButton.setY(parentLayout.getHeight() - toolbarView.getHeight() - mapCenterButton.getHeight());
-                            navigateDestinationButton.setY(parentLayout.getHeight() - toolbarView.getHeight() - navigateDestinationButton.getHeight());
                         }
 
                     } catch (Exception e) {
@@ -401,12 +398,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private void showBuildingInfoFragment(boolean isVisible) {
         if (isVisible) {
             getChildFragmentManager().beginTransaction().show(buildingInfoFragment).commit();
+            navigateDestinationButton.setVisibility(View.VISIBLE);
             outdoors = true;
             // this boolean exist because it is not in the directions fragment
             // Creates 4 combinations between buildingInfoShown and outdoors
             buildingInfoShown = true;
         } else {
             getChildFragmentManager().beginTransaction().hide(buildingInfoFragment).commit();
+            navigateDestinationButton.setVisibility(View.GONE);
             outdoors = false;
             buildingInfoShown = false;
         }
