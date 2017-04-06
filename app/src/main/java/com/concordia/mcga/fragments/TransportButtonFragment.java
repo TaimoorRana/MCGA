@@ -121,10 +121,16 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
      * Displays time for each transportation option
      */
     protected void displayAllTransportTimes() {
-        walkTextView.setText(outdoorDirections.getDuration(MCGATransportMode.WALKING));
-        bikeTextView.setText(outdoorDirections.getDuration(MCGATransportMode.BICYCLING));
-        carTextView.setText(outdoorDirections.getDuration(MCGATransportMode.DRIVING));
-        publicTransportTextView.setText(outdoorDirections.getDuration(MCGATransportMode.TRANSIT));
+        setTimeForTextView(walkTextView,MCGATransportMode.WALKING);
+        setTimeForTextView(bikeTextView,MCGATransportMode.BICYCLING);
+        setTimeForTextView(carTextView,MCGATransportMode.DRIVING);
+        setTimeForTextView(publicTransportTextView,MCGATransportMode.TRANSIT);
+    }
+
+    private void setTimeForTextView(TextView textView, String transportType){
+        String time = formatTime(outdoorDirections.getHoursForTransportType(transportType),
+                outdoorDirections.getMinutesForTransportType(transportType));
+        textView.setText(time);
     }
 
 
@@ -211,7 +217,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private String formatTime(int hours, int minutes) {
         String time = null;
         if (hours > 0 && minutes > 0) {
-            time = hours + "h" + minutes + "m";
+            time = hours + "h " + minutes + "m";
         } else if (hours == 0) {
             time = minutes + "m";
         } else if (minutes == 0) {
