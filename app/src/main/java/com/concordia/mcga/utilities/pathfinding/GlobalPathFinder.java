@@ -27,6 +27,7 @@ public class GlobalPathFinder implements Runnable {
     private LatLng[] outdoorCoordinates;
     private MultiMapPathFinder indoorPathFinder;
     private OutdoorDirections outdoorDirections;
+    private String transportMode;
 
     /**
      * @param activity reference to the MainActivity
@@ -40,9 +41,10 @@ public class GlobalPathFinder implements Runnable {
         this.destPOI = destPOI;
         this.activity = activity;
         this.map = map;
+        this.transportMode = transportMode;
         indoorPathFinder = new MultiMapPathFinder();
         outdoorDirections = new OutdoorDirections();
-        setUpOutdoorDirections(activity, map, transportMode);
+        setUpOutdoorDirections();
     }
 
     @Override
@@ -63,7 +65,7 @@ public class GlobalPathFinder implements Runnable {
             } else if (destPOI instanceof IndoorPOI) {
                 outdoorToIndoorNavigation();
             } else { // Both POIs are external
-                externalOnlyNavigation(MCGATransportMode.TRANSIT);
+                externalOnlyNavigation();
             }
         } catch (MCGAPathFindingException e) {
             Log.e(this.getClass().getName(), "ERROR generating navigation path");
@@ -94,7 +96,7 @@ public class GlobalPathFinder implements Runnable {
 
     }
 
-    private void externalOnlyNavigation(String transportMode) {
+    private void externalOnlyNavigation() {
         outdoorDirections.requestDirection(startPOI.getMapCoordinates(),destPOI.getMapCoordinates(), transportMode);
     }
 
@@ -122,7 +124,7 @@ public class GlobalPathFinder implements Runnable {
 
     }
 
-    private void setUpOutdoorDirections(MainActivity activity, GoogleMap map, String transportMode) {
+    private void setUpOutdoorDirections() {
         outdoorDirections.setContext(activity);
         outdoorDirections.setServerKey(activity.getResources().getString(R.string.google_maps_key));
         outdoorDirections.setMap(map);
