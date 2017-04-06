@@ -59,6 +59,13 @@ public class DatabaseConnector extends SQLiteOpenHelper {
     }
 
     /**
+     * Setter used for testing purposes
+     */
+    public static void setDatabaseConnector(DatabaseConnector databaseConnector) {
+        DatabaseConnector.databaseConnector = databaseConnector;
+    }
+
+    /**
      * @return - an instance of a readable Database <b>DO NOT FORGET to call {@link
      * SQLiteDatabase#close()}</b> after you are done!
      */
