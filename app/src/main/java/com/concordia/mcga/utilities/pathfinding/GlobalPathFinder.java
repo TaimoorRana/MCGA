@@ -158,6 +158,13 @@ public class GlobalPathFinder implements Runnable {
     }
 
     /**
+     * @return OutdoorDirections that is used to draw path between two outdoor POIs
+     */
+    public OutdoorDirections getOutdoorDirections(){
+        return outdoorDirections;
+    }
+
+    /**
      * @return A LatLng Array, where index 0 is the start of the outdoor component
      * and index 1 is the destination of the outdoor component. Returns null if
      * there is no oudoor component to the directions.
