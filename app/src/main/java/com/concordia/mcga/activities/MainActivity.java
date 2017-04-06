@@ -20,6 +20,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int SPOT_REQUEST_CODE = 1;
     private DrawerLayout drawerLayout;
 
     @Override
@@ -121,6 +122,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public void openSpotActivity() {
         Intent intent = new Intent(MainActivity.this, StudentSpotActivity.class);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, SPOT_REQUEST_CODE);
     }
 }

@@ -39,6 +39,7 @@ import android.widget.ExpandableListView;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.activities.StudentSpotActivity;
 import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
@@ -283,8 +284,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            String json = data.getExtras().getString("spot");
+        if (requestCode == MainActivity.SPOT_REQUEST_CODE && resultCode == RESULT_OK) {
+            String json = data.getExtras().getString(StudentSpotActivity.SPOT_IDENTIFIER);
             StudentSpot spot = new Gson().fromJson(json, StudentSpot.class);
             setNavigationPOI(spot, true);
         }

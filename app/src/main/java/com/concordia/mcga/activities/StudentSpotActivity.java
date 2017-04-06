@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class StudentSpotActivity extends AppCompatActivity {
+    public final static String SPOT_IDENTIFIER = "spot";
     private List<StudentSpot> spots;
     private StudentSpotAdapter adapter;
     private LocationManager gpsManager;
@@ -34,30 +35,8 @@ public class StudentSpotActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_spot_list);
 
-        // Back button
-        Toolbar toolbar = (Toolbar) findViewById(R.id.spotToolbar);
-        setSupportActionBar(toolbar);
-
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        // Get location
-        gpsManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        gpsListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {}
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-            @Override
-            public void onProviderEnabled(String provider) {}
-            @Override
-            public void onProviderDisabled(String provider) {}
-        };
+        setUpBackButton();
+        setUpGPS();
 
         if (!gpsManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Intent gpsOptionsIntent = new Intent(
@@ -79,6 +58,43 @@ public class StudentSpotActivity extends AppCompatActivity {
         else {
             setUpList();
         }
+    }
+
+    /**
+     * Initialize the toolbar's back button during the onCreate transition
+     * The button exits the activity
+     */
+    private void setUpBackButton() {
+        // Back button
+        Toolbar toolbar = (Toolbar) findViewById(R.id.spotToolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
+    /**
+     * Initializes the GPS manager and listener used to get the current location
+     * This is used to calculate the distance to the Student Spots
+     */
+    private void setUpGPS() {
+        // Get location
+        gpsManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        gpsListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {}
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+            @Override
+            public void onProviderEnabled(String provider) {}
+            @Override
+            public void onProviderDisabled(String provider) {}
+        };
     }
 
     private void setUpList() {
@@ -103,7 +119,7 @@ public class StudentSpotActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     StudentSpot spot = (StudentSpot) list.getItemAtPosition(position);
                     Intent intent = new Intent();
-                    intent.putExtra("spot", new Gson().toJson(spot));
+                    intent.putExtra(SPOT_IDENTIFIER, new Gson().toJson(spot));
                     setResult(RESULT_OK, intent);
                     finish();
                 }

@@ -19,7 +19,7 @@ import java.util.List;
 public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
     private final Context context;
     private final DecimalFormat df = new DecimalFormat(".##");
-    private LatLng currentCoordinates;
+    private final int RADIUS_EARTH = 6371;
 
     /**
      * Constructor which takes the list of student spots as well as a coordinate to calculate
@@ -31,9 +31,7 @@ public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
     public StudentSpotAdapter(Context context, List<StudentSpot> spots, LatLng currentCoordinates) {
         super(context, R.layout.student_spot_row, spots);
         this.context = context;
-        // Set coordinates when initializing student spot. This happens when the fragment is opened
-        this.currentCoordinates = currentCoordinates;
-        
+
         // Set distance
         for (StudentSpot i: spots) {
             i.setLastKnownDistance(getDistance(currentCoordinates, i.getMapCoordinates()));
@@ -80,8 +78,6 @@ public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
      * @return Formatted string indicating distance
      */
     private double getDistance(LatLng start, LatLng end) {
-        final int radius = 6371;
-
         double lat  = Math.toRadians(end.latitude - start.latitude);
         double lon = Math.toRadians(end.longitude - end.longitude);
 
@@ -89,6 +85,6 @@ public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
                 + Math.cos(Math.toRadians(start.latitude)) * Math.cos(Math.toRadians(end.latitude))
                 * Math.sin(lon / 2) * Math.sin(lon / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return radius * c * 1000;
+        return RADIUS_EARTH * c * 1000;
     }
 }
