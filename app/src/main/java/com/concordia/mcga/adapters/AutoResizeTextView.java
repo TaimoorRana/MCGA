@@ -1,8 +1,6 @@
 package com.concordia.mcga.adapters;
 
-/**
- * Created by root on 4/3/17.
- */
+
 import android.annotation.TargetApi;
         import android.content.Context;
         import android.content.res.Resources;
@@ -12,8 +10,7 @@ import android.annotation.TargetApi;
         import android.text.StaticLayout;
         import android.text.TextPaint;
         import android.util.AttributeSet;
-import android.util.Size;
-import android.util.SparseIntArray;
+    import android.util.SparseIntArray;
         import android.util.TypedValue;
         import android.widget.TextView;
 
@@ -184,15 +181,15 @@ public class AutoResizeTextView extends TextView {
      */
     @Override
     public void setTextSize(int unit, float size) {
-        Context c = getContext();
-        Resources r;
+        Context context = getContext();
+        Resources resources;
 
-        if (c == null)
-            r = Resources.getSystem();
+        if (context == null)
+            resources = Resources.getSystem();
         else
-            r = c.getResources();
+            resources = context.getResources();
         mMaxTextSize = TypedValue.applyDimension(unit, size,
-                r.getDisplayMetrics());
+                resources.getDisplayMetrics());
         mTextCachedSizes.clear();
         adjustTextSize(getText().toString());
     }

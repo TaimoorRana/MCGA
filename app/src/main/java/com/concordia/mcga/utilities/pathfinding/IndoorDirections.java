@@ -1,8 +1,13 @@
 package com.concordia.mcga.utilities.pathfinding;
 
+import android.util.Log;
+
+import com.concordia.mcga.exceptions.MCGAJunctionPointException;
 import com.concordia.mcga.models.IndoorMapTile;
 
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 
 public class IndoorDirections {
@@ -56,7 +61,7 @@ public class IndoorDirections {
                 y2 = tiles.get(i).getCoordinateY();
 
                 turn = getTurn(x1, x2, y1, y2);
-                distance = MeasureDistance(x1, x2, y1, y2);
+                distance = measureDistance(x1, x2, y1, y2);
                 image = getImage();
 
                 // Format looks like: Turn Right In 200U ; where 'U' is for Unit
@@ -70,8 +75,11 @@ public class IndoorDirections {
                 previousCoordinateX = tiles.get(i).getCoordinateX();
                 previousCoordinateY = tiles.get(i).getCoordinateY();
             }
-        }catch(Exception e){
-            // Do nothing
+        }catch(ArrayIndexOutOfBoundsException e){
+            Log.e(TAG, "Exception: " + Log.getStackTraceString(e));
+        }
+        catch (Exception e){
+            Log.e(TAG, "Exception: " + Log.getStackTraceString(e));
         }
 
         return returnString;
@@ -83,7 +91,6 @@ public class IndoorDirections {
      */
     private String getImage(){
 
-        String img = null;
         // IDEALLY THIS SHOULD BE IN THE DATABASE
         switch(orientation){
             case NORTH_ORIENTATION:
@@ -101,7 +108,7 @@ public class IndoorDirections {
             default:
                 break;
         }
-        return img;
+        return null;
     }
 
     /**
@@ -131,27 +138,15 @@ public class IndoorDirections {
      * @param y2 current y coordinate
      * @return distance measured in undefined unit 'U'
      */
-    private int MeasureDistance(int x1, int x2, int y1, int y2){
-        int distance = 0;
-        if (x2 < x1){
-            distance = Math.abs(x1 - x2);
+    private int measureDistance(int x1, int x2, int y1, int y2){
 
+        if (x2 != x1){
+            return Math.abs(x1 - x2);
         }
-        else if (x2 > x1){
-            distance = Math.abs(x1 - x2);
+        else if (y2 != y1){
+            return Math.abs(y1 - y2);
         }
-
-        else if (y2 < y1){
-            distance = Math.abs(y1 - y2);
-        }
-
-        else if (y2 > y1){
-            distance = Math.abs(y1 - y2);
-        }
-        else{
-            // Straight line. Problem in junction points given
-        }
-        return distance;
+        return 0;
     }
 
 
@@ -165,59 +160,61 @@ public class IndoorDirections {
      */
     private int getNextOrientation(int x1, int x2, int y1, int y2){
         int goRight = 0;
-        // going right
-        if (x1 < x2){
-            // Facing north
-            if (orientation == NORTH_ORIENTATION){
-                goClockWise();
-                goRight = 1;
+        try {
+            // going right
+            if (x1 < x2) {
+                // Facing north
+                if (orientation == NORTH_ORIENTATION) {
+                    goClockWise();
+                    goRight = 1;
+                }
+                //Facing south
+                else {
+                    goCounterClockWise();
+                }
             }
-            //Facing south
-            else{
-                goCounterClockWise();
-            }
-        }
 
-        // going left
-        else if (x1 > x2){
-            // Facing north
-            if (orientation == NORTH_ORIENTATION){
-                goCounterClockWise();
+            // going left
+            else if (x1 > x2) {
+                // Facing north
+                if (orientation == NORTH_ORIENTATION) {
+                    goCounterClockWise();
+                }
+                //Facing south
+                else {
+                    goClockWise();
+                    goRight = 1;
+                }
             }
-            //Facing south
-            else{
-                goClockWise();
-                goRight = 1;
-            }
-        }
 
-        // going down
-        else if (y1 < y2){
-            // Facing East
-            if (orientation == EAST_ORIENTATION){
-                goClockWise();
-                goRight = 1;
+            // going down
+            else if (y1 < y2) {
+                // Facing East
+                if (orientation == EAST_ORIENTATION) {
+                    goClockWise();
+                    goRight = 1;
+                }
+                // Facing West
+                else {
+                    goCounterClockWise();
+                }
             }
-            // Facing West
-            else{
-                goCounterClockWise();
-            }
-        }
 
-        // going up
-        else if (y1 > y2){
-            // Facing East
-            if (orientation == EAST_ORIENTATION){
-                goCounterClockWise();
-            }
-            // Facing West
-            else{
-                goClockWise();
-                goRight = 1;
+            // going up
+            else if (y1 > y2) {
+                // Facing East
+                if (orientation == EAST_ORIENTATION) {
+                    goCounterClockWise();
+                }
+                // Facing West
+                else {
+                    goClockWise();
+                    goRight = 1;
+                }
             }
         }
-        else{
-            //this should never happen
+        catch (MCGAJunctionPointException e){
+            Log.e(TAG, "Exception: " + Log.getStackTraceString(e));
         }
         return goRight;
     }
@@ -225,11 +222,10 @@ public class IndoorDirections {
     /**
      * Changes the orientation of the user by 90 degrees clockwise
      */
-    private void goClockWise(){
+    private void goClockWise() throws MCGAJunctionPointException{
         switch (orientation){
             case UNDEF_ORIENTATION:
-                // Should not happen
-                break;
+                throw new MCGAJunctionPointException("Junction Point Invalid Exception");
 
             case NORTH_ORIENTATION:
                 orientation = EAST_ORIENTATION;
@@ -255,11 +251,10 @@ public class IndoorDirections {
     /**
      * changes the orientation of the user by 90 degrees counterclockwise
      */
-    private void goCounterClockWise(){
+    private void goCounterClockWise() throws MCGAJunctionPointException{
         switch (orientation){
             case UNDEF_ORIENTATION:
-                // Should not happen
-                break;
+                throw new MCGAJunctionPointException("Junction Point Invalid Exception");
 
             case NORTH_ORIENTATION:
                 orientation = WEST_ORIENTATION;
