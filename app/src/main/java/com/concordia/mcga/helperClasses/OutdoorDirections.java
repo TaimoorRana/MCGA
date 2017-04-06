@@ -50,6 +50,7 @@ public class OutdoorDirections {
 
     /**
      * Set destination for all transportation
+     *
      * @param destination
      */
     public void setDestination(LatLng destination) {
@@ -60,6 +61,7 @@ public class OutdoorDirections {
 
     /**
      * Set map for all transportation
+     *
      * @param map will be used to draw paths on
      */
     public void setMap(GoogleMap map) {
@@ -70,6 +72,7 @@ public class OutdoorDirections {
 
     /**
      * Set context for all transportation
+     *
      * @param context
      */
     public void setContext(Context context) {
@@ -116,7 +119,6 @@ public class OutdoorDirections {
     }
 
     /**
-     *
      * @return directions for the selected mode of transportation
      */
     public List<String> getInstructionsForSelectedTransportMode() {
@@ -141,7 +143,7 @@ public class OutdoorDirections {
 
     }
 
-    public void setServerKey(String serverKey){
+    public void setServerKey(String serverKey) {
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setServerKey(serverKey);
         }
