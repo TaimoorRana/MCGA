@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.activities.ShuttleActivity;
 import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.models.Transportation;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
 
@@ -125,6 +130,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         bikeTextView.setText(outdoorDirections.getDuration(MCGATransportMode.BICYCLING));
         carTextView.setText(outdoorDirections.getDuration(MCGATransportMode.DRIVING));
         publicTransportTextView.setText(outdoorDirections.getDuration(MCGATransportMode.TRANSIT));
+        shuttleTextView.setText(getMinutesToNextShuttleDeparture());
     }
 
 
@@ -415,5 +421,16 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
 
     public void setOutdoorDirections(OutdoorDirections outdoorDirections) {
         this.outdoorDirections = outdoorDirections;
+    }
+
+    public String getMinutesToNextShuttleDeparture(){
+        String[][] shuttleSchedule = ShuttleActivity.getShuttleSchedule();
+
+        String day = new SimpleDateFormat("u").format(new Date());
+        String hourminute = new SimpleDateFormat("HH:mm").format(new Date());
+
+        Log.d("Adrianna Shuttle",hourminute+"next shuttle at:"+shuttleSchedule[20][0]);
+
+        return "xx";
     }
 }
