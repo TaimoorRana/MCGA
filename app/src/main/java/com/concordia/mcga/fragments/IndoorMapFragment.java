@@ -114,13 +114,23 @@ public class IndoorMapFragment extends Fragment {
             for (final Integer floorNumber : floorNumbersOrdered) {
                 final Floor floor = floorsLoaded.get(floorNumber);
 
-                Button button = new Button(getContext());
+                final Button button = new Button(getContext());
 
                 button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
                 button.setText(String.valueOf(floorNumber));
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        for (int i = 0; i < floorButtonContainer.getChildCount(); i++) {
+                            Button b = (Button) floorButtonContainer.getChildAt(i);
+                            b.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
+                            b.setTextColor(ResourcesCompat.getColor(getResources(), R.color.black, null));
+                        }
+
+                        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button_clicked, null));
+                        button.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+
                         if (pageLoaded) {
                             currentFloor = floorsLoaded.get(floorNumber);
                             leafletView.evaluateJavascript("loadMap('" + getMapId(floor) + "')", null);
@@ -138,6 +148,13 @@ public class IndoorMapFragment extends Fragment {
                 @Override
                 public void run() {
                     int floorNumber = floorNumbersOrdered.get(0);
+
+                    //Set The First Button Color
+                    Button b = (Button) floorButtonContainer.getChildAt(0);
+                    b.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button_clicked, null));
+                    b.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+
+                    //Load The Floor
                     currentFloor = floorsLoaded.get(floorNumber);
                     leafletView.evaluateJavascript("loadMap('" + getMapId(currentFloor) + "')", null);
                     leafletView.evaluateJavascript("addFloorRooms(" + currentFloor.getRoomsJSON().toString() + ")", null);
@@ -146,7 +163,7 @@ public class IndoorMapFragment extends Fragment {
 
             buildingLoaded = building;
         }
-        
+
     }
 
     /**
