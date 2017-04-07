@@ -44,7 +44,37 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context=".sample.MainActivity">
-
     </android.support.design.widget.CoordinatorLayout>
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/step1"
+            android:layout_width="28dp"
+            android:layout_height="wrap_content"
+            android:onClick="loadStartIndoor"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/step2"
+            android:layout_width="28dp"
+            android:layout_height="wrap_content"
+            android:onClick="loadOutdoor"
+            android:text="2" />
+
+        <Button
+            android:id="@+id/step3"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:onClick="loadDestIndoor"
+            android:text="3" />
+
+        <Button
+            android:id="@+id/testGenerate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="testGeneration"
+            android:text="Generate" />
+    </android.support.v7.widget.LinearLayoutCompat>
 </android.support.v4.widget.DrawerLayout>

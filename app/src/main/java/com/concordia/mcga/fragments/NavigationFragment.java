@@ -830,5 +830,20 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         return outdoorDirections;
     }
 
+    public IndoorMapFragment getIndoorMapFragment() {
+        return indoorMapFragment;
+    }
+
+    public POI getLocation() {
+        return location;
+    }
+
+    public POI getDestination() {
+        return destination;
+    }
+
+    public GoogleMap getMap() {
+        return map;
+    }
 }
 

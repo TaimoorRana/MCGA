@@ -2,6 +2,7 @@ package com.concordia.mcga.models;
 
 import android.database.Cursor;
 import android.graphics.Color;
+
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.ConnectedPOIFactory;
 import com.concordia.mcga.factories.IndoorMapFactory;
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -103,6 +105,12 @@ public class Building extends POI implements Observer {
                 floor.getIndoorPOIs().add(room);
                 floorMaps.put(room.getFloorNumber(), floor);
             }
+        }
+        if (this.getShortName().equals("H")){
+            portals = new HashSet<>();
+            Portal aa = new Portal(getMapCoordinates(), "AA", new IndoorMapTile(593, 960));
+            aa.setFloor(floorMaps.get(2));
+            portals.add(aa);
         }
     }
 

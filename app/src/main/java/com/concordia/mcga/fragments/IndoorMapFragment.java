@@ -107,8 +107,10 @@ public class IndoorMapFragment extends Fragment {
             @Override
             public void run() {
                 if (currentPathTiles.get(currentFloor) != null) {
-                    if (pageLoaded)
+                    if (pageLoaded) {
+                        Log.d("A", "HERE1");
                         leafletView.evaluateJavascript("drawWalkablePath(" + SingleMapPathFinder.toJSONArray(currentPathTiles.get(currentFloor)).toString() + ")", null);
+                    }
                 } else {
                     if (pageLoaded)
                         leafletView.evaluateJavascript("clearPathLayers()", null);
@@ -305,6 +307,8 @@ public class IndoorMapFragment extends Fragment {
 
             } catch (MCGAPathFindingException e) {
                 e.printStackTrace();
+            } catch (MCGADatabaseException e) {
+                e.printStackTrace();
             }
             setCurrentPathTiles(pathTilesJunctions);
 
@@ -316,6 +320,10 @@ public class IndoorMapFragment extends Fragment {
             showProgressBar(false);
             drawCurrentWalkablePath();
         }
+    }
+
+    public void setCurrentFloor(Floor currentFloor) {
+        this.currentFloor = currentFloor;
     }
 }
 

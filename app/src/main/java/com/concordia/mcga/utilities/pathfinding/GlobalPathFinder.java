@@ -3,6 +3,7 @@ package com.concordia.mcga.utilities.pathfinding;
 import android.util.Log;
 
 import com.concordia.mcga.activities.MainActivity;
+import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
@@ -10,10 +11,14 @@ import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.POI;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GlobalPathFinder implements Runnable {
+public class GlobalPathFinder implements Runnable, Serializable {
+    private static final long serialVersionUID = 7526472295622776147L;
+
     private final POI startPOI;
     private final POI destPOI;
     private MainActivity activity;
@@ -21,16 +26,18 @@ public class GlobalPathFinder implements Runnable {
     private Map<Floor, List<IndoorMapTile>> destBuildingDirections;
     private LatLng[] outdoorCoordinates;
     private MultiMapPathFinder indoorPathFinder;
+    private String mode;
 
     /**
      * @param activity reference to the MainActivity
      * @param startPOI
      * @param destPOI
      */
-    GlobalPathFinder(MainActivity activity, POI startPOI, POI destPOI) {
+    public GlobalPathFinder(MainActivity activity, POI startPOI, POI destPOI, String mode) {
         this.startPOI = startPOI;
         this.destPOI = destPOI;
         this.activity = activity;
+        this.mode = mode;
         indoorPathFinder = new MultiMapPathFinder();
     }
 
@@ -40,9 +47,9 @@ public class GlobalPathFinder implements Runnable {
             if (startPOI instanceof IndoorPOI && destPOI instanceof IndoorPOI) {
                 if (
                         ((IndoorPOI) startPOI).getFloor().getBuilding()
-                        .equals(
-                        ((IndoorPOI) destPOI).getFloor().getBuilding())
-                    ) {
+                                .equals(
+                                        ((IndoorPOI) destPOI).getFloor().getBuilding())
+                        ) {
                     sameBuildingNavigation();
                 } else {
                     differentBuildingNavigation();
@@ -54,33 +61,47 @@ public class GlobalPathFinder implements Runnable {
             } else { // Both POIs are external
                 externalOnlyNavigation();
             }
-        } catch (MCGAPathFindingException e) {
+        } catch (MCGAPathFindingException | MCGADatabaseException e) {
             Log.e(this.getClass().getName(), "ERROR generating navigation path");
         }
         activity.notifyPathfindingComplete();
     }
 
-    private void indoorToOutdoorNavigation() throws MCGAPathFindingException {
+    private void indoorToOutdoorNavigation() throws MCGAPathFindingException, MCGADatabaseException {
         IndoorPOI startIndoorPOI = (IndoorPOI) startPOI;
         IndoorPOI destIndoorPOI = ((IndoorPOI) startPOI).getFloor().getBuilding().getPortals().iterator().next();
 
-        startBuildingDirections = indoorPathFinder.shortestPath(startIndoorPOI, destIndoorPOI);
+
+        Map<Floor, List<IndoorMapTile>> completeDirections = indoorPathFinder.shortestPath(startIndoorPOI, destIndoorPOI);
+
+        startBuildingDirections = new LinkedHashMap<>();
+        for (Map.Entry<Floor, List<IndoorMapTile>> pair : completeDirections.entrySet()) {
+            startBuildingDirections.put(pair.getKey(), SingleMapPathFinder.shortestPathJunctions(pair.getValue()));
+        }
 
         outdoorCoordinates = new LatLng[2];
         outdoorCoordinates[0] = destIndoorPOI.getMapCoordinates();
         outdoorCoordinates[1] = destPOI.getMapCoordinates();
+
+        startIndoorPOI.getFloor().clearTiledMap();
+        destIndoorPOI.getFloor().clearTiledMap();
     }
 
-    private void outdoorToIndoorNavigation() throws MCGAPathFindingException {
+    private void outdoorToIndoorNavigation() throws MCGAPathFindingException, MCGADatabaseException {
         IndoorPOI destIndoorPOI = (IndoorPOI) destPOI;
         IndoorPOI startIndoorPOI = destIndoorPOI.getFloor().getBuilding().getPortals().iterator().next();
 
-        destBuildingDirections = indoorPathFinder.shortestPath(startIndoorPOI, destIndoorPOI);
-
+        Map<Floor, List<IndoorMapTile>> completeDirections = indoorPathFinder.shortestPath(startIndoorPOI, destIndoorPOI);
+        destBuildingDirections = new LinkedHashMap<>();
+        for (Map.Entry<Floor, List<IndoorMapTile>> pair : completeDirections.entrySet()) {
+            destBuildingDirections.put(pair.getKey(), SingleMapPathFinder.shortestPathJunctions(pair.getValue()));
+        }
         outdoorCoordinates = new LatLng[2];
         outdoorCoordinates[0] = startPOI.getMapCoordinates();
         outdoorCoordinates[1] = startIndoorPOI.getMapCoordinates();
 
+        startIndoorPOI.getFloor().clearTiledMap();
+        destIndoorPOI.getFloor().clearTiledMap();
     }
 
     private void externalOnlyNavigation() {
@@ -89,28 +110,50 @@ public class GlobalPathFinder implements Runnable {
         outdoorCoordinates[1] = destPOI.getMapCoordinates();
     }
 
-    private void differentBuildingNavigation() throws MCGAPathFindingException {
+    private void differentBuildingNavigation() throws MCGAPathFindingException, MCGADatabaseException {
         IndoorPOI start1IndoorPOI = (IndoorPOI) startPOI;
         IndoorPOI dest1IndoorPOI = ((IndoorPOI) startPOI).getFloor().getBuilding().getPortals().iterator().next();
 
-        startBuildingDirections = indoorPathFinder.shortestPath(start1IndoorPOI, dest1IndoorPOI);
+        Map<Floor, List<IndoorMapTile>> completeDirections = indoorPathFinder.shortestPath(start1IndoorPOI, dest1IndoorPOI);
+        startBuildingDirections = new LinkedHashMap<>();
+        for (Map.Entry<Floor, List<IndoorMapTile>> pair : completeDirections.entrySet()) {
+            startBuildingDirections.put(pair.getKey(), SingleMapPathFinder.shortestPathJunctions(pair.getValue()));
+        }
+
+        start1IndoorPOI.getFloor().clearTiledMap();
+        dest1IndoorPOI.getFloor().clearTiledMap();
 
         IndoorPOI start2IndoorPOI = ((IndoorPOI) destPOI).getFloor().getBuilding().getPortals().iterator().next();
         IndoorPOI dest2IndoorPOI = ((IndoorPOI) destPOI);
 
-        destBuildingDirections = indoorPathFinder.shortestPath(start2IndoorPOI, dest2IndoorPOI);
+        completeDirections = indoorPathFinder.shortestPath(start2IndoorPOI, dest2IndoorPOI);
+
+        destBuildingDirections = new LinkedHashMap<>();
+        for (Map.Entry<Floor, List<IndoorMapTile>> pair : completeDirections.entrySet()) {
+            destBuildingDirections.put(pair.getKey(), SingleMapPathFinder.shortestPathJunctions(pair.getValue()));
+        }
+
+        start2IndoorPOI.getFloor().clearTiledMap();
+        dest2IndoorPOI.getFloor().clearTiledMap();
 
         outdoorCoordinates = new LatLng[2];
         outdoorCoordinates[0] = dest1IndoorPOI.getMapCoordinates();
         outdoorCoordinates[1] = start2IndoorPOI.getMapCoordinates();
     }
 
-    private void sameBuildingNavigation() throws MCGAPathFindingException {
+    private void sameBuildingNavigation() throws MCGAPathFindingException, MCGADatabaseException {
         IndoorPOI startIndoorPOI = (IndoorPOI) startPOI;
         IndoorPOI destIndoorPOI = (IndoorPOI) destPOI;
 
-        startBuildingDirections = indoorPathFinder.shortestPath(startIndoorPOI, destIndoorPOI);
+        Map<Floor, List<IndoorMapTile>> completeDirections = indoorPathFinder.shortestPath(startIndoorPOI, destIndoorPOI);
 
+        startBuildingDirections = new LinkedHashMap<>();
+        for (Map.Entry<Floor, List<IndoorMapTile>> pair : completeDirections.entrySet()) {
+            startBuildingDirections.put(pair.getKey(), SingleMapPathFinder.shortestPathJunctions(pair.getValue()));
+        }
+
+        startIndoorPOI.getFloor().clearTiledMap();
+        destIndoorPOI.getFloor().clearTiledMap();
     }
 
     /**
@@ -154,6 +197,10 @@ public class GlobalPathFinder implements Runnable {
 
     public POI getDestPOI() {
         return destPOI;
+    }
+
+    public String getMode() {
+        return mode;
     }
 
     void setIndoorPathFinder(MultiMapPathFinder indoorPathFinder) {
