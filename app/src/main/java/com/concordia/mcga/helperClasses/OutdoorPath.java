@@ -20,6 +20,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @Link{OutdoorPath} connects to the Google Directions API in out to find paths between POI
@@ -39,6 +41,8 @@ public class OutdoorPath implements DirectionCallback {
     private GoogleMap map;
     private Context context;
     private String transportMode;
+    private int durationMinutes;
+    private int durationHours;
 
     public OutdoorPath() {
         polylines = new ArrayList<>();
@@ -59,6 +63,7 @@ public class OutdoorPath implements DirectionCallback {
             Route route = direction.getRouteList().get(0);
             leg = route.getLegList().get(0);
             steps = leg.getStepList();
+            setDurationHoursAndMinutes();
         }
     }
 
@@ -131,6 +136,34 @@ public class OutdoorPath implements DirectionCallback {
         return leg.getDuration().getText();
     }
 
+    /**
+     * Filters and set minutes and hours for this outdoorPath
+     */
+    private void setDurationHoursAndMinutes(){
+        final int hoursAndMinutesListMaxSize = 2;
+        String duration = getDuration();
+
+        // Regex pattern to capture integers
+        String pattern = "\\d+";
+
+        // Create a Pattern object
+        Pattern r = Pattern.compile(pattern);
+
+        // Now create matcher object.
+        Matcher m = r.matcher(duration);
+
+        List<Integer> hoursAndMinutes = new ArrayList<>();
+        while(m.find()){
+            hoursAndMinutes.add(Integer.valueOf(m.group()));
+        }
+        if (hoursAndMinutes.size() < hoursAndMinutesListMaxSize){
+            // add 0 for hours and place it in from of the list if duration is less than an hour
+            hoursAndMinutes.add(0,0);
+        }
+        durationHours = hoursAndMinutes.get(0);
+        durationMinutes = hoursAndMinutes.get(1);
+    }
+
 
     public LatLng getOrigin() {
         return origin;
@@ -169,6 +202,13 @@ public class OutdoorPath implements DirectionCallback {
         this.serverKey = serverKey;
     }
 
+    public int getDurationMinutes(){
+        return durationMinutes;
+    }
+
+    public int getDurationHours(){
+        return durationHours;
+    }
     @Override
     public String toString() {
         return "OutdoorPath{" +

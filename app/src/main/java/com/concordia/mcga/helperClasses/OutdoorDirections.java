@@ -7,6 +7,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class OutdoorDirections {
     private List<OutdoorPath> outdoorPathList;
@@ -146,6 +149,40 @@ public class OutdoorDirections {
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setServerKey(serverKey);
         }
+    }
+
+    public int getMinutesForSelectedOutdoorPath(){
+        return selectedOutdoorPath.getDurationMinutes();
+    }
+
+    public int getHoursForSelectedOutdoorPath(){
+        return selectedOutdoorPath.getDurationHours();
+    }
+
+    /**
+     * @param transport
+     * @return minutes
+     */
+    public int getMinutesForTransportType(String transport){
+        for (OutdoorPath outdoorPath : outdoorPathList) {
+            if (outdoorPath.getTransportMode().equalsIgnoreCase(transport)) {
+                return outdoorPath.getDurationMinutes();
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * @param transport
+     * @return Hours
+     */
+    public int getHoursForTransportType(String transport){
+        for (OutdoorPath outdoorPath : outdoorPathList) {
+            if (outdoorPath.getTransportMode().equalsIgnoreCase(transport)) {
+                return outdoorPath.getDurationHours();
+            }
+        }
+        return 0;
     }
 
 }

@@ -18,10 +18,12 @@ import com.concordia.mcga.activities.R;
 import com.concordia.mcga.activities.ShuttleActivity;
 import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
+import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Transportation;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 public class TransportButtonFragment extends Fragment implements View.OnClickListener {
 
@@ -44,6 +46,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private boolean publicTransportVisible = true;
     //Outdoor directions
     private OutdoorDirections outdoorDirections;
+    private Campus currentCampus = Campus.SGW;
 
     @Nullable
     @Override
@@ -126,11 +129,22 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
      * Displays time for each transportation option
      */
     protected void displayAllTransportTimes() {
-        walkTextView.setText(outdoorDirections.getDuration(MCGATransportMode.WALKING));
-        bikeTextView.setText(outdoorDirections.getDuration(MCGATransportMode.BICYCLING));
-        carTextView.setText(outdoorDirections.getDuration(MCGATransportMode.DRIVING));
-        publicTransportTextView.setText(outdoorDirections.getDuration(MCGATransportMode.TRANSIT));
-        shuttleTextView.setText(getMinutesToNextShuttleDeparture());
+        setTimeForTextView(walkTextView, MCGATransportMode.WALKING);
+        setTimeForTextView(bikeTextView, MCGATransportMode.BICYCLING);
+        setTimeForTextView(carTextView, MCGATransportMode.DRIVING);
+        setTimeForTextView(publicTransportTextView, MCGATransportMode.TRANSIT);
+        setTimeForTextView(shuttleTextView, MCGATransportMode.SHUTTLE);
+    }
+
+    private void setTimeForTextView(TextView textView, String transportType) {
+        String time;
+        if (transportType == MCGATransportMode.SHUTTLE) {
+            time = formatTime(getMinutesToNextShuttleDeparture());
+        } else {
+            time = formatTime(outdoorDirections.getHoursForTransportType(transportType),
+                    outdoorDirections.getMinutesForTransportType(transportType));
+        }
+        textView.setText(time);
     }
 
 
@@ -214,10 +228,14 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         transportExpandFAB.clearColorFilter();
     }
 
+    private String formatTime(int minutes){
+        return formatTime(minutes % 60, minutes-(minutes % 60)*60);
+    }
+
     private String formatTime(int hours, int minutes) {
         String time = null;
         if (hours > 0 && minutes > 0) {
-            time = hours + "h" + minutes + "m";
+            time = hours + "h " + minutes + "m";
         } else if (hours == 0) {
             time = minutes + "m";
         } else if (minutes == 0) {
@@ -227,7 +245,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     /**
-     *  Disables the shuttle transport option by greying it out and disable any click activity
+     * Disables the shuttle transport option by greying it out and disable any click activity
+     *
      * @param isDisabled
      */
     public void disableShuttle(boolean isDisabled) {
@@ -243,7 +262,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     /**
-     *  Disables the car option by greying it out and disable any click activity
+     * Disables the car option by greying it out and disable any click activity
+     *
      * @param isDisabled
      */
     public void disableCar(boolean isDisabled) {
@@ -259,7 +279,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     /**
-     *  Disables the public transport option by greying it out and disable any click activity
+     * Disables the public transport option by greying it out and disable any click activity
+     *
      * @param isDisabled
      */
     public void disablePublicTransport(boolean isDisabled) {
@@ -423,14 +444,122 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         this.outdoorDirections = outdoorDirections;
     }
 
-    public String getMinutesToNextShuttleDeparture(){
+    public int getMinutesToNextShuttleDeparture() {
         String[][] shuttleSchedule = ShuttleActivity.getShuttleSchedule();
 
-        String day = new SimpleDateFormat("u").format(new Date());
-        String hourminute = new SimpleDateFormat("HH:mm").format(new Date());
+        int currentDay = Integer.valueOf(new SimpleDateFormat("u").format(new Date()));
+        int currentTime = getMinutesFromTimeString(new SimpleDateFormat("HH:mm").format(new Date()));
 
-        Log.d("Adrianna Shuttle",hourminute+"next shuttle at:"+shuttleSchedule[20][0]);
+        int shuttleColumnIndex = getShuttleColumnIndex(currentDay);
 
-        return "xx";
+        int timeToNextShuttle = -1;
+
+        if (isShuttleAvailable(currentDay)) {
+            timeToNextShuttle = calculateTimeToNextShuttle(shuttleSchedule,shuttleColumnIndex, currentTime);
+        }
+
+        if (timeToNextShuttle < 0 || !isShuttleAvailable(currentDay)) {
+            final int TOTAL_MINUTES_IN_A_DAY = 60 * 24;
+            int daysToNextShuttleService = calculeNumberOfWholeDaysToNextShuttle(currentDay);
+            shuttleColumnIndex = getNextDayColumnIndex(currentDay, shuttleColumnIndex);
+
+            timeToNextShuttle = (TOTAL_MINUTES_IN_A_DAY - currentTime) + (TOTAL_MINUTES_IN_A_DAY * daysToNextShuttleService) + getMinutesFromTimeString(shuttleSchedule[0][shuttleColumnIndex]);
+        }
+        Log.d("Adrianna next shuttle", String.valueOf(timeToNextShuttle));
+        return timeToNextShuttle;
+    }
+
+    private int getNextDayColumnIndex(int currentDay, int currentIndex) {
+        int sqlTableColumnIndex = currentIndex;
+
+        //Monday to Thursday shift one to the right
+        if (currentDay > 0 && currentDay < 5)
+            sqlTableColumnIndex += 1;
+        else
+            sqlTableColumnIndex -= 1;
+
+        return sqlTableColumnIndex;
+    }
+
+    /**
+     * Returns the appropriate column index for the shuttle,
+     * based on currentDay and the current Campus.
+     *
+     * @param currentDay
+     * @return
+     */
+    private int getShuttleColumnIndex(int currentDay) {
+        int sqlTableColumnIndex = 0;
+
+        if (currentCampus == Campus.LOY)
+            sqlTableColumnIndex += 2; //LOYtoSGW are columns 2,3
+
+        if (currentDay > 4)
+            sqlTableColumnIndex += 1; //Friday are columns 1,3
+
+        return sqlTableColumnIndex;
+    }
+
+    /**
+     * Shuttle service is only available from Monday to Friday
+     */
+    private boolean isShuttleAvailable(int day) {
+        return (day > 0 && day < 6);
+    }
+
+    /**
+     * Input "HH:mm"
+     *
+     * @param hourminute
+     * @return minutes
+     */
+    private int getMinutesFromTimeString(String hourminute) {
+        String[] tokens = hourminute.split(":");
+        if (tokens[0].contains("-")) {
+            return -1;
+        } else {
+            return Integer.valueOf(tokens[0]) * 60 + Integer.valueOf(tokens[1]);
+        }
+    }
+
+    private int calculateTimeToNextShuttle(String[][] scheduleMinutes, int columnIndex, int currentTime) {
+        //Scans the list from the beginning, for current day
+        for (int rowIndex=0; rowIndex < scheduleMinutes.length; rowIndex++) {
+            int scheduleSlotInMinutes = getMinutesFromTimeString(scheduleMinutes[rowIndex][columnIndex]);
+            //There are "-" in the schedule for empty slots
+            if (scheduleSlotInMinutes == -1)
+            {
+                continue;
+            }
+
+            int timeDifference = scheduleSlotInMinutes - currentTime;
+            if (timeDifference > 0) {
+                return timeDifference;
+            }
+        }
+        //Current time is after last shuttle for day has departed
+        return -1;
+    }
+
+    private int calculeNumberOfWholeDaysToNextShuttle(int currentDay) {
+
+        //This should never occur.
+        if (currentDay < 0 || currentDay > 7)
+            return -1;
+
+        //Friday, have to wait for Saturday, Sunday
+        if (currentDay == 5)
+            return 2;
+
+        //Saturday, have to wait for Sunday
+        if (currentDay == 6)
+            return 1;
+
+        //Shuttle service available the following day
+        return 0;
+    }
+
+    public void setCampus(Campus c) {
+        currentCampus = c;
     }
 }
