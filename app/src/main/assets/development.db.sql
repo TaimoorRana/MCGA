@@ -16479,6 +16479,14 @@ INSERT INTO `walkable_paths` VALUES ('H',4,350,1643);
 INSERT INTO `walkable_paths` VALUES ('H',4,351,1643);
 INSERT INTO `walkable_paths` VALUES ('H',4,352,1643);
 INSERT INTO `walkable_paths` VALUES ('H',4,353,1643);
+CREATE TABLE `student_spots` ( `name` TEXT, `rating` REAL, `center_coordinate` TEXT, `address` TEXT, `description` TEXT, `resource_image` TEXT );
+INSERT INTO `student_spots` VALUES ('Boustan',4.0,'{"latitude":45.498020,"longitude":-73.577895,"mVersionCode":1}','2020 Crescent St','Lebanese, fast-food','ic_boustan');
+INSERT INTO `student_spots` VALUES ('A&W',3.0,'{"latitude":45.496004,"longitude":-73.578834,"mVersionCode":1}','1540 Boulevard de Maisonneuve O','American, fast-food','ic_aw');
+INSERT INTO `student_spots` VALUES ('Don Taco',5.0,'{"latitude":45.493169,"longitude":-73.580286,"mVersionCode":1}','1853 Saint-Catherine St','Mexican, coffee, study spot','ic_dontaco');
+INSERT INTO `student_spots` VALUES ('Moose Bawr',4.0,'{"latitude":45.493559,"longitude":-73.579718,"mVersionCode":1}','1817 Saint-Catherine St W','Bar, popcorn, study spot','ic_moosebawr');
+INSERT INTO `student_spots` VALUES ('Cafe Myriade',3.0,'{"latitude":45.496073,"longitude":-73.577937,"mVersionCode":1}','1432 Mackay St','Coffee, study spot','ic_myriade');
+INSERT INTO `student_spots` VALUES ('Eggspectation',2.0,'{"latitude":45.498750,"longitude":-73.577026,"mVersionCode":1}','1313 De Maisonneuve West','Breakfast, eggs','ic_eggspectations');
+INSERT INTO `student_spots` VALUES ('Fiddler''s Green',3.0,'{"latitude":45.495952,"longitude":-73.575381,"mVersionCode":1}','1224 Bishop St','Bar, Irish, Mac & cheese','ic_fiddlers');
 CREATE TABLE "room" (
 	`_id`	INTEGER,
 	`name`	TEXT,

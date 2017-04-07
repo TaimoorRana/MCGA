@@ -264,7 +264,7 @@ public class IndoorMapFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ((MainActivity) getActivity()).setNavigationPOI(threadPOI);
+                ((MainActivity) getActivity()).setNavigationPOI(threadPOI, false);
             }
         });
 

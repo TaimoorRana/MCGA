@@ -1,5 +1,6 @@
 package com.concordia.mcga.fragments;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -18,6 +19,8 @@ import android.widget.Button;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.activities.StudentSpotActivity;
+import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.helperClasses.Subject;
@@ -25,6 +28,7 @@ import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.POI;
+import com.concordia.mcga.models.StudentSpot;
 import com.concordia.mcga.models.Room;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,11 +39,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.LOCATION_SERVICE;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         OnCameraIdleListener, Subject {
@@ -166,6 +174,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         });
         //Show outdoor map on start
         showOutdoorMap();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == MainActivity.SPOT_REQUEST_CODE && resultCode == RESULT_OK) {
+            String json = data.getExtras().getString(StudentSpotActivity.SPOT_IDENTIFIER);
+            StudentSpot spot = new Gson().fromJson(json, StudentSpot.class);
+            ((MainActivity)getActivity()).setNavigationPOI(spot, true);
+        }
     }
 
     @Override
@@ -298,7 +317,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         buildingInfoFragment.collapse();
 
         ((MainActivity)getActivity()).setNavigationPOI((Building)
-                multiBuildingMap.get(polygon.getId()));
+                multiBuildingMap.get(polygon.getId()), false);
     }
 
     /**
@@ -325,7 +344,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
         buildingInfoFragment.collapse();
 
-        ((MainActivity)getActivity()).setNavigationPOI((Building) multiBuildingMap.get(marker.getId()));
+        ((MainActivity)getActivity()).setNavigationPOI((Building) multiBuildingMap.get(marker.getId()), false);
     }
 
     /**
