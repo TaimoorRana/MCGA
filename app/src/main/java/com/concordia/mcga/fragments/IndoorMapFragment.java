@@ -230,7 +230,22 @@ public class IndoorMapFragment extends Fragment {
     }
 
     public void onRoomSearch() {
+
         Log.d("IndoorMapFragment", "On room search ");
+
+        final Room room = (Room) ((MainActivity) getActivity()).getLocation();
+        final String mapId = room.getFloor().getBuilding().getShortName() + room.getFloor().getFloorNumber();
+
+        currentFloor = room.getFloor();
+
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                int x = room.getTile().getCoordinateX();
+                int y = room.getTile().getCoordinateY();
+                leafletView.evaluateJavascript("panToMap(" + x + "," + y + ",'" + mapId + "')", null);
+            }
+        });
     }
 
 
