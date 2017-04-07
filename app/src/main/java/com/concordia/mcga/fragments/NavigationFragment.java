@@ -17,7 +17,6 @@ import android.widget.Button;
 
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.MainActivity;
-import com.concordia.mcga.activities.Manifest;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
@@ -58,8 +57,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     //State
     private ViewType viewType;
     private Campus currentCampus = Campus.SGW;
-    private boolean indoorMapVisible = false;
-    private boolean outdoorMapVisible = false;
     private boolean transportButtonVisible = false;
 
     //Fragments
@@ -95,11 +92,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View v) {
                 if (viewType == ViewType.INDOOR) {
-                    viewType = ViewType.OUTDOOR;
-                    getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
-                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit(); //To be removed after Outside transportation Google API incorporation
-                    campusButton.setVisibility(View.VISIBLE);
-                    viewSwitchButton.setText("GO INDOORS");
+                    showOutdoorMap();
                 }
                 ((MainActivity)getActivity()).onClose();
                 //Camera Movement
@@ -113,23 +106,19 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         campusButton = (Button) parentLayout.findViewById(R.id.campusButton);
         viewSwitchButton = (Button) parentLayout.findViewById(R.id.viewSwitchButton);
+
+        campusButton.setVisibility(View.VISIBLE);
         viewSwitchButton.setText("GO INDOORS");
+
         viewSwitchButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (viewType == ViewType.OUTDOOR) {
                     showIndoorMap(lastClickedBuilding);
-                    campusButton.setVisibility(View.GONE);
-                    viewSwitchButton.setText("GO OUTDOORS");
-                    //Commented this out because its annoying
                     //showDirectionsFragment(true);
-                    showBuildingInfoFragment(false);
                 } else {
                     showOutdoorMap();
-                    campusButton.setVisibility(View.VISIBLE);
-                    viewSwitchButton.setText("GO INDOORS");
-                    showDirectionsFragment(false);
-                    showBuildingInfoFragment(true);
+                    //showDirectionsFragment(false);
                 }
             }
         });
@@ -145,9 +134,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         // Set the directions one to false
         showBuildingInfoFragment(true);
         showDirectionsFragment(false);
-
-        //Set initial view type
-        viewType = ViewType.OUTDOOR;
 
         //Requests focus on creation. Prevents text views from being auto selected on launch.
         parentLayout.requestFocus();
@@ -207,7 +193,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public void onRoomSearch(Building building) {
-        if (outdoorMapVisible) {
+        if (viewType == ViewType.OUTDOOR) {
             showIndoorMap(building);
         }
 
@@ -242,14 +228,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * Shows or hides the indoor map, will hide the outdoormap if visible
      */
     public void showIndoorMap(Building building) {
-        outdoorMapVisible = false;
-        indoorMapVisible = true;
         viewType = ViewType.INDOOR;
 
         if (transportButtonVisible) {
             showTransportButton(false);
         }
         campusButton.setVisibility(View.GONE);
+        viewSwitchButton.setText("GO OUTDOORS");
+        showBuildingInfoFragment(false);
 
         getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
         indoorMapFragment.initializeBuilding(building);
@@ -260,11 +246,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * Shows or hides the outdoor map, will hide the indoormap if visible
      */
     public void showOutdoorMap() {
-        outdoorMapVisible = true;
-        indoorMapVisible = false;
         viewType = ViewType.OUTDOOR;
+
         campusButton.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
+
+        viewSwitchButton.setText("GO INDOORS");
+        showBuildingInfoFragment(true);
     }
 
     /**

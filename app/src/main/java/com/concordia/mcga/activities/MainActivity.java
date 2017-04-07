@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements
                 if (groupPosition == POISearchAdapter.MY_LOCATION_GROUP_POSITION) {
                     LatLng location = gpsManager.getLocation();
                     if (location != null) {
-                        POI myPOI = new POI(gpsManager.getLocation(), "My Location");
+                        POI myPOI = new POI(location, "My Location");
                         setNavigationPOI(myPOI);
                         onClose();
                         return true;
