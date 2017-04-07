@@ -239,9 +239,9 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
     // Need to make this relative
     public int getTop(){
         int[] location = new int[2];
-        list.getLocationOnScreen(location);
+        bottom_sheet_title.getLocationOnScreen(location);
 
-        return (location[1] - listHeight - bottom_sheet_title.getHeight());
+        return (location[1] - bottom_sheet_title.getHeight());
     }
 
     /**

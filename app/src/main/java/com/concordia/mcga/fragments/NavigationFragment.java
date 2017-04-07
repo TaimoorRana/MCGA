@@ -131,7 +131,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     private Button viewSwitchButton;
     private FloatingActionButton mapCenterButton;
-    private FloatingActionButton navigateDestinationButton;
     //GPS attributes
     private LocationManager gpsmanager; //LocationManager instance to check gps activity
     // Search components
@@ -143,7 +142,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private POI destination;
     private POI bottomSheetBuilding;
     private SearchState searchState;
-
     private boolean outdoors = true;
 
     @Override
@@ -160,18 +158,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
         directionsFragment = (BottomSheetDirectionsFragment) getChildFragmentManager().findFragmentById(R.id.directionsFragment);
         buildingInfoFragment = (BottomSheetBuildingInfoFragment) getChildFragmentManager().findFragmentById(R.id.buildingInfoFragment);
-
-        //Init View Components
-        navigateDestinationButton = (FloatingActionButton) parentLayout.findViewById(R.id.navigateDestinationButton);
-        navigateDestinationButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bottomSheetBuilding != null) {
-                    // set the navigation POI and hide the bar
-                    setNavigationPOI(bottomSheetBuilding);
-                }
-            }
-        });
 
         mapCenterButton = (FloatingActionButton) parentLayout.findViewById(R.id.mapCenterButton);
         mapCenterButton.setOnClickListener(new OnClickListener() {
@@ -317,6 +303,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     }
 
+
     /**
      * Positions the Locate Me button as well as the
      * Directions button relative to the bottomsheet at all times
@@ -340,15 +327,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                         } catch (Exception e) {
                         }
                         if ((buildingInfoShown)) {
-                            mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight() + mapCenterButton.getHeight()/ 3);
-                            navigateDestinationButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + navigateDestinationButton.getHeight() + navigateDestinationButton.getHeight()/3);
+                            mapCenterButton.setY(y - 2 * mapCenterButton.getHeight() - mapCenterButton.getHeight()/3);
                         }
                         else if (!outdoors){
-                            mapCenterButton.setY(y - parentLayout.getHeight() + toolbarView.getHeight() + mapCenterButton.getHeight()+ mapCenterButton.getHeight()/ 3);
+                            mapCenterButton.setY(y - parentLayout.getHeight() + 2 * toolbarView.getHeight() + mapCenterButton.getHeight() + mapCenterButton.getHeight()/ 3);
                         }
                         else
                         {
-                            mapCenterButton.setY(parentLayout.getHeight() - toolbarView.getHeight() - mapCenterButton.getHeight());
+                            mapCenterButton.setY( parentLayout.getHeight() -  mapCenterButton.getHeight() -  mapCenterButton.getHeight() / 2);
                         }
 
                     } catch (Exception e) {
@@ -394,14 +380,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private void showBuildingInfoFragment(boolean isVisible) {
         if (isVisible) {
             getChildFragmentManager().beginTransaction().show(buildingInfoFragment).commit();
-            navigateDestinationButton.setVisibility(View.VISIBLE);
             outdoors = true;
             // this boolean exist because it is not in the directions fragment
             // Creates 4 combinations between buildingInfoShown and outdoors
             buildingInfoShown = true;
         } else {
             getChildFragmentManager().beginTransaction().hide(buildingInfoFragment).commit();
-            navigateDestinationButton.setVisibility(View.GONE);
             outdoors = false;
             buildingInfoShown = false;
         }

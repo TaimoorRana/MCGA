@@ -245,12 +245,14 @@ public class BottomSheet<V extends View> extends CoordinatorLayout.Behavior<V> {
         mParentHeight = parent.getHeight();
 
         if (mType == "building_navigation") {
+
             mMinOffset = mParentHeight - child.getHeight() / 2 - child.getHeight()/5 - child.getHeight() / 40;
-            mMaxOffset = mParentHeight - parent.getHeight() / 7;
+            mMaxOffset = Math.max(mParentHeight - mPeekHeight, mMinOffset);
         }
         else if(mType == "building_information"){
             mMinOffset = mParentHeight - child.getHeight()/2 - child.getHeight() / 4;
-            mMaxOffset = mParentHeight - child.getHeight() / 2 + child.getHeight() / 4 + child.getHeight() / 12;
+            //mMaxOffset = mParentHeight - child.getHeight() / 2 + child.getHeight() / 4 + child.getHeight() / 12;
+            mMaxOffset = Math.max(mParentHeight - mPeekHeight, mMinOffset);
         }
         else {
             mMinOffset = mParentHeight - child.getHeight() / 2;
