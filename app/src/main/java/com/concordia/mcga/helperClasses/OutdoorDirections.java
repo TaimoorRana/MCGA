@@ -21,6 +21,7 @@ public class OutdoorDirections {
             add(MCGATransportMode.DRIVING);
             add(MCGATransportMode.TRANSIT);
             add(MCGATransportMode.WALKING);
+            add(MCGATransportMode.SHUTTLE);
         }};
         for (int i = 0; i < transportModes.size(); i++) {
             outdoorPathList.add(new OutdoorPath());

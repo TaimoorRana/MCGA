@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,7 @@ public class ShuttleActivity extends AppCompatActivity {
     final static int LOY_TO_SGW_FRI = 3;
     final static int SHUTTLE_TABLE_COLUMNS = 4;
 
-    private String[][] shuttleSchedule;
+    public static String[][] shuttleSchedule;
     private TableLayout tableLayout;
     private Button sgwToLoyola;
     private Button loyolaToSgw;
@@ -111,7 +112,7 @@ public class ShuttleActivity extends AppCompatActivity {
      * Queries the database for the shuttle schedules
      * Creates a nx4 array of String to store the schedule
      */
-    private void createShuttleSchedule() {
+    private static void createShuttleSchedule() {
         Cursor shuttleCursor;
         String shuttleQuery = "select * from shuttle;";
         try {
@@ -130,6 +131,12 @@ public class ShuttleActivity extends AppCompatActivity {
         shuttleCursor.close();
     }
 
+    public static String[][] getShuttleSchedule(){
+        if (shuttleSchedule == null){
+            createShuttleSchedule();
+        }
+        return shuttleSchedule;
+    }
 
     /**
      * Method that creates a table and fills it programmatically
