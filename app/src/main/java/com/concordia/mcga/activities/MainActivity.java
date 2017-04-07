@@ -356,9 +356,15 @@ public class MainActivity extends AppCompatActivity implements
             location = poi;
             searchState = SearchState.LOCATION;
         } else if (searchState == SearchState.DESTINATION) {
+            if (poi == destination) {
+                return false;
+            }
             location = poi;
             searchState = SearchState.LOCATION_DESTINATION;
         } else if (searchState == SearchState.LOCATION) {
+            if (poi == location) {
+                return false;
+            }
             destination = poi;
             searchState = SearchState.LOCATION_DESTINATION;
         } else { // if searchState == SearchState.LOCATION_DESTINATION
