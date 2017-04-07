@@ -230,7 +230,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      */
     public void showIndoorMap(Building building) {
         viewType = ViewType.INDOOR;
-        clearOutdoorPath();
 
         showTransportButton(false);
         campusButton.setVisibility(View.GONE);
