@@ -35,6 +35,7 @@ import com.concordia.mcga.helperClasses.GPSManager;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.POI;
 import com.concordia.mcga.models.Room;
 import com.google.android.gms.maps.model.LatLng;
@@ -61,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements
     private POISearchAdapter poiSearchAdapter;
 
     // Directions
-    private OutdoorDirections outdoorDirections = new OutdoorDirections();
     private SearchState searchState;
 
     private GPSManager gpsManager;
@@ -381,26 +381,21 @@ public class MainActivity extends AppCompatActivity implements
                 toolbarView.findViewById(R.id.search_location);
         LinearLayoutCompat destinationLayout = (LinearLayoutCompat)
                 toolbarView.findViewById(R.id.search_destination);
-        if (getLocation() != null) {
+
+        if (location != null) {
             AppCompatTextView locationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_location_text);
-            setDisplayName(getLocation(), locationText);
-            outdoorDirections.setOrigin(getLocation().getMapCoordinates());
-        } else {
-            outdoorDirections.setOrigin(null);
+            setDisplayName(location, locationText);
         }
-        if (getDestination() != null) {
+        if (destination != null) {
             AppCompatTextView destinationText = (AppCompatTextView)
                     toolbarView.findViewById(R.id.search_destination_text);
-            setDisplayName(getDestination(), destinationText);
-            outdoorDirections.setDestination(getDestination().getMapCoordinates());
-        } else {
-            outdoorDirections.setDestination(null);
+            setDisplayName(destination, destinationText);
         }
 
-        outdoorDirections.deleteDirection();
-        if (getLocation() != null && getDestination() != null) {
-            outdoorDirections.requestDirections();
+        // Always clear the directions first
+        if (navigationFragment != null) {
+            navigationFragment.clearOutdoorPath();
         }
 
         if (getSearchState() == SearchState.NONE) {
@@ -422,6 +417,16 @@ public class MainActivity extends AppCompatActivity implements
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setVisibility(View.GONE);
+
+            // Set up directions. Here is where indoor/outdoor comes to play.
+            // For now we only handle purely outdoor or purely indoor paths
+            if (!(location instanceof IndoorPOI) && !(destination instanceof IndoorPOI)) {
+                navigationFragment.generateOutdoorPath(location, destination);
+            } else if (location instanceof IndoorPOI && destination instanceof IndoorPOI) {
+                navigationFragment.generateIndoorPath((IndoorPOI)location, (IndoorPOI)destination);
+            } else {
+                // TODO: Indoor/outdoor integration
+            }
         }
     }
 

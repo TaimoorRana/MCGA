@@ -21,6 +21,8 @@ import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.IndoorPOI;
+import com.concordia.mcga.models.POI;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -390,6 +392,20 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         } catch (Resources.NotFoundException e) {
             Log.e("Google Map Style", "Can't find style. Error: ", e);
         }
+    }
+
+    public void clearOutdoorPath() {
+        outdoorDirections.deleteDirection();
+    }
+
+    public void generateOutdoorPath(POI start, POI dest) {
+        outdoorDirections.setOrigin(start.getMapCoordinates());
+        outdoorDirections.setDestination(dest.getMapCoordinates());
+        outdoorDirections.requestDirections();
+    }
+
+    public void generateIndoorPath(IndoorPOI start, IndoorPOI dest) {
+        indoorMapFragment.generatePath(start, dest);
     }
 
     /**

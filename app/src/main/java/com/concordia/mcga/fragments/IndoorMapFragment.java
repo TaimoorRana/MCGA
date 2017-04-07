@@ -14,14 +14,12 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
-import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.IndoorPOI;
@@ -53,7 +51,6 @@ public class IndoorMapFragment extends Fragment {
     private Building buildingLoaded;
 
     private Map<Floor, List<IndoorMapTile>> currentPathTiles;
-    private ArrayList<IndoorPOI> indoorPoiStack;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,7 +82,6 @@ public class IndoorMapFragment extends Fragment {
         pathProgressBar.setVisibility(View.GONE);
 
         //Init Attributes
-        indoorPoiStack = new ArrayList<>();
         currentPathTiles = new HashMap<>();
         floorsLoaded = new HashMap<>();
 
@@ -200,39 +196,15 @@ public class IndoorMapFragment extends Fragment {
             }
         }
 
+        final IndoorPOI threadPOI = poiClicked;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((MainActivity) getActivity()).setNavigationPOI(threadPOI);
+            }
+        });
+
         Log.d("PoiClickEvent", "Poi is: " + poiClicked);
-        pushRoom((Room) poiClicked);
-    }
-
-    public void pushRoom(Room room) {
-        boolean doAdd = true;
-        if (indoorPoiStack.size() == 2) {
-            currentPathTiles.clear();
-            indoorPoiStack.clear();
-            leafletView.post(new Runnable() {
-                @Override
-                public void run() {
-                    leafletView.evaluateJavascript("clearPathLayers()", null);
-                }
-            });
-        }
-
-        if (indoorPoiStack.size() == 0) {
-            Toast.makeText(getContext(), "Start Room: " + room.getName(), Toast.LENGTH_SHORT).show();
-        } else if (indoorPoiStack.size() == 1 && !indoorPoiStack.get(0).equals(room)) {
-            Toast.makeText(getContext(), "Dest Room: " + room.getName(), Toast.LENGTH_SHORT).show();
-        } else {
-            doAdd = false;
-        }
-
-        if (doAdd)
-            indoorPoiStack.add(room);
-
-        if (indoorPoiStack.size() == 2) {
-            IndoorPOI startTemp = indoorPoiStack.get(0);
-            IndoorPOI endTemp = indoorPoiStack.get(1);
-            generatePath(startTemp, endTemp);
-        }
     }
 
     public void onRoomSearch() {
