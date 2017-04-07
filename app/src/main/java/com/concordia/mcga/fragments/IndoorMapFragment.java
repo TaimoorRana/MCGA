@@ -31,6 +31,7 @@ import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
 import com.jcabi.aspects.Timeable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +47,11 @@ public class IndoorMapFragment extends Fragment {
     //State
     private boolean pageLoaded = false;
     private boolean pathGenerating = false;
+
     private Map<Integer, Floor> floorsLoaded;
     private Floor currentFloor;
+    private Building buildingLoaded;
+
     private Map<Floor, List<IndoorMapTile>> currentPathTiles;
     private ArrayList<IndoorPOI> indoorPoiStack;
 
@@ -61,8 +65,6 @@ public class IndoorMapFragment extends Fragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 pageLoaded = true;
-                //Initialize a building, normally this would be done dynamically
-                initializeHBuilding();
             }
         });
 
@@ -87,9 +89,72 @@ public class IndoorMapFragment extends Fragment {
         currentPathTiles = new HashMap<>();
         floorsLoaded = new HashMap<>();
 
-        Campus.populateCampusesWithBuildings();
-
         return view;
+    }
+
+
+    public void initializeBuilding(Building building) {
+        buildingLoaded = building;
+        final List<Integer> floorNumbersOrdered = new ArrayList<>();
+
+        //Load Floors
+        for (Map.Entry<Integer, Floor> entry : building.getFloorMaps().entrySet()) {
+            Integer key = entry.getKey();
+            Floor floor = entry.getValue();
+
+            floorNumbersOrdered.add(key);
+            floorsLoaded.put(entry.getKey(), entry.getValue());
+        }
+
+        Collections.sort(floorNumbersOrdered, Collections.<Integer>reverseOrder());
+
+        for (final Integer floorNumber : floorNumbersOrdered) {
+            final Floor floor = floorsLoaded.get(floorNumber);
+
+            Button button = new Button(getContext());
+
+            button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
+            button.setText(String.valueOf(floorNumber));
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (pageLoaded) {
+                        currentFloor = floorsLoaded.get(floorNumber);
+                        leafletView.evaluateJavascript("loadMap('" + getMapId(floor) + "')", null);
+                        leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(floorNumber).getRoomsJSON().toString() + ")", null);
+                        onFloorChange();
+                    }
+                }
+            });
+
+            floorButtonContainer.addView(button);
+        }
+
+        //Set the default floor as the lowest one
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                int floorNumber = floorNumbersOrdered.get(0);
+                currentFloor = floorsLoaded.get(floorNumber);
+                leafletView.evaluateJavascript("loadMap('" + getMapId(currentFloor) + "')", null);
+                leafletView.evaluateJavascript("addFloorRooms(" + currentFloor.getRoomsJSON().toString() + ")", null);
+            }
+        });
+    }
+
+    public void showFloor(final Floor floor) {
+        if (!buildingLoaded.getFloorMaps().containsValue(floor)) {
+            return;
+        }
+
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                currentFloor = floorsLoaded.get(floor.getFloorNumber());
+                leafletView.evaluateJavascript("loadMap('" + getMapId(currentFloor) + "')", null);
+                leafletView.evaluateJavascript("addFloorRooms(" + currentFloor.getRoomsJSON().toString() + ")", null);
+            }
+        });
     }
 
     public void generatePath(final IndoorPOI start, final IndoorPOI dest) {
@@ -122,68 +187,9 @@ public class IndoorMapFragment extends Fragment {
         drawCurrentWalkablePath();
     }
 
-    public void initializeHBuilding() {
-        Building hBuilding = Campus.SGW.getBuilding("H");
-        floorsLoaded.put(1, hBuilding.getFloorMap(1));
-        floorsLoaded.put(2, hBuilding.getFloorMap(2));
-        floorsLoaded.put(4, hBuilding.getFloorMap(4));
-
-        if (pageLoaded) {
-            leafletView.evaluateJavascript("loadMap('H2')", null);
-            leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(2).getRoomsJSON().toString() + ")", null);
-        }
-
-        //Add Floor Buttons
-        Button h1 = new Button(getContext());
-        h1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
-        h1.setText("1");
-        h1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pageLoaded) {
-                    currentFloor = floorsLoaded.get(1);
-                    leafletView.evaluateJavascript("loadMap('H1')", null);
-                    leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(1).getRoomsJSON().toString() + ")", null);
-                    onFloorChange();
-                }
-            }
-        });
-
-        Button h2 = new Button(getContext());
-        h2.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
-        h2.setText("2");
-        h2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pageLoaded) {
-                    currentFloor = floorsLoaded.get(2);
-                    leafletView.evaluateJavascript("loadMap('H2')", null);
-                    leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(2).getRoomsJSON().toString() + ")", null);
-                    onFloorChange();
-                }
-            }
-        });
-
-        Button h4 = new Button(getContext());
-        h4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
-        h4.setText("4");
-        h4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pageLoaded) {
-                    currentFloor = floorsLoaded.get(4);
-                    leafletView.evaluateJavascript("loadMap('H4')", null);
-                    leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(4).getRoomsJSON().toString() + ")", null);
-                    onFloorChange();
-                }
-            }
-        });
-
-        floorButtonContainer.addView(h4);
-        floorButtonContainer.addView(h2);
-        floorButtonContainer.addView(h1);
-    }
-
+    /*
+        EVENT HANDLERS
+     */
     @JavascriptInterface
     public void poiClicked(String poiName) {
         Log.d("PoiClickEvent", poiName);
@@ -230,20 +236,14 @@ public class IndoorMapFragment extends Fragment {
     }
 
     public void onRoomSearch() {
-
-        Log.d("IndoorMapFragment", "On room search ");
-
         final Room room = (Room) ((MainActivity) getActivity()).getLocation();
-        final String mapId = room.getFloor().getBuilding().getShortName() + room.getFloor().getFloorNumber();
-
-        currentFloor = room.getFloor();
-
+        showFloor(room.getFloor());
         leafletView.post(new Runnable() {
             @Override
             public void run() {
                 int x = room.getTile().getCoordinateX();
                 int y = room.getTile().getCoordinateY();
-                leafletView.evaluateJavascript("panToMap(" + x + "," + y + ",'" + mapId + "')", null);
+                leafletView.evaluateJavascript("panToMap(" + x + "," + y + ",'" + getMapId(room.getFloor()) + "')", null);
             }
         });
     }
@@ -269,6 +269,10 @@ public class IndoorMapFragment extends Fragment {
                 }
             });
         }
+    }
+
+    public String getMapId(Floor floor) {
+        return floor.getBuilding().getShortName() + floor.getFloorNumber();
     }
 
 
