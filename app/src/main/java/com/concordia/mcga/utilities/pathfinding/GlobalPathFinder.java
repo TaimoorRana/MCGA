@@ -30,8 +30,9 @@ public class GlobalPathFinder implements Runnable, Serializable {
 
     /**
      * @param activity reference to the MainActivity
-     * @param startPOI
-     * @param destPOI
+     * @param startPOI - Start POI
+     * @param destPOI - Destination POI
+     * @param mode - {@link com.concordia.mcga.helperClasses.MCGATransportMode} to be used
      */
     public GlobalPathFinder(MainActivity activity, POI startPOI, POI destPOI, String mode) {
         this.startPOI = startPOI;
@@ -41,15 +42,15 @@ public class GlobalPathFinder implements Runnable, Serializable {
         indoorPathFinder = new MultiMapPathFinder();
     }
 
+    /**
+     * Thread execution method
+     */
     @Override
     public void run() {
         try {
             if (startPOI instanceof IndoorPOI && destPOI instanceof IndoorPOI) {
-                if (
-                        ((IndoorPOI) startPOI).getFloor().getBuilding()
-                                .equals(
-                                        ((IndoorPOI) destPOI).getFloor().getBuilding())
-                        ) {
+                if (((IndoorPOI) startPOI).getFloor().getBuilding()
+                        .equals(((IndoorPOI) destPOI).getFloor().getBuilding())) {
                     sameBuildingNavigation();
                 } else {
                     differentBuildingNavigation();
@@ -67,6 +68,11 @@ public class GlobalPathFinder implements Runnable, Serializable {
         activity.notifyPathfindingComplete();
     }
 
+    /**
+     * Generate a path from an indoor map to outdoor map
+     * @throws MCGAPathFindingException - Exception when attempting to find a path
+     * @throws MCGADatabaseException - Exception when attempting to access floor data
+     */
     private void indoorToOutdoorNavigation() throws MCGAPathFindingException, MCGADatabaseException {
         IndoorPOI startIndoorPOI = (IndoorPOI) startPOI;
         IndoorPOI destIndoorPOI = ((IndoorPOI) startPOI).getFloor().getBuilding().getPortals().iterator().next();
@@ -87,6 +93,11 @@ public class GlobalPathFinder implements Runnable, Serializable {
         destIndoorPOI.getFloor().clearTiledMap();
     }
 
+    /**
+     * Generate a path from an outdoor map to indoor map
+     * @throws MCGAPathFindingException - Exception when attempting to find a path
+     * @throws MCGADatabaseException - Exception when attempting to access floor data
+     */
     private void outdoorToIndoorNavigation() throws MCGAPathFindingException, MCGADatabaseException {
         IndoorPOI destIndoorPOI = (IndoorPOI) destPOI;
         IndoorPOI startIndoorPOI = destIndoorPOI.getFloor().getBuilding().getPortals().iterator().next();
@@ -104,12 +115,20 @@ public class GlobalPathFinder implements Runnable, Serializable {
         destIndoorPOI.getFloor().clearTiledMap();
     }
 
+    /**
+     * Generate a path with outdoor components only
+     */
     private void externalOnlyNavigation() {
         outdoorCoordinates = new LatLng[2];
         outdoorCoordinates[0] = startPOI.getMapCoordinates();
         outdoorCoordinates[1] = destPOI.getMapCoordinates();
     }
 
+    /**
+     * Generate a path from an indoor map to another indoor map in a different building, passing through an outdoor map
+     * @throws MCGAPathFindingException - Exception when attempting to find a path
+     * @throws MCGADatabaseException - Exception when attempting to access floor data
+     */
     private void differentBuildingNavigation() throws MCGAPathFindingException, MCGADatabaseException {
         IndoorPOI start1IndoorPOI = (IndoorPOI) startPOI;
         IndoorPOI dest1IndoorPOI = ((IndoorPOI) startPOI).getFloor().getBuilding().getPortals().iterator().next();
@@ -141,6 +160,11 @@ public class GlobalPathFinder implements Runnable, Serializable {
         outdoorCoordinates[1] = start2IndoorPOI.getMapCoordinates();
     }
 
+    /**
+     * Generate a path from an indoor map to a different map in the same building
+     * @throws MCGAPathFindingException - Exception when attempting to find a path
+     * @throws MCGADatabaseException - Exception when attempting to access floor data
+     */
     private void sameBuildingNavigation() throws MCGAPathFindingException, MCGADatabaseException {
         IndoorPOI startIndoorPOI = (IndoorPOI) startPOI;
         IndoorPOI destIndoorPOI = (IndoorPOI) destPOI;

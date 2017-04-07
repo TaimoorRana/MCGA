@@ -115,9 +115,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         if (clickedView.getId() != R.id.transportExpandFAB) {
             NavigationFragment fragment = ((NavigationFragment) getParentFragment());
 
+            // Tell the main activity to generate directions
             ((MainActivity) getActivity()).generateDirections(fragment.getLocation(), fragment.getDestination(), transportType);
-//            outdoorDirections.setSelectedTransportMode(transportType);
-//            outdoorDirections.drawPathForSelectedTransportMode();
         }
     }
 
