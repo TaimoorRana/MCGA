@@ -17,6 +17,9 @@
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
+        <include
+            android:id="@+id/nav_toolbar"
+            layout="@layout/nav_main_toolbar"/>
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
