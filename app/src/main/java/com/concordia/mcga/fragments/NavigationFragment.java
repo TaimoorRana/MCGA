@@ -1,10 +1,12 @@
 package com.concordia.mcga.fragments;
 
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +25,7 @@ import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.POI;
+import com.concordia.mcga.models.Room;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -55,8 +58,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     //State
     private ViewType viewType;
     private Campus currentCampus = Campus.SGW;
-    private boolean indoorMapVisible = false;
-    private boolean outdoorMapVisible = false;
     private boolean transportButtonVisible = false;
 
     //Fragments
@@ -92,40 +93,33 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View v) {
                 if (viewType == ViewType.INDOOR) {
-                    viewType = ViewType.OUTDOOR;
-                    getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
-                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit(); //To be removed after Outside transportation Google API incorporation
-                    campusButton.setVisibility(View.VISIBLE);
-                    viewSwitchButton.setText("GO INDOORS");
+                    showOutdoorMap();
                 }
                 ((MainActivity)getActivity()).onClose();
                 //Camera Movement
                 LatLng location = ((MainActivity) getActivity()).getGpsManager().getLocation();
                 if (location != null) {
                     camMove(location);
+                    toggleMapLocation(true);
                 }
             }
         });
 
         campusButton = (Button) parentLayout.findViewById(R.id.campusButton);
         viewSwitchButton = (Button) parentLayout.findViewById(R.id.viewSwitchButton);
+
+        campusButton.setVisibility(View.VISIBLE);
         viewSwitchButton.setText("GO INDOORS");
+
         viewSwitchButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (viewType == ViewType.OUTDOOR) {
                     showIndoorMap(lastClickedBuilding);
-                    campusButton.setVisibility(View.GONE);
-                    viewSwitchButton.setText("GO OUTDOORS");
-                    //Commented this out because its annoying
                     //showDirectionsFragment(true);
-                    showBuildingInfoFragment(false);
                 } else {
                     showOutdoorMap();
-                    campusButton.setVisibility(View.VISIBLE);
-                    viewSwitchButton.setText("GO INDOORS");
-                    showDirectionsFragment(false);
-                    showBuildingInfoFragment(true);
+                    //showDirectionsFragment(false);
                 }
             }
         });
@@ -134,7 +128,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         viewType = ViewType.OUTDOOR;
 
         //Hide Fragments
-        showTransportButton(false);
+        showTransportButton(true);
 
         // Set the building information bottomsheet to true
         // When the app starts
@@ -142,8 +136,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         showBuildingInfoFragment(true);
         showDirectionsFragment(false);
 
-        //Set initial view type
-        viewType = ViewType.OUTDOOR;
+        //Requests focus on creation. Prevents text views from being auto selected on launch.
+        parentLayout.requestFocus();
 
         return parentLayout;
     }
@@ -199,12 +193,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         updateCampus();
     }
 
-    public void onRoomSearch(Building building) {
-        if (outdoorMapVisible) {
-            showIndoorMap(building);
+    public void onRoomSearch(Room room) {
+        if (viewType == ViewType.OUTDOOR) {
+            showIndoorMap(room.getFloor().getBuilding());
         }
 
-        indoorMapFragment.onRoomSearch();
+        indoorMapFragment.onRoomSearch(room);
     }
 
     /**
@@ -235,16 +229,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * Shows or hides the indoor map, will hide the outdoormap if visible
      */
     public void showIndoorMap(Building building) {
-        outdoorMapVisible = false;
-        indoorMapVisible = true;
         viewType = ViewType.INDOOR;
 
-        if (transportButtonVisible) {
-            showTransportButton(false);
-        }
+        showTransportButton(false);
         campusButton.setVisibility(View.GONE);
+        showBuildingInfoFragment(false);
 
         getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
+        viewSwitchButton.setText("GO OUTDOORS");
+
         indoorMapFragment.initializeBuilding(building);
     }
 
@@ -253,11 +246,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * Shows or hides the outdoor map, will hide the indoormap if visible
      */
     public void showOutdoorMap() {
-        outdoorMapVisible = true;
-        indoorMapVisible = false;
         viewType = ViewType.OUTDOOR;
+
+        showTransportButton(true);
         campusButton.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
+
+        viewSwitchButton.setText("GO INDOORS");
+        showBuildingInfoFragment(true);
     }
 
     /**
@@ -404,11 +400,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public void clearOutdoorPath() {
-        outdoorDirections.deleteDirection();
+        if (outdoorDirections != null) {
+            outdoorDirections.deleteDirection();
+        }
     }
 
     public void clearIndoorPath() {
-        indoorMapFragment.clearWalkablePaths();
+        if (indoorMapFragment != null) {
+            indoorMapFragment.clearWalkablePaths();
+        }
     }
 
     public void generateOutdoorPath(POI start, POI dest) {
@@ -459,6 +459,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     public void camMove(LatLng MyPos){
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(MyPos, 16f));//Camera Update method
+    }
+
+    public void toggleMapLocation(boolean active) {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(active);
+        } else {
+            map.setMyLocationEnabled(false);
+        }
     }
 }
 
