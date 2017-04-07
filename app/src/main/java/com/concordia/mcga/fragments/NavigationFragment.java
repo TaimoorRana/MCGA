@@ -236,9 +236,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorMapVisible = false;
         indoorMapVisible = true;
         viewType = ViewType.INDOOR;
+
         if (transportButtonVisible) {
             showTransportButton(false);
         }
+        campusButton.setVisibility(View.GONE);
+
         getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
         indoorMapFragment.initializeBuilding(building);
     }
@@ -251,6 +254,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorMapVisible = true;
         indoorMapVisible = false;
         viewType = ViewType.OUTDOOR;
+        campusButton.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
     }
 

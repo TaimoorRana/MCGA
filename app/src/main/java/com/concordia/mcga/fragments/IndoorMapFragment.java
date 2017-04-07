@@ -237,7 +237,7 @@ public class IndoorMapFragment extends Fragment {
 
     public void onRoomSearch() {
         final Room room = (Room) ((MainActivity) getActivity()).getLocation();
-        //showFloor(room.getFloor());
+
         leafletView.post(new Runnable() {
             @Override
             public void run() {
