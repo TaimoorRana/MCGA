@@ -213,7 +213,9 @@ public class IndoorMapFragment extends Fragment {
         leafletView.post(new Runnable() {
             @Override
             public void run() {
-                showFloor(room.getFloor());
+                if (!currentFloor.equals(room.getFloor()))
+                    showFloor(room.getFloor());
+                
                 int x = room.getTile().getCoordinateX();
                 int y = room.getTile().getCoordinateY();
                 leafletView.evaluateJavascript("panTo(" + x + "," + y + ")", null);

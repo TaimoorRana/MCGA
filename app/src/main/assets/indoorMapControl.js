@@ -13,7 +13,7 @@ var curLatBound;
 var curLngBound;
 
 //Constants
-var panZoom = 1.25;
+var panZoom = -1;
 
 //Debug Flag
 var debug = false;
@@ -192,17 +192,9 @@ function femaleWashroomIcon(point, roomName) {
 
 //Utility Functions
 function panTo(x, y) {
-    map.panTo(L.latLng(curLatBound - y, x));
-    map.zoomIn(panZoom);
+    map.flyTo(L.latLng(curLatBound - y, x), panZoom);
 }
 
-function panToMap(x, y, mapId) {
-    console.log("x: " + x);
-    console.log("y: " + y);
-    console.log("m: " + mapId);
-    loadMap(mapId);
-    map.panTo(L.latLng(curLatBound - y, x));
-}
 
 //Clearing Functions
 function clearPathLayers() {
