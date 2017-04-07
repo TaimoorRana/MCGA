@@ -127,7 +127,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         viewType = ViewType.OUTDOOR;
 
         //Hide Fragments
-        showTransportButton(false);
+        showTransportButton(true);
 
         // Set the building information bottomsheet to true
         // When the app starts
@@ -229,15 +229,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      */
     public void showIndoorMap(Building building) {
         viewType = ViewType.INDOOR;
+        clearOutdoorPath();
 
-        if (transportButtonVisible) {
-            showTransportButton(false);
-        }
+        showTransportButton(false);
         campusButton.setVisibility(View.GONE);
-        viewSwitchButton.setText("GO OUTDOORS");
         showBuildingInfoFragment(false);
 
         getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
+        viewSwitchButton.setText("GO OUTDOORS");
+
         indoorMapFragment.initializeBuilding(building);
     }
 
@@ -248,6 +248,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     public void showOutdoorMap() {
         viewType = ViewType.OUTDOOR;
 
+        showTransportButton(true);
         campusButton.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
 
@@ -399,11 +400,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     public void clearOutdoorPath() {
-        outdoorDirections.deleteDirection();
+        if (outdoorDirections != null) {
+            outdoorDirections.deleteDirection();
+        }
     }
 
     public void clearIndoorPath() {
-        indoorMapFragment.clearWalkablePaths();
+        if (indoorMapFragment != null) {
+            indoorMapFragment.clearWalkablePaths();
+        }
     }
 
     public void generateOutdoorPath(POI start, POI dest) {
