@@ -128,6 +128,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private POI destination;
     private SearchState searchState;
 
+    //State
+    private Building lastClickedBuilding;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -171,7 +174,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClick(View v) {
                 if (viewType == ViewType.OUTDOOR) {
-                    showIndoorMap();
+                    showIndoorMap(lastClickedBuilding);
                     campusButton.setVisibility(View.GONE);
                     viewSwitchButton.setText("GO OUTDOORS");
                     //Commented this out because its annoying
@@ -300,9 +303,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         updateCampus();
     }
 
-    private void onRoomSearch() {
+    private void onRoomSearch(Building building) {
         if (outdoorMapVisible) {
-            showIndoorMap();
+            showIndoorMap(building);
         }
 
         indoorMapFragment.onRoomSearch();
@@ -337,7 +340,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     /*
      * Shows or hides the indoor map, will hide the outdoormap if visible
      */
-    public void showIndoorMap() {
+    public void showIndoorMap(Building building) {
         outdoorMapVisible = false;
         indoorMapVisible = true;
         viewType = ViewType.INDOOR;
@@ -345,7 +348,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             showTransportButton(false);
         }
         getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
+        indoorMapFragment.initializeBuilding(building);
     }
+
 
     /**
      * Shows or hides the outdoor map, will hide the indoormap if visible
@@ -440,12 +445,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
+                lastClickedBuilding = Campus.getBuilding(polygon);
                 setBottomSheetContent(polygon);
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                lastClickedBuilding = Campus.getBuilding(marker);
                 setBottomSheetContent(marker);
                 return true;
             }
@@ -783,7 +790,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     map.moveCamera(CameraUpdateFactory.newLatLngZoom(poi.getMapCoordinates(),
                             CAMPUS_DEFAULT_ZOOM_LEVEL));
                 } else {
-                    onRoomSearch();
+                    onRoomSearch(((Room) poi).getFloor().getBuilding());
                 }
 
                 onClose();
