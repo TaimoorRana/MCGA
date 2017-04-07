@@ -88,56 +88,73 @@ public class IndoorMapFragment extends Fragment {
         return view;
     }
 
-
+    /**
+     * Initializes a building, populating floor buttons and loading a default floor. The default
+     * floor is always the one with the lowest floor number.
+     *
+     * @param building
+     */
     public void initializeBuilding(Building building) {
-        buildingLoaded = building;
-        final List<Integer> floorNumbersOrdered = new ArrayList<>();
 
-        //Load Floors
-        for (Map.Entry<Integer, Floor> entry : building.getFloorMaps().entrySet()) {
-            Integer key = entry.getKey();
-            Floor floor = entry.getValue();
+        if (buildingLoaded == null || !buildingLoaded.equals(building)) {
 
-            floorNumbersOrdered.add(key);
-            floorsLoaded.put(entry.getKey(), entry.getValue());
-        }
+            final List<Integer> floorNumbersOrdered = new ArrayList<>();
 
-        Collections.sort(floorNumbersOrdered, Collections.<Integer>reverseOrder());
+            //Load Floors
+            for (Map.Entry<Integer, Floor> entry : building.getFloorMaps().entrySet()) {
+                Integer key = entry.getKey();
+                Floor floor = entry.getValue();
 
-        for (final Integer floorNumber : floorNumbersOrdered) {
-            final Floor floor = floorsLoaded.get(floorNumber);
+                floorNumbersOrdered.add(key);
+                floorsLoaded.put(entry.getKey(), entry.getValue());
+            }
 
-            Button button = new Button(getContext());
+            Collections.sort(floorNumbersOrdered, Collections.<Integer>reverseOrder());
 
-            button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
-            button.setText(String.valueOf(floorNumber));
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (pageLoaded) {
-                        currentFloor = floorsLoaded.get(floorNumber);
-                        leafletView.evaluateJavascript("loadMap('" + getMapId(floor) + "')", null);
-                        leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(floorNumber).getRoomsJSON().toString() + ")", null);
-                        onFloorChange();
+            for (final Integer floorNumber : floorNumbersOrdered) {
+                final Floor floor = floorsLoaded.get(floorNumber);
+
+                Button button = new Button(getContext());
+
+                button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
+                button.setText(String.valueOf(floorNumber));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (pageLoaded) {
+                            currentFloor = floorsLoaded.get(floorNumber);
+                            leafletView.evaluateJavascript("loadMap('" + getMapId(floor) + "')", null);
+                            leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(floorNumber).getRoomsJSON().toString() + ")", null);
+                            onFloorChange();
+                        }
                     }
+                });
+
+                floorButtonContainer.addView(button);
+            }
+
+            //Set the default floor as the lowest one
+            leafletView.post(new Runnable() {
+                @Override
+                public void run() {
+                    int floorNumber = floorNumbersOrdered.get(0);
+                    currentFloor = floorsLoaded.get(floorNumber);
+                    leafletView.evaluateJavascript("loadMap('" + getMapId(currentFloor) + "')", null);
+                    leafletView.evaluateJavascript("addFloorRooms(" + currentFloor.getRoomsJSON().toString() + ")", null);
                 }
             });
 
-            floorButtonContainer.addView(button);
+            buildingLoaded = building;
         }
-
-        //Set the default floor as the lowest one
-        leafletView.post(new Runnable() {
-            @Override
-            public void run() {
-                int floorNumber = floorNumbersOrdered.get(0);
-                currentFloor = floorsLoaded.get(floorNumber);
-                leafletView.evaluateJavascript("loadMap('" + getMapId(currentFloor) + "')", null);
-                leafletView.evaluateJavascript("addFloorRooms(" + currentFloor.getRoomsJSON().toString() + ")", null);
-            }
-        });
+        
     }
 
+    /**
+     * If the building is currently loaded, will show the floor map associated to the floor passed in.
+     * If the building is not currently loaded, call initializeBuilding() first.
+     *
+     * @param floor
+     */
     public void showFloor(final Floor floor) {
         if (!buildingLoaded.getFloorMaps().containsValue(floor)) {
             return;
@@ -153,6 +170,12 @@ public class IndoorMapFragment extends Fragment {
         });
     }
 
+    /**
+     * Initiates a path generation thread to find a walkable path between start and dest
+     *
+     * @param start Start Point
+     * @param dest  End Point
+     */
     public void generatePath(final IndoorPOI start, final IndoorPOI dest) {
         Thread generatePathThread = null;
 
@@ -163,7 +186,10 @@ public class IndoorMapFragment extends Fragment {
 
     }
 
-    public void drawCurrentWalkablePath() {
+    /**
+     * Callback useful for drawing paths.
+     */
+    private void drawCurrentWalkablePath() {
         pathGenerating = false;
         leafletView.post(new Runnable() {
             @Override
@@ -179,12 +205,33 @@ public class IndoorMapFragment extends Fragment {
         });
     }
 
+    /**
+     * Public method to clear walkable paths on all indoor maps
+     */
+    public void clearWalkablePaths() {
+        currentPathTiles.clear();
+
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (pageLoaded)
+                    leafletView.evaluateJavascript("clearPathLayers()", null);
+            }
+        });
+    }
+
     public void onFloorChange() {
         drawCurrentWalkablePath();
     }
 
     /*
         EVENT HANDLERS
+     */
+
+    /**
+     * This event is fired everytime a poi is clicked on a map.
+     *
+     * @param poiName The name of the poiClicked. This is provided by the caller.
      */
     @JavascriptInterface
     public void poiClicked(String poiName) {
@@ -207,6 +254,10 @@ public class IndoorMapFragment extends Fragment {
         Log.d("PoiClickEvent", "Poi is: " + poiClicked);
     }
 
+    /**
+     * This event handles a room search. It will show the floor if the appropriate building is loaded
+     * and will pan and zoom into that room.
+     */
     public void onRoomSearch() {
         final Room room = (Room) ((MainActivity) getActivity()).getLocation();
 
@@ -215,7 +266,7 @@ public class IndoorMapFragment extends Fragment {
             public void run() {
                 if (!currentFloor.equals(room.getFloor()))
                     showFloor(room.getFloor());
-                
+
                 int x = room.getTile().getCoordinateX();
                 int y = room.getTile().getCoordinateY();
                 leafletView.evaluateJavascript("panTo(" + x + "," + y + ")", null);
@@ -223,11 +274,11 @@ public class IndoorMapFragment extends Fragment {
         });
     }
 
-
-    public void setCurrentPathTiles(Map<Floor, List<IndoorMapTile>> currentPathTiles) {
-        this.currentPathTiles = currentPathTiles;
-    }
-
+    /**
+     * Shows a progress bar. Typically used when a path is being generated by a thread.
+     *
+     * @param isVisible
+     */
     private void showProgressBar(boolean isVisible) {
         if (isVisible) {
             pathProgressBar.post(new Runnable() {
@@ -246,8 +297,18 @@ public class IndoorMapFragment extends Fragment {
         }
     }
 
+    /**
+     * Given a floor, this will return the mapId that identifies the map, allowing its image to be loaded into the canvas.
+     *
+     * @param floor
+     * @return mapId - Example: H4
+     */
     public String getMapId(Floor floor) {
         return floor.getBuilding().getShortName() + floor.getFloorNumber();
+    }
+
+    public void setCurrentPathTiles(Map<Floor, List<IndoorMapTile>> currentPathTiles) {
+        this.currentPathTiles = currentPathTiles;
     }
 
 

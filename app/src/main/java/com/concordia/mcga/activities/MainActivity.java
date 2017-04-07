@@ -394,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements
 
         // Always clear the directions first
         if (navigationFragment != null) {
-            navigationFragment.clearOutdoorPath();
+            navigationFragment.clearAllPaths();
         }
 
         if (getSearchState() == SearchState.NONE) {

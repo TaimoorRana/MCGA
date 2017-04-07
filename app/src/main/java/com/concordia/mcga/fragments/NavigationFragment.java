@@ -398,8 +398,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    public void clearAllPaths() {
+        clearOutdoorPath();
+        clearIndoorPath();
+    }
+
     public void clearOutdoorPath() {
         outdoorDirections.deleteDirection();
+    }
+
+    public void clearIndoorPath() {
+        indoorMapFragment.clearWalkablePaths();
     }
 
     public void generateOutdoorPath(POI start, POI dest) {
