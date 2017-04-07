@@ -139,7 +139,12 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private void setTimeForTextView(TextView textView, String transportType) {
         String time;
         if (transportType == MCGATransportMode.SHUTTLE) {
-            time = formatTime(getMinutesToNextShuttleDeparture());
+            int totaltime =0;
+            totaltime += getMinutesToNextShuttleDeparture();
+            totaltime += outdoorDirections.getHoursForTransportType(transportType)*60;
+            totaltime += outdoorDirections.getMinutesForTransportType(transportType);
+
+            time = formatTime(totaltime);
         } else {
             time = formatTime(outdoorDirections.getHoursForTransportType(transportType),
                     outdoorDirections.getMinutesForTransportType(transportType));
@@ -229,7 +234,9 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     private String formatTime(int minutes){
-        return formatTime(minutes % 60, minutes-(minutes % 60)*60);
+        int hours = minutes / 60;
+        minutes %= 60;
+        return formatTime(hours,minutes);
     }
 
     private String formatTime(int hours, int minutes) {
