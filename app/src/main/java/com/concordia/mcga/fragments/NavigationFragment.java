@@ -229,16 +229,18 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * Shows or hides the indoor map, will hide the outdoormap if visible
      */
     public void showIndoorMap(Building building) {
-        viewType = ViewType.INDOOR;
+        if (building.getShortName().equals("H")) { // TODO: Allow indoor map on other available buildings
+            viewType = ViewType.INDOOR;
 
-        showTransportButton(false);
-        campusButton.setVisibility(View.GONE);
-        showBuildingInfoFragment(false);
+            showTransportButton(false);
+            campusButton.setVisibility(View.GONE);
+            showBuildingInfoFragment(false);
 
-        getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
-        viewSwitchButton.setText("GO OUTDOORS");
+            getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
+            viewSwitchButton.setText("GO OUTDOORS");
 
-        indoorMapFragment.initializeBuilding(building);
+            indoorMapFragment.initializeBuilding(building);
+        }
     }
 
 
