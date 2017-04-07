@@ -12,6 +12,9 @@ var pathGroup;
 var curLatBound;
 var curLngBound;
 
+//Constants
+var panZoom = 1.25;
+
 //Debug Flag
 var debug = false;
 
@@ -190,6 +193,7 @@ function femaleWashroomIcon(point, roomName) {
 //Utility Functions
 function panTo(x, y) {
     map.panTo(L.latLng(curLatBound - y, x));
+    map.zoomIn(panZoom);
 }
 
 function panToMap(x, y, mapId) {

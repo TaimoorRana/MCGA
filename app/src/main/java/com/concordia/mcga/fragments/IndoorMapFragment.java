@@ -209,13 +209,14 @@ public class IndoorMapFragment extends Fragment {
 
     public void onRoomSearch() {
         final Room room = (Room) ((MainActivity) getActivity()).getLocation();
-        showFloor(room.getFloor());
+
         leafletView.post(new Runnable() {
             @Override
             public void run() {
+                showFloor(room.getFloor());
                 int x = room.getTile().getCoordinateX();
                 int y = room.getTile().getCoordinateY();
-                leafletView.evaluateJavascript("panToMap(" + x + "," + y + ",'" + getMapId(room.getFloor()) + "')", null);
+                leafletView.evaluateJavascript("panTo(" + x + "," + y + ")", null);
             }
         });
     }
