@@ -25,6 +25,7 @@ import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.POI;
+import com.concordia.mcga.models.Room;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -192,12 +193,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         updateCampus();
     }
 
-    public void onRoomSearch(Building building) {
+    public void onRoomSearch(Room room) {
         if (viewType == ViewType.OUTDOOR) {
-            showIndoorMap(building);
+            showIndoorMap(room.getFloor().getBuilding());
         }
 
-        indoorMapFragment.onRoomSearch();
+        indoorMapFragment.onRoomSearch(room);
     }
 
     /**

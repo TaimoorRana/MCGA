@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements
                     navigationFragment.camMove(poi.getMapCoordinates());
                 } else {
                     // call indoormapfragment
-                    navigationFragment.onRoomSearch(((Room) poi).getFloor().getBuilding());
+                    navigationFragment.onRoomSearch((Room) poi);
                 }
 
                 onClose();

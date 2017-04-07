@@ -258,9 +258,7 @@ public class IndoorMapFragment extends Fragment {
      * This event handles a room search. It will show the floor if the appropriate building is loaded
      * and will pan and zoom into that room.
      */
-    public void onRoomSearch() {
-        final Room room = (Room) ((MainActivity) getActivity()).getLocation();
-
+    public void onRoomSearch(final Room room) {
         leafletView.post(new Runnable() {
             @Override
             public void run() {
