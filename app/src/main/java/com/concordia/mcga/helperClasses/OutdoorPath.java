@@ -64,6 +64,7 @@ public class OutdoorPath implements DirectionCallback {
             leg = route.getLegList().get(0);
             steps = leg.getStepList();
             setDurationHoursAndMinutes();
+
         }
     }
 
@@ -90,9 +91,6 @@ public class OutdoorPath implements DirectionCallback {
      * Draws the path on the map
      */
     public void drawPath() {
-        if(origin == null || destination == null){
-            return;
-        }
 
         ArrayList<PolylineOptions> polylineOptionList = DirectionConverter.createTransitPolyline(
                 context,
