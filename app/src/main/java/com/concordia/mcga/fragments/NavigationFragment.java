@@ -145,6 +145,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         //Set initial view type
         viewType = ViewType.OUTDOOR;
 
+        //Requests focus on creation. Prevents text views from being auto selected on launch.
+        parentLayout.requestFocus();
+
         return parentLayout;
     }
 
