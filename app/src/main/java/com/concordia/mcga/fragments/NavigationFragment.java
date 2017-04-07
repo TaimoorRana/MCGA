@@ -1,10 +1,12 @@
 package com.concordia.mcga.fragments;
 
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import android.widget.Button;
 
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.MainActivity;
+import com.concordia.mcga.activities.Manifest;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
@@ -103,6 +106,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 LatLng location = ((MainActivity) getActivity()).getGpsManager().getLocation();
                 if (location != null) {
                     camMove(location);
+                    toggleMapLocation(true);
                 }
             }
         });
@@ -462,6 +466,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     public void camMove(LatLng MyPos){
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(MyPos, 16f));//Camera Update method
+    }
+
+    public void toggleMapLocation(boolean active) {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(active);
+        } else {
+            map.setMyLocationEnabled(false);
+        }
     }
 }
 
