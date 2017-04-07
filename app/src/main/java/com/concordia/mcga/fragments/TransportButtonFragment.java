@@ -113,10 +113,10 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
                 break;
         }
         if (clickedView.getId() != R.id.transportExpandFAB) {
-            NavigationFragment fragment = ((NavigationFragment) getParentFragment());
+            MainActivity activity = ((MainActivity) getActivity());
 
             // Tell the main activity to generate directions
-            ((MainActivity) getActivity()).generateDirections(fragment.getLocation(), fragment.getDestination(), transportType);
+            ((MainActivity) getActivity()).generateDirections(activity.getLocation(), activity.getDestination(), transportType);
         }
     }
 

@@ -206,7 +206,7 @@ public class IndoorMapFragment extends Fragment {
     /**
      * Callback useful for drawing paths.
      */
-    private void drawCurrentWalkablePath() {
+    public void drawCurrentWalkablePath() {
         pathGenerating = false;
         leafletView.post(new Runnable() {
             @Override

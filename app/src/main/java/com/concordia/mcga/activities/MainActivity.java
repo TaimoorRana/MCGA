@@ -1,6 +1,13 @@
 package com.concordia.mcga.activities;
 
 
+import android.app.Dialog;
+import android.app.SearchManager;
+import android.content.Context;
+import android.graphics.Rect;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,7 +23,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.concordia.mcga.adapters.POISearchAdapter;
@@ -25,7 +35,16 @@ import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.fragments.IndoorMapFragment;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
-
+import com.concordia.mcga.helperClasses.GPSManager;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
+import com.concordia.mcga.helperClasses.OutdoorDirections;
+import com.concordia.mcga.models.Building;
+import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.Floor;
+import com.concordia.mcga.models.IndoorPOI;
+import com.concordia.mcga.models.POI;
+import com.concordia.mcga.models.Room;
+import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
@@ -66,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements
     private POI location;
     private POI destination;
 
->>>>>>> master
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -214,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public void loadStartIndoor(View v) {
         currentState = NavigationState.START_INDOOR_BUILDING;
-        navigationFragment.showIndoorMap();
+        navigationFragment.showIndoorMap(finder.getStartBuildingDirections().keySet().iterator().next().getBuilding());
         final IndoorMapFragment indoorMapFragment = navigationFragment.getIndoorMapFragment();
         indoorMapFragment.setCurrentPathTiles(finder.getStartBuildingDirections());
         indoorMapFragment.setCurrentFloor(finder.getStartBuildingDirections().keySet().iterator().next());
@@ -230,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public void loadDestIndoor(View v) {
         currentState = NavigationState.DEST_INDOOR_BUILDING;
-        navigationFragment.showIndoorMap();
+        navigationFragment.showIndoorMap(finder.getDestBuildingDirections().keySet().iterator().next().getBuilding());
         final IndoorMapFragment indoorMapFragment = navigationFragment.getIndoorMapFragment();
         indoorMapFragment.setCurrentPathTiles(finder.getDestBuildingDirections());
         indoorMapFragment.setCurrentFloor(finder.getDestBuildingDirections().keySet().iterator().next());

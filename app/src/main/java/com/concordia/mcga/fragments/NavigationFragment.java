@@ -471,124 +471,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    /**
-     * Constructor helper function to set up the search functionality of the view
-     */
-    private void setupSearchAttributes() {
-        //Search
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(
-                Context.SEARCH_SERVICE);
-        search = (SearchView) parentLayout.findViewById(R.id.navigation_search);
-        search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        search.setIconifiedByDefault(false);
-        search.setOnQueryTextListener(this);
-        search.setOnCloseListener(this);
-        search.setQueryHint("Enter destination");
-
-        //Custom search dialog
-        searchDialog = new Dialog(getActivity());
-        searchDialog.setCanceledOnTouchOutside(true);
-        searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        searchDialog.setContentView(R.layout.search_dialog);
-        final Window window = searchDialog.getWindow();
-        window.setGravity(Gravity.TOP);
-        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-        window.setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
-        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        window.setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
-                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        window.setLayout(LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
-                LinearLayoutCompat.LayoutParams.MATCH_PARENT);
-
-        parentLayout.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        // Set dialog window offset and height
-                        WindowManager.LayoutParams wmlp = window.getAttributes();
-                        int xy[] = new int[2];
-                        parentLayout.findViewById(R.id.navigation_search).getLocationOnScreen(xy);
-                        wmlp.y = xy[1] + 20;
-
-                        Rect r = new Rect();
-                        parentLayout.getWindowVisibleDisplayFrame(r);
-                        wmlp.height = (r.bottom - r.top) - wmlp.y;
-                        window.setAttributes(wmlp);
-                    }
-                }
-        );
-    }
-
-    /**
-     * Constructor helper function to set up the list and listener for the navigation search
-     */
-    private void setupSearchList() {
-        searchList = (ExpandableListView) searchDialog.findViewById(R.id.expandableList);
-        poiSearchAdapter = new POISearchAdapter(getActivity(), Campus.SGW, Campus.LOY);
-        searchList.setAdapter(poiSearchAdapter);
-
-        searchList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                POI dest = (POI)poiSearchAdapter.getChild(groupPosition, childPosition);
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(),
-                        CAMPUS_DEFAULT_ZOOM_LEVEL));
-
-                setNavigationPOI(dest);
-                onClose();
-                return true;
-            }
-        });
-
-        searchList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                if (groupPosition == POISearchAdapter.MY_LOCATION_GROUP_POSITION) {
-                    POI myPOI = new POI(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen), getString(R.string.my_location_string));
-                    setNavigationPOI(myPOI);
-                    onClose();
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    /**
-     * Sets the navigation state and location/destination for internal use
-     * @param dest The {@link POI} location to be added to the search state
-     * @return Whether the state was updated or not
-     */
-    private boolean setNavigationPOI(POI dest) {
-        if (searchState == SearchState.NONE) {
-            location = dest;
-            searchState = SearchState.LOCATION;
-        } else if (searchState == SearchState.DESTINATION) {
-            location = dest;
-            searchState = SearchState.LOCATION_DESTINATION;
-        } else if (searchState == SearchState.LOCATION) {
-            destination = dest;
-            searchState = SearchState.LOCATION_DESTINATION;
-        } else { // if searchState == SearchState.LOCATION_DESTINATION
-            return false;
-        }
-        updateSearchUI();
-        return true;
-    }
-
-    //Getters
-    public boolean isIndoorMapVisible() {
-        return indoorMapVisible;
-    }
-
-    public boolean isOutdoorMapVisible() {
-        return outdoorMapVisible;
-    }
-
     public boolean isTransportButtonVisible() { return transportButtonVisible; }
 
     public ViewType getViewType() {
@@ -601,14 +483,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     public IndoorMapFragment getIndoorMapFragment() {
         return indoorMapFragment;
-    }
-
-    public POI getLocation() {
-        return location;
-    }
-
-    public POI getDestination() {
-        return destination;
     }
 
     public GoogleMap getMap() {
