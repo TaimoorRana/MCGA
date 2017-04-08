@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ToggleButton;
 
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.MainActivity;
@@ -69,6 +70,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private ViewType viewType;
     private Campus currentCampus = Campus.SGW;
     private boolean transportButtonVisible = false;
+    private ToggleButton toggleButton;
 
     //Fragments
     private LinearLayoutCompat parentLayout;
@@ -160,7 +162,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Button toggleButton = (Button) getView().findViewById(R.id.campusButton);
+        toggleButton = (ToggleButton) getView().findViewById(R.id.campusButton);
         toggleButton.setBackgroundColor(Color.parseColor("#850f02"));
         toggleButton.setTextColor(Color.WHITE);
         toggleButton.setOnClickListener(new OnClickListener() {
@@ -225,10 +227,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     public Campus closestCampus(double distance1, double distance2){
         if(distance1<=distance2){
+            toggleButton.setChecked(false);
             return Campus.SGW;
         }
-        else
+        else{
+            toggleButton.setChecked(true);
             return Campus.LOY;
+        }
     }
 
     public void onRoomSearch(Room room) {
