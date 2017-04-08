@@ -570,17 +570,8 @@ public class MainActivity extends AppCompatActivity implements
             setDisplayName(destination, destinationText);
         }
 
-        try {
-            // Always clear the directions first
-            if (navigationFragment != null) {
-                navigationFragment.clearAllPaths();
-                directionsBottomSheet = navigationFragment.getDirectionsFragment();
-                directionsBottomSheet.clearDirections();
-            }
-        }
-        catch (NullPointerException e){
-
-        }
+        // Always clear the directions first
+        clearPaths();
 
         if (getSearchState() == SearchState.NONE) {
             locationLayout.setVisibility(View.GONE);
@@ -604,6 +595,16 @@ public class MainActivity extends AppCompatActivity implements
 
             generateDirections(location, destination, navigationFragment.getTransportationType());
 
+        }
+    }
+
+    public void clearPaths() {
+        if (navigationFragment != null) {
+            navigationFragment.clearAllPaths();
+            directionsBottomSheet = navigationFragment.getDirectionsFragment();
+            if (directionsBottomSheet != null) {
+                directionsBottomSheet.clearDirections();
+            }
         }
     }
 
