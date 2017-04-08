@@ -216,6 +216,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         updateCampus();
     }
 
+    /**
+     *
+     * @param point1: First LatLng to compare
+     * @param point2: Second LatLng to compare
+     * @return a double calculated by the different in LatLng by SphericalUtil
+     * This method calculates the distance between two LatLng variables.
+     * To be used with method "closestCampus".
+     */
     public Double distanceBetween(LatLng point1, LatLng point2){
         if(point1==null||point2 == null){
             return null;
@@ -225,6 +233,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    /**
+     *
+     * @param distance1: Distance returned from myLocation to SGW Campus
+     * @param distance2: Distance returned from myLocation to LOY Campus
+     * @return: Returns the campus it's closest to
+     * This method is used to return a campus depending on the user's current location by comparing the distance between the user and both campus's
+     * location using the previous "distanceBetween" method
+     */
     public Campus closestCampus(double distance1, double distance2){
         if(distance1<=distance2){
             toggleButton.setChecked(false);
@@ -240,7 +256,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         if (viewType == ViewType.OUTDOOR) {
             showIndoorMap(room.getFloor().getBuilding());
         }
-
         indoorMapFragment.onRoomSearch(room);
     }
 
