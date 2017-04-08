@@ -78,15 +78,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private Button campusButton;
     private Button viewSwitchButton;
     private FloatingActionButton mapCenterButton;
-
+    private Button nextDirection, previousDirection;
     //State
     private Building lastClickedBuilding;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         parentLayout = (LinearLayoutCompat) inflater.inflate(R.layout.nav_main_fragment, container, false);
+
 
         //Init Fragments
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);

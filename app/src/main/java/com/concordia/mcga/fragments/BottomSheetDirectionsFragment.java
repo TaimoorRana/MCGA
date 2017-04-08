@@ -39,6 +39,8 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     private List<String> completeDirectionsImage = new ArrayList<String>();
     private List<String> completeDirectionsList = new ArrayList<String>();
 
+    private List<Integer> flag = new ArrayList<Integer>();
+
     // Counter keeps track of the index of the current direction
     private int currentDirection = 0;
 
@@ -53,6 +55,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     // simple buttons
     private ImageButton nextButton, previousButton, expandButton;
 
+    private static final int FLAG_INDOORS = 0, FLAG_OUTDOORS = 1;
 
     /**
      * On create view override
@@ -205,9 +208,13 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         String[][] direction = indoorDirections.getDirections(tiles);
 
         for (int i = 0; i < direction.length; i++){
-            addDirection(direction[i][0], direction[i][1]);
+            addDirection(direction[i][0], direction[i][1], FLAG_INDOORS);
         }
         updateDirections();
+    }
+
+    public void addOutdoorsDirection(String direction, String image){
+        addDirection(direction, image, FLAG_OUTDOORS);
     }
 
     /**
@@ -215,9 +222,10 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      * @param direction
      * @param image
      */
-    public void addDirection(String direction, String image){
+    public void addDirection(String direction, String image, int flag){
         completeDirectionsList.add(direction);
         completeDirectionsImage.add(image);
+        addFlag(flag);
     }
 
     /**
@@ -239,6 +247,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     public void clearDirections(){
         completeDirectionsList.clear();
         completeDirectionsImage.clear();
+        flag.clear();
         currentDirection = 0;
         updateDirections();
     }
@@ -310,13 +319,29 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         if (completeDirectionsList.size() > 0) {
             // Set the main direction
             setTextDirections(completeDirectionsList.get(currentDirection));
+            try{
+                if (flag.get(currentDirection) == FLAG_OUTDOORS) {
+                    ((NavigationFragment) getParentFragment()).showOutdoorMap();
+                }
+            }
+            catch(IndexOutOfBoundsException e){
+
+            }
         }
         else{
             setTextDirections("Directions");
         }
+
     }
 
 
+    private void addFlag(int state){
+        flag.add(state);
+    }
+
+    public int getFlag(int index){
+        return flag.get(index);
+    }
 
     ////////////////////////////////////
     // Main Direction View

@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements
             if (outdoorsDirection.size() > 0) {
 
                 for (int i = 0; i < outdoorsDirection.size(); i++) {
-                    directionsBottomSheet.addDirection(outdoorsDirection.get(i), "none");
+                    directionsBottomSheet.addOutdoorsDirection(outdoorsDirection.get(i), "none");
                 }
                 directionsBottomSheet.updateDirections();
             }
@@ -652,6 +652,7 @@ public class MainActivity extends AppCompatActivity implements
             progressDialog.hide();
         }
     }
+
 
 
     public SearchState getSearchState() {
