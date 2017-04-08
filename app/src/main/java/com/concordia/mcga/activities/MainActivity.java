@@ -40,6 +40,7 @@ import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.helperClasses.GPSManager;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
+import com.concordia.mcga.helperClasses.OutdoorPath;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Floor;
@@ -572,40 +573,58 @@ public class MainActivity extends AppCompatActivity implements
             setDisplayName(destination, destinationText);
         }
 
-        try {
-            // Always clear the directions first
-            if (navigationFragment != null) {
-                navigationFragment.clearAllPaths();
-                directionsBottomSheet = navigationFragment.getDirectionsFragment();
-                directionsBottomSheet.clearDirections();
-            }
-        }
-        catch (NullPointerException e){
-
-        }
+        // Always clear the directions first
+        clearPaths();
 
         if (getSearchState() == SearchState.NONE) {
+            showDirectionsFragment(false);
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter location...");
             search.setVisibility(View.VISIBLE);
         } else if (getSearchState() == SearchState.LOCATION) {
+            showDirectionsFragment(false);
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter destination...");
             search.setVisibility(View.VISIBLE);
         } else if (getSearchState() == SearchState.DESTINATION) {
+            showDirectionsFragment(false);
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setQueryHint("Enter location...");
             search.setVisibility(View.VISIBLE);
         } else { // SearchState.LOCATION_DESTINATION
+            showDirectionsFragment(true);
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setVisibility(View.GONE);
 
             generateDirections(location, destination, navigationFragment.getTransportationType());
 
+        }
+    }
+
+    private void showDirectionsFragment(boolean active) {
+        if (navigationFragment != null) {
+            if (navigationFragment.getView() != null) {
+                navigationFragment.showDirectionsFragment(active);
+            }
+        }
+    }
+
+    public void clearPaths() {
+        if (navigationFragment != null) {
+            navigationFragment.clearAllPaths();
+            directionsBottomSheet = navigationFragment.getDirectionsFragment();
+            if (directionsBottomSheet != null) {
+                directionsBottomSheet.clearDirections();
+            }
+            OutdoorPath path = navigationFragment.getOutdoorDirections().getDirectionObject();
+
+            if (path != null) {
+                path.clearInstructions();
+            }
         }
     }
 
