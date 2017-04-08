@@ -255,6 +255,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             showTransportButton(false);
             campusButton.setVisibility(View.GONE);
             showBuildingInfoFragment(false);
+            showDirectionsFragment(true);
 
             getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
             viewSwitchButton.setText("GO OUTDOORS");
@@ -273,6 +274,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         showTransportButton(true);
         campusButton.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
+        showDirectionsFragment(false);
 
         viewSwitchButton.setText("GO INDOORS");
         showBuildingInfoFragment(true);
