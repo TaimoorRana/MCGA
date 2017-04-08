@@ -3,12 +3,14 @@ package com.concordia.mcga.utilities.pathfinding;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.PathFinderTile.Type;
+
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import org.json.JSONArray;
 
 /**
  * Pathfinding class, which runs the A* shortest pathfinding algorithm
@@ -57,41 +59,12 @@ public class SingleMapPathFinder {
         List<IndoorMapTile> returnList = new ArrayList<>();
         while (true) {
             returnList.add(0, current.getIndoorMapTile());
-            if (current.getTileType() == Type.START){
+            if (current.getTileType() == Type.START) {
                 break;
             }
             current = current.getParent();
         }
         return returnList;
-    }
-
-    /**
-     * Finds the shortest path but only returns points where a direction change occurs. Useful for plotting lines on a map using markers.
-     *
-     * @param start - starting position
-     * @param dest  - ending position
-     * @return - Returns a list of the tiles found in the shortest path. Sorted from first to last.
-     * @throws MCGAPathFindingException - Thrown if there exists no valid path between both points
-     */
-    public List<IndoorMapTile> shortestPathJunctions(IndoorMapTile start, IndoorMapTile dest) throws MCGAPathFindingException {
-        List<IndoorMapTile> pathTiles = new ArrayList<IndoorMapTile>(shortestPath(start, dest));
-        List<IndoorMapTile> pathTilesJunctions = new ArrayList<IndoorMapTile>();
-
-        IndoorMapTile firstPft = pathTiles.get(0);
-        pathTilesJunctions.add(firstPft);
-        int curX = firstPft.getCoordinateX();
-        int curY = firstPft.getCoordinateY();
-
-        for (int i = 1; i < pathTiles.size(); i++) {
-            IndoorMapTile pft = pathTiles.get(i);
-            if (!(pft.getCoordinateX() == curX && pft.getCoordinateY() != curY) && !(pft.getCoordinateY() == curY && pft.getCoordinateX() != curX)) {
-                pathTilesJunctions.add(pft);
-                curX = pft.getCoordinateX();
-                curY = pft.getCoordinateY();
-            }
-        }
-
-        return pathTilesJunctions;
     }
 
     public static JSONArray toJSONArray(List<IndoorMapTile> pathTilesJunctions) {
@@ -121,7 +94,7 @@ public class SingleMapPathFinder {
             if (tile == null) {
                 continue;
             }
-            if (tile.getDistFromEnd() == 0 && tile.getTileType() != Type.DESTINATION){
+            if (tile.getDistFromEnd() == 0 && tile.getTileType() != Type.DESTINATION) {
                 tile.setDistFromEnd(tile.calculateDistanceTo(map.getEndTile()));
             }
             if (!closedSet.contains(tile)) {
@@ -140,12 +113,45 @@ public class SingleMapPathFinder {
         }
     }
 
+
+    /**
+     * Given a list of generated path tiles, finds only the tiles where the direction changes. Useful for getting points to draw lines on a map.
+     *
+     * @param pathTiles
+     * @return
+     * @throws MCGAPathFindingException
+     */
+    public static List<IndoorMapTile> shortestPathJunctions(List<IndoorMapTile> pathTiles) throws MCGAPathFindingException {
+        List<IndoorMapTile> pathTilesJunctions = new ArrayList<>();
+
+        IndoorMapTile firstPft = pathTiles.get(0);
+        pathTilesJunctions.add(firstPft);
+        int lastX = firstPft.getCoordinateX();
+        int lastY = firstPft.getCoordinateY();
+
+        for (int i = 1; i < pathTiles.size(); i++) {
+            IndoorMapTile pft = pathTiles.get(i);
+            if (!(pft.getCoordinateX() == lastX && pft.getCoordinateY() != lastY) && !(pft.getCoordinateY() == lastY && pft.getCoordinateX() != lastX)) {
+                pathTilesJunctions.add(pft);
+                lastX = pft.getCoordinateX();
+                lastY = pft.getCoordinateY();
+            }
+
+            //If its the last one, always add it
+            if (i == pathTiles.size() - 1) {
+                pathTilesJunctions.add(pft);
+            }
+        }
+
+        return pathTilesJunctions;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (PathFinderTile[] tiles : map.getAllTiles()) {
-            for (PathFinderTile tile : tiles){
-                if (tile == null){
+            for (PathFinderTile tile : tiles) {
+                if (tile == null) {
                     builder.append(" ");
                 } else if (Type.START.equals(tile.getTileType())) {
                     builder.append("S");

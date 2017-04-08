@@ -50,6 +50,10 @@
             android:name=".ShuttleActivity"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".StudentSpotActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>
