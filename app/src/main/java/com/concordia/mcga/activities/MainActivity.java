@@ -213,13 +213,15 @@ public class MainActivity extends AppCompatActivity implements
             directionsBottomSheet.addJointPoints(tiles);
         }
 
-        List<String> outdoorsDirection = navigationFragment.getOutdoorDirections().getInstructionsForSelectedTransportMode();
-        if (outdoorsDirection.size() > 0){
+        if (navigationFragment.getOutdoorDirections().getDirectionObject() != null) {
+            List<String> outdoorsDirection = navigationFragment.getOutdoorDirections().getInstructionsForSelectedTransportMode();
+            if (outdoorsDirection.size() > 0) {
 
-            for (int i = 0; i < outdoorsDirection.size(); i ++){
-                directionsBottomSheet.addDirection(outdoorsDirection.get(i), "none");
+                for (int i = 0; i < outdoorsDirection.size(); i++) {
+                    directionsBottomSheet.addDirection(outdoorsDirection.get(i), "none");
+                }
+                directionsBottomSheet.updateDirections();
             }
-            directionsBottomSheet.updateDirections();
         }
     }
 

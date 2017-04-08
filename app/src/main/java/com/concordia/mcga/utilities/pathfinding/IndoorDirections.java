@@ -20,6 +20,8 @@ public class IndoorDirections {
 
     private int orientation;
 
+    private static final int ERROR_TOLERANCE = 5;
+
     ///////////////
     // Main Code //
     ///////////////
@@ -60,12 +62,19 @@ public class IndoorDirections {
                 y1 = previousCoordinateY;
                 y2 = tiles.get(i).getCoordinateY();
 
-                turn = getTurn(x1, x2, y1, y2);
+
                 distance = measureDistance(x1, x2, y1, y2);
-                image = getImage();
+                try{
+                    turn = getTurnWithoutOrientation(x1, x2, y1, y2);
+                    image = turn;
+                }
+                catch(MCGAJunctionPointException e){
+
+                }
+
 
                 // Format looks like: Turn Right In 200U ; where 'U' is for Unit
-                currentDirection = "Turn " + turn + " In " + distance + "u";
+                currentDirection = "Go " + turn + " In " + distance + "u";
 
                 // Update 2D array
                 returnString[i - 1][0] = currentDirection;
@@ -87,6 +96,38 @@ public class IndoorDirections {
 
         return returnString;
     }
+
+    /**
+     * Returns directions for the user to take without orientation discriminator
+     * @param x1
+     * @param x2
+     * @param y1
+     * @param y2
+     * @return
+     * @throws MCGAJunctionPointException
+     */
+    private String getTurnWithoutOrientation(int x1, int x2, int y1, int y2) throws MCGAJunctionPointException{
+
+        if ((x1 < x2) && (Math.abs(x1 - x2) > ERROR_TOLERANCE)){
+            return "right";
+        }
+
+        else if ((x1 > x2) && (Math.abs(x1 - x2) > ERROR_TOLERANCE)){
+            return "left";
+        }
+
+        else if ((y1 < y2) && (Math.abs(y1 - y2) > ERROR_TOLERANCE)){
+            return "down";
+        }
+
+        else if ((y1 > y2) && (Math.abs(y1 - y2) > ERROR_TOLERANCE)){
+            return "up";
+        }
+        else{
+            throw new MCGAJunctionPointException("Invalid Orientation");
+        }
+    }
+
 
     /**
      *
@@ -113,6 +154,7 @@ public class IndoorDirections {
         }
         return null;
     }
+
 
     /**
      * Tell user to turn left or right depending on the way they are facing
@@ -143,10 +185,10 @@ public class IndoorDirections {
      */
     private int measureDistance(int x1, int x2, int y1, int y2){
 
-        if (x2 != x1){
+        if ((x2 != x1) && (Math.abs(x1 - x2) > ERROR_TOLERANCE)){
             return Math.abs(x1 - x2);
         }
-        else if (y2 != y1){
+        else if ((y2 != y1) && (Math.abs(y1 - y2) > ERROR_TOLERANCE)){
             return Math.abs(y1 - y2);
         }
         return 0;
