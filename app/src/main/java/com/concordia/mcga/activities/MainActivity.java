@@ -37,18 +37,20 @@ import com.concordia.mcga.fragments.IndoorMapFragment;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.helperClasses.GPSManager;
-import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Floor;
-import com.concordia.mcga.models.IndoorPOI;
+import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.POI;
 import com.concordia.mcga.models.Room;
 import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements
@@ -176,10 +178,11 @@ public class MainActivity extends AppCompatActivity implements
             public void handleMessage(Message msg) {
                 //Toast.makeText(getApplicationContext(), "Done finding", Toast.LENGTH_SHORT).show();
                 showProgressDialog(false);
-                if(null != finder.getStartBuildingDirections()){
-                    loadStartIndoor(null);
+
+                if (setIndoorTiles()) {
+                    loadStartIndoor();
                 } else {
-                    loadOutdoor(null);
+                    loadStartOutdoor();
                 }
             }
         };
@@ -202,13 +205,6 @@ public class MainActivity extends AppCompatActivity implements
         } catch (IOException ioe) {
             throw new Error("Unable to create database");
         }
-    }
-
-    public void testGeneration(View v) throws MCGADatabaseException {
-        Floor testMap = Campus.SGW.getBuilding("H").getFloorMap(4);
-        testMap.populateTiledMap();
-        testMap.getIndoorPOIs().get(0);
-        generateDirections(testMap.getIndoorPOIs().get(3), Campus.SGW.getBuildings().get(3), MCGATransportMode.WALKING);
     }
 
     public void generateDirections(POI start, POI dest, String mode){
@@ -243,29 +239,36 @@ public class MainActivity extends AppCompatActivity implements
         handler.sendMessage(message);
     }
 
-    public void loadStartIndoor(View v) {
+    public boolean setIndoorTiles() {
+        final IndoorMapFragment indoorMapFragment = navigationFragment.getIndoorMapFragment();
+        boolean startsIndoors = false;
+
+        Map<Floor, List<IndoorMapTile>> allBuildingDirections = new HashMap<>();
+        if (finder.getStartBuildingDirections() != null) {
+            allBuildingDirections.putAll(finder.getStartBuildingDirections());
+            startsIndoors = true;
+        }
+        if (finder.getDestBuildingDirections() != null) {
+            allBuildingDirections.putAll(finder.getDestBuildingDirections());
+        }
+
+        indoorMapFragment.setCurrentPathTiles(allBuildingDirections);
+        return startsIndoors;
+    }
+
+    public void loadStartIndoor() {
         currentState = NavigationState.START_INDOOR_BUILDING;
         navigationFragment.showIndoorMap(finder.getStartBuildingDirections().keySet().iterator().next().getBuilding());
         final IndoorMapFragment indoorMapFragment = navigationFragment.getIndoorMapFragment();
-        indoorMapFragment.setCurrentPathTiles(finder.getStartBuildingDirections());
         indoorMapFragment.setCurrentFloor(finder.getStartBuildingDirections().keySet().iterator().next());
         indoorMapFragment.drawCurrentWalkablePath();
     }
 
-    public void loadOutdoor(View v) {
+    public void loadStartOutdoor() {
         currentState = NavigationState.OUTDOOR;
         navigationFragment.showOutdoorMap();
         OutdoorDirections outdoorDirections = navigationFragment.getOutdoorDirections();
         outdoorDirections.drawPathForSelectedTransportMode();
-    }
-
-    public void loadDestIndoor(View v) {
-        currentState = NavigationState.DEST_INDOOR_BUILDING;
-        navigationFragment.showIndoorMap(finder.getDestBuildingDirections().keySet().iterator().next().getBuilding());
-        final IndoorMapFragment indoorMapFragment = navigationFragment.getIndoorMapFragment();
-        indoorMapFragment.setCurrentPathTiles(finder.getDestBuildingDirections());
-        indoorMapFragment.setCurrentFloor(finder.getDestBuildingDirections().keySet().iterator().next());
-        indoorMapFragment.drawCurrentWalkablePath();
     }
 
     @Override
@@ -528,6 +531,9 @@ public class MainActivity extends AppCompatActivity implements
             destinationLayout.setVisibility(View.VISIBLE);
             search.setVisibility(View.GONE);
 
+            generateDirections(location, destination, navigationFragment.getTransportationType());
+
+            /**
             // Set up directions. Here is where indoor/outdoor comes to play.
             // For now we only handle purely outdoor or purely indoor paths
             if (!(location instanceof IndoorPOI) && !(destination instanceof IndoorPOI)) {
@@ -538,6 +544,7 @@ public class MainActivity extends AppCompatActivity implements
             } else {
                 // TODO: Indoor/outdoor integration
             }
+             */
         }
     }
 

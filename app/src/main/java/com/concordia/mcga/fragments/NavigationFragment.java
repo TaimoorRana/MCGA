@@ -238,6 +238,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             viewSwitchButton.setText("GO OUTDOORS");
 
             indoorMapFragment.initializeBuilding(building);
+            indoorMapFragment.drawCurrentWalkablePath();
         }
     }
 
@@ -465,6 +466,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         } else {
             map.setMyLocationEnabled(false);
         }
+    }
+
+    public String getTransportationType() {
+        return transportButtonFragment.getTransportType();
     }
 
     public boolean isTransportButtonVisible() { return transportButtonVisible; }
