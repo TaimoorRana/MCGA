@@ -19,4 +19,26 @@
     <string name="key_binding_default_toolbar_name">Modal-Toolbar-Title</string>
     <string name="BottomSheetBuildingInfo">com.concordia.mcga.bottomsheet.BottomSheet</string>
     <string name="my_location_string">My Location</string>
+
+    <string name="association_asfa">asfa</string>
+    <string name="association_sasu">sasu</string>
+    <string name="association_space">space</string>
+    <string name="association_lifting">lifting</string>
+    <string name="association_hive">hive</string>
+    <string name="association_csu">csu</string>
+    <string name="association_ccsu">ccsu</string>
+    <string name="association_scs">scs</string>
+
+    <string name="association_jmac">jmac</string>
+    <string name="association_jmiba">jmiba</string>
+    <string name="association_jmma">jmma</string>
+    <string name="association_jmas">jmas</string>
+    <string name="association_fisa">fisa</string>
+    <string name="association_jmucc">jmucc</string>
+    <string name="association_jsec">jsec</string>
+    <string name="association_jmsb_case_comp">jmsb_case_comp</string>
+
+    <string name="hall_building">H</string>
+    <string name="john_molson_building">JM</string>
+
 </resources>
