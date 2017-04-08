@@ -38,7 +38,6 @@ public class IndoorMapFragment extends Fragment {
 
     //State
     private boolean pageLoaded = false;
-    private boolean pathGenerating = false;
 
     private Map<Integer, Floor> floorsLoaded;
     private Floor currentFloor;
@@ -92,10 +91,7 @@ public class IndoorMapFragment extends Fragment {
 
             //Load Floors
             for (Map.Entry<Integer, Floor> entry : building.getFloorMaps().entrySet()) {
-                Integer key = entry.getKey();
-                Floor floor = entry.getValue();
-
-                floorNumbersOrdered.add(key);
+                floorNumbersOrdered.add(entry.getKey());
                 floorsLoaded.put(entry.getKey(), entry.getValue());
             }
 
@@ -103,23 +99,16 @@ public class IndoorMapFragment extends Fragment {
 
             for (final Integer floorNumber : floorNumbersOrdered) {
                 final Floor floor = floorsLoaded.get(floorNumber);
-
                 final Button button = new Button(getContext());
 
                 button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
                 button.setText(String.valueOf(floorNumber));
+                button.setTag(getMapId(floor));
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        for (int i = 0; i < floorButtonContainer.getChildCount(); i++) {
-                            Button b = (Button) floorButtonContainer.getChildAt(i);
-                            b.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
-                            b.setTextColor(ResourcesCompat.getColor(getResources(), R.color.black, null));
-                        }
-
-                        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button_clicked, null));
-                        button.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+                        clearButtonFormats();
+                        setButtonActive(button);
 
                         if (pageLoaded) {
                             currentFloor = floorsLoaded.get(floorNumber);
@@ -141,8 +130,7 @@ public class IndoorMapFragment extends Fragment {
 
                     //Set The First Button Color
                     Button b = (Button) floorButtonContainer.getChildAt(0);
-                    b.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button_clicked, null));
-                    b.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+                    setButtonActive(b);
 
                     //Load The Floor
                     currentFloor = floorsLoaded.get(floorNumber);
@@ -156,6 +144,19 @@ public class IndoorMapFragment extends Fragment {
 
     }
 
+    private void clearButtonFormats() {
+        for (int i = 0; i < floorButtonContainer.getChildCount(); i++) {
+            Button b = (Button) floorButtonContainer.getChildAt(i);
+            b.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
+            b.setTextColor(ResourcesCompat.getColor(getResources(), R.color.black, null));
+        }
+    }
+
+    private void setButtonActive(Button button) {
+        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button_clicked, null));
+        button.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+    }
+
     /**
      * If the building is currently loaded, will show the floor map associated to the floor passed in.
      * If the building is not currently loaded, call initializeBuilding() first.
@@ -165,6 +166,16 @@ public class IndoorMapFragment extends Fragment {
     public void showFloor(final Floor floor) {
         if (!buildingLoaded.getFloorMaps().containsValue(floor)) {
             return;
+        }
+
+        clearButtonFormats();
+
+        for (int i = 0; i < floorButtonContainer.getChildCount(); i++) {
+            Button b = (Button) floorButtonContainer.getChildAt(i);
+
+            if (b.getTag().equals(getMapId(floor))) {
+                setButtonActive(b);
+            }
         }
 
         leafletView.post(new Runnable() {
@@ -177,27 +188,11 @@ public class IndoorMapFragment extends Fragment {
         });
     }
 
-    /**
-     * Initiates a path generation thread to find a walkable path between start and dest
-     *
-     * @param start Start Point
-     * @param dest  End Point
-     */
- /*   public void generatePath(final IndoorPOI start, final IndoorPOI dest) {
-        Thread generatePathThread = null;
-
-        if (!pathGenerating) {
-            generatePathThread = new Thread(new GeneratePath(start, dest));
-            generatePathThread.start();
-        }
-        }
-*/
 
     /**
      * Callback useful for drawing paths.
      */
     public void drawCurrentWalkablePath() {
-        pathGenerating = false;
         leafletView.post(new Runnable() {
             @Override
             public void run() {
