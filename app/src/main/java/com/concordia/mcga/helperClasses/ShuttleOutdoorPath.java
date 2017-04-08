@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShuttleOutdoorPath implements IOutdoorPath {
@@ -28,10 +29,8 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
 
     public ShuttleOutdoorPath(){
         userToShuttleStopPath = new OutdoorPath();
-        userToShuttleStopPath.setTransitPathColor(0x801767e8);
         sgwToLoyPath = new OutdoorPath();
         shuttleStopToBuildingPath = new OutdoorPath();
-        shuttleStopToBuildingPath.setTransitPathColor(0x801767e8);
     }
 
     @Override
@@ -99,12 +98,20 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
 
     @Override
     public int getDurationMinutes() {
-        return 0;
+        int totalMinutes = 0;
+        totalMinutes += userToShuttleStopPath.getDurationMinutes();
+        totalMinutes += sgwToLoyPath.getDurationMinutes();
+        totalMinutes += shuttleStopToBuildingPath.getDurationMinutes();
+        return totalMinutes;
     }
 
     @Override
     public int getDurationHours() {
-        return 0;
+        int totalHours = 0;
+        totalHours += userToShuttleStopPath.getDurationHours();
+        totalHours += sgwToLoyPath.getDurationHours();
+        totalHours += shuttleStopToBuildingPath.getDurationHours();
+        return totalHours;
     }
 
     @Override
@@ -117,7 +124,11 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
 
     @Override
     public List<String> getInstructions() {
-        return null;
+        List<String> allInstructions = new ArrayList<>();
+        allInstructions.addAll(userToShuttleStopPath.getInstructions());
+        allInstructions.addAll(sgwToLoyPath.getInstructions());
+        allInstructions.addAll(shuttleStopToBuildingPath.getInstructions());
+        return allInstructions;
     }
 
     @Override
@@ -129,7 +140,17 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
 
     @Override
     public String getDuration() {
-        return null;
+        int totalMinutes = getDurationMinutes();
+        totalMinutes += getDurationHours() * 60;
+
+        int minutes = totalMinutes % 60;
+        int hours = totalMinutes / 60;
+
+        if(hours > 0){
+            return hours + "h " + minutes+ "m";
+        }else {
+            return minutes+"m";
+        }
     }
 
     @Override
@@ -138,4 +159,6 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         sgwToLoyPath.drawPath();
         shuttleStopToBuildingPath.drawPath();
     }
+
+
 }

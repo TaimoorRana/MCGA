@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  * Please refer to http://www.akexorcist.com/2015/12/google-direction-library-for-android-en.html
  */
 public class OutdoorPath implements DirectionCallback, IOutdoorPath {
-    private final int transitPathWidth = 5;
+    private int transitPathWidth = 5;
     private int transitPathColor = 0x80ed1026; // transparent red
     private final int walkingPathWidth = 3;
     private final int walkingPathColor = 0x801767e8; // transparent blue
@@ -137,7 +137,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     /**
      * Filters and set minutes and hours for this outdoorPath
      */
-    private void setDurationHoursAndMinutes(){
+    private  void setDurationHoursAndMinutes(){
         final int hoursAndMinutesListMaxSize = 2;
         String duration = getDuration();
 
@@ -193,6 +193,10 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
 
     public void setTransportMode(String transportMode) {
         this.transportMode = transportMode;
+        if(transportMode.equalsIgnoreCase(MCGATransportMode.WALKING)){
+            transitPathColor = walkingPathColor;
+            transitPathWidth = walkingPathWidth;
+        }
     }
 
 
