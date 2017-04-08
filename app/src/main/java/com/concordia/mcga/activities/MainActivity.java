@@ -1,10 +1,10 @@
 package com.concordia.mcga.activities;
 
-
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements
     private NavigationState currentState;
     private GlobalPathFinder finder;
     private Handler handler;
+    public static final int SPOT_REQUEST_CODE = 1;
     private DrawerLayout drawerLayout;
     private NavigationFragment navigationFragment;
 
@@ -154,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements
                             Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
                             return true;
                         case R.id.student_spots:
+                            openSpotActivity();
                             Toast.makeText(getApplicationContext(), "Student Spots", Toast.LENGTH_SHORT).show();
                             return true;
                         case R.id.about:
@@ -176,7 +179,6 @@ public class MainActivity extends AppCompatActivity implements
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                //Toast.makeText(getApplicationContext(), "Done finding", Toast.LENGTH_SHORT).show();
                 showProgressDialog(false);
 
                 if (setIndoorTiles()) {
@@ -272,6 +274,24 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Pass it along to the NavigationFragment,
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    /**
+     * Opens the spot activity and requests a result, to be returned to onActivityResult and
+     * propagated to the fragments
+     */
+    public void openSpotActivity() {
+        Intent intent = new Intent(MainActivity.this, StudentSpotActivity.class);
+        startActivityForResult(intent, SPOT_REQUEST_CODE);
+    }
+
     public boolean onClose() {
         search.setQuery("", false);
         search.clearFocus();
@@ -407,7 +427,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 POI poi = (POI)poiSearchAdapter.getChild(groupPosition, childPosition);
-                setNavigationPOI(poi);
+                setNavigationPOI(poi, false);
 
                 if (!(poi instanceof Room)) {
                     // call navigationfragment
@@ -429,7 +449,7 @@ public class MainActivity extends AppCompatActivity implements
                     LatLng location = gpsManager.getLocation();
                     if (location != null) {
                         POI myPOI = new POI(location, "My Location");
-                        setNavigationPOI(myPOI);
+                        setNavigationPOI(myPOI, false);
                         onClose();
                         return true;
                     }
@@ -459,16 +479,27 @@ public class MainActivity extends AppCompatActivity implements
      * @param poi The {@link POI} location to be added to the search state
      * @return Whether the state was updated or not
      */
-    public boolean setNavigationPOI(POI poi) {
+    public boolean setNavigationPOI(POI poi, boolean forceDestination) {
         if (searchState == SearchState.NONE) {
-            location = poi;
-            searchState = SearchState.LOCATION;
-        } else if (searchState == SearchState.DESTINATION) {
-            if (poi == destination) {
-                return false;
+            if (!forceDestination) {
+                location = poi;
+                searchState = SearchState.LOCATION;
+            } else {
+                destination = poi;
+                searchState = SearchState.DESTINATION;
             }
-            location = poi;
-            searchState = SearchState.LOCATION_DESTINATION;
+        } else if (searchState == SearchState.DESTINATION) {
+            if (!forceDestination) {
+                if (poi == destination) {
+                    return false;
+                }
+
+                location = poi;
+                searchState = SearchState.LOCATION_DESTINATION;
+            } else {
+                destination = poi;
+                searchState = SearchState.DESTINATION;
+            }
         } else if (searchState == SearchState.LOCATION) {
             if (poi == location) {
                 return false;
@@ -533,18 +564,6 @@ public class MainActivity extends AppCompatActivity implements
 
             generateDirections(location, destination, navigationFragment.getTransportationType());
 
-            /**
-            // Set up directions. Here is where indoor/outdoor comes to play.
-            // For now we only handle purely outdoor or purely indoor paths
-            if (!(location instanceof IndoorPOI) && !(destination instanceof IndoorPOI)) {
-                navigationFragment.generateOutdoorPath(location, destination);
-            } else if (location instanceof IndoorPOI && destination instanceof IndoorPOI) {
-                //navigationFragment.generateIndoorPath((IndoorPOI)location, (IndoorPOI)destination);
-                generateDirections(location, destination, null);
-            } else {
-                // TODO: Indoor/outdoor integration
-            }
-             */
         }
     }
 
