@@ -127,6 +127,12 @@ public class OutdoorPath implements DirectionCallback {
         return instructions;
     }
 
+    public void clearInstructions() {
+        if (instructions != null) {
+            instructions.clear();
+        }
+    }
+
     /**
      * @return Route total duration in "x hours y min" format
      */
