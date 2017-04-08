@@ -123,10 +123,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             public void onClick(View v) {
                 if (viewType == ViewType.OUTDOOR) {
                     showIndoorMap(lastClickedBuilding);
-                    //showDirectionsFragment(true);
                 } else {
                     showOutdoorMap();
-                    //showDirectionsFragment(false);
                 }
             }
         });
@@ -235,7 +233,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * Shows or hides the directions bottom sheet fragment
      * @param isVisible
      */
-    private void showDirectionsFragment(boolean isVisible) {
+    public void showDirectionsFragment(boolean isVisible) {
         if (isVisible) {
             getChildFragmentManager().beginTransaction().show(directionsFragment).commit();
 
@@ -253,7 +251,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             showTransportButton(false);
             campusButton.setVisibility(View.GONE);
             showBuildingInfoFragment(false);
-            showDirectionsFragment(true);
 
             getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
             viewSwitchButton.setText("GO OUTDOORS");
@@ -273,7 +270,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         showTransportButton(true);
         campusButton.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
-        showDirectionsFragment(false);
 
         viewSwitchButton.setText("GO INDOORS");
         showBuildingInfoFragment(true);

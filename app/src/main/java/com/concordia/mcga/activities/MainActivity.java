@@ -575,27 +575,39 @@ public class MainActivity extends AppCompatActivity implements
         clearPaths();
 
         if (getSearchState() == SearchState.NONE) {
+            showDirectionsFragment(false);
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter location...");
             search.setVisibility(View.VISIBLE);
         } else if (getSearchState() == SearchState.LOCATION) {
+            showDirectionsFragment(false);
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter destination...");
             search.setVisibility(View.VISIBLE);
         } else if (getSearchState() == SearchState.DESTINATION) {
+            showDirectionsFragment(false);
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setQueryHint("Enter location...");
             search.setVisibility(View.VISIBLE);
         } else { // SearchState.LOCATION_DESTINATION
+            showDirectionsFragment(true);
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setVisibility(View.GONE);
 
             generateDirections(location, destination, navigationFragment.getTransportationType());
 
+        }
+    }
+
+    private void showDirectionsFragment(boolean active) {
+        if (navigationFragment != null) {
+            if (navigationFragment.getView() != null) {
+                navigationFragment.showDirectionsFragment(active);
+            }
         }
     }
 
