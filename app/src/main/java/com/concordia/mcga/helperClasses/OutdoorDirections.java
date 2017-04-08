@@ -7,12 +7,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class OutdoorDirections {
     private List<OutdoorPath> outdoorPathList;
     private String selectedTransportMode = null;
     private OutdoorPath selectedOutdoorPath;
-    private ShuttleOutdoorPath shuttleOutdoorPath;
 
     public OutdoorDirections() {
         outdoorPathList = new ArrayList<>();
@@ -21,13 +23,11 @@ public class OutdoorDirections {
             add(MCGATransportMode.DRIVING);
             add(MCGATransportMode.TRANSIT);
             add(MCGATransportMode.WALKING);
-            add(MCGATransportMode.SHUTTLE);
         }};
         for (int i = 0; i < transportModes.size(); i++) {
             outdoorPathList.add(new OutdoorPath());
             outdoorPathList.get(i).setTransportMode(transportModes.get(i));
         }
-        shuttleOutdoorPath = new ShuttleOutdoorPath();
     }
 
 
@@ -38,7 +38,6 @@ public class OutdoorDirections {
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.requestDirection();
         }
-        shuttleOutdoorPath.requestDirection();
     }
 
     /**
@@ -50,7 +49,6 @@ public class OutdoorDirections {
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setOrigin(origin);
         }
-        shuttleOutdoorPath.setOrigin(origin);
     }
 
     /**
@@ -61,7 +59,6 @@ public class OutdoorDirections {
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setDestination(destination);
         }
-        shuttleOutdoorPath.setDestination(destination);
     }
 
     /**
@@ -72,7 +69,6 @@ public class OutdoorDirections {
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setMap(map);
         }
-        shuttleOutdoorPath.setMap(map);
     }
 
     /**
@@ -83,7 +79,6 @@ public class OutdoorDirections {
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setContext(context);
         }
-        shuttleOutdoorPath.setContext(context);
     }
 
     /**
@@ -113,8 +108,7 @@ public class OutdoorDirections {
      */
     public void drawPathForSelectedTransportMode() {
         deleteDirection();
-        //selectedOutdoorPath.drawPath();
-        shuttleOutdoorPath.drawPath();
+        selectedOutdoorPath.drawPath();
     }
 
     /**
@@ -145,15 +139,15 @@ public class OutdoorDirections {
                 selectedOutdoorPath = outdoorPath;
                 this.selectedTransportMode = selectedTransportMode;
             }
-
         }
+
+
     }
 
     public void setServerKey(String serverKey){
         for (OutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setServerKey(serverKey);
         }
-        shuttleOutdoorPath.setServerKey(serverKey);
     }
 
     public int getMinutesForSelectedOutdoorPath(){
