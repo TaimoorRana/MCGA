@@ -417,10 +417,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorDirections.requestDirections();
     }
 
-    public void generateIndoorPath(IndoorPOI start, IndoorPOI dest) {
-        indoorMapFragment.generatePath(start, dest);
-    }
-
     /**
      * Applying custom google map style in order to get rid of unwanted POI and other information that is not useful to our application
      */

@@ -2,6 +2,7 @@ package com.concordia.mcga.activities;
 
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.graphics.Rect;
@@ -67,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements
     private DrawerLayout drawerLayout;
     private NavigationFragment navigationFragment;
 
+    //Progress
+    private ProgressDialog progressDialog;
+
     // Search
     private View toolbarView;
     private View parentView;
@@ -97,6 +101,13 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         navigationFragment = new NavigationFragment();
+
+        //Setup Progress Dialog
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Generating Path");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
+
         // Setup GPS
         setUpGPS();
 
@@ -163,8 +174,8 @@ public class MainActivity extends AppCompatActivity implements
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                Toast.makeText(getApplicationContext(), "Done finding", Toast.LENGTH_SHORT).show();
-
+                //Toast.makeText(getApplicationContext(), "Done finding", Toast.LENGTH_SHORT).show();
+                showProgressDialog(false);
                 if(null != finder.getStartBuildingDirections()){
                     loadStartIndoor(null);
                 } else {
@@ -199,7 +210,9 @@ public class MainActivity extends AppCompatActivity implements
         testMap.getIndoorPOIs().get(0);
         generateDirections(testMap.getIndoorPOIs().get(3), Campus.SGW.getBuildings().get(3), MCGATransportMode.WALKING);
     }
+
     public void generateDirections(POI start, POI dest, String mode){
+        showProgressDialog(true);
         finder = new GlobalPathFinder(this, start, dest, mode);
         Thread finderThread = new Thread(finder);
         finderThread.start();
@@ -520,7 +533,8 @@ public class MainActivity extends AppCompatActivity implements
             if (!(location instanceof IndoorPOI) && !(destination instanceof IndoorPOI)) {
                 navigationFragment.generateOutdoorPath(location, destination);
             } else if (location instanceof IndoorPOI && destination instanceof IndoorPOI) {
-                navigationFragment.generateIndoorPath((IndoorPOI)location, (IndoorPOI)destination);
+                //navigationFragment.generateIndoorPath((IndoorPOI)location, (IndoorPOI)destination);
+                generateDirections(location, destination, null);
             } else {
                 // TODO: Indoor/outdoor integration
             }
@@ -541,6 +555,17 @@ public class MainActivity extends AppCompatActivity implements
             textView.setText(poi.getName());
         }
     }
+
+
+    public void showProgressDialog(boolean isVisible) {
+        progressDialog.dismiss();
+        if (isVisible) {
+            progressDialog.show();
+        } else {
+            progressDialog.hide();
+        }
+    }
+
 
     public SearchState getSearchState() {
         return searchState;

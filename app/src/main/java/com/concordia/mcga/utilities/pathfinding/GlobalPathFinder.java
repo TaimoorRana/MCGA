@@ -60,6 +60,12 @@ public class GlobalPathFinder implements Runnable, Serializable {
             } else if (destPOI instanceof IndoorPOI) {
                 outdoorToIndoorNavigation();
             } else { // Both POIs are external
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        activity.showProgressDialog(false);
+                    }
+                });
                 externalOnlyNavigation();
             }
         } catch (MCGAPathFindingException | MCGADatabaseException e) {
