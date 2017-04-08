@@ -5,7 +5,9 @@ import android.content.Context;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
-public class ShuttleOutdoorPath extends OutdoorPath {
+import java.util.List;
+
+public class ShuttleOutdoorPath implements IOutdoorPath {
     private OutdoorPath userToShuttleStopPath;
     private OutdoorPath sgwToLoyPath;
     private OutdoorPath shuttleStopToBuildingPath;
@@ -16,8 +18,10 @@ public class ShuttleOutdoorPath extends OutdoorPath {
 
     public ShuttleOutdoorPath(){
         userToShuttleStopPath = new OutdoorPath();
+        userToShuttleStopPath.setTransitPathColor(0x801767e8);
         sgwToLoyPath = new OutdoorPath();
         shuttleStopToBuildingPath = new OutdoorPath();
+        shuttleStopToBuildingPath.setTransitPathColor(0x801767e8);
     }
 
     @Override
@@ -36,10 +40,20 @@ public class ShuttleOutdoorPath extends OutdoorPath {
     }
 
     @Override
+    public LatLng getDestination() {
+        return null;
+    }
+
+    @Override
     public void requestDirection() {
         userToShuttleStopPath.requestDirection();
         sgwToLoyPath.requestDirection();
         shuttleStopToBuildingPath.requestDirection();
+    }
+
+    @Override
+    public LatLng getOrigin() {
+        return null;
     }
 
     @Override
@@ -57,6 +71,11 @@ public class ShuttleOutdoorPath extends OutdoorPath {
     }
 
     @Override
+    public String getTransportMode() {
+        return MCGATransportMode.SHUTTLE;
+    }
+
+    @Override
     public void setServerKey(String serverKey) {
         userToShuttleStopPath.setServerKey(serverKey);
         sgwToLoyPath.setServerKey(serverKey);
@@ -64,10 +83,37 @@ public class ShuttleOutdoorPath extends OutdoorPath {
     }
 
     @Override
+    public int getDurationMinutes() {
+        return 0;
+    }
+
+    @Override
+    public int getDurationHours() {
+        return 0;
+    }
+
+    @Override
     public void setMap(GoogleMap map) {
         userToShuttleStopPath.setMap(map);
         sgwToLoyPath.setMap(map);
         shuttleStopToBuildingPath.setMap(map);
+    }
+
+    @Override
+    public List<String> getInstructions() {
+        return null;
+    }
+
+    @Override
+    public void deleteDirection() {
+        shuttleStopToBuildingPath.deleteDirection();
+        userToShuttleStopPath.deleteDirection();
+        sgwToLoyPath.deleteDirection();
+    }
+
+    @Override
+    public String getDuration() {
+        return null;
     }
 
     @Override

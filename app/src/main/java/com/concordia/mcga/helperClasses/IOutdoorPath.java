@@ -1,5 +1,7 @@
 package com.concordia.mcga.helperClasses;
 
+import android.content.Context;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -17,7 +19,7 @@ public interface IOutdoorPath {
     public List<String> getInstructions();
     public void deleteDirection();
     public String getDuration();
-    public void setContext();
+    public void setContext(Context context);
     public String getTransportMode();
     public void setTransportMode(String transportMode);
     public void setServerKey(String serverKey);

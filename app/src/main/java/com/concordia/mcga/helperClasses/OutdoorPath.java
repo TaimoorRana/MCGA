@@ -27,9 +27,14 @@ import java.util.regex.Pattern;
  * @Link{OutdoorPath} connects to the Google Directions API in out to find paths between POI
  * Please refer to http://www.akexorcist.com/2015/12/google-direction-library-for-android-en.html
  */
-public class OutdoorPath implements DirectionCallback {
+public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     private final int transitPathWidth = 5;
-    private final int transitPathColor = 0x80ed1026; // transparent red
+
+    public void setTransitPathColor(int transitPathColor) {
+        this.transitPathColor = transitPathColor;
+    }
+
+    private int transitPathColor = 0x80ed1026; // transparent red
     private final int walkingPathWidth = 3;
     private final int walkingPathColor = 0x801767e8; // transparent blue
     private String serverKey;
