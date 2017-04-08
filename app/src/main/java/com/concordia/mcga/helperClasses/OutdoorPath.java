@@ -29,11 +29,6 @@ import java.util.regex.Pattern;
  */
 public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     private final int transitPathWidth = 5;
-
-    public void setTransitPathColor(int transitPathColor) {
-        this.transitPathColor = transitPathColor;
-    }
-
     private int transitPathColor = 0x80ed1026; // transparent red
     private final int walkingPathWidth = 3;
     private final int walkingPathColor = 0x801767e8; // transparent blue
@@ -220,4 +215,9 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
                 ", transportMode='" + transportMode + '\'' +
                 '}';
     }
+
+    public void setTransitPathColor(int transitPathColor) {
+        this.transitPathColor = transitPathColor;
+    }
+
 }
