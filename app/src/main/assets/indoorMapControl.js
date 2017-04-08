@@ -12,6 +12,9 @@ var pathGroup;
 var curLatBound;
 var curLngBound;
 
+//Constants
+var panZoom = -1;
+
 //Debug Flag
 var debug = false;
 
@@ -185,6 +188,11 @@ function femaleWashroomIcon(point, roomName) {
     });
 
     return L.marker(point, { icon: femaleWashroom, "roomName": roomName });
+}
+
+//Utility Functions
+function panTo(x, y) {
+    map.flyTo(L.latLng(curLatBound - y, x), panZoom);
 }
 
 
