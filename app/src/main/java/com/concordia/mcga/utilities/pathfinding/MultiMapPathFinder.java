@@ -3,6 +3,8 @@ package com.concordia.mcga.utilities.pathfinding;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.ConnectedPOI;
 import com.concordia.mcga.models.Floor;
@@ -30,7 +32,7 @@ public class MultiMapPathFinder {
      * destination
      */
     public Map<Floor, List<IndoorMapTile>> shortestPath(IndoorPOI start, IndoorPOI dest)
-        throws MCGAPathFindingException {
+            throws MCGAPathFindingException, MCGADatabaseException {
         if (start.getFloor().equals(dest.getFloor())) {
             return sameFloorNavigation(start.getFloor(), start.getTile(), dest.getTile());
         }
@@ -56,9 +58,11 @@ public class MultiMapPathFinder {
      */
     @NonNull
     Map<Floor, List<IndoorMapTile>> sameFloorNavigation(Floor floor, IndoorMapTile start,
-        IndoorMapTile dest) throws MCGAPathFindingException {
+        IndoorMapTile dest) throws MCGAPathFindingException, MCGADatabaseException {
+        floor.populateTiledMap();
         List<IndoorMapTile> pathList = getDirectionList(floor.getMap(), start, dest);
         LinkedHashMap<Floor, List<IndoorMapTile>> returnMap = new LinkedHashMap<>();
+        floor.clearTiledMap();
         returnMap.put(floor, pathList);
         return returnMap;
     }
@@ -89,16 +93,18 @@ public class MultiMapPathFinder {
      */
     Map<Floor, List<IndoorMapTile>> sameBuildingNavigation(Floor startFloor,
         IndoorMapTile startTile, Floor destFloor,
-        IndoorMapTile destTile) throws MCGAPathFindingException {
+        IndoorMapTile destTile) throws MCGAPathFindingException, MCGADatabaseException {
         ConnectedPOI connectedPOI = getClosestConnectedPOI(startFloor, startTile, destFloor, destTile);
 
         Map<Floor, List<IndoorMapTile>> returnMap = new LinkedHashMap<>();
-
+        startFloor.populateTiledMap();
         List<IndoorMapTile> startFloorList = getDirectionList(startFloor.getMap(),
             startTile, connectedPOI.getFloorPOI(startFloor.getFloorNumber()).getTile());
+        startFloor.clearTiledMap();
+        destFloor.populateTiledMap();
         List<IndoorMapTile> destFloorList = getDirectionList(destFloor.getMap(),
             connectedPOI.getFloorPOI(destFloor.getFloorNumber()).getTile(), destTile);
-
+        destFloor.clearTiledMap();
         returnMap.put(startFloor, startFloorList);
         returnMap.put(destFloor, destFloorList);
 
