@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
+import com.concordia.mcga.fragments.BottomSheetDirectionsFragment;
 import com.concordia.mcga.fragments.IndoorMapFragment;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
@@ -49,6 +50,7 @@ import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private POI location;
     private POI destination;
+
+    private BottomSheetDirectionsFragment directionsBottomSheet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,8 +190,37 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     loadStartOutdoor();
                 }
+                setDirections();
+
+
+
             }
         };
+    }
+
+    /**
+     * Updates the Directions on the bottomsheet For the indoor navigation
+     */
+    private void setDirections(){
+        directionsBottomSheet = navigationFragment.getDirectionsFragment();
+
+        if (finder.getStartBuildingDirections() != null){
+            List<IndoorMapTile> tiles = new ArrayList<>();
+
+            for (List<IndoorMapTile> findTile : finder.getStartBuildingDirections().values()){
+                tiles.addAll(findTile);
+            }
+            directionsBottomSheet.addJointPoints(tiles);
+        }
+
+        List<String> outdoorsDirection = navigationFragment.getOutdoorDirections().getInstructionsForSelectedTransportMode();
+        if (outdoorsDirection.size() > 0){
+
+            for (int i = 0; i < outdoorsDirection.size(); i ++){
+                directionsBottomSheet.addDirection(outdoorsDirection.get(i), "none");
+            }
+            directionsBottomSheet.updateDirections();
+        }
     }
 
     public void createToast(String message) {
@@ -537,9 +570,16 @@ public class MainActivity extends AppCompatActivity implements
             setDisplayName(destination, destinationText);
         }
 
-        // Always clear the directions first
-        if (navigationFragment != null) {
-            navigationFragment.clearAllPaths();
+        try {
+            // Always clear the directions first
+            if (navigationFragment != null) {
+                navigationFragment.clearAllPaths();
+                directionsBottomSheet = navigationFragment.getDirectionsFragment();
+                directionsBottomSheet.clearDirections();
+            }
+        }
+        catch (NullPointerException e){
+
         }
 
         if (getSearchState() == SearchState.NONE) {

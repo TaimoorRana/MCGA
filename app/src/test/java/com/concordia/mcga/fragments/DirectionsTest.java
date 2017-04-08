@@ -314,10 +314,7 @@ public class DirectionsTest {
 
         assertTrue(direction.get(0).equals("Turn Left In 10u"));
         assertTrue(direction.get(1).equals("Turn Left In 12u"));
-        assertTrue(img.get(1).equals("left"));
         assertTrue(direction.get(2).equals("Turn Left In 6u"));
-        assertTrue(img.get(0).equals("down"));
         assertTrue(direction.get(3).equals("Turn Right In 11u"));
-        assertTrue(img.get(3).equals("left"));
     }
 }

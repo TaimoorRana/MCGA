@@ -511,5 +511,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     public GoogleMap getMap() {
         return map;
     }
+
+    public BottomSheetDirectionsFragment getDirectionsFragment(){
+        return directionsFragment;
+    }
 }
 
