@@ -120,6 +120,7 @@ public class OutdoorPath implements DirectionCallback {
      * @return list of instructions to get from origin to destination
      */
     public List<String> getInstructions() {
+        instructions.clear();
         for (Step step : steps) {
             instructions.add(step.getHtmlInstruction());
         }
