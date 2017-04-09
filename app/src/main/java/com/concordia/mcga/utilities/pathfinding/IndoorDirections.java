@@ -74,7 +74,7 @@ public class IndoorDirections {
 
 
                 // Format looks like: Turn Right In 200U ; where 'U' is for Unit
-                currentDirection = "Go " + turn + " In " + distance + "u";
+                currentDirection = "Go " + turn + " for " + distance + "u";
 
                 // Update 2D array
                 returnString[i - 1][0] = currentDirection;

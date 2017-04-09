@@ -14,7 +14,6 @@ import com.concordia.mcga.lib.BottomSheet;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
-import com.concordia.mcga.utilities.pathfinding.IndoorDirections;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -327,7 +326,7 @@ public class DirectionsTest {
         orderedFloors.add(floor);
         orderedFloors.add(floor);
 
-        myFragment.addJointPoints(listTiles, orderedFloors);
+        myFragment.addJunctionPoints(listTiles, orderedFloors);
 
         List<String> direction = myFragment.getCompleteDirectionsList();
         List<String> img = myFragment.getCompleteDirectionsList();

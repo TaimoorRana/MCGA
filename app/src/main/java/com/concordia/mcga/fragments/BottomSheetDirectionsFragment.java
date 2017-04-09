@@ -210,7 +210,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      * Adds directions from a list of joint points
      * @param tiles
      */
-    public void addJointPoints(List<IndoorMapTile> tiles, List<Floor> orderedFloorList){
+    public void addJunctionPoints(List<IndoorMapTile> tiles, List<Floor> orderedFloorList){
         IndoorDirections indoorDirections = new IndoorDirections();
         String[][] direction = indoorDirections.getDirections(tiles);
         this.tiles = tiles;
@@ -218,6 +218,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
             addDirection(direction[i][0], direction[i][1], FLAG_INDOORS, orderedFloorList.get(i));
         }
         updateDirections();
+        drawTile();
     }
 
 
@@ -236,7 +237,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
         }
 
-        addJointPoints(tiles, orderedFloorList);
+        addJunctionPoints(tiles, orderedFloorList);
     }
 
     public void addOutdoorsDirection(String direction, String image){

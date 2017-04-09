@@ -293,6 +293,7 @@ public class IndoorMapFragment extends Fragment {
      * @param tile
      */
     public void drawStepIndicator(final IndoorMapTile tile){
+        Log.d("DSI", "Step Indicator Drawn");
         leafletView.post(new Runnable() {
             @Override
             public void run() {
