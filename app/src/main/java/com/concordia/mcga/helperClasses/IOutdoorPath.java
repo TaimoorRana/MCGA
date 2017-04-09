@@ -26,5 +26,6 @@ public interface IOutdoorPath {
     public int getDurationMinutes();
     public int getDurationHours();
     public void setPathSelected(boolean isPathSelected);
+    public void clearInstructions();
 
 }

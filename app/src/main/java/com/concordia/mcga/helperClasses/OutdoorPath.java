@@ -218,6 +218,11 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     }
 
     @Override
+    public void clearInstructions() {
+        instructions.clear();
+    }
+
+    @Override
     public String toString() {
         return "OutdoorPath{" +
                 "origin=" + origin +

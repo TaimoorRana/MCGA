@@ -16,7 +16,6 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
 
     private final LatLng SGW_STOP = new LatLng(45.497067, -73.578463);
     private final LatLng LOY_STOP = new LatLng(45.457832, -73.638908);
-    private final LatLng USER_LOCATION = new LatLng(45.497480, -73.578109);
 
     private String serverKey;
     private LatLng origin, destination;
@@ -33,6 +32,7 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         userToShuttleStopPath = new OutdoorPath();
         sgwToLoyPath = new OutdoorPath();
         shuttleStopToBuildingPath = new OutdoorPath();
+        instructions = new ArrayList<>();
     }
 
     @Override
@@ -67,6 +67,9 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         return destination;
     }
 
+    /**
+     * Makes a https request to get a direction from origin to destination
+     */
     @Override
     public void requestDirection() {
         userToShuttleStopPath.requestDirection();
@@ -114,7 +117,8 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         totalMinutes += userToShuttleStopPath.getDurationMinutes();
         totalMinutes += sgwToLoyPath.getDurationMinutes();
         totalMinutes += shuttleStopToBuildingPath.getDurationMinutes();
-        return totalMinutes;
+        durationMinutes = totalMinutes;
+        return durationMinutes;
     }
 
     @Override
@@ -123,7 +127,8 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         totalHours += userToShuttleStopPath.getDurationHours();
         totalHours += sgwToLoyPath.getDurationHours();
         totalHours += shuttleStopToBuildingPath.getDurationHours();
-        return totalHours;
+        durationMinutes = totalHours;
+        return durationHours;
     }
 
     @Override
@@ -140,6 +145,9 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         shuttleStopToBuildingPath.setMap(map);
     }
 
+    /**
+     * @return list of instructions to get from origin to destination
+     */
     @Override
     public List<String> getInstructions() {
         List<String> allInstructions = new ArrayList<>();
@@ -150,12 +158,23 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     }
 
     @Override
+    public void clearInstructions(){
+        instructions.clear();
+    }
+
+    /**
+     * Deletes Paths on the map
+     */
+    @Override
     public void deleteDirection() {
         shuttleStopToBuildingPath.deleteDirection();
         userToShuttleStopPath.deleteDirection();
         sgwToLoyPath.deleteDirection();
     }
 
+    /**
+     * @return Route total duration in "Xh Ym" format
+     */
     @Override
     public String getDuration() {
         int totalMinutes = getDurationMinutes();
@@ -171,6 +190,9 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         }
     }
 
+    /**
+     * Draws the path on the map
+     */
     @Override
     public void drawPath() {
         userToShuttleStopPath.drawPath();
@@ -181,5 +203,6 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     public void setStartCampus(String campus){
         currentCampus = campus;
     }
+
 
 }
