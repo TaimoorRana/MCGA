@@ -15,11 +15,13 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
 import com.concordia.mcga.lib.BottomSheet;
+import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.IndoorDirections;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class BottomSheetDirectionsFragment extends Fragment implements View.OnClickListener{
@@ -40,6 +42,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     private List<String> completeDirectionsList = new ArrayList<String>();
 
     private List<Integer> flag = new ArrayList<Integer>();
+    private List<Floor> floorAssociation = new ArrayList<>();
 
     // Counter keeps track of the index of the current direction
     private int currentDirection = 0;
@@ -203,18 +206,37 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      * Adds directions from a list of joint points
      * @param tiles
      */
-    public void addJointPoints(List<IndoorMapTile> tiles){
+    public void addJointPoints(List<IndoorMapTile> tiles, List<Floor> orderedFloorList){
         IndoorDirections indoorDirections = new IndoorDirections();
         String[][] direction = indoorDirections.getDirections(tiles);
 
         for (int i = 0; i < direction.length; i++){
-            addDirection(direction[i][0], direction[i][1], FLAG_INDOORS);
+            addDirection(direction[i][0], direction[i][1], FLAG_INDOORS, orderedFloorList.get(i));
         }
         updateDirections();
     }
 
+
+    public void addFloor(Map<Floor, List<IndoorMapTile>> floorMap){
+        List<IndoorMapTile> tiles = new ArrayList<>();
+
+        List<Floor> floors = new ArrayList<>(floorMap.keySet());
+        List<Floor> orderedFloorList = new ArrayList<>();
+
+
+        for (int i = 0; i < floors.size(); i ++){
+            for (int j =0 ; j < floorMap.get(floors.get(i)).size(); j++){
+                tiles.add(floorMap.get(floors.get(i)).get(j));
+                orderedFloorList.add(floors.get(i));
+            }
+
+        }
+
+        addJointPoints(tiles, orderedFloorList);
+    }
+
     public void addOutdoorsDirection(String direction, String image){
-        addDirection(direction, image, FLAG_OUTDOORS);
+        addDirection(direction, image, FLAG_OUTDOORS, null);
     }
 
     /**
@@ -222,9 +244,10 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      * @param direction
      * @param image
      */
-    public void addDirection(String direction, String image, int flag){
+    public void addDirection(String direction, String image, int flag, Floor floor){
         completeDirectionsList.add(direction);
         completeDirectionsImage.add(image);
+        floorAssociation.add(floor);
         addFlag(flag);
     }
 
@@ -249,6 +272,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         completeDirectionsImage.clear();
         flag.clear();
         currentDirection = 0;
+        floorAssociation.clear();
         updateDirections();
     }
 
@@ -320,8 +344,19 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
             // Set the main direction
             setTextDirections(completeDirectionsList.get(currentDirection));
             try{
+                // load the outdoors view
                 if (flag.get(currentDirection) == FLAG_OUTDOORS) {
                     ((NavigationFragment) getParentFragment()).showOutdoorMap();
+                }
+                // reset the indoors view if we change floors
+                else if (flag.get(currentDirection) == FLAG_INDOORS){
+                    Floor tempFloor = ((NavigationFragment) getParentFragment()).getIndoorMapFragment().getCurrentFloor();
+                    if (!(tempFloor.equals(floorAssociation.get(currentDirection)))) {
+                        displayFloor();
+                    }else if (((NavigationFragment) getParentFragment()).getViewType() == NavigationFragment.ViewType.OUTDOOR){
+                        displayFloor();
+                    }
+
                 }
             }
             catch(IndexOutOfBoundsException e){
@@ -332,6 +367,12 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
             setTextDirections("Directions");
         }
 
+    }
+
+    private void displayFloor(){
+        ((NavigationFragment) getParentFragment()).showIndoorMap(floorAssociation.get(currentDirection).getBuilding());
+        ((NavigationFragment) getParentFragment()).getIndoorMapFragment().showFloor(floorAssociation.get(currentDirection));
+        ((NavigationFragment) getParentFragment()).getIndoorMapFragment().drawCurrentWalkablePath();
     }
 
 

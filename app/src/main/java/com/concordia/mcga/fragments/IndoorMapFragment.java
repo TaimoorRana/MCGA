@@ -292,5 +292,9 @@ public class IndoorMapFragment extends Fragment {
     public void setCurrentFloor(Floor currentFloor) {
         this.currentFloor = currentFloor;
     }
+
+    public Floor getCurrentFloor(){
+        return this.currentFloor;
+    }
 }
 

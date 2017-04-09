@@ -51,7 +51,7 @@ import static android.content.Context.LOCATION_SERVICE;
 public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         OnCameraIdleListener, Subject {
     //Enum representing which map view is active
-    private enum ViewType {
+    public enum ViewType {
         INDOOR, OUTDOOR
     }
 

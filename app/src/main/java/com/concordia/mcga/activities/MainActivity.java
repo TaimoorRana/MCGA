@@ -192,9 +192,6 @@ public class MainActivity extends AppCompatActivity implements
                     loadStartOutdoor();
                 }
                 setDirections();
-
-
-
             }
         };
     }
@@ -206,12 +203,7 @@ public class MainActivity extends AppCompatActivity implements
         directionsBottomSheet = navigationFragment.getDirectionsFragment();
 
         if (finder.getStartBuildingDirections() != null){
-            List<IndoorMapTile> tiles = new ArrayList<>();
-
-            for (List<IndoorMapTile> findTile : finder.getStartBuildingDirections().values()){
-                tiles.addAll(findTile);
-            }
-            directionsBottomSheet.addJointPoints(tiles);
+            directionsBottomSheet.addFloor(finder.getStartBuildingDirections());
         }
 
         if (navigationFragment.getOutdoorDirections().getDirectionObject() != null) {
@@ -223,6 +215,10 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 directionsBottomSheet.updateDirections();
             }
+        }
+
+        if (finder.getDestBuildingDirections() != null){
+            directionsBottomSheet.addFloor(finder.getDestBuildingDirections());
         }
     }
 
