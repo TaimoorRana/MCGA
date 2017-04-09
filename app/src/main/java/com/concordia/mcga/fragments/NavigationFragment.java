@@ -210,9 +210,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                                     mapCenterButton.getHeight()/3);
                         }
                         else if (!outdoors){
-                            mapCenterButton.setY(y - parentLayout.getHeight() + 2 *
-                                    ((MainActivity)getActivity()).getToolbarView().getHeight() +
-                                    mapCenterButton.getHeight() + mapCenterButton.getHeight()/ 3);
+                            if (directionsFragment.isVisible()) {
+                                mapCenterButton.setY(y - parentLayout.getHeight() + 2 *
+                                        ((MainActivity) getActivity()).getToolbarView().getHeight() +
+                                        mapCenterButton.getHeight() + mapCenterButton.getHeight() / 3);
+                            }
+                            else{
+                                mapCenterButton.setY( parentLayout.getHeight() -
+                                        mapCenterButton.getHeight() -  mapCenterButton.getHeight() / 2);
+                            }
                         }
                         else
                         {
