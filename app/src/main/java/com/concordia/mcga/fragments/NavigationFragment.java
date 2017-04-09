@@ -81,6 +81,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private View navToolBar;
 
     private Button viewSwitchButton;
+    private FloatingActionButton directionsButton;
     private FloatingActionButton mapCenterButton;
 
     private POI bottomSheetBuilding;
@@ -126,6 +127,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         campusButton = (Button) parentLayout.findViewById(R.id.campusButton);
         viewSwitchButton = (Button) parentLayout.findViewById(R.id.viewSwitchButton);
+        directionsButton = (FloatingActionButton) parentLayout.findViewById(R.id.directionsButton);
+        directionsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bottomSheetBuilding != null) {
+                    ((MainActivity) getActivity()).setNavigationPOI(bottomSheetBuilding, false);
+                }
+            }
+        });
 
         campusButton.setVisibility(View.VISIBLE);
         viewSwitchButton.setText("GO INDOORS");
@@ -209,23 +219,38 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                         } catch (Exception e) {
                         }
                         if ((buildingInfoShown)) {
+                            directionsButton.setVisibility(View.VISIBLE);
+
+                            directionsButton.setY(y - 2 * mapCenterButton.getHeight() -
+                                    mapCenterButton.getHeight()/3);
                             mapCenterButton.setY(y - 2 * mapCenterButton.getHeight() -
                                     mapCenterButton.getHeight()/3);
                         }
                         else if (!outdoors){
+                            directionsButton.setVisibility(View.GONE);
+
                             if (directionsFragment.isVisible()) {
                                 mapCenterButton.setY(y - parentLayout.getHeight() + 2 *
+                                        ((MainActivity) getActivity()).getToolbarView().getHeight() +
+                                        mapCenterButton.getHeight() + mapCenterButton.getHeight() / 3);
+                                directionsButton.setY(y - parentLayout.getHeight() + 2 *
                                         ((MainActivity) getActivity()).getToolbarView().getHeight() +
                                         mapCenterButton.getHeight() + mapCenterButton.getHeight() / 3);
                             }
                             else{
                                 mapCenterButton.setY( parentLayout.getHeight() -
                                         mapCenterButton.getHeight() -  mapCenterButton.getHeight() / 2);
+                                directionsButton.setY( parentLayout.getHeight() -
+                                        mapCenterButton.getHeight() -  mapCenterButton.getHeight() / 2);
                             }
                         }
                         else
                         {
+                            directionsButton.setVisibility(View.GONE);
+
                             mapCenterButton.setY( parentLayout.getHeight() -
+                                    mapCenterButton.getHeight() -  mapCenterButton.getHeight() / 2);
+                            directionsButton.setY( parentLayout.getHeight() -
                                     mapCenterButton.getHeight() -  mapCenterButton.getHeight() / 2);
                         }
 
@@ -391,8 +416,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         String name = building.getShortName();
         updateBuildingInfoSheet(name);
         bottomSheetBuilding = (Building)multiBuildingMap.get(polygon.getId());
-        ((MainActivity)getActivity()).setNavigationPOI((Building)
-                multiBuildingMap.get(polygon.getId()), false);
     }
 
 
@@ -413,8 +436,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         String name = building.getShortName();
         updateBuildingInfoSheet(name);
         bottomSheetBuilding = (Building)multiBuildingMap.get(marker.getId());
-
-        ((MainActivity)getActivity()).setNavigationPOI((Building) multiBuildingMap.get(marker.getId()), false);
     }
 
     /**
