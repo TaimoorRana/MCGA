@@ -17,7 +17,10 @@ public class Room extends IndoorPOI {
     public enum RoomIcon {
         NONE,
         WASHROOM_MALE,
-        WASHROOM_FEMALE
+        WASHROOM_FEMALE,
+        ELEVATOR,
+        STAIRS,
+        WATERFOUNTAIN
     }
 
     private String roomNumber;
