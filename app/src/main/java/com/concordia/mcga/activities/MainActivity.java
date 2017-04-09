@@ -39,6 +39,7 @@ import com.concordia.mcga.fragments.IndoorMapFragment;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.helperClasses.GPSManager;
+import com.concordia.mcga.helperClasses.IOutdoorPath;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.helperClasses.OutdoorPath;
 import com.concordia.mcga.models.Building;
@@ -637,7 +638,7 @@ public class MainActivity extends AppCompatActivity implements
             if (directionsBottomSheet != null) {
                 directionsBottomSheet.clearDirections();
             }
-            OutdoorPath path = navigationFragment.getOutdoorDirections().getDirectionObject();
+            IOutdoorPath path = navigationFragment.getOutdoorDirections().getDirectionObject();
 
             if (path != null) {
                 path.clearInstructions();
