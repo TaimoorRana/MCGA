@@ -475,18 +475,9 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         int currentDay = Calendar.getInstance().getTime().getDay();
         int currentTime = Calendar.getInstance().getTime().getHours() * MINUTES_IN_AN_HOUR + Calendar.getInstance().getTime().getMinutes();
 
-        //Day of week returned is from 0-6 but
-        //all the logic is built around 1-7
-        if (currentDay == 0) {
-            currentDay = MCGADayOfWeek.SUNDAY;
-        }
-        //Note: This will break if 0-6 is used so only use after
-        // the adjust.
-        int shuttleColumnIndex = getShuttleColumnIndex(currentDay);
-
         int timeToNextShuttle = -1;
         if (isShuttleAvailable(currentDay)) {
-            timeToNextShuttle = calculateTimeToNextShuttle(shuttleSchedule, shuttleColumnIndex, currentTime);
+            timeToNextShuttle = calculateTimeToNextShuttle(shuttleSchedule, getShuttleColumnIndex(currentDay), currentTime);
         }
 
         if (timeToNextShuttle < 0 || !isShuttleAvailable(currentDay)) {
@@ -494,7 +485,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             int daysToNextShuttleService = calculateNumberOfWholeDaysToNextShuttle(currentDay);
             timeToNextShuttle = (TOTAL_MINUTES_IN_A_DAY - currentTime) +
                     (TOTAL_MINUTES_IN_A_DAY * daysToNextShuttleService) +
-                    getTimeForFirstShuttleService(currentDay, shuttleColumnIndex, shuttleSchedule);
+                    getTimeForFirstShuttleService(currentDay, getShuttleColumnIndex(currentDay), shuttleSchedule);
         }
         return timeToNextShuttle;
     }
@@ -530,7 +521,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         int sqlTableColumnIndex = currentIndex;
 
         //Monday to Thursday shift one to the right
-        if (currentDay > MCGADayOfWeek.MONDAY && currentDay < MCGADayOfWeek.FRIDAY)
+        if (currentDay >= MCGADayOfWeek.MONDAY && currentDay < MCGADayOfWeek.FRIDAY)
             sqlTableColumnIndex += 1;
         else
             sqlTableColumnIndex -= 1;
@@ -551,7 +542,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         if (currentCampus == Campus.LOY)
             sqlTableColumnIndex += 2; //LOYtoSGW are columns 2,3
 
-        if (currentDay > MCGADayOfWeek.THURSDAY)
+        if (currentDay > MCGADayOfWeek.THURSDAY || currentDay < MCGADayOfWeek.MONDAY)
             sqlTableColumnIndex += 1; //Friday, Weekends are columns 1,3
 
         return sqlTableColumnIndex;
@@ -561,7 +552,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
      * Shuttle service is only available from Monday to Friday
      */
     private boolean isShuttleAvailable(int day) {
-        return (day > MCGADayOfWeek.MONDAY && day <= MCGADayOfWeek.FRIDAY);
+        return (day >= MCGADayOfWeek.MONDAY && day <= MCGADayOfWeek.FRIDAY);
     }
 
     /**
@@ -617,7 +608,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private int calculateNumberOfWholeDaysToNextShuttle(int currentDay) {
 
         //This should never occur.
-        if (currentDay < MCGADayOfWeek.MONDAY || currentDay > MCGADayOfWeek.SUNDAY)
+        if (currentDay < MCGADayOfWeek.SUNDAY || currentDay > MCGADayOfWeek.SATURDAY)
             return -1;
 
         //Friday, have to wait for Saturday, Sunday
