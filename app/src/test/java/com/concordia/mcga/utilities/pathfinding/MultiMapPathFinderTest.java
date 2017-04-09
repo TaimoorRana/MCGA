@@ -1,6 +1,7 @@
 package com.concordia.mcga.utilities.pathfinding;
 
 
+import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.ConnectedPOI;
@@ -27,7 +28,7 @@ public class MultiMapPathFinderTest {
     private MultiMapPathFinder spyPathFinder;
 
     @Test
-    public void testShortestPath_sameFloorPOIs() throws MCGAPathFindingException {
+    public void testShortestPath_sameFloorPOIs() throws MCGAPathFindingException, MCGADatabaseException {
         // Test Data
         IndoorMapTile startTile = new IndoorMapTile(1, 2);
         IndoorMapTile destTile = new IndoorMapTile(1, 2);
@@ -53,7 +54,7 @@ public class MultiMapPathFinderTest {
     }
 
     @Test
-    public void testShortestPath_sameBuildingPOIs() throws MCGAPathFindingException {
+    public void testShortestPath_sameBuildingPOIs() throws MCGAPathFindingException, MCGADatabaseException {
         // Test Data
         IndoorMapTile startTile = new IndoorMapTile(1, 1);
         IndoorMapTile destTile = new IndoorMapTile(3, 3);
@@ -81,7 +82,7 @@ public class MultiMapPathFinderTest {
     }
 
     @Test
-    public void testShortestPath_differentBuildingPOIs() throws MCGAPathFindingException {
+    public void testShortestPath_differentBuildingPOIs() throws MCGAPathFindingException, MCGADatabaseException {
         // Test Data
         IndoorMapTile startTile = new IndoorMapTile(1, 1);
         IndoorMapTile destTile = new IndoorMapTile(3, 3);
@@ -109,13 +110,13 @@ public class MultiMapPathFinderTest {
     }
 
     @Test
-    public void testSameBuildingNavigation() throws MCGAPathFindingException {
+    public void testSameBuildingNavigation() throws MCGAPathFindingException, MCGADatabaseException {
         // Test data
         IndoorMapTile startTile = new IndoorMapTile(1, 1);
         IndoorMapTile destTile = new IndoorMapTile(3, 3);
         Building building1 = new Building(new LatLng(0, 0), "TEST", "TEST", new MarkerOptions());
-        Floor map1 = new Floor(building1, 4);
-        Floor map2 = new Floor(building1, 5);
+        Floor map1 = Mockito.mock(Floor.class);
+        Floor map2 = Mockito.mock(Floor.class);
 
         ConnectedPOI connectedPOI = Mockito.mock(ConnectedPOI.class);
         IndoorPOI intermediatePOI = new IndoorPOI(new LatLng(0, 0), "NAME",
