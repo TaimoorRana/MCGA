@@ -310,8 +310,13 @@ public class IndoorMapFragment extends Fragment {
     }
 
     // STUB
-    public void drawMapTile(IndoorMapTile tile){
-
+    public void drawMapTile(final IndoorMapTile tile){
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                leafletView.evaluateJavascript("addStepIndicatorWithPan(" + tile.getCoordinateX() + "," + tile.getCoordinateY() + ")", null);
+            }
+        });
     }
 }
 

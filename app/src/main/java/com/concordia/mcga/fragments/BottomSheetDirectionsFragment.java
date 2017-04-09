@@ -317,6 +317,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         if (displayedDirectionsList.size() > 0) {
             currentDirection++;
         }
+        drawTile();
         updateDirections();
     }
 
@@ -327,6 +328,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         if (currentDirection > 0) {
             currentDirection--;
         }
+        drawTile();
         updateDirections();
     }
 
@@ -380,6 +382,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         ((NavigationFragment) getParentFragment()).showIndoorMap(floorAssociation.get(currentDirection).getBuilding());
         ((NavigationFragment) getParentFragment()).getIndoorMapFragment().showFloor(floorAssociation.get(currentDirection));
         ((NavigationFragment) getParentFragment()).getIndoorMapFragment().drawCurrentWalkablePath();
+        drawTile();
     }
 
 
