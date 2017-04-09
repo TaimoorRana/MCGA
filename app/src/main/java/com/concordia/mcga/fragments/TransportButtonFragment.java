@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.activities.ShuttleActivity;
+import com.concordia.mcga.helperClasses.MCGADayOfWeek;
 import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.models.Campus;
@@ -47,6 +47,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     //Outdoor directions
     private OutdoorDirections outdoorDirections;
     private Campus currentCampus = Campus.SGW;
+
+    final static int MINUTES_IN_AN_HOUR = 60;
 
     @Nullable
     @Override
@@ -149,7 +151,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         if (transportType == MCGATransportMode.SHUTTLE) {
             int totaltime = 0;
             totaltime += getMinutesToNextShuttleDeparture();
-            totaltime += outdoorDirections.getHoursForTransportType(transportType) * 60;
+            totaltime += outdoorDirections.getHoursForTransportType(transportType) * MINUTES_IN_AN_HOUR;
             totaltime += outdoorDirections.getMinutesForTransportType(transportType);
 
             time = formatTime(totaltime);
@@ -242,8 +244,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     private String formatTime(int minutes) {
-        int hours = minutes / 60;
-        minutes %= 60;
+        int hours = minutes / MINUTES_IN_AN_HOUR;
+        minutes %= MINUTES_IN_AN_HOUR;
         return formatTime(hours, minutes);
     }
 
@@ -469,19 +471,23 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
      */
     public int getMinutesToNextShuttleDeparture() {
         String[][] shuttleSchedule = ShuttleActivity.getShuttleSchedule();
-
         int currentDay = Calendar.getInstance().getTime().getDay();
-        int currentTime = Calendar.getInstance().getTime().getHours() * 60 + Calendar.getInstance().getTime().getMinutes();
+        int currentTime = Calendar.getInstance().getTime().getHours() * MINUTES_IN_AN_HOUR + Calendar.getInstance().getTime().getMinutes();
         int shuttleColumnIndex = getShuttleColumnIndex(currentDay);
 
-        int timeToNextShuttle = -1;
+        //Day of week returned is from 0-6 but
+        //all the logic is built around 1-7
+        if (currentDay == 0) {
+            currentDay = MCGADayOfWeek.SUNDAY;
+        }
 
+        int timeToNextShuttle = -1;
         if (isShuttleAvailable(currentDay)) {
             timeToNextShuttle = calculateTimeToNextShuttle(shuttleSchedule, shuttleColumnIndex, currentTime);
         }
 
         if (timeToNextShuttle < 0 || !isShuttleAvailable(currentDay)) {
-            final int TOTAL_MINUTES_IN_A_DAY = 60 * 24;
+            final int TOTAL_MINUTES_IN_A_DAY = MINUTES_IN_AN_HOUR * 24;
             int daysToNextShuttleService = calculateNumberOfWholeDaysToNextShuttle(currentDay);
 
             timeToNextShuttle = (TOTAL_MINUTES_IN_A_DAY - currentTime) +
@@ -505,7 +511,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
 
         int nextShuttleTime = -1;
         for (int rowIndex = 0; rowIndex < shuttleSchedule.length && nextShuttleTime < 0; rowIndex++) {
-            nextShuttleTime = getMinutesFromTimeString(shuttleSchedule[rowIndex][followingDayColumnIndex]);
+            nextShuttleTime = getMinutesFrom_HHmm_TimeString(shuttleSchedule[rowIndex][followingDayColumnIndex]);
         }
 
         return nextShuttleTime;
@@ -523,7 +529,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         int sqlTableColumnIndex = currentIndex;
 
         //Monday to Thursday shift one to the right
-        if (currentDay > 0 && currentDay < 5)
+        if (currentDay > MCGADayOfWeek.MONDAY && currentDay < MCGADayOfWeek.FRIDAY)
             sqlTableColumnIndex += 1;
         else
             sqlTableColumnIndex -= 1;
@@ -544,7 +550,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         if (currentCampus == Campus.LOY)
             sqlTableColumnIndex += 2; //LOYtoSGW are columns 2,3
 
-        if (currentDay > 4)
+        if (currentDay > MCGADayOfWeek.THURSDAY)
             sqlTableColumnIndex += 1; //Friday, Weekends are columns 1,3
 
         return sqlTableColumnIndex;
@@ -554,21 +560,21 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
      * Shuttle service is only available from Monday to Friday
      */
     private boolean isShuttleAvailable(int day) {
-        return (day > 0 && day < 6);
+        return (day > MCGADayOfWeek.MONDAY && day <= MCGADayOfWeek.FRIDAY);
     }
 
     /**
      * This is a parsing method to extract time in minutes from a String.
      *
-     * @param hourminute "HH:mm"
+     * @param hoursColonMinutes "HH:mm"
      * @return minutes
      */
-    private int getMinutesFromTimeString(String hourminute) {
-        String[] tokens = hourminute.split(":");
+    private int getMinutesFrom_HHmm_TimeString(String hoursColonMinutes) {
+        String[] tokens = hoursColonMinutes.split(":");
         if (tokens[0].contains("-")) {
             return -1;
         } else {
-            return Integer.valueOf(tokens[0]) * 60 + Integer.valueOf(tokens[1]);
+            return Integer.valueOf(tokens[0]) * MINUTES_IN_AN_HOUR + Integer.valueOf(tokens[1]);
         }
     }
 
@@ -585,7 +591,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private int calculateTimeToNextShuttle(String[][] shuttleSchedule, int columnIndex, int currentTimeInMinutes) {
         //Scans the list from the beginning, for current day
         for (int rowIndex = 0; rowIndex < shuttleSchedule.length; rowIndex++) {
-            int scheduleSlotInMinutes = getMinutesFromTimeString(shuttleSchedule[rowIndex][columnIndex]);
+            int scheduleSlotInMinutes = getMinutesFrom_HHmm_TimeString(shuttleSchedule[rowIndex][columnIndex]);
             //There are "-" in the schedule for empty slots
             if (scheduleSlotInMinutes == -1) {
                 continue;
@@ -610,15 +616,15 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     private int calculateNumberOfWholeDaysToNextShuttle(int currentDay) {
 
         //This should never occur.
-        if (currentDay < 0 || currentDay > 7)
+        if (currentDay < MCGADayOfWeek.MONDAY || currentDay > MCGADayOfWeek.SUNDAY)
             return -1;
 
         //Friday, have to wait for Saturday, Sunday
-        if (currentDay == 5)
+        if (currentDay == MCGADayOfWeek.FRIDAY)
             return 2;
 
         //Saturday, have to wait for Sunday
-        if (currentDay == 6)
+        if (currentDay == MCGADayOfWeek.SATURDAY)
             return 1;
 
         //Shuttle service available the following day
