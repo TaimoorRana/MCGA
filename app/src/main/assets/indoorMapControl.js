@@ -69,8 +69,8 @@ function loadMap(mapId) {
 	clearAllLayers();
 
 	switch (mapId) {
-		case "H1":
-			loadMapImage('floormaps/H/1.png', 2823, 2643);
+		case "CC1":
+			loadMapImage('floormaps/CC/1.png', 1704, 4944);
 			break;
 		case "H2":
 			loadMapImage('floormaps/H/2.png', 2604, 2356);

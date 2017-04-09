@@ -107,11 +107,17 @@ public class Building extends POI implements Observer {
             }
         }
         if (this.getShortName().equals("H")){
-            // TODO: fix with actual portals
             portals = new HashSet<>();
             Portal aa = new Portal(getMapCoordinates(), "AA", new IndoorMapTile(286, 1140));
             aa.setFloor(floorMaps.get(2));
             portals.add(aa);
+        }
+
+        if (this.getShortName().equals("CC")){
+            portals = new HashSet<>();
+            Portal bb = new Portal(getMapCoordinates(), "BB", new IndoorMapTile(512, 977));
+            bb.setFloor(floorMaps.get(1));
+            portals.add(bb);
         }
     }
 
