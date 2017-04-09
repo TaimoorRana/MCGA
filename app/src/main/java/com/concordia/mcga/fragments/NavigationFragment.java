@@ -80,6 +80,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private Button campusButton;
     private View navToolBar;
 
+    private boolean directionMode = false;
+
     private Button viewSwitchButton;
     private FloatingActionButton directionsButton;
     private FloatingActionButton mapCenterButton;
@@ -330,7 +332,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * @param isVisible
      */
     public void showDirectionsFragment(boolean isVisible) {
+        directionMode = isVisible;
+
         if (isVisible) {
+            showBuildingInfoFragment(false);
             getChildFragmentManager().beginTransaction().show(directionsFragment).commit();
             outdoors = false;
         } else {
@@ -369,7 +374,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
 
         viewSwitchButton.setText("GO INDOORS");
-        showBuildingInfoFragment(true);
     }
 
     /**
@@ -395,7 +399,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         buildingInfoFragment.setBuildingName(buildingName);
         buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
         buildingInfoFragment.updateBottomSheet();
-        showBuildingInfoFragment(true);
+        if (!directionMode) {
+            showBuildingInfoFragment(true);
+        }
         parentLayout.postInvalidate();
     }
 
@@ -416,6 +422,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         String name = building.getShortName();
         updateBuildingInfoSheet(name);
         bottomSheetBuilding = (Building)multiBuildingMap.get(polygon.getId());
+
+        if (!directionMode) {
+            showBuildingInfoFragment(true);
+        }
+
     }
 
 
@@ -436,6 +447,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         String name = building.getShortName();
         updateBuildingInfoSheet(name);
         bottomSheetBuilding = (Building)multiBuildingMap.get(marker.getId());
+
+        if (!directionMode) {
+            showBuildingInfoFragment(true);
+        }
     }
 
     /**
