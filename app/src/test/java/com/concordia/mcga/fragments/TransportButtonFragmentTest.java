@@ -124,10 +124,13 @@ public class TransportButtonFragmentTest {
         assertFalse(transportButtonFragment.getPublicTransportFAB().isClickable());
     }
 
-    @Test
-    public void testTransportOptionClick() {
-        transportButtonFragment.getWalkFAB().performClick();
-        assertTrue(transportButtonFragment.getTransportType().equals(MCGATransportMode.WALKING));
-    }
 
+    @Test
+    public void testDisplayAllTransportTime() {
+        transportButtonFragment.displayAllTransportTimes();
+        assertTrue(transportButtonFragment.getCarTextView().getText().equals("1h 1m"));
+        assertTrue(transportButtonFragment.getPublicTransportTextView().getText().equals("2h 2m"));
+        assertTrue(transportButtonFragment.getBikeTextView().getText().equals("3h 3m"));
+        assertTrue(transportButtonFragment.getWalkTextView().getText().equals("4h 4m"));
+    }
 }

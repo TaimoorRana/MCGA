@@ -7,14 +7,16 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class OutdoorDirections {
-    private List<OutdoorPath> outdoorPathList;
+    private List<IOutdoorPath> outdoorPathList;
     private String selectedTransportMode = null;
-    private OutdoorPath selectedOutdoorPath;
+    private IOutdoorPath selectedOutdoorPath;
+    private IOutdoorPath shuttleOutdoorPath;
+    private LatLng origin, destination;
+    private GoogleMap map;
+    private String serverKey;
+    private Context context;
 
     public OutdoorDirections() {
         outdoorPathList = new ArrayList<>();
@@ -28,6 +30,9 @@ public class OutdoorDirections {
             outdoorPathList.add(new OutdoorPath());
             outdoorPathList.get(i).setTransportMode(transportModes.get(i));
         }
+        shuttleOutdoorPath = new ShuttleOutdoorPath();
+        shuttleOutdoorPath.setTransportMode(MCGATransportMode.SHUTTLE);
+        outdoorPathList.add(shuttleOutdoorPath);
     }
 
 
@@ -35,10 +40,11 @@ public class OutdoorDirections {
      * Request directions for all transportation
      */
     public void requestDirections() {
-        for (OutdoorPath outdoorPath : outdoorPathList) {
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.requestDirection();
         }
     }
+
 
     /**
      * Set origin for all transportation
@@ -46,7 +52,8 @@ public class OutdoorDirections {
      * @param origin
      */
     public void setOrigin(LatLng origin) {
-        for (OutdoorPath outdoorPath : outdoorPathList) {
+        this.origin = origin;
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setOrigin(origin);
         }
     }
@@ -56,7 +63,8 @@ public class OutdoorDirections {
      * @param destination
      */
     public void setDestination(LatLng destination) {
-        for (OutdoorPath outdoorPath : outdoorPathList) {
+        this.destination = destination;
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setDestination(destination);
         }
     }
@@ -66,7 +74,8 @@ public class OutdoorDirections {
      * @param map will be used to draw paths on
      */
     public void setMap(GoogleMap map) {
-        for (OutdoorPath outdoorPath : outdoorPathList) {
+        this.map = map;
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setMap(map);
         }
     }
@@ -76,7 +85,8 @@ public class OutdoorDirections {
      * @param context
      */
     public void setContext(Context context) {
-        for (OutdoorPath outdoorPath : outdoorPathList) {
+        this.context = context;
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setContext(context);
         }
     }
@@ -86,7 +96,7 @@ public class OutdoorDirections {
      * @return The duration of the transportation mode
      */
     public String getDuration(String transportMode) {
-        for (OutdoorPath outdoorPath : outdoorPathList) {
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
             if (outdoorPath.getTransportMode().equalsIgnoreCase(transportMode)) {
                 return outdoorPath.getDuration();
             }
@@ -98,7 +108,7 @@ public class OutdoorDirections {
      * Delete all paths shown on the map
      */
     public void deleteDirection() {
-        for (OutdoorPath outdoorPath : outdoorPathList) {
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.deleteDirection();
         }
     }
@@ -114,7 +124,7 @@ public class OutdoorDirections {
     /**
      * @return The OutdoorPath object that was selected as a transportation mode
      */
-    public OutdoorPath getDirectionObject() {
+    public IOutdoorPath getDirectionObject() {
         return selectedOutdoorPath != null ? selectedOutdoorPath : null;
     }
 
@@ -134,18 +144,19 @@ public class OutdoorDirections {
      * @param selectedTransportMode sets the transport mode the will be used to draw a path on the map
      */
     public void setSelectedTransportMode(String selectedTransportMode) {
-        for (OutdoorPath outdoorPath : outdoorPathList) {
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
             if (outdoorPath.getTransportMode().equalsIgnoreCase(selectedTransportMode)) {
                 selectedOutdoorPath = outdoorPath;
+                selectedOutdoorPath.setPathSelected(true);
                 this.selectedTransportMode = selectedTransportMode;
             }
+
         }
-
-
     }
 
     public void setServerKey(String serverKey){
-        for (OutdoorPath outdoorPath : outdoorPathList) {
+        this.serverKey = serverKey;
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setServerKey(serverKey);
         }
     }
@@ -163,7 +174,7 @@ public class OutdoorDirections {
      * @return minutes
      */
     public int getMinutesForTransportType(String transport){
-        for (OutdoorPath outdoorPath : outdoorPathList) {
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
             if (outdoorPath.getTransportMode().equalsIgnoreCase(transport)) {
                 return outdoorPath.getDurationMinutes();
             }
@@ -176,12 +187,16 @@ public class OutdoorDirections {
      * @return Hours
      */
     public int getHoursForTransportType(String transport){
-        for (OutdoorPath outdoorPath : outdoorPathList) {
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
             if (outdoorPath.getTransportMode().equalsIgnoreCase(transport)) {
                 return outdoorPath.getDurationHours();
             }
         }
         return 0;
+    }
+
+    public void setShuttleStartCampus(String campus){
+        ((ShuttleOutdoorPath)shuttleOutdoorPath).setStartCampus(campus);
     }
 
 }

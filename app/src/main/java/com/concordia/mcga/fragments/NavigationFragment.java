@@ -1,51 +1,33 @@
 package com.concordia.mcga.fragments;
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Rect;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatImageButton;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ExpandableListView;
 
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.adapters.POISearchAdapter;
+import com.concordia.mcga.activities.StudentSpotActivity;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
+import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.POI;
+import com.concordia.mcga.models.StudentSpot;
+import com.concordia.mcga.models.Room;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
@@ -55,53 +37,34 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static android.content.Context.LOCATION_SERVICE;
+import static android.app.Activity.RESULT_OK;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback,
-        OnCameraIdleListener, Subject, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
-
+        OnCameraIdleListener, Subject {
     //Enum representing which map view is active
     private enum ViewType {
         INDOOR, OUTDOOR
-    }
-
-    private enum SearchState {
-        NONE, LOCATION, DESTINATION, LOCATION_DESTINATION
     }
 
     //Outdoor Map
     private final float CAMPUS_DEFAULT_ZOOM_LEVEL = 16f;
     //Outdoor direction
     private OutdoorDirections outdoorDirections = new OutdoorDirections();
-    private LocationListener gpsListen = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            //Method called when new location is found by the network
-            Log.d("Message: ", "Location changed," + location.getLatitude() + "," + location.getLongitude() + ".");
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-    };
     private GoogleMap map;
     private List<Observer> observerList = new ArrayList<>();
     private Map<String, Object> multiBuildingMap = new HashMap<>();
     //State
     private ViewType viewType;
     private Campus currentCampus = Campus.SGW;
-    private boolean indoorMapVisible = false;
-    private boolean outdoorMapVisible = false;
+    private boolean transportButtonVisible = false;
+
     //Fragments
     private LinearLayoutCompat parentLayout;
     private SupportMapFragment mapFragment;
@@ -110,132 +73,67 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private BottomSheetDirectionsFragment directionsFragment;
     private BottomSheetBuildingInfoFragment buildingInfoFragment;
     //View Components
-    private View rootView;
-    private View toolbarView;
     private Button campusButton;
     private Button viewSwitchButton;
     private FloatingActionButton mapCenterButton;
-    //GPS attributes
-    private LocationManager gpsmanager; //LocationManager instance to check gps activity
-    // Search components
-    private SearchView search;
-    private POISearchAdapter poiSearchAdapter;
-    private ExpandableListView searchList;
-    private Dialog searchDialog;
-    private POI location;
-    private POI destination;
-    private SearchState searchState;
+
+    //State
+    private Building lastClickedBuilding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         parentLayout = (LinearLayoutCompat) inflater.inflate(R.layout.nav_main_fragment, container, false);
-        rootView = parentLayout.findViewById(R.id.navigationMain);
-        toolbarView = parentLayout.findViewById(R.id.nav_toolbar);
 
         //Init Fragments
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
         indoorMapFragment = (IndoorMapFragment) getChildFragmentManager().findFragmentById(R.id.indoormap);
         directionsFragment = (BottomSheetDirectionsFragment) getChildFragmentManager().findFragmentById(R.id.directionsFragment);
         buildingInfoFragment = (BottomSheetBuildingInfoFragment) getChildFragmentManager().findFragmentById(R.id.buildingInfoFragment);
+
         //Init View Components
         mapCenterButton = (FloatingActionButton) parentLayout.findViewById(R.id.mapCenterButton);
         mapCenterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    if(alertGPS(mapFragment.getActivity())){
-                        Log.d("Testing AlertGPS Launch", "Finished AlertGPS");
-                    }
-                }
                 if (viewType == ViewType.INDOOR) {
-                    viewType = ViewType.OUTDOOR;
-                    getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
-                    getChildFragmentManager().beginTransaction().show(transportButtonFragment).commit(); //To be removed after Outside transportation Google API incorporation
-                    campusButton.setVisibility(View.VISIBLE);
-                    viewSwitchButton.setText("GO INDOORS");
+                    showOutdoorMap();
                 }
-                onClose();
-
-                if(locateMe(map, mapFragment.getActivity(), gpsmanager, gpsListen)){
-                    Log.d("GPS Locator","Successful");}
-                else {
-                    Log.d("GPS Locator", "Fail");
+                ((MainActivity)getActivity()).onClose();
+                //Camera Movement
+                LatLng location = ((MainActivity) getActivity()).getGpsManager().getLocation();
+                if (location != null) {
+                    camMove(location);
+                    toggleMapLocation(true);
                 }
-
             }
         });
 
         campusButton = (Button) parentLayout.findViewById(R.id.campusButton);
         viewSwitchButton = (Button) parentLayout.findViewById(R.id.viewSwitchButton);
+
+        campusButton.setVisibility(View.VISIBLE);
         viewSwitchButton.setText("GO INDOORS");
+
         viewSwitchButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (viewType == ViewType.OUTDOOR) {
-                    showIndoorMap();
-                    campusButton.setVisibility(View.GONE);
-                    viewSwitchButton.setText("GO OUTDOORS");
-                    showDirectionsFragment(true);
-                    showBuildingInfoFragment(false);
+                    showIndoorMap(lastClickedBuilding);
+                    //showDirectionsFragment(true);
                 } else {
                     showOutdoorMap();
-                    campusButton.setVisibility(View.VISIBLE);
-                    viewSwitchButton.setText("GO INDOORS");
-                    showDirectionsFragment(false);
-                    showBuildingInfoFragment(true);
+                    //showDirectionsFragment(false);
                 }
             }
         });
-
-
 
         //Set initial view type
         viewType = ViewType.OUTDOOR;
 
         //Hide Fragments
-
-        AppCompatImageButton locationCancelButton;
-        locationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
-                R.id.search_location_button);
-        locationCancelButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                location = null;
-                if (destination == null) {
-                    searchState = SearchState.NONE;
-                } else {
-                    searchState = SearchState.DESTINATION;
-                }
-                updateSearchUI();
-            }
-        });
-
-        AppCompatImageButton destinationCancelButton;
-        destinationCancelButton = (AppCompatImageButton)toolbarView.findViewById(
-                R.id.search_destination_button);
-        destinationCancelButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                destination = null;
-                if (location == null) {
-                    searchState = SearchState.NONE;
-                } else {
-                    searchState = SearchState.LOCATION;
-                }
-                updateSearchUI();
-            }
-        });
-
-        //Hide Indoor Fragment
-
-        getChildFragmentManager().beginTransaction().hide(indoorMapFragment).commit();
-
-        //Hide Fragments
         showTransportButton(true);
-
-
 
         // Set the building information bottomsheet to true
         // When the app starts
@@ -243,19 +141,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         showBuildingInfoFragment(true);
         showDirectionsFragment(false);
 
-        //Hide Fragments
-        showTransportButton(true);
-
-        setupSearchAttributes();
-        setupSearchList();
-
-        //Set initial view type
-        viewType = ViewType.OUTDOOR;
-
-        // Display no location/destination by default
-        searchState = SearchState.NONE;
-        updateSearchUI();
-
+        //Requests focus on creation. Prevents text views from being auto selected on launch.
+        parentLayout.requestFocus();
 
         return parentLayout;
     }
@@ -263,7 +150,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        gpsmanager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -288,6 +174,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == MainActivity.SPOT_REQUEST_CODE && resultCode == RESULT_OK) {
+            String json = data.getExtras().getString(StudentSpotActivity.SPOT_IDENTIFIER);
+            StudentSpot spot = new Gson().fromJson(json, StudentSpot.class);
+            ((MainActivity)getActivity()).setNavigationPOI(spot, true);
+        }
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnCameraIdleListener(this);
@@ -302,7 +199,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorDirections.setContext(getActivity().getApplicationContext());
         outdoorDirections.setServerKey(getResources().getString(R.string.google_maps_key));
         outdoorDirections.setMap(map);
-        outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
 
         //Map Customization
         applyCustomGoogleMapsStyle();
@@ -312,9 +208,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         updateCampus();
     }
 
-    /**
+    public void onRoomSearch(Room room) {
+        if (viewType == ViewType.OUTDOOR) {
+            showIndoorMap(room.getFloor().getBuilding());
+        }
 
-     * Shows or hides the bottom sheet building information fragment
+        indoorMapFragment.onRoomSearch(room);
+    }
+
+    /**
+     * Shows or hides the indoor map, will hide the outdoormap and transport button if visible
+     *
      * @param isVisible
      */
     private void showBuildingInfoFragment(boolean isVisible) {
@@ -339,21 +243,35 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     /*
      * Shows or hides the indoor map, will hide the outdoormap if visible
      */
-    public void showIndoorMap() {
-        outdoorMapVisible = false;
-        indoorMapVisible = true;
-        viewType = ViewType.INDOOR;
-        getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
+    public void showIndoorMap(Building building) {
+        if (building.getShortName().equals("H")) { // TODO: Allow indoor map on other available buildings
+            viewType = ViewType.INDOOR;
+
+            showTransportButton(false);
+            campusButton.setVisibility(View.GONE);
+            showBuildingInfoFragment(false);
+
+            getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
+            viewSwitchButton.setText("GO OUTDOORS");
+
+            indoorMapFragment.initializeBuilding(building);
+            indoorMapFragment.drawCurrentWalkablePath();
+        }
     }
+
 
     /**
      * Shows or hides the outdoor map, will hide the indoormap if visible
      */
     public void showOutdoorMap() {
-        outdoorMapVisible = true;
-        indoorMapVisible = false;
         viewType = ViewType.OUTDOOR;
+
+        showTransportButton(true);
+        campusButton.setVisibility(View.VISIBLE);
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
+
+        viewSwitchButton.setText("GO INDOORS");
+        showBuildingInfoFragment(true);
     }
 
     /**
@@ -367,6 +285,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             getChildFragmentManager().beginTransaction().hide(transportButtonFragment).commit();
 
         }
+        transportButtonVisible = isVisible;
     }
 
     /**
@@ -394,8 +313,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
         buildingInfoFragment.collapse();
 
-
-        setNavigationPOI((Building) multiBuildingMap.get(polygon.getId()));
+        ((MainActivity)getActivity()).setNavigationPOI((Building)
+                multiBuildingMap.get(polygon.getId()), false);
     }
 
     /**
@@ -422,7 +341,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
         buildingInfoFragment.collapse();
 
-        setNavigationPOI((Building) multiBuildingMap.get(marker.getId()));
+        ((MainActivity)getActivity()).setNavigationPOI((Building) multiBuildingMap.get(marker.getId()), false);
     }
 
     /**
@@ -440,12 +359,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
+                lastClickedBuilding = Campus.getBuilding(polygon);
                 setBottomSheetContent(polygon);
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                lastClickedBuilding = Campus.getBuilding(marker);
                 setBottomSheetContent(marker);
                 return true;
             }
@@ -491,6 +412,29 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    public void clearAllPaths() {
+        clearOutdoorPath();
+        clearIndoorPath();
+    }
+
+    public void clearOutdoorPath() {
+        if (outdoorDirections != null) {
+            outdoorDirections.deleteDirection();
+        }
+    }
+
+    public void clearIndoorPath() {
+        if (indoorMapFragment != null) {
+            indoorMapFragment.clearWalkablePaths();
+        }
+    }
+
+    public void generateOutdoorPath(POI start, POI dest) {
+        outdoorDirections.setOrigin(start.getMapCoordinates());
+        outdoorDirections.setDestination(dest.getMapCoordinates());
+        outdoorDirections.requestDirections();
+    }
+
     /**
      * Applying custom google map style in order to get rid of unwanted POI and other information that is not useful to our application
      */
@@ -527,279 +471,40 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    /**
-     * Build alert dialog on fragment's activity
-     * Shown iff (gpsmanager.isProviderEnabled(LocationManager.GPS_PROVIDER) is false
-     * Prompt user to enable the GPS
-     * If user presses "Enable GPS",  minimize application and prompt user to GPS Android window
-     */
-
-    public static boolean alertGPS(final Activity activity) { //GPS detection method
-        AlertDialog.Builder build = new AlertDialog.Builder(activity);
-        build
-                .setTitle("GPS Detection Services")
-                .setMessage("GPS is disabled in your device. Enable it?")
-                .setCancelable(false)
-                .setPositiveButton("Enable GPS",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                                activity.startActivity(i);
-                            }
-                        });
-        build.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = build.create();
-        alert.show();
-        return true;
+    public void camMove(LatLng MyPos){
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(MyPos, 16f));//Camera Update method
     }
 
-    /**
-     *
-     * @param map object of the navigation fragment's
-     * @param activity acquired with mapfragment.getActivity()
-     * @param gpsmanager object of LocationManager (from android and not google maps)
-     * @param gpsListen object from interface LocationListener (from android and not google maps)
-     * @return true if the operation is a success (if permission is acquired && a location was succesfully retrieved
-     *
-     * Method run to acquire user's location on a map, display it and update camera to it
-     * if permission NOT found, request the permission
-     * Enable GPS provider updates on locationmanager (requires permission check)
-     * Enable Google Map layer over map object to display user's location on the map
-     * Instantiate location with last known location of Network provider
-     * if no location found, return false, otherwise, map centers on user's location
-     *
-     */
-
-    public static boolean locateMe(GoogleMap map, Activity activity, LocationManager gpsmanager, LocationListener gpsListen) {
-        if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            return false;
+    public void toggleMapLocation(boolean active) {
+        if (ContextCompat.checkSelfPermission(getActivity(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(active);
         } else {
-            gpsmanager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1500, 2, gpsListen); //Enable Network Provider updates
-            map.setMyLocationEnabled(true); //Enable Google Map layer over mapFragment
-            Location location = gpsmanager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER); //Force Network provider due to GPS problems with different phone brands
-            if (location != null) {
-                double latitude = location.getLatitude(); //Getting latitude of the current location
-                double longitude = location.getLongitude(); // Getting longitude of the current location
-                LatLng myPosition = new LatLng(latitude, longitude); // Creating a LatLng object for the current location
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(myPosition, 16f));//Camera Update method
-                return true;
-            }
-            else{
-                return false;
-            }
+            map.setMyLocationEnabled(false);
         }
     }
 
-
-    // Bug in API, onClose doesn't get called. Use this manually
-    @Override
-    public boolean onClose() {
-        search.setQuery("", false);
-        search.clearFocus();
-        rootView.requestFocus();
-        return false;
+    public String getTransportationType() {
+        return transportButtonFragment.getTransportType();
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        poiSearchAdapter.filterData(query);
-        expandAll();
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        poiSearchAdapter.filterData(newText);
-        expandAll();
-        return false;
-    }
-
-    /**
-     * Updates the UI elements associated with the search state.
-     * If no location or destination has been selected, hide the elements.
-     * If a location has been specified, hide the destination element but update the location label.
-     * If a destination has been specified, hide the location element but update destination label.
-     * If both have been specified, show everything and update both labels.
-     */
-    private void updateSearchUI() {
-        LinearLayoutCompat locationLayout = (LinearLayoutCompat)
-                toolbarView.findViewById(R.id.search_location);
-        LinearLayoutCompat destinationLayout = (LinearLayoutCompat)
-                toolbarView.findViewById(R.id.search_destination);
-        if (location != null) {
-            AppCompatTextView locationText = (AppCompatTextView)
-                    toolbarView.findViewById(R.id.search_location_text);
-            locationText.setText(location.getName());
-            outdoorDirections.setOrigin(location.getMapCoordinates());
-        }else{
-            outdoorDirections.setOrigin(null);
-        }
-
-        if (destination != null) {
-            AppCompatTextView destinationText = (AppCompatTextView)
-                    toolbarView.findViewById(R.id.search_destination_text);
-            destinationText.setText(destination.getName());
-            outdoorDirections.setDestination(destination.getMapCoordinates());
-        }else{
-            outdoorDirections.setDestination(null);
-        }
-
-        outdoorDirections.deleteDirection();
-        if (location != null && destination != null) {
-            outdoorDirections.requestDirections();
-        }
-
-
-        if (searchState == SearchState.NONE) {
-            locationLayout.setVisibility(View.GONE);
-            destinationLayout.setVisibility(View.GONE);
-            search.setQueryHint("Enter location...");
-        } else if (searchState == SearchState.LOCATION) {
-            locationLayout.setVisibility(View.VISIBLE);
-            destinationLayout.setVisibility(View.GONE);
-            search.setQueryHint("Enter destination...");
-        } else if (searchState == SearchState.DESTINATION) {
-            locationLayout.setVisibility(View.GONE);
-            destinationLayout.setVisibility(View.VISIBLE);
-            search.setQueryHint("Enter location...");
-        } else { // searchState == SearchState.LOCATION_DESTINATION
-            locationLayout.setVisibility(View.VISIBLE);
-            destinationLayout.setVisibility(View.VISIBLE);
-            search.setQueryHint("Search...");
-        }
-    }
-
-    /**
-     * Expands all the view result groups (showing the POIs under the campus search results)
-     */
-    private void expandAll() {
-        if (poiSearchAdapter.getGroupCount() == 0) {
-            searchDialog.dismiss();
-        } else {
-            searchDialog.show();
-            for (int i = 0; i < poiSearchAdapter.getGroupCount(); i++) {
-                searchList.expandGroup(i);
-            }
-        }
-    }
-
-    /**
-     * Constructor helper function to set up the search functionality of the view
-     */
-    private void setupSearchAttributes() {
-        //Search
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(
-                Context.SEARCH_SERVICE);
-        search = (SearchView) parentLayout.findViewById(R.id.navigation_search);
-        search.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-        search.setIconifiedByDefault(false);
-        search.setOnQueryTextListener(this);
-        search.setOnCloseListener(this);
-        search.setQueryHint("Enter destination");
-
-        //Custom search dialog
-        searchDialog = new Dialog(getActivity());
-        searchDialog.setCanceledOnTouchOutside(true);
-        searchDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        searchDialog.setContentView(R.layout.search_dialog);
-        final Window window = searchDialog.getWindow();
-        window.setGravity(Gravity.TOP);
-        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-        window.setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
-        window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        window.setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
-                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
-        window.setLayout(LinearLayoutCompat.LayoutParams.WRAP_CONTENT,
-                LinearLayoutCompat.LayoutParams.MATCH_PARENT);
-
-        parentLayout.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        // Set dialog window offset and height
-                        WindowManager.LayoutParams wmlp = window.getAttributes();
-                        int xy[] = new int[2];
-                        parentLayout.findViewById(R.id.navigation_search).getLocationOnScreen(xy);
-                        wmlp.y = xy[1] + 20;
-
-                        Rect r = new Rect();
-                        parentLayout.getWindowVisibleDisplayFrame(r);
-                        wmlp.height = (r.bottom - r.top) - wmlp.y;
-                        window.setAttributes(wmlp);
-                    }
-                }
-        );
-    }
-
-    /**
-     * Constructor helper function to set up the list and listener for the navigation search
-     */
-    private void setupSearchList() {
-        searchList = (ExpandableListView) searchDialog.findViewById(R.id.expandableList);
-        poiSearchAdapter = new POISearchAdapter(getActivity(), Campus.SGW, Campus.LOY);
-        searchList.setAdapter(poiSearchAdapter);
-
-        searchList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                POI dest = (POI)poiSearchAdapter.getChild(groupPosition, childPosition);
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(dest.getMapCoordinates(),
-                        CAMPUS_DEFAULT_ZOOM_LEVEL));
-
-                setNavigationPOI(dest);
-                onClose();
-                return true;
-            }
-        });
-    }
-
-    /**
-     * Sets the navigation state and location/destination for internal use
-     * @param dest The {@link POI} location to be added to the search state
-     * @return Whether the state was updated or not
-     */
-    private boolean setNavigationPOI(POI dest) {
-        if (searchState == SearchState.NONE) {
-            location = dest;
-            searchState = SearchState.LOCATION;
-        } else if (searchState == SearchState.DESTINATION) {
-            location = dest;
-            searchState = SearchState.LOCATION_DESTINATION;
-        } else if (searchState == SearchState.LOCATION) {
-            destination = dest;
-            searchState = SearchState.LOCATION_DESTINATION;
-        } else { // if searchState == SearchState.LOCATION_DESTINATION
-            return false;
-        }
-        updateSearchUI();
-        return true;
-    }
-
-    //Getters
-    public boolean isIndoorMapVisible() {
-        return indoorMapVisible;
-    }
-
-
-
-
-    public boolean isOutdoorMapVisible() {
-        return outdoorMapVisible;
-    }
+    public boolean isTransportButtonVisible() { return transportButtonVisible; }
 
     public ViewType getViewType() {
         return viewType;
     }
 
+    public OutdoorDirections getOutdoorDirections() {
+        return outdoorDirections;
+    }
+
+    public IndoorMapFragment getIndoorMapFragment() {
+        return indoorMapFragment;
+    }
+
+    public GoogleMap getMap() {
+        return map;
+    }
 }
 

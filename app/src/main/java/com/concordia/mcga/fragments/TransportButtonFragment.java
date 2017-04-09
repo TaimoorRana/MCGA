@@ -14,6 +14,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.activities.ShuttleActivity;
 import com.concordia.mcga.helperClasses.MCGATransportMode;
@@ -119,8 +120,10 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
                 break;
         }
         if (clickedView.getId() != R.id.transportExpandFAB) {
-            outdoorDirections.setSelectedTransportMode(transportType);
-            outdoorDirections.drawPathForSelectedTransportMode();
+            MainActivity activity = ((MainActivity) getActivity());
+
+            // Tell the main activity to generate directions
+            ((MainActivity) getActivity()).generateDirections(activity.getLocation(), activity.getDestination(), transportType);
         }
     }
 

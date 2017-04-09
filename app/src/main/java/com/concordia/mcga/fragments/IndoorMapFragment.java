@@ -13,36 +13,37 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.ProgressBar;
+
+import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.exceptions.MCGAPathFindingException;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Floor;
-import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.IndoorMapTile;
+import com.concordia.mcga.models.IndoorPOI;
+import com.concordia.mcga.models.Room;
 import com.concordia.mcga.utilities.pathfinding.SingleMapPathFinder;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class IndoorMapFragment extends Fragment {
 
     //Components
     private WebView leafletView;
     private LinearLayout floorButtonContainer;
-    private Button testPathButton;
 
     //State
     private boolean pageLoaded = false;
-    private boolean pathsDrawn = false;
 
-    //Test POIs for Demo
-    IndoorPOI H423 = new IndoorPOI(null, "H423", new IndoorMapTile(353, 1326));
-    IndoorPOI H436 = new IndoorPOI(null, "H436", new IndoorMapTile(1220, 594));
-    IndoorPOI H433 = new IndoorPOI(null, "H433", new IndoorMapTile(354, 57));
-    IndoorPOI H401 = new IndoorPOI(null, "H401", new IndoorMapTile(1972, 1616));
-    private ArrayList<IndoorPOI> indoorPoiStack;
+    private Map<Integer, Floor> floorsLoaded;
+    private Floor currentFloor;
+    private Building buildingLoaded;
+
+    private Map<Floor, List<IndoorMapTile>> currentPathTiles;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,8 +55,6 @@ public class IndoorMapFragment extends Fragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 pageLoaded = true;
-                //Initialize a building, normally this would be done dynamically
-                initializeHBuilding();
             }
         });
 
@@ -71,111 +70,227 @@ public class IndoorMapFragment extends Fragment {
         //Floor Select Spinner
         floorButtonContainer = (LinearLayout) view.findViewById(R.id.floorButtonContainer);
 
-        //Indoor POI Stack
-        indoorPoiStack = new ArrayList<IndoorPOI>();
+        //Init Attributes
+        currentPathTiles = new HashMap<>();
+        floorsLoaded = new HashMap<>();
 
         return view;
     }
 
-    public void generatePath(final IndoorPOI start, final IndoorPOI dest) {
-        leafletView.post(new Runnable() {
-            @Override
-            public void run() {
-                Building hall = new Building(new LatLng(0,0), "Hall", "H", new MarkerOptions());
-                Floor H4 = hall.getFloorMap(4);
-                SingleMapPathFinder pf = new SingleMapPathFinder(H4.getMap());
+    /**
+     * Initializes a building, populating floor buttons and loading a default floor. The default
+     * floor is always the one with the lowest floor number.
+     *
+     * @param building
+     */
+    public void initializeBuilding(Building building) {
 
-                ArrayList<IndoorMapTile> pathTilesJunctions = null;
+        if (buildingLoaded == null || !buildingLoaded.equals(building)) {
 
-                try {
-                    pathTilesJunctions = (ArrayList<IndoorMapTile>) pf.shortestPathJunctions(start.getTile(), dest.getTile());
+            final List<Integer> floorNumbersOrdered = new ArrayList<>();
 
-                    Iterator<IndoorMapTile> it2 = pathTilesJunctions.iterator();
-                    while (it2.hasNext()) {
-                        IndoorMapTile pft2 = it2.next();
-                        Log.d("JCT: ", pft2.toString());
+            //Load Floors
+            for (Map.Entry<Integer, Floor> entry : building.getFloorMaps().entrySet()) {
+                floorNumbersOrdered.add(entry.getKey());
+                floorsLoaded.put(entry.getKey(), entry.getValue());
+            }
+
+            Collections.sort(floorNumbersOrdered, Collections.<Integer>reverseOrder());
+
+            for (final Integer floorNumber : floorNumbersOrdered) {
+                final Floor floor = floorsLoaded.get(floorNumber);
+                final Button button = new Button(getContext());
+
+                button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
+                button.setText(String.valueOf(floorNumber));
+                button.setTag(getMapId(floor));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        clearButtonFormats();
+                        setButtonActive(button);
+
+                        if (pageLoaded) {
+                            currentFloor = floorsLoaded.get(floorNumber);
+                            leafletView.evaluateJavascript("loadMap('" + getMapId(floor) + "')", null);
+                            leafletView.evaluateJavascript("addFloorRooms(" + floorsLoaded.get(floorNumber).getRoomsJSON().toString() + ")", null);
+                            onFloorChange();
+                        }
                     }
+                });
 
-                    if (pageLoaded)
-                        leafletView.evaluateJavascript("drawWalkablePath(" + pf.toJSONArray(pathTilesJunctions).toString() + ")", null);
-                } catch (MCGAPathFindingException e) {
-                    e.printStackTrace();
-                }
+                floorButtonContainer.addView(button);
             }
-        });
-    }
 
-    public void initializeHBuilding() {
-        leafletView.evaluateJavascript("loadMap('H4')", null);
-        leafletView.evaluateJavascript("addH4Markers()", null);
-
-        //Add Floor Buttons
-        Button h1 = new Button(getContext());
-        h1.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
-        h1.setText("1/2");
-        h1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pageLoaded) {
-                    leafletView.evaluateJavascript("loadMap('H1-2')", null);
-                }
-            }
-        });
-
-        Button h4 = new Button(getContext());
-        h4.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
-        h4.setText("4");
-        h4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pageLoaded) {
-                    leafletView.evaluateJavascript("loadMap('H4')", null);
-                    leafletView.evaluateJavascript("addH4Markers()", null);
-                }
-            }
-        });
-
-        floorButtonContainer.addView(h4);
-        floorButtonContainer.addView(h1);
-    }
-
-    @JavascriptInterface
-    public void pushRoom(String roomNumber) {
-        if (indoorPoiStack.size() == 2) {
-            indoorPoiStack.clear();
+            //Set the default floor as the lowest one
             leafletView.post(new Runnable() {
                 @Override
                 public void run() {
-                    leafletView.evaluateJavascript("clearPathLayers()", null);
+                    int floorNumber = floorNumbersOrdered.get(0);
+
+                    //Set The First Button Color
+                    Button b = (Button) floorButtonContainer.getChildAt(0);
+                    setButtonActive(b);
+
+                    //Load The Floor
+                    currentFloor = floorsLoaded.get(floorNumber);
+                    leafletView.evaluateJavascript("loadMap('" + getMapId(currentFloor) + "')", null);
+                    leafletView.evaluateJavascript("addFloorRooms(" + currentFloor.getRoomsJSON().toString() + ")", null);
                 }
             });
+
+            buildingLoaded = building;
         }
 
-        if (indoorPoiStack.size() == 0) {
-            Toast.makeText(getContext(), "Start Room: " + roomNumber, Toast.LENGTH_SHORT).show();
-        } else if (indoorPoiStack.size() == 1) {
-            Toast.makeText(getContext(), "Dest Room: " + roomNumber, Toast.LENGTH_SHORT).show();
-        }
+    }
 
-        switch (roomNumber) {
-            case "H423":
-                indoorPoiStack.add(H423);
-                break;
-            case "H436":
-                indoorPoiStack.add(H436);
-                break;
-            case "H433":
-                indoorPoiStack.add(H433);
-                break;
-            case "H401":
-                indoorPoiStack.add(H401);
-                break;
-        }
-
-        if (indoorPoiStack.size() == 2) {
-            generatePath(indoorPoiStack.get(0), indoorPoiStack.get(1));
+    private void clearButtonFormats() {
+        for (int i = 0; i < floorButtonContainer.getChildCount(); i++) {
+            Button b = (Button) floorButtonContainer.getChildAt(i);
+            b.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button, null));
+            b.setTextColor(ResourcesCompat.getColor(getResources(), R.color.black, null));
         }
     }
 
+    private void setButtonActive(Button button) {
+        button.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.indoor_floor_button_clicked, null));
+        button.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+    }
 
+    /**
+     * If the building is currently loaded, will show the floor map associated to the floor passed in.
+     * If the building is not currently loaded, call initializeBuilding() first.
+     *
+     * @param floor
+     */
+    public void showFloor(final Floor floor) {
+        if (!buildingLoaded.getFloorMaps().containsValue(floor)) {
+            return;
+        }
+
+        clearButtonFormats();
+
+        for (int i = 0; i < floorButtonContainer.getChildCount(); i++) {
+            Button b = (Button) floorButtonContainer.getChildAt(i);
+
+            if (b.getTag().equals(getMapId(floor))) {
+                setButtonActive(b);
+            }
+        }
+
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                currentFloor = floorsLoaded.get(floor.getFloorNumber());
+                leafletView.evaluateJavascript("loadMap('" + getMapId(currentFloor) + "')", null);
+                leafletView.evaluateJavascript("addFloorRooms(" + currentFloor.getRoomsJSON().toString() + ")", null);
+            }
+        });
+    }
+
+
+    /**
+     * Callback useful for drawing paths.
+     */
+    public void drawCurrentWalkablePath() {
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (currentPathTiles.get(currentFloor) != null) {
+                    if (pageLoaded)
+                        leafletView.evaluateJavascript("drawWalkablePath(" + SingleMapPathFinder.toJSONArray(currentPathTiles.get(currentFloor)).toString() + ")", null);
+                } else {
+                    if (pageLoaded)
+                        leafletView.evaluateJavascript("clearPathLayers()", null);
+                }
+            }
+        });
+    }
+
+    /**
+     * Public method to clear walkable paths on all indoor maps
+     */
+    public void clearWalkablePaths() {
+        currentPathTiles.clear();
+
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (pageLoaded)
+                    leafletView.evaluateJavascript("clearPathLayers()", null);
+            }
+        });
+    }
+
+    public void onFloorChange() {
+        drawCurrentWalkablePath();
+    }
+
+    /*
+        EVENT HANDLERS
+     */
+
+    /**
+     * This event is fired everytime a poi is clicked on a map.
+     *
+     * @param poiName The name of the poiClicked. This is provided by the caller.
+     */
+    @JavascriptInterface
+    public void poiClicked(String poiName) {
+        Log.d("PoiClickEvent", poiName);
+        IndoorPOI poiClicked = null;
+        for (IndoorPOI poi : currentFloor.getIndoorPOIs()) {
+            if (poi.getName().equalsIgnoreCase(poiName)) {
+                poiClicked = poi;
+            }
+        }
+
+        final IndoorPOI threadPOI = poiClicked;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((MainActivity) getActivity()).setNavigationPOI(threadPOI, false);
+            }
+        });
+
+        Log.d("PoiClickEvent", "Poi is: " + poiClicked);
+    }
+
+    /**
+     * This event handles a room search. It will show the floor if the appropriate building is loaded
+     * and will pan and zoom into that room.
+     */
+    public void onRoomSearch(final Room room) {
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!currentFloor.equals(room.getFloor()))
+                    showFloor(room.getFloor());
+
+                int x = room.getTile().getCoordinateX();
+                int y = room.getTile().getCoordinateY();
+                leafletView.evaluateJavascript("panTo(" + x + "," + y + ")", null);
+            }
+        });
+    }
+
+
+    /**
+     * Given a floor, this will return the mapId that identifies the map, allowing its image to be loaded into the canvas.
+     *
+     * @param floor
+     * @return mapId - Example: H4
+     */
+    public String getMapId(Floor floor) {
+        return floor.getBuilding().getShortName() + floor.getFloorNumber();
+    }
+
+    public void setCurrentPathTiles(Map<Floor, List<IndoorMapTile>> currentPathTiles) {
+        this.currentPathTiles = currentPathTiles;
+    }
+
+    public void setCurrentFloor(Floor currentFloor) {
+        this.currentFloor = currentFloor;
+    }
 }
+
