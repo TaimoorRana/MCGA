@@ -135,6 +135,12 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         setTimeForTextView(shuttleTextView, MCGATransportMode.SHUTTLE);
     }
 
+    /**
+     * This method sets the time for the appropriate TextView object.
+     *
+     * @param textView
+     * @param transportType
+     */
     private void setTimeForTextView(TextView textView, String transportType) {
         String time;
         if (transportType == MCGATransportMode.SHUTTLE) {
@@ -450,6 +456,14 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         this.outdoorDirections = outdoorDirections;
     }
 
+    /**
+     * This method calculates and returns the time in minutes to the next Concordia Shuttle departure.
+     * It takes into consideration, the current time, with day of the week, as well as the
+     * current campus location. Concordia Shuttle service is only available from Monday-Friday,
+     * with the Friday having a different schedule than the rest of the week.
+     *
+     * @return
+     */
     public int getMinutesToNextShuttleDeparture() {
         String[][] shuttleSchedule = ShuttleActivity.getShuttleSchedule();
 
@@ -468,25 +482,40 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             int daysToNextShuttleService = calculateNumberOfWholeDaysToNextShuttle(currentDay);
 
             timeToNextShuttle = (TOTAL_MINUTES_IN_A_DAY - currentTime) +
-                    (TOTAL_MINUTES_IN_A_DAY * daysToNextShuttleService)+
-                    getTimeForFirstShuttleService(currentDay,shuttleColumnIndex,shuttleSchedule);
+                    (TOTAL_MINUTES_IN_A_DAY * daysToNextShuttleService) +
+                    getTimeForFirstShuttleService(currentDay, shuttleColumnIndex, shuttleSchedule);
         }
-        Log.d("Adrianna next shuttle", String.valueOf(timeToNextShuttle));
         return timeToNextShuttle;
     }
 
+    /**
+     * This will return the time in minutes for the first shuttle service
+     * available for the current day.
+     *
+     * @param currentDay
+     * @param currentShuttleColumnIndex
+     * @param shuttleSchedule
+     * @return
+     */
     private int getTimeForFirstShuttleService(int currentDay, int currentShuttleColumnIndex, String[][] shuttleSchedule) {
         int followingDayColumnIndex = getNextDayColumnIndex(currentDay, currentShuttleColumnIndex);
 
         int nextShuttleTime = -1;
-        for (int rowIndex = 0; rowIndex < shuttleSchedule.length && nextShuttleTime < 0; rowIndex++)
-        {
+        for (int rowIndex = 0; rowIndex < shuttleSchedule.length && nextShuttleTime < 0; rowIndex++) {
             nextShuttleTime = getMinutesFromTimeString(shuttleSchedule[rowIndex][followingDayColumnIndex]);
         }
 
         return nextShuttleTime;
     }
 
+    /**
+     * Given a day and an index, returns the correct index out
+     * that we would need for the following day.
+     *
+     * @param currentDay
+     * @param currentIndex
+     * @return
+     */
     private int getNextDayColumnIndex(int currentDay, int currentIndex) {
         int sqlTableColumnIndex = currentIndex;
 
@@ -526,9 +555,9 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
     }
 
     /**
-     * Input "HH:mm"
+     * This is a parsing method to extract time in minutes from a String.
      *
-     * @param hourminute
+     * @param hourminute "HH:mm"
      * @return minutes
      */
     private int getMinutesFromTimeString(String hourminute) {
@@ -540,16 +569,26 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    private int calculateTimeToNextShuttle(String[][] scheduleMinutes, int columnIndex, int currentTime) {
+    /**
+     * Calculates the time in minutes until the next Concordia Shuttle
+     * departure. The method iterates over the list and tries to find a
+     * match for the next available departure.
+     *
+     * @param shuttleSchedule
+     * @param columnIndex
+     * @param currentTimeInMinutes
+     * @return returns the time until the next departure, or -1 if reached end of list
+     */
+    private int calculateTimeToNextShuttle(String[][] shuttleSchedule, int columnIndex, int currentTimeInMinutes) {
         //Scans the list from the beginning, for current day
-        for (int rowIndex = 0; rowIndex < scheduleMinutes.length; rowIndex++) {
-            int scheduleSlotInMinutes = getMinutesFromTimeString(scheduleMinutes[rowIndex][columnIndex]);
+        for (int rowIndex = 0; rowIndex < shuttleSchedule.length; rowIndex++) {
+            int scheduleSlotInMinutes = getMinutesFromTimeString(shuttleSchedule[rowIndex][columnIndex]);
             //There are "-" in the schedule for empty slots
             if (scheduleSlotInMinutes == -1) {
                 continue;
             }
 
-            int timeDifference = scheduleSlotInMinutes - currentTime;
+            int timeDifference = scheduleSlotInMinutes - currentTimeInMinutes;
             if (timeDifference > 0) {
                 return timeDifference;
             }
@@ -558,6 +597,13 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         return -1;
     }
 
+    /**
+     * Calculates the number of whole days until the
+     * next day that has Concordia Shuttle Service.
+     *
+     * @param currentDay
+     * @return
+     */
     private int calculateNumberOfWholeDaysToNextShuttle(int currentDay) {
 
         //This should never occur.
