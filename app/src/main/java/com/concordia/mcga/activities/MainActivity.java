@@ -202,10 +202,14 @@ public class MainActivity extends AppCompatActivity implements
     private void setDirections(){
         directionsBottomSheet = navigationFragment.getDirectionsFragment();
 
+        // Set the indoor directions from the starting building, if any.
+        // Get all the directions from the unordered map from top to bottom. We
         if (finder.getStartBuildingDirections() != null){
             directionsBottomSheet.addFloor(finder.getStartBuildingDirections());
+
         }
 
+        // Get all the
         if (navigationFragment.getOutdoorDirections().getDirectionObject() != null) {
             List<String> outdoorsDirection = navigationFragment.getOutdoorDirections().getInstructionsForSelectedTransportMode();
             if (outdoorsDirection.size() > 0) {
@@ -217,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
 
-        if (finder.getDestBuildingDirections() != null){
+        if (finder.getDestBuildingDirections() != null) {
             directionsBottomSheet.addFloor(finder.getDestBuildingDirections());
         }
     }
