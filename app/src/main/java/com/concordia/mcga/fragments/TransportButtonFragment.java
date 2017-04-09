@@ -474,13 +474,15 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         String[][] shuttleSchedule = ShuttleActivity.getShuttleSchedule();
         int currentDay = Calendar.getInstance().getTime().getDay();
         int currentTime = Calendar.getInstance().getTime().getHours() * MINUTES_IN_AN_HOUR + Calendar.getInstance().getTime().getMinutes();
-        int shuttleColumnIndex = getShuttleColumnIndex(currentDay);
 
         //Day of week returned is from 0-6 but
         //all the logic is built around 1-7
         if (currentDay == 0) {
             currentDay = MCGADayOfWeek.SUNDAY;
         }
+        //Note: This will break if 0-6 is used so only use after
+        // the adjust.
+        int shuttleColumnIndex = getShuttleColumnIndex(currentDay);
 
         int timeToNextShuttle = -1;
         if (isShuttleAvailable(currentDay)) {
@@ -490,7 +492,6 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         if (timeToNextShuttle < 0 || !isShuttleAvailable(currentDay)) {
             final int TOTAL_MINUTES_IN_A_DAY = MINUTES_IN_AN_HOUR * 24;
             int daysToNextShuttleService = calculateNumberOfWholeDaysToNextShuttle(currentDay);
-
             timeToNextShuttle = (TOTAL_MINUTES_IN_A_DAY - currentTime) +
                     (TOTAL_MINUTES_IN_A_DAY * daysToNextShuttleService) +
                     getTimeForFirstShuttleService(currentDay, shuttleColumnIndex, shuttleSchedule);
@@ -509,7 +510,6 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
      */
     private int getTimeForFirstShuttleService(int currentDay, int currentShuttleColumnIndex, String[][] shuttleSchedule) {
         int followingDayColumnIndex = getNextDayColumnIndex(currentDay, currentShuttleColumnIndex);
-
         int nextShuttleTime = -1;
         for (int rowIndex = 0; rowIndex < shuttleSchedule.length && nextShuttleTime < 0; rowIndex++) {
             nextShuttleTime = getMinutesFrom_HHmm_TimeString(shuttleSchedule[rowIndex][followingDayColumnIndex]);
