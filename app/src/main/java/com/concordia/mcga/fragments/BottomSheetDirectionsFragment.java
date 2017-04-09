@@ -318,7 +318,10 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         if (displayedDirectionsList.size() > 0) {
             currentDirection++;
         }
-        drawTile();
+        try {
+            drawTile();
+        } catch (Exception e) {}
+
         updateDirections();
     }
 
@@ -329,7 +332,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         if (currentDirection > 0) {
             currentDirection--;
         }
-        drawTile();
+        try {
+            drawTile();
+        } catch (Exception e) {}
         updateDirections();
     }
 

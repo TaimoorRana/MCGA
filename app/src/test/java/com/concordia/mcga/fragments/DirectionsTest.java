@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -306,6 +307,7 @@ public class DirectionsTest {
 
     @Test
     public void UpdateDirections_FromList_True(){
+        BottomSheetDirectionsFragment fragment = Mockito.spy(BottomSheetDirectionsFragment.class);
         IndoorMapTile tile1 = new IndoorMapTile(0, 0);
         IndoorMapTile tile2 = new IndoorMapTile(10, 0);
         IndoorMapTile tile3 = new IndoorMapTile(10, 12);
@@ -326,11 +328,13 @@ public class DirectionsTest {
         orderedFloors.add(floor);
         orderedFloors.add(floor);
 
-        myFragment.addJunctionPoints(listTiles, orderedFloors);
+        Mockito.doNothing().when(fragment).drawTile();
+        Mockito.doNothing().when(fragment).updateDirections();
+        fragment.addJunctionPoints(listTiles, orderedFloors);
 
-        List<String> direction = myFragment.getCompleteDirectionsList();
-        List<String> img = myFragment.getCompleteDirectionsList();
+        List<String> direction = fragment.getCompleteDirectionsList();
+        List<String> img = fragment.getCompleteDirectionsList();
 
-        assertNotEquals(direction.get(0), "Turn Left In 10u");
+        assertNotEquals(direction.get(0), "Turn Left For 10u");
     }
 }
