@@ -178,7 +178,7 @@ CC119 !
 --
 [{"latitude":392,"longitude":1468,"mVersionCode":1},{"latitude":768,"longitude":1470,"mVersionCode":1},{"latitude":750,"longitude":634,"mVersionCode":1},{"latitude":384,"longitude":626,"mVersionCode":1},{"latitude":392,"longitude":1468,"mVersionCode":1}]
 
-CC124
+CC124 ! 
 --
 908,886,1
 1272,880,1
@@ -189,3 +189,78 @@ CC124
 {"coordinateX":815,"coordinateY":886}
 --
 [{"latitude":908,"longitude":886,"mVersionCode":1},{"latitude":1272,"longitude":880,"mVersionCode":1},{"latitude":1272,"longitude":622,"mVersionCode":1},{"latitude":906,"longitude":630,"mVersionCode":1},{"latitude":908,"longitude":886,"mVersionCode":1}]
+
+
+
+Stairs
+------
+CC118 !
+{"coordinateX":1725,"coordinateY":886}
+--
+latitude,longitude,mVersionCode
+916,1548,1
+1302,1540,1
+1296,1764,1
+910,1772,1
+916,1548,1
+--
+[{"latitude":916,"longitude":1548,"mVersionCode":1},{"latitude":1302,"longitude":1540,"mVersionCode":1},{"latitude":1296,"longitude":1764,"mVersionCode":1},{"latitude":910,"longitude":1772,"mVersionCode":1},{"latitude":916,"longitude":1548,"mVersionCode":1}]
+
+CC110 !
+{"coordinateX":3190,"coordinateY":886}
+--
+latitude,longitude,mVersionCode
+903,3237,1
+1054,3241,1
+1055,3362,1
+1294,3361,1
+1291,3159,1
+902,3158,1
+903,3237,1
+--
+[{"latitude":903,"longitude":3237,"mVersionCode":1},{"latitude":1054,"longitude":3241,"mVersionCode":1},{"latitude":1055,"longitude":3362,"mVersionCode":1},{"latitude":1294,"longitude":3361,"mVersionCode":1},{"latitude":1291,"longitude":3159,"mVersionCode":1},{"latitude":902,"longitude":3158,"mVersionCode":1},{"latitude":903,"longitude":3237,"mVersionCode":1}]
+
+
+CC150 !
+{"coordinateX":4400,"coordinateY":886}
+--
+latitude,longitude,mVersionCode
+750,4272,1
+563,4279,1
+565,4435,1
+755,4435,1
+750,4272,1
+--
+[{"latitude":750,"longitude":4272,"mVersionCode":1},{"latitude":563,"longitude":4279,"mVersionCode":1},{"latitude":565,"longitude":4435,"mVersionCode":1},{"latitude":755,"longitude":4435,"mVersionCode":1},{"latitude":750,"longitude":4272,"mVersionCode":1}]
+
+
+
+Elevators
+---------
+CC1 Elevator
+{"coordinateX":3310,"coordinateY":886}
+--
+latitude,longitude,mVersionCode
+902,3239,1
+1054,3241,1
+1053,3377,1
+906,3378,1
+902,3239,1
+--
+[{"latitude":902,"longitude":3239,"mVersionCode":1},{"latitude":1054,"longitude":3241,"mVersionCode":1},{"latitude":1053,"longitude":3377,"mVersionCode":1},{"latitude":906,"longitude":3378,"mVersionCode":1},{"latitude":902,"longitude":3239,"mVersionCode":1}]
+
+
+
+Waterfountains
+--------------
+CC1 Waterfountain
+{"coordinateX":4100,"coordinateY":886}
+--
+latitude,longitude,mVersionCode
+903,4079.5,1
+969,4078.5,1
+969,3997,1
+905,3997,1
+903,4079.5,1
+--
+[{"latitude":903,"longitude":4079.5,"mVersionCode":1},{"latitude":969,"longitude":4078.5,"mVersionCode":1},{"latitude":969,"longitude":3997,"mVersionCode":1},{"latitude":905,"longitude":3997,"mVersionCode":1},{"latitude":903,"longitude":4079.5,"mVersionCode":1}]

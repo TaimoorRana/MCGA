@@ -147,6 +147,18 @@ function addFloorRooms(roomArray) {
                 hasIcon = true;
                 iconMarker = femaleWashroomIcon(polygon.getBounds().getCenter(), room.roomName);
                 break;
+            case "ELEVATOR":
+                hasIcon = true;
+                iconMarker = elevatorIcon(polygon.getBounds().getCenter(), room.roomName);
+                break;
+            case "STAIRS":
+                hasIcon = true;
+                iconMarker = stairsIcon(polygon.getBounds().getCenter(), room.roomName);
+                break;
+            case "WATERFOUNTAIN":
+                hasIcon = true;
+                iconMarker = waterfountainIcon(polygon.getBounds().getCenter(), room.roomName);
+                break;
         }
 
         if (hasIcon) {
@@ -165,7 +177,7 @@ function addFloorRooms(roomArray) {
     }
 }
 
-
+//Icons
 function maleWashroomIcon(point, roomName) {
     var maleWashroom = L.icon({
         iconUrl: 'images/washroom-male.png',
@@ -188,6 +200,42 @@ function femaleWashroomIcon(point, roomName) {
     });
 
     return L.marker(point, { icon: femaleWashroom, "roomName": roomName });
+}
+
+function elevatorIcon(point, roomName) {
+    var elevator = L.icon({
+        iconUrl: 'images/elevator.png',
+
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, 0]
+    });
+
+    return L.marker(point, { icon: elevator, "roomName": roomName });
+}
+
+function stairsIcon(point, roomName) {
+    var stairs = L.icon({
+        iconUrl: 'images/stairs.png',
+
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, 0]
+    });
+
+    return L.marker(point, { icon: stairs, "roomName": roomName });
+}
+
+function waterfountainIcon(point, roomName) {
+    var waterfountain = L.icon({
+        iconUrl: 'images/waterfountain.png',
+
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, 0]
+    });
+
+    return L.marker(point, { icon: waterfountain, "roomName": roomName });
 }
 
 //Utility Functions

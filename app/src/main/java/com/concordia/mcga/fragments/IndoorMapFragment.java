@@ -261,7 +261,16 @@ public class IndoorMapFragment extends Fragment {
      * and will pan and zoom into that room.
      */
     public void onRoomSearch(final Room room) {
-        if (!currentFloor.equals(room.getFloor())) {
+        panToRoom(room);
+    }
+
+    /**
+     * This function pans to a particular room. Will load the building and floor and show it if necessary.
+     *
+     * @param room Any Valid Room
+     */
+    public void panToRoom(final Room room) {
+        if (currentFloor == null || !currentFloor.equals(room.getFloor())) {
             if (!buildingLoaded.equals(room.getFloor().getBuilding())) {
                 initializeBuilding(room.getFloor().getBuilding());
             }
@@ -277,7 +286,6 @@ public class IndoorMapFragment extends Fragment {
             }
         });
     }
-
 
     /**
      * Given a floor, this will return the mapId that identifies the map, allowing its image to be loaded into the canvas.
