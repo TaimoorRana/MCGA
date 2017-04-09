@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ToggleButton;
 
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.helperClasses.GPSManager;
@@ -206,7 +205,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorDirections.setContext(getActivity().getApplicationContext());
         outdoorDirections.setServerKey(getResources().getString(R.string.google_maps_key));
         outdoorDirections.setMap(map);
-        outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
 
         //Map Customization
         applyCustomGoogleMapsStyle();
@@ -298,6 +296,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             viewSwitchButton.setText("GO OUTDOORS");
 
             indoorMapFragment.initializeBuilding(building);
+            indoorMapFragment.drawCurrentWalkablePath();
         }
     }
 
@@ -478,10 +477,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorDirections.requestDirections();
     }
 
-    public void generateIndoorPath(IndoorPOI start, IndoorPOI dest) {
-        indoorMapFragment.generatePath(start, dest);
-    }
-
     /**
      * Applying custom google map style in order to get rid of unwanted POI and other information that is not useful to our application
      */
@@ -530,6 +525,28 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         } else {
             map.setMyLocationEnabled(false);
         }
+    }
+
+    public String getTransportationType() {
+        return transportButtonFragment.getTransportType();
+    }
+
+    public boolean isTransportButtonVisible() { return transportButtonVisible; }
+
+    public ViewType getViewType() {
+        return viewType;
+    }
+
+    public OutdoorDirections getOutdoorDirections() {
+        return outdoorDirections;
+    }
+
+    public IndoorMapFragment getIndoorMapFragment() {
+        return indoorMapFragment;
+    }
+
+    public GoogleMap getMap() {
+        return map;
     }
 }
 
