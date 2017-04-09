@@ -124,7 +124,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     public List<String> getInstructions() {
         instructions.clear();
         for (Step step : steps) {
-            instructions.add(step.getHtmlInstruction());
+            instructions.add(step.getHtmlInstruction().replaceAll("\\<[^>]*>",""));
         }
         return instructions;
     }

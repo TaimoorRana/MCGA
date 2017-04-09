@@ -144,15 +144,23 @@ public class OutdoorDirections {
      * @param selectedTransportMode sets the transport mode the will be used to draw a path on the map
      */
     public void setSelectedTransportMode(String selectedTransportMode) {
+
+        clearPathSelectedAttribute();
         for (IOutdoorPath outdoorPath : outdoorPathList) {
             if (outdoorPath.getTransportMode().equalsIgnoreCase(selectedTransportMode)) {
                 selectedOutdoorPath = outdoorPath;
                 selectedOutdoorPath.setPathSelected(true);
                 this.selectedTransportMode = selectedTransportMode;
             }
-
         }
     }
+
+    public void clearPathSelectedAttribute(){
+        for (IOutdoorPath outdoorPath : outdoorPathList) {
+            outdoorPath.setPathSelected(false);
+        }
+    }
+
 
     public void setServerKey(String serverKey){
         this.serverKey = serverKey;
