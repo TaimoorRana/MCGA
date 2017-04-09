@@ -11,8 +11,12 @@ import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
 import com.concordia.mcga.lib.BottomSheet;
+import com.concordia.mcga.models.Building;
+import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.IndoorDirections;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -68,6 +72,12 @@ public class DirectionsTest {
     private BottomSheetDirectionsFragment myFragment;
     private ActivityController<MainActivity> controller;
 
+    MarkerOptions markerOptions;
+    Building testBuilding;
+    Floor floor;
+
+    private final static int FLOOR_NUMBER = 4;
+    private final static int OUTDOOR_FLAG = 1, INDOOR_FLAG = 0;
     ///////////////////////////////////////////
     // SETUP FRAGMENT IN THE MAIN ACTIVITY
     ///////////////////////////////////////////
@@ -78,6 +88,9 @@ public class DirectionsTest {
         controller = Robolectric.buildActivity(MainActivity.class);
         myFragment = new BottomSheetDirectionsFragment();
         startFragment(myFragment, AppCompatActivity.class);
+        testBuilding = new Building(new LatLng(45.495656, -73.574290), "Hall", "H", markerOptions);
+        markerOptions = new MarkerOptions();
+        floor = new Floor(testBuilding, FLOOR_NUMBER);
 
         bottomSheetTextView = myFragment.getBottomSheetTextView();
         list = myFragment.getList();
@@ -148,8 +161,8 @@ public class DirectionsTest {
 
     @Test
     public void ClickNextDirectionButton_ShowsNextDirectionWhenAvailable_True(){
-        myFragment.addDirection("Up", "up");
-        myFragment.addDirection("Down", "down");
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
+        myFragment.addDirection("Down", "down", INDOOR_FLAG, floor);
         myFragment.updateDirections();
 
         int index = myFragment.getCurrentDirection();
@@ -164,7 +177,7 @@ public class DirectionsTest {
 
     @Test
     public void ClickNextDirectionButton_ShowNextDirectionWhenNotAvailable_False(){
-        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
         myFragment.updateDirections();
 
         int index = myFragment.getCurrentDirection();
@@ -179,8 +192,8 @@ public class DirectionsTest {
 
     @Test
     public void ClickPreviousDirectionButton_ShowsPreviuousDirectionWhenAvailable_True(){
-        myFragment.addDirection("Up", "up");
-        myFragment.addDirection("Down", "down");
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
+        myFragment.addDirection("Down", "down", INDOOR_FLAG, floor);
         myFragment.updateDirections();
         List<String> direction = myFragment.getCompleteDirectionsList();
         nextButton.performClick();
@@ -193,7 +206,7 @@ public class DirectionsTest {
 
     @Test
     public void ClickPreviousDirectionButton_ShowPreviousDirectionWhenNotAvailable_False(){
-        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
         myFragment.updateDirections();
         int index = myFragment.getCurrentDirection();
         List<String> direction = myFragment.getCompleteDirectionsList();
@@ -204,21 +217,21 @@ public class DirectionsTest {
 
     @Test
     public void AddDirection_AddsDirectionToList_True(){
-        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
         myFragment.updateDirections();
         int index = myFragment.getCurrentDirection();
         List<String> array = myFragment.getCompleteDirectionsList();
         assertTrue(array.get(index).equals("Up"));
 
-        myFragment.addDirection("Left", "left");
+        myFragment.addDirection("Left", "left", INDOOR_FLAG, floor);
         myFragment.updateDirections();
         assertTrue(array.get(index + 1).equals("Left"));
     }
 
     @Test
     public void RemoveDirection_RemovesDirectionAtIndex_True(){
-        myFragment.addDirection("Up", "up");
-        myFragment.addDirection("Left", "left");
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
+        myFragment.addDirection("Left", "left", INDOOR_FLAG, floor);
         myFragment.updateDirections();
 
         int index = myFragment.getCurrentDirection();
@@ -233,8 +246,8 @@ public class DirectionsTest {
 
     @Test
     public void ClearDirections_SetsArrayToSize0_True(){
-        myFragment.addDirection("Up", "up");
-        myFragment.addDirection("Left", "left");
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
+        myFragment.addDirection("Left", "left", INDOOR_FLAG, floor);
         myFragment.updateDirections();
 
         List<String> array = myFragment.getCompleteDirectionsList();
@@ -251,16 +264,16 @@ public class DirectionsTest {
 
     @Test
     public void UpdateDirections_AddingDirectionsWithoutUpdating_False(){
-        myFragment.addDirection("Up", "up");
-        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
         List<String> array = myFragment.getDisplayedDirectionsList();
         assertFalse(array.size() > 0);
     }
 
     @Test
     public void UpdateDirections_AddingDirectionsWithUpdating_True(){
-        myFragment.addDirection("Up", "up");
-        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
+        myFragment.addDirection("Up", "up", FLOOR_NUMBER, floor);
         myFragment.updateDirections();
         List<String> array = myFragment.getDisplayedDirectionsList();
         assertTrue(array.size() > 0);
@@ -268,8 +281,8 @@ public class DirectionsTest {
 
     @Test
     public void UpdateDirections_RemovingDirectionsWithoutUpdating_False(){
-        myFragment.addDirection("Up", "up");
-        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
         myFragment.updateDirections();
         List<String> array = myFragment.getDisplayedDirectionsList();
         assertTrue(array.size() > 0);
@@ -280,8 +293,8 @@ public class DirectionsTest {
 
     @Test
     public void UpdateDirections_RemovingDirectionsWithUpdating_True(){
-        myFragment.addDirection("Up", "up");
-        myFragment.addDirection("Up", "up");
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
+        myFragment.addDirection("Up", "up", INDOOR_FLAG, floor);
         myFragment.updateDirections();
         List<String> array = myFragment.getDisplayedDirectionsList();
         assertTrue(array.size() > 0);
@@ -307,7 +320,14 @@ public class DirectionsTest {
         listTiles.add(tile4);
         listTiles.add(tile5);
 
-        myFragment.addJointPoints(listTiles);
+        List<Floor> orderedFloors = new ArrayList<>();
+        orderedFloors.add(floor);
+        orderedFloors.add(floor);
+        orderedFloors.add(floor);
+        orderedFloors.add(floor);
+        orderedFloors.add(floor);
+
+        myFragment.addJointPoints(listTiles, orderedFloors);
 
         List<String> direction = myFragment.getCompleteDirectionsList();
         List<String> img = myFragment.getCompleteDirectionsList();

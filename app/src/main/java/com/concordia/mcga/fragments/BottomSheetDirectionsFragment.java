@@ -44,6 +44,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     private List<Integer> flag = new ArrayList<Integer>();
     private List<Floor> floorAssociation = new ArrayList<>();
 
+    private List<IndoorMapTile> tiles;
+
+
     // Counter keeps track of the index of the current direction
     private int currentDirection = 0;
 
@@ -59,6 +62,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     private ImageButton nextButton, previousButton, expandButton;
 
     private static final int FLAG_INDOORS = 0, FLAG_OUTDOORS = 1;
+
 
     /**
      * On create view override
@@ -209,7 +213,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     public void addJointPoints(List<IndoorMapTile> tiles, List<Floor> orderedFloorList){
         IndoorDirections indoorDirections = new IndoorDirections();
         String[][] direction = indoorDirections.getDirections(tiles);
-
+        this.tiles = tiles;
         for (int i = 0; i < direction.length; i++){
             addDirection(direction[i][0], direction[i][1], FLAG_INDOORS, orderedFloorList.get(i));
         }
@@ -529,6 +533,23 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      */
     public ImageButton getExpandButton() {
         return expandButton;
+    }
+
+
+    /**
+     * Return map tile
+     * @param index
+     * @return
+     */
+    public IndoorMapTile getTiles(int index){
+        return tiles.get(index);
+    }
+
+    /**
+     * Draws the current leg of the travel
+     */
+    public void drawTile(){
+        ((NavigationFragment) getParentFragment()).getIndoorMapFragment().drawMapTile(getTiles(currentDirection));
     }
 
 }

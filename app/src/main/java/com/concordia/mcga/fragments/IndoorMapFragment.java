@@ -296,5 +296,10 @@ public class IndoorMapFragment extends Fragment {
     public Floor getCurrentFloor(){
         return this.currentFloor;
     }
+
+    // STUB
+    public void drawMapTile(IndoorMapTile tile){
+
+    }
 }
 
