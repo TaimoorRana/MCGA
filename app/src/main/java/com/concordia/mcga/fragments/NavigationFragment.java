@@ -49,7 +49,7 @@ import static android.app.Activity.RESULT_OK;
 public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         OnCameraIdleListener, Subject {
     //Enum representing which map view is active
-    private enum ViewType {
+    public enum ViewType {
         INDOOR, OUTDOOR
     }
 
@@ -76,15 +76,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private Button campusButton;
     private Button viewSwitchButton;
     private FloatingActionButton mapCenterButton;
-
+    private Button nextDirection, previousDirection;
     //State
     private Building lastClickedBuilding;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         parentLayout = (LinearLayoutCompat) inflater.inflate(R.layout.nav_main_fragment, container, false);
+
 
         //Init Fragments
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
@@ -121,10 +123,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             public void onClick(View v) {
                 if (viewType == ViewType.OUTDOOR) {
                     showIndoorMap(lastClickedBuilding);
-                    //showDirectionsFragment(true);
                 } else {
                     showOutdoorMap();
-                    //showDirectionsFragment(false);
                 }
             }
         });
@@ -233,9 +233,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * Shows or hides the directions bottom sheet fragment
      * @param isVisible
      */
-    private void showDirectionsFragment(boolean isVisible) {
+    public void showDirectionsFragment(boolean isVisible) {
         if (isVisible) {
             getChildFragmentManager().beginTransaction().show(directionsFragment).commit();
+
         } else {
             getChildFragmentManager().beginTransaction().hide(directionsFragment).commit();
         }
@@ -505,6 +506,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     public GoogleMap getMap() {
         return map;
+    }
+
+    public BottomSheetDirectionsFragment getDirectionsFragment(){
+        return directionsFragment;
     }
 }
 

@@ -126,6 +126,7 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
 
             // Tell the main activity to generate directions
             ((MainActivity) getActivity()).generateDirections(activity.getLocation(), activity.getDestination(), transportType);
+            activity.clearPaths();
         }
     }
 

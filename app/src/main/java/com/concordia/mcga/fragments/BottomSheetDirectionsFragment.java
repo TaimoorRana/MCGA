@@ -15,9 +15,13 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
 import com.concordia.mcga.lib.BottomSheet;
+import com.concordia.mcga.models.Floor;
+import com.concordia.mcga.models.IndoorMapTile;
+import com.concordia.mcga.utilities.pathfinding.IndoorDirections;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class BottomSheetDirectionsFragment extends Fragment implements View.OnClickListener{
@@ -37,6 +41,12 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     private List<String> completeDirectionsImage = new ArrayList<String>();
     private List<String> completeDirectionsList = new ArrayList<String>();
 
+    private List<Integer> flag = new ArrayList<Integer>();
+    private List<Floor> floorAssociation = new ArrayList<>();
+
+    private List<IndoorMapTile> tiles;
+
+
     // Counter keeps track of the index of the current direction
     private int currentDirection = 0;
 
@@ -50,6 +60,8 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
     // simple buttons
     private ImageButton nextButton, previousButton, expandButton;
+
+    private static final int FLAG_INDOORS = 0, FLAG_OUTDOORS = 1;
 
 
     /**
@@ -69,7 +81,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         overrideBottomSheetCallBack();
         setupAdapter();
         setupButtonListeners();
-
+        updateDirections();
         return view;
     }
 
@@ -194,15 +206,53 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     // This List stores all the directions
     ///////////////////////////////////////
 
+    /**
+     * Adds directions from a list of joint points
+     * @param tiles
+     */
+    public void addJointPoints(List<IndoorMapTile> tiles, List<Floor> orderedFloorList){
+        IndoorDirections indoorDirections = new IndoorDirections();
+        String[][] direction = indoorDirections.getDirections(tiles);
+        this.tiles = tiles;
+        for (int i = 0; i < direction.length; i++){
+            addDirection(direction[i][0], direction[i][1], FLAG_INDOORS, orderedFloorList.get(i));
+        }
+        updateDirections();
+    }
+
+
+    public void addFloor(Map<Floor, List<IndoorMapTile>> floorMap){
+        List<IndoorMapTile> tiles = new ArrayList<>();
+
+        List<Floor> floors = new ArrayList<>(floorMap.keySet());
+        List<Floor> orderedFloorList = new ArrayList<>();
+
+
+        for (int i = 0; i < floors.size(); i ++){
+            for (int j =0 ; j < floorMap.get(floors.get(i)).size(); j++){
+                tiles.add(floorMap.get(floors.get(i)).get(j));
+                orderedFloorList.add(floors.get(i));
+            }
+
+        }
+
+        addJointPoints(tiles, orderedFloorList);
+    }
+
+    public void addOutdoorsDirection(String direction, String image){
+        addDirection(direction, image, FLAG_OUTDOORS, null);
+    }
 
     /**
      * Add Directions to the list Dynamically
      * @param direction
      * @param image
      */
-    public void addDirection(String direction, String image){
+    public void addDirection(String direction, String image, int flag, Floor floor){
         completeDirectionsList.add(direction);
         completeDirectionsImage.add(image);
+        floorAssociation.add(floor);
+        addFlag(flag);
     }
 
     /**
@@ -224,7 +274,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
     public void clearDirections(){
         completeDirectionsList.clear();
         completeDirectionsImage.clear();
+        flag.clear();
         currentDirection = 0;
+        floorAssociation.clear();
         updateDirections();
     }
 
@@ -295,12 +347,49 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         if (completeDirectionsList.size() > 0) {
             // Set the main direction
             setTextDirections(completeDirectionsList.get(currentDirection));
+            try{
+                // load the outdoors view
+                if (flag.get(currentDirection) == FLAG_OUTDOORS) {
+                    ((NavigationFragment) getParentFragment()).showOutdoorMap();
+                }
+                // reset the indoors view if we change floors
+                else if (flag.get(currentDirection) == FLAG_INDOORS){
+                    Floor tempFloor = ((NavigationFragment) getParentFragment()).getIndoorMapFragment().getCurrentFloor();
+                    if (!(tempFloor.equals(floorAssociation.get(currentDirection)))) {
+                        displayFloor();
+                    }else if (((NavigationFragment) getParentFragment()).getViewType() == NavigationFragment.ViewType.OUTDOOR){
+                        displayFloor();
+                    }
+
+                }
+            }
+            catch(IndexOutOfBoundsException e){
+
+            }
+            catch(Exception e) {
+
+            }
         }
         else{
             setTextDirections("Directions");
         }
+
     }
 
+    private void displayFloor(){
+        ((NavigationFragment) getParentFragment()).showIndoorMap(floorAssociation.get(currentDirection).getBuilding());
+        ((NavigationFragment) getParentFragment()).getIndoorMapFragment().showFloor(floorAssociation.get(currentDirection));
+        ((NavigationFragment) getParentFragment()).getIndoorMapFragment().drawCurrentWalkablePath();
+    }
+
+
+    private void addFlag(int state){
+        flag.add(state);
+    }
+
+    public int getFlag(int index){
+        return flag.get(index);
+    }
 
     ////////////////////////////////////
     // Main Direction View
@@ -447,6 +536,23 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      */
     public ImageButton getExpandButton() {
         return expandButton;
+    }
+
+
+    /**
+     * Return map tile
+     * @param index
+     * @return
+     */
+    public IndoorMapTile getTiles(int index){
+        return tiles.get(index);
+    }
+
+    /**
+     * Draws the current leg of the travel
+     */
+    public void drawTile(){
+        ((NavigationFragment) getParentFragment()).getIndoorMapFragment().drawMapTile(getTiles(currentDirection));
     }
 
 }

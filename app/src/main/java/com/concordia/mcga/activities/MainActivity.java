@@ -34,11 +34,13 @@ import android.widget.Toast;
 import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
+import com.concordia.mcga.fragments.BottomSheetDirectionsFragment;
 import com.concordia.mcga.fragments.IndoorMapFragment;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.helperClasses.GPSManager;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
+import com.concordia.mcga.helperClasses.OutdoorPath;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Floor;
@@ -49,6 +51,7 @@ import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private POI location;
     private POI destination;
+
+    private BottomSheetDirectionsFragment directionsBottomSheet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,8 +192,39 @@ public class MainActivity extends AppCompatActivity implements
                 } else {
                     loadStartOutdoor();
                 }
+                setDirections();
             }
         };
+    }
+
+    /**
+     * Updates the Directions on the bottomsheet For the indoor navigation
+     */
+    private void setDirections(){
+        directionsBottomSheet = navigationFragment.getDirectionsFragment();
+
+        // Set the indoor directions from the starting building, if any.
+        // Get all the directions from the unordered map from top to bottom. We
+        if (finder.getStartBuildingDirections() != null){
+            directionsBottomSheet.addFloor(finder.getStartBuildingDirections());
+
+        }
+
+        // Get all the
+        if (navigationFragment.getOutdoorDirections().getDirectionObject() != null) {
+            List<String> outdoorsDirection = navigationFragment.getOutdoorDirections().getInstructionsForSelectedTransportMode();
+            if (outdoorsDirection.size() > 0) {
+
+                for (int i = 0; i < outdoorsDirection.size(); i++) {
+                    directionsBottomSheet.addOutdoorsDirection(outdoorsDirection.get(i), "none");
+                }
+                directionsBottomSheet.updateDirections();
+            }
+        }
+
+        if (finder.getDestBuildingDirections() != null) {
+            directionsBottomSheet.addFloor(finder.getDestBuildingDirections());
+        }
     }
 
     public void createToast(String message) {
@@ -555,32 +591,57 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         // Always clear the directions first
-        if (navigationFragment != null) {
-            navigationFragment.clearAllPaths();
-        }
+        clearPaths();
 
         if (getSearchState() == SearchState.NONE) {
+            showDirectionsFragment(false);
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter location...");
             search.setVisibility(View.VISIBLE);
         } else if (getSearchState() == SearchState.LOCATION) {
+            showDirectionsFragment(false);
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter destination...");
             search.setVisibility(View.VISIBLE);
         } else if (getSearchState() == SearchState.DESTINATION) {
+            showDirectionsFragment(false);
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setQueryHint("Enter location...");
             search.setVisibility(View.VISIBLE);
         } else { // SearchState.LOCATION_DESTINATION
+            showDirectionsFragment(true);
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setVisibility(View.GONE);
 
             generateDirections(location, destination, navigationFragment.getTransportationType());
 
+        }
+    }
+
+    private void showDirectionsFragment(boolean active) {
+        if (navigationFragment != null) {
+            if (navigationFragment.getView() != null) {
+                navigationFragment.showDirectionsFragment(active);
+            }
+        }
+    }
+
+    public void clearPaths() {
+        if (navigationFragment != null) {
+            navigationFragment.clearAllPaths();
+            directionsBottomSheet = navigationFragment.getDirectionsFragment();
+            if (directionsBottomSheet != null) {
+                directionsBottomSheet.clearDirections();
+            }
+            OutdoorPath path = navigationFragment.getOutdoorDirections().getDirectionObject();
+
+            if (path != null) {
+                path.clearInstructions();
+            }
         }
     }
 
@@ -608,6 +669,7 @@ public class MainActivity extends AppCompatActivity implements
             progressDialog.hide();
         }
     }
+
 
 
     public SearchState getSearchState() {
