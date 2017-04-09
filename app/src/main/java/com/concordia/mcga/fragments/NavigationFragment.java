@@ -136,6 +136,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         directionsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                setFlag(FLAG_NO_DISPLAY);
                 if (bottomSheetBuilding != null) {
                     ((MainActivity) getActivity()).setNavigationPOI(bottomSheetBuilding, false);
                 }
@@ -215,21 +216,21 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                         sleep(20);
                         int y = 0;
                         if ((building_flag == FLAG_INFO)) {
-                            y = buildingInfoFragment.getTop();
                             directionsButton.setVisibility(View.VISIBLE);
-                            directionsButton.setY(y - 2 * mapCenterButton.getHeight());
-                            mapCenterButton.setY(y - 2 * mapCenterButton.getHeight());
+                            y = buildingInfoFragment.getTop();
+                            directionsButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
+                            mapCenterButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
                         }
                         else if (building_flag == FLAG_DIRECTIONS){
-                            directionsButton.setVisibility(View.GONE);
+                            //directionsButton.setVisibility(View.INVISIBLE);
                             y = directionsFragment.getTop();
-                            mapCenterButton.setY(y - 3  * mapCenterButton.getHeight());
-                            directionsButton.setY(y - 3 * mapCenterButton.getHeight());
+                            mapCenterButton.setY(y - mapCenterButton.getHeight());
+                            directionsButton.setY(y -  mapCenterButton.getHeight());
 
                         }
                         else if (building_flag == FLAG_NO_DISPLAY)
                         {
-                            directionsButton.setVisibility(View.GONE);
+                            //directionsButton.setVisibility(View.INVISIBLE);
                             mapCenterButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
                             directionsButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
                         }
@@ -293,15 +294,18 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     private void showBottomSheet(){
         if (building_flag == FLAG_DIRECTIONS){
+            Log.d("bottomsheet-", "DIRECTIONS");
             showBuildingInfoFragment(false);
             showDirectionsFragment(true);
         }
         else if(building_flag == FLAG_INFO){
+            Log.d("bottomsheet-", "INFO");
             showBuildingInfoFragment(true);
             showDirectionsFragment(false);
             buildingInfoFragment.collapse();
         }
         else if(building_flag == FLAG_NO_DISPLAY){
+            Log.d("bottomsheet-", "NO_DISPLAY");
             showDirectionsFragment(false);
             showBuildingInfoFragment(false);
         }

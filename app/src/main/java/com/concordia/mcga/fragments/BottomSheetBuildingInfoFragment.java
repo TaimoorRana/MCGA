@@ -249,6 +249,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         int[] location = new int[2];
         bottom_sheet_title.getLocationOnScreen(location);
 
+
         return (location[1] - bottom_sheet_title.getHeight());
     }
 

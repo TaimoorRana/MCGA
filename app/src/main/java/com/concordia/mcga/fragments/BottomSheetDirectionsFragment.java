@@ -414,10 +414,10 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
     public int getTop(){
         int[] location = new int[2];
-        list.getLocationOnScreen(location);
+        bottomSheetTextView.getLocationOnScreen(location);
 
 
-        return (location[1] - list.getHeight());
+        return (location[1] - bottomSheetTextView.getHeight());
     }
 
     ////////////////////////////////////
