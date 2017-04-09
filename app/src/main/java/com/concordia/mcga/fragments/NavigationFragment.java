@@ -106,9 +106,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 if (viewType == ViewType.INDOOR) {
                     showOutdoorMap();
                 }
-                //Close Search Options
-                searchState = SearchState.NONE;
-                updateSearchUI();
+                //Close Search Options -- old way
+                ((MainActivity)getActivity()).setSearchState(MainActivity.SearchState.NONE);
+                ((MainActivity)getActivity()).updateSearchUI();
                 ((MainActivity)getActivity()).onClose();
                 //Close slider - To be done in MCGA-140
 
