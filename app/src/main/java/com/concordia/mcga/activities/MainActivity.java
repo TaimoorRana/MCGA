@@ -589,12 +589,14 @@ public class MainActivity extends AppCompatActivity implements
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter destination...");
             search.setVisibility(View.VISIBLE);
+            navigationFragment.getIndoorMapFragment().clearStepIndicator();
         } else if (getSearchState() == SearchState.DESTINATION) {
             showDirectionsFragment(false);
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setQueryHint("Enter location...");
             search.setVisibility(View.VISIBLE);
+            navigationFragment.getIndoorMapFragment().clearStepIndicator();
         } else { // SearchState.LOCATION_DESTINATION
             showDirectionsFragment(true);
             locationLayout.setVisibility(View.VISIBLE);

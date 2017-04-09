@@ -555,7 +555,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      * Draws the current leg of the travel
      */
     public void drawTile(){
-        ((NavigationFragment) getParentFragment()).getIndoorMapFragment().drawMapTile(getTiles(currentDirection));
+        ((NavigationFragment) getParentFragment()).getIndoorMapFragment().drawStepIndicator(getTiles(currentDirection));
     }
 
 }

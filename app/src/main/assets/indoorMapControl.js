@@ -299,6 +299,10 @@ function clearMarkerLayers() {
 	stepIndicatorGroup.clearLayers();
 }
 
+function clearStepIndicator() {
+	stepIndicatorGroup.clearLayers();
+}
+
 function clearPolygonLayers() {
 	polygonGroup.clearLayers();
 }
