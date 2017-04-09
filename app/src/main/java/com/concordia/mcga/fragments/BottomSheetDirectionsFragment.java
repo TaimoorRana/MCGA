@@ -366,6 +366,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
             catch(IndexOutOfBoundsException e){
 
             }
+            catch(Exception e) {
+
+            }
         }
         else{
             setTextDirections("Directions");

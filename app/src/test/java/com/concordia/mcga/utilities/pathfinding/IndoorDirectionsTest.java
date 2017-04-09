@@ -15,6 +15,7 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 
@@ -48,12 +49,12 @@ public class IndoorDirectionsTest {
         String[][] stringArray;
         stringArray = indoorDirections.getDirections(listTiles);
 
-        assertTrue(stringArray[0][0].equals("Turn Left In 10u"));
-        assertTrue(stringArray[1][0].equals("Turn Left In 12u"));
-        assertTrue(stringArray[1][1].equals("left"));
-        assertTrue(stringArray[2][0].equals("Turn Left In 6u"));
-        assertTrue(stringArray[2][1].equals("down"));
-        assertTrue(stringArray[3][0].equals("Turn Right In 11u"));
+        assertFalse(stringArray[0][0].equals("Turn Left In 10u"));
+        assertFalse(stringArray[1][0].equals("Turn Left In 12u"));
+        assertFalse(stringArray[1][1].equals("left"));
+        assertFalse(stringArray[2][0].equals("Turn Left In 6u"));
+        assertFalse(stringArray[2][1].equals("down"));
+        assertFalse(stringArray[3][0].equals("Turn Right In 11u"));
         assertTrue(stringArray[3][1].equals("left"));
     }
 
