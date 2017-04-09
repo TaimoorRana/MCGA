@@ -94,6 +94,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     //State
     private Building lastClickedBuilding;
 
+    private final static int FLAG_DIRECTIONS = 0, FLAG_INFO = 1, FLAG_NO_DISPLAY = -1;
+    private int building_flag = FLAG_NO_DISPLAY;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -162,8 +165,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         // Set the building information bottomsheet to true
         // When the app starts
         // Set the directions one to false
-        showBuildingInfoFragment(false);
-        showDirectionsFragment(false);
+        setFlag(FLAG_NO_DISPLAY);
 
         buildingInfoFragment.updateBottomSheet();
         parentLayout.requestFocus();
@@ -251,9 +253,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                             directionsButton.setVisibility(View.GONE);
 
                             mapCenterButton.setY( parentLayout.getHeight() -
-                                    mapCenterButton.getHeight() -  mapCenterButton.getHeight() / 2);
+                                    mapCenterButton.getHeight() -  mapCenterButton.getHeight());
                             directionsButton.setY( parentLayout.getHeight() -
-                                    mapCenterButton.getHeight() -  mapCenterButton.getHeight() / 2);
+                                    mapCenterButton.getHeight() -  mapCenterButton.getHeight());
                         }
 
                     } catch (Exception e) {
@@ -308,6 +310,27 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         indoorMapFragment.onRoomSearch(room);
     }
 
+    private void setFlag(int flag){
+        building_flag = flag;
+        showBottomSheet();
+    }
+
+    private void showBottomSheet(){
+        if (building_flag == FLAG_DIRECTIONS){
+            showBuildingInfoFragment(false);
+            showDirectionsFragment(true);
+        }
+        else if(building_flag == FLAG_INFO){
+            showBuildingInfoFragment(true);
+            showDirectionsFragment(false);
+        }
+        else if(building_flag == FLAG_NO_DISPLAY){
+            showDirectionsFragment(false);
+            showBuildingInfoFragment(false);
+        }
+
+    }
+
     /**
      * Shows or hides the indoor map, will hide the outdoormap and transport button if visible
      *
@@ -335,7 +358,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         directionMode = isVisible;
 
         if (isVisible) {
-            showBuildingInfoFragment(false);
             getChildFragmentManager().beginTransaction().show(directionsFragment).commit();
             outdoors = false;
         } else {
@@ -352,7 +374,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
             showTransportButton(false);
             campusButton.setVisibility(View.GONE);
-            showBuildingInfoFragment(false);
 
             getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
             viewSwitchButton.setText("GO OUTDOORS");
@@ -399,9 +420,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         buildingInfoFragment.setBuildingName(buildingName);
         buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
         buildingInfoFragment.updateBottomSheet();
-        if (!directionMode) {
-            showBuildingInfoFragment(true);
-        }
+        setFlag(FLAG_INFO);
         parentLayout.postInvalidate();
     }
 
@@ -422,10 +441,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         String name = building.getShortName();
         updateBuildingInfoSheet(name);
         bottomSheetBuilding = (Building)multiBuildingMap.get(polygon.getId());
-
-        if (!directionMode) {
-            showBuildingInfoFragment(true);
-        }
 
     }
 
@@ -448,9 +463,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         updateBuildingInfoSheet(name);
         bottomSheetBuilding = (Building)multiBuildingMap.get(marker.getId());
 
-        if (!directionMode) {
-            showBuildingInfoFragment(true);
-        }
     }
 
     /**
