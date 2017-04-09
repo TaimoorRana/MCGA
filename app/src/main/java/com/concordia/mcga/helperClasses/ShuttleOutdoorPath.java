@@ -133,8 +133,9 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
 
     @Override
     public void setPathSelected(boolean isPathSelected) {
-        userToShuttleStopPath.setPathSelected(true);
-        sgwToLoyPath.setPathSelected(true);
+        userToShuttleStopPath.setPathSelected(isPathSelected);
+        sgwToLoyPath.setPathSelected(isPathSelected);
+        shuttleStopToBuildingPath.setPathSelected(isPathSelected);
     }
 
     @Override
