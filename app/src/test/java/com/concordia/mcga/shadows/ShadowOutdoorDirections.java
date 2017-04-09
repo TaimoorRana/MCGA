@@ -27,4 +27,36 @@ public class ShadowOutdoorDirections {
                 return "";
         }
     }
+
+    @Implementation
+    public int getHoursForTransportType(String transportMode){
+        switch (transportMode) {
+            case MCGATransportMode.DRIVING:
+                return 1;
+            case MCGATransportMode.TRANSIT:
+                return 2;
+            case MCGATransportMode.BICYCLING:
+                return 3;
+            case MCGATransportMode.WALKING:
+                return 4;
+            default:
+                return 0;
+        }
+    }
+
+    @Implementation
+    public int getMinutesForTransportType(String transportMode){
+        switch (transportMode) {
+            case MCGATransportMode.DRIVING:
+                return 1;
+            case MCGATransportMode.TRANSIT:
+                return 2;
+            case MCGATransportMode.BICYCLING:
+                return 3;
+            case MCGATransportMode.WALKING:
+                return 4;
+            default:
+                return 0;
+        }
+    }
 }

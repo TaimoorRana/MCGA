@@ -15,10 +15,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+
 import android.widget.RelativeLayout;
+
+import android.widget.ToggleButton;
+
 
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.helperClasses.GPSManager;
 import com.concordia.mcga.activities.StudentSpotActivity;
 import com.concordia.mcga.helperClasses.Observer;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
@@ -37,6 +42,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
+import com.google.maps.android.SphericalUtil;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -66,6 +72,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
     private boolean buildingInfoShown = false;
     private boolean transportButtonVisible = false;
+    private ToggleButton toggleButton;
 
 
     //Fragments
@@ -183,7 +190,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Button toggleButton = (Button) getView().findViewById(R.id.campusButton);
+        toggleButton = (ToggleButton) getView().findViewById(R.id.campusButton);
         toggleButton.setBackgroundColor(Color.parseColor("#850f02"));
         toggleButton.setTextColor(Color.WHITE);
         toggleButton.setOnClickListener(new OnClickListener() {
@@ -275,15 +282,50 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         applyCustomGoogleMapsStyle();
         Campus.populateCampusesWithBuildings();
         addBuildingMarkersAndPolygons();
-
+        currentCampus=closestCampus(distanceBetween(((MainActivity) getActivity()).getGpsManager().getLocation(),Campus.SGW.getMapCoordinates()),distanceBetween(((MainActivity) getActivity()).getGpsManager().getLocation(),Campus.LOY.getMapCoordinates()));
         updateCampus();
+    }
+
+    /**
+     *
+     * @param point1: First LatLng to compare
+     * @param point2: Second LatLng to compare
+     * @return a double calculated by the different in LatLng by SphericalUtil
+     * This method calculates the distance between two LatLng variables.
+     * To be used with method "closestCampus".
+     */
+    public Double distanceBetween(LatLng point1, LatLng point2){
+        if(point1==null||point2 == null){
+            return 0.0;
+        }
+        else{
+            return SphericalUtil.computeDistanceBetween(point1, point2);
+        }
+    }
+
+    /**
+     *
+     * @param distance1: Distance returned from myLocation to SGW Campus
+     * @param distance2: Distance returned from myLocation to LOY Campus
+     * @return: Returns the campus it's closest to
+     * This method is used to return a campus depending on the user's current location by comparing the distance between the user and both campus's
+     * location using the previous "distanceBetween" method
+     */
+    public Campus closestCampus(double distance1, double distance2){
+        if(distance1<=distance2){
+            toggleButton.setChecked(false);
+            return Campus.SGW;
+        }
+        else{
+            toggleButton.setChecked(true);
+            return Campus.LOY;
+        }
     }
 
     public void onRoomSearch(Room room) {
         if (viewType == ViewType.OUTDOOR) {
             showIndoorMap(room.getFloor().getBuilding());
         }
-
         indoorMapFragment.onRoomSearch(room);
     }
 
@@ -392,6 +434,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
         transportButtonVisible = isVisible;
     }
+
 
     /**
      * Updates Bottomsheet displaying information about a building

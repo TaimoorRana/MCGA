@@ -39,6 +39,7 @@ import com.concordia.mcga.fragments.IndoorMapFragment;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.helperClasses.GPSManager;
+import com.concordia.mcga.helperClasses.IOutdoorPath;
 import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.helperClasses.OutdoorPath;
 import com.concordia.mcga.models.Building;
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements
     private Handler handler;
     public static final int SPOT_REQUEST_CODE = 1;
     private DrawerLayout drawerLayout;
+    private Campus currentCampus = Campus.LOY;
     private NavigationFragment navigationFragment;
 
     //Progress
@@ -156,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements
                             return true;
                         case R.id.shuttle_schedule:
                             Toast.makeText(getApplicationContext(), "Shuttle Schedule", Toast.LENGTH_SHORT).show();
+                            openShuttleActivity();
                             return true;
                         case R.id.settings:
                             Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
@@ -174,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         );
-
         drawerLayout = (DrawerLayout) parentView;
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 toolbar, R.string.open_drawer, R.string.close_drawer);
@@ -243,6 +245,21 @@ public class MainActivity extends AppCompatActivity implements
         } catch (IOException ioe) {
             throw new Error("Unable to create database");
         }
+    }
+
+    public Campus getCurrentCampus()
+    {
+        return this.currentCampus;
+    }
+
+    public void setCurrentCampus(Campus c)
+    {
+        this.currentCampus = c;
+    }
+
+    public void openShuttleActivity() {
+        Intent intent = new Intent(this, ShuttleActivity.class);
+        startActivity(intent);
     }
 
     public void generateDirections(POI start, POI dest, String mode){
@@ -621,7 +638,7 @@ public class MainActivity extends AppCompatActivity implements
             if (directionsBottomSheet != null) {
                 directionsBottomSheet.clearDirections();
             }
-            OutdoorPath path = navigationFragment.getOutdoorDirections().getDirectionObject();
+            IOutdoorPath path = navigationFragment.getOutdoorDirections().getDirectionObject();
 
             if (path != null) {
                 path.clearInstructions();
