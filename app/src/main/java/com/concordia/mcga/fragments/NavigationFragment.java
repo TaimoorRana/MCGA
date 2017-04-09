@@ -94,7 +94,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     //State
     private Building lastClickedBuilding;
 
-    private final static int FLAG_DIRECTIONS = 0, FLAG_INFO = 1, FLAG_NO_DISPLAY = -1;
+    public final static int FLAG_DIRECTIONS = 0, FLAG_INFO = 1, FLAG_NO_DISPLAY = -1;
     private int building_flag = FLAG_NO_DISPLAY;
 
 
@@ -150,6 +150,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             public void onClick(View v) {
                 if (viewType == ViewType.OUTDOOR) {
                     showIndoorMap(lastClickedBuilding);
+                    setFlag(FLAG_NO_DISPLAY);
                 } else {
                     showOutdoorMap();
                 }
@@ -213,49 +214,24 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     try {
                         sleep(20);
                         int y = 0;
-                        try {
-                            if (outdoors) {
-                                y = buildingInfoFragment.getTop();
-
-                            } else {
-                                y = directionsFragment.getTop();
-                            }
-                        } catch (Exception e) {
-                        }
-                        if ((buildingInfoShown)) {
+                        if ((building_flag == FLAG_INFO)) {
+                            y = buildingInfoFragment.getTop();
                             directionsButton.setVisibility(View.VISIBLE);
-
-                            directionsButton.setY(y - 2 * mapCenterButton.getHeight() -
-                                    mapCenterButton.getHeight()/3);
-                            mapCenterButton.setY(y - 2 * mapCenterButton.getHeight() -
-                                    mapCenterButton.getHeight()/3);
+                            directionsButton.setY(y - 2 * mapCenterButton.getHeight());
+                            mapCenterButton.setY(y - 2 * mapCenterButton.getHeight());
                         }
-                        else if (!outdoors){
+                        else if (building_flag == FLAG_DIRECTIONS){
                             directionsButton.setVisibility(View.GONE);
+                            y = directionsFragment.getTop();
+                            mapCenterButton.setY(y - 3  * mapCenterButton.getHeight());
+                            directionsButton.setY(y - 3 * mapCenterButton.getHeight());
 
-                            if (directionsFragment.isVisible()) {
-                                mapCenterButton.setY(y - parentLayout.getHeight() + 2 *
-                                        ((MainActivity) getActivity()).getToolbarView().getHeight() +
-                                        mapCenterButton.getHeight() + mapCenterButton.getHeight() / 3);
-                                directionsButton.setY(y - parentLayout.getHeight() + 2 *
-                                        ((MainActivity) getActivity()).getToolbarView().getHeight() +
-                                        mapCenterButton.getHeight() + mapCenterButton.getHeight() / 3);
-                            }
-                            else{
-                                mapCenterButton.setY( parentLayout.getHeight() -
-                                        mapCenterButton.getHeight() -  mapCenterButton.getHeight() / 2);
-                                directionsButton.setY( parentLayout.getHeight() -
-                                        mapCenterButton.getHeight() -  mapCenterButton.getHeight() / 2);
-                            }
                         }
-                        else
+                        else if (building_flag == FLAG_NO_DISPLAY)
                         {
                             directionsButton.setVisibility(View.GONE);
-
-                            mapCenterButton.setY( parentLayout.getHeight() -
-                                    mapCenterButton.getHeight() -  mapCenterButton.getHeight());
-                            directionsButton.setY( parentLayout.getHeight() -
-                                    mapCenterButton.getHeight() -  mapCenterButton.getHeight());
+                            mapCenterButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
+                            directionsButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
                         }
 
                     } catch (Exception e) {
@@ -310,7 +286,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         indoorMapFragment.onRoomSearch(room);
     }
 
-    private void setFlag(int flag){
+    public void setFlag(int flag){
         building_flag = flag;
         showBottomSheet();
     }
@@ -323,6 +299,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         else if(building_flag == FLAG_INFO){
             showBuildingInfoFragment(true);
             showDirectionsFragment(false);
+            buildingInfoFragment.collapse();
         }
         else if(building_flag == FLAG_NO_DISPLAY){
             showDirectionsFragment(false);
@@ -339,6 +316,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private void showBuildingInfoFragment(boolean isVisible) {
         if (isVisible) {
             getChildFragmentManager().beginTransaction().show(buildingInfoFragment).commit();
+            buildingInfoFragment.collapse();
             outdoors = true;
             // this boolean exist because it is not in the directions fragment
             // Creates 4 combinations between buildingInfoShown and outdoors
