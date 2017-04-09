@@ -90,7 +90,7 @@ android:focusableInTouchMode="true">
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dip"
+            android:layout_marginTop="85dip"
             android:textOff="@string/button_loyola"
             android:textOn="@string/button_SGW" />
 

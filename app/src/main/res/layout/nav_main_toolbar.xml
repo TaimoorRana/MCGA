@@ -5,6 +5,7 @@
     android:id="@+id/search_edit_frame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:elevation="100dp"
     android:background="@color/colorPrimary">
 
     <android.support.v7.widget.LinearLayoutCompat
