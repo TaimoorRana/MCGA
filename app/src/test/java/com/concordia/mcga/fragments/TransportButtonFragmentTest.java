@@ -60,7 +60,7 @@ public class TransportButtonFragmentTest {
     public void testTimeSet() {
         //Only one button is tested since they all have the same implementation
         transportButtonFragment.setBikeTime(1, 40);
-        assertTrue(transportButtonFragment.getBikeTextView().getText().toString().equals("1h40m"));
+        assertTrue(transportButtonFragment.getBikeTextView().getText().toString().equals("1h 40m"));
 
         transportButtonFragment.setBikeTime(0, 40);
         assertTrue(transportButtonFragment.getBikeTextView().getText().toString().equals("40m"));
@@ -128,9 +128,9 @@ public class TransportButtonFragmentTest {
     @Test
     public void testDisplayAllTransportTime() {
         transportButtonFragment.displayAllTransportTimes();
-        assertTrue(transportButtonFragment.getCarTextView().getText().equals("1 minute"));
-        assertTrue(transportButtonFragment.getPublicTransportTextView().getText().equals("2 minutes"));
-        assertTrue(transportButtonFragment.getBikeTextView().getText().equals("3 minutes"));
-        assertTrue(transportButtonFragment.getWalkTextView().getText().equals("4 minutes"));
+        assertTrue(transportButtonFragment.getCarTextView().getText().equals("1h 1m"));
+        assertTrue(transportButtonFragment.getPublicTransportTextView().getText().equals("2h 2m"));
+        assertTrue(transportButtonFragment.getBikeTextView().getText().equals("3h 3m"));
+        assertTrue(transportButtonFragment.getWalkTextView().getText().equals("4h 4m"));
     }
 }
