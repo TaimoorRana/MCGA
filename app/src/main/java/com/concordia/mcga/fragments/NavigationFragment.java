@@ -226,7 +226,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      */
     public Double distanceBetween(LatLng point1, LatLng point2){
         if(point1==null||point2 == null){
-            return null;
+            return 0.0;
         }
         else{
             return SphericalUtil.computeDistanceBetween(point1, point2);
