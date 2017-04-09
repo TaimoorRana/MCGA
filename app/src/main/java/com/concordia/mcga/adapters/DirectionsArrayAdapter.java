@@ -3,6 +3,7 @@ package com.concordia.mcga.adapters;
 
 
 import android.content.Context;
+import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,36 +64,23 @@ public class DirectionsArrayAdapter extends ArrayAdapter<String> {
             textView.setText(directionsText.get(position));
 
             try {
-                String image = directionsImage.get(position);
-
+                String image =  directionsImage.get(position);
                 // Depending on the string, a different image is generated
-                switch (image) {
-                    case "up":
-                        imageView.setImageResource(R.drawable.ic_arrow_upward_black_24dp);
-                        break;
+                if (image.equals("up"))
+                    imageView.setImageResource(R.drawable.ic_arrow_upward_black_24dp);
 
-                    case "down":
-                        imageView.setImageResource(R.drawable.ic_arrow_downward_black_24dp);
-                        break;
+                else if (image.equals("down"))
+                    imageView.setImageResource(R.drawable.ic_arrow_downward_black_24dp);
 
-                    case "right":
-                        imageView.setImageResource(R.drawable.ic_arrow_forward_black_24dp);
-                        break;
+                else if (image.equals("right"))
+                    imageView.setImageResource(R.drawable.ic_arrow_forward_black_24dp);
 
-                    case "left":
-                        imageView.setImageResource(R.drawable.ic_arrow_back_black_24dp);
-                        break;
+                else if (image.equals("left"))
+                    imageView.setImageResource(R.drawable.ic_arrow_back_black_24dp);
 
-                    case "destination":
-                        imageView.setImageResource(R.drawable.ic_add_location_black_24dp);
-                        break;
+                else if (image.equals("destination"))
+                    imageView.setImageResource(R.drawable.ic_add_location_black_24dp);
 
-                    case "None":
-                        break;
-
-                    default:
-                        break;
-                }
                 return rowView;
             } catch (Exception e) {
                 Log.e(TAG, "Exception: " + Log.getStackTraceString(e));
