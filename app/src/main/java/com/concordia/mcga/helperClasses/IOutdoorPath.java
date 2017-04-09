@@ -25,5 +25,6 @@ public interface IOutdoorPath {
     public void setServerKey(String serverKey);
     public int getDurationMinutes();
     public int getDurationHours();
+    public void setPathSelected(boolean isPathSelected);
 
 }

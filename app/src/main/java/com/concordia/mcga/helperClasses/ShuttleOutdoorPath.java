@@ -2,6 +2,7 @@ package com.concordia.mcga.helperClasses;
 
 import android.content.Context;
 
+import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -25,6 +26,7 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     private String transportMode;
     private int durationMinutes;
     private int durationHours;
+    private String currentCampus = Campus.SGW.getShortName();
 
 
     public ShuttleOutdoorPath(){
@@ -36,17 +38,27 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     @Override
     public void setOrigin(LatLng origin) {
         this.origin = origin;
-        userToShuttleStopPath.setOrigin(USER_LOCATION); // user's position
-        sgwToLoyPath.setOrigin(SGW_STOP);
-        shuttleStopToBuildingPath.setOrigin(LOY_STOP);
+        if(currentCampus.equalsIgnoreCase(Campus.SGW.getShortName())) {
+            sgwToLoyPath.setOrigin(SGW_STOP);
+            shuttleStopToBuildingPath.setOrigin(LOY_STOP);
+        }else {
+            sgwToLoyPath.setOrigin(LOY_STOP);
+            shuttleStopToBuildingPath.setOrigin(SGW_STOP);
+        }
+        userToShuttleStopPath.setOrigin(origin);
     }
 
 
     @Override
     public void setDestination(LatLng destination) {
         this.destination = destination;
-        userToShuttleStopPath.setDestination(SGW_STOP);
-        sgwToLoyPath.setDestination(LOY_STOP);
+        if(currentCampus.equalsIgnoreCase(Campus.SGW.getShortName())) {
+            userToShuttleStopPath.setDestination(SGW_STOP);
+            sgwToLoyPath.setDestination(LOY_STOP);
+        }else{
+            userToShuttleStopPath.setDestination(LOY_STOP);
+            sgwToLoyPath.setDestination(SGW_STOP);
+        }
         shuttleStopToBuildingPath.setDestination(destination);
     }
 
@@ -115,6 +127,12 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     }
 
     @Override
+    public void setPathSelected(boolean isPathSelected) {
+        userToShuttleStopPath.setPathSelected(true);
+        sgwToLoyPath.setPathSelected(true);
+    }
+
+    @Override
     public void setMap(GoogleMap map) {
         this.map = map;
         userToShuttleStopPath.setMap(map);
@@ -160,5 +178,8 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         shuttleStopToBuildingPath.drawPath();
     }
 
+    public void setStartCampus(String campus){
+        currentCampus = campus;
+    }
 
 }

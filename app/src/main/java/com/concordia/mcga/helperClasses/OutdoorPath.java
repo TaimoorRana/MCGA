@@ -6,7 +6,6 @@ import android.util.Log;
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransitMode;
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.constant.Unit;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
@@ -43,16 +42,18 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     private String transportMode;
     private int durationMinutes;
     private int durationHours;
+    private boolean isPathSelected;
 
     public OutdoorPath() {
         polylines = new ArrayList<>();
         steps = new ArrayList<>();
         instructions = new ArrayList<>();
-        transportMode = TransportMode.TRANSIT; // default transport mode
+        transportMode = MCGATransportMode.TRANSIT; // default transport mode
+        isPathSelected = false;
     }
 
     /**
-     * Upon successful response from Google Direction Server, Create a path between the origin and destion
+     * Upon successful response from Google Direction Server, Create a path between the origin and destination
      *
      * @param direction raw directions in JSON format are wrapped with the Direction class for ease of use
      * @param rawBody   raw directions in JSON format
@@ -64,7 +65,8 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
             leg = route.getLegList().get(0);
             steps = leg.getStepList();
             setDurationHoursAndMinutes();
-
+            if(isPathSelected)
+                drawPath();
         }
     }
 
@@ -106,7 +108,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
 
     /**
      * Deletes Markers and polylines.
-     * sets origin and destionation to null
+     * sets origin and destination to null
      */
     public void deleteDirection() {
         if (polylines != null) {
@@ -211,6 +213,10 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     public int getDurationHours(){
         return durationHours;
     }
+    public void setPathSelected(boolean isPathSelected) {
+        this.isPathSelected = isPathSelected;
+    }
+
     @Override
     public String toString() {
         return "OutdoorPath{" +

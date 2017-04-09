@@ -1,14 +1,17 @@
 package com.concordia.mcga.activities;
 
-import android.content.Intent;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -31,28 +34,47 @@ import android.widget.Toast;
 import com.concordia.mcga.adapters.POISearchAdapter;
 import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.factories.BuildingFactory;
+import com.concordia.mcga.fragments.IndoorMapFragment;
 import com.concordia.mcga.fragments.NavigationFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.helperClasses.GPSManager;
+import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
-import com.concordia.mcga.models.IndoorPOI;
+import com.concordia.mcga.models.Floor;
+import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.models.POI;
 import com.concordia.mcga.models.Room;
+import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 public class MainActivity extends AppCompatActivity implements
         SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+    enum NavigationState {
+        START_INDOOR_BUILDING,
+        OUTDOOR,
+        DEST_INDOOR_BUILDING
+    }
     public enum SearchState {
         NONE, LOCATION, DESTINATION, LOCATION_DESTINATION
     }
 
+    private NavigationState currentState;
+    private GlobalPathFinder finder;
+    private Handler handler;
     public static final int SPOT_REQUEST_CODE = 1;
     private DrawerLayout drawerLayout;
     private Campus currentCampus = Campus.LOY;
     private NavigationFragment navigationFragment;
+
+    //Progress
+    private ProgressDialog progressDialog;
 
     // Search
     private View toolbarView;
@@ -82,6 +104,14 @@ public class MainActivity extends AppCompatActivity implements
         parentView = findViewById(R.id.drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        navigationFragment = new NavigationFragment();
+
+        //Setup Progress Dialog
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Generating Path");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(true);
 
         // Setup GPS
         setUpGPS();
@@ -147,6 +177,18 @@ public class MainActivity extends AppCompatActivity implements
 
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                showProgressDialog(false);
+
+                if (setIndoorTiles()) {
+                    loadStartIndoor();
+                } else {
+                    loadStartOutdoor();
+                }
+            }
+        };
     }
 
     public void createToast(String message) {
@@ -178,9 +220,73 @@ public class MainActivity extends AppCompatActivity implements
         this.currentCampus = c;
     }
 
-    public void openShuttleActivity(){
+    public void openShuttleActivity() {
         Intent intent = new Intent(this, ShuttleActivity.class);
         startActivity(intent);
+    }
+
+    public void generateDirections(POI start, POI dest, String mode){
+        showProgressDialog(true);
+        finder = new GlobalPathFinder(this, start, dest, mode);
+        Thread finderThread = new Thread(finder);
+        finderThread.start();
+    }
+
+    public void notifyPathfindingComplete(){
+        if (finder.getOutDoorCoordinates() != null){
+            Context context = getApplicationContext();
+            OutdoorDirections outdoorDirections = navigationFragment.getOutdoorDirections();
+            LatLng[] coords = finder.getOutDoorCoordinates();
+            outdoorDirections.setOrigin(coords[0]);
+            outdoorDirections.setSelectedTransportMode(finder.getMode());
+            outdoorDirections.setDestination(coords[1]);
+            outdoorDirections.setContext(context);
+            outdoorDirections.setServerKey(getResources().getString(R.string.google_maps_key));
+            outdoorDirections.setMap(navigationFragment.getMap());
+            outdoorDirections.requestDirections();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        Message message = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("finder", finder);
+        message.setData(bundle);
+        handler.sendMessage(message);
+    }
+
+    public boolean setIndoorTiles() {
+        final IndoorMapFragment indoorMapFragment = navigationFragment.getIndoorMapFragment();
+        boolean startsIndoors = false;
+
+        Map<Floor, List<IndoorMapTile>> allBuildingDirections = new HashMap<>();
+        if (finder.getStartBuildingDirections() != null) {
+            allBuildingDirections.putAll(finder.getStartBuildingDirections());
+            startsIndoors = true;
+        }
+        if (finder.getDestBuildingDirections() != null) {
+            allBuildingDirections.putAll(finder.getDestBuildingDirections());
+        }
+
+        indoorMapFragment.setCurrentPathTiles(allBuildingDirections);
+        return startsIndoors;
+    }
+
+    public void loadStartIndoor() {
+        currentState = NavigationState.START_INDOOR_BUILDING;
+        navigationFragment.showIndoorMap(finder.getStartBuildingDirections().keySet().iterator().next().getBuilding());
+        final IndoorMapFragment indoorMapFragment = navigationFragment.getIndoorMapFragment();
+        indoorMapFragment.setCurrentFloor(finder.getStartBuildingDirections().keySet().iterator().next());
+        indoorMapFragment.drawCurrentWalkablePath();
+    }
+
+    public void loadStartOutdoor() {
+        currentState = NavigationState.OUTDOOR;
+        navigationFragment.showOutdoorMap();
+        OutdoorDirections outdoorDirections = navigationFragment.getOutdoorDirections();
+        outdoorDirections.drawPathForSelectedTransportMode();
     }
 
     @Override
@@ -472,15 +578,8 @@ public class MainActivity extends AppCompatActivity implements
             destinationLayout.setVisibility(View.VISIBLE);
             search.setVisibility(View.GONE);
 
-            // Set up directions. Here is where indoor/outdoor comes to play.
-            // For now we only handle purely outdoor or purely indoor paths
-            if (!(location instanceof IndoorPOI) && !(destination instanceof IndoorPOI)) {
-                navigationFragment.generateOutdoorPath(location, destination);
-            } else if (location instanceof IndoorPOI && destination instanceof IndoorPOI) {
-                navigationFragment.generateIndoorPath((IndoorPOI)location, (IndoorPOI)destination);
-            } else {
-                // TODO: Indoor/outdoor integration
-            }
+            generateDirections(location, destination, navigationFragment.getTransportationType());
+
         }
     }
 
@@ -498,6 +597,17 @@ public class MainActivity extends AppCompatActivity implements
             textView.setText(poi.getName());
         }
     }
+
+
+    public void showProgressDialog(boolean isVisible) {
+        progressDialog.dismiss();
+        if (isVisible) {
+            progressDialog.show();
+        } else {
+            progressDialog.hide();
+        }
+    }
+
 
     public SearchState getSearchState() {
         return searchState;

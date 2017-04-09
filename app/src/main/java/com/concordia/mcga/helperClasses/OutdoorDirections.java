@@ -13,6 +13,10 @@ public class OutdoorDirections {
     private String selectedTransportMode = null;
     private IOutdoorPath selectedOutdoorPath;
     private IOutdoorPath shuttleOutdoorPath;
+    private LatLng origin, destination;
+    private GoogleMap map;
+    private String serverKey;
+    private Context context;
 
     public OutdoorDirections() {
         outdoorPathList = new ArrayList<>();
@@ -41,12 +45,14 @@ public class OutdoorDirections {
         }
     }
 
+
     /**
      * Set origin for all transportation
      *
      * @param origin
      */
     public void setOrigin(LatLng origin) {
+        this.origin = origin;
         for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setOrigin(origin);
         }
@@ -57,6 +63,7 @@ public class OutdoorDirections {
      * @param destination
      */
     public void setDestination(LatLng destination) {
+        this.destination = destination;
         for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setDestination(destination);
         }
@@ -67,6 +74,7 @@ public class OutdoorDirections {
      * @param map will be used to draw paths on
      */
     public void setMap(GoogleMap map) {
+        this.map = map;
         for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setMap(map);
         }
@@ -77,6 +85,7 @@ public class OutdoorDirections {
      * @param context
      */
     public void setContext(Context context) {
+        this.context = context;
         for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setContext(context);
         }
@@ -138,6 +147,7 @@ public class OutdoorDirections {
         for (IOutdoorPath outdoorPath : outdoorPathList) {
             if (outdoorPath.getTransportMode().equalsIgnoreCase(selectedTransportMode)) {
                 selectedOutdoorPath = outdoorPath;
+                selectedOutdoorPath.setPathSelected(true);
                 this.selectedTransportMode = selectedTransportMode;
             }
 
@@ -145,6 +155,7 @@ public class OutdoorDirections {
     }
 
     public void setServerKey(String serverKey){
+        this.serverKey = serverKey;
         for (IOutdoorPath outdoorPath : outdoorPathList) {
             outdoorPath.setServerKey(serverKey);
         }
@@ -182,6 +193,10 @@ public class OutdoorDirections {
             }
         }
         return 0;
+    }
+
+    public void setShuttleStartCampus(String campus){
+        ((ShuttleOutdoorPath)shuttleOutdoorPath).setStartCampus(campus);
     }
 
 }

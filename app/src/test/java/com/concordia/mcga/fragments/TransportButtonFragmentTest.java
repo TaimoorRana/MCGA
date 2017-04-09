@@ -124,11 +124,6 @@ public class TransportButtonFragmentTest {
         assertFalse(transportButtonFragment.getPublicTransportFAB().isClickable());
     }
 
-    @Test
-    public void testTransportOptionClick() {
-        transportButtonFragment.getWalkFAB().performClick();
-        assertTrue(transportButtonFragment.getTransportType().equals(MCGATransportMode.WALKING));
-    }
 
     @Test
     public void testDisplayAllTransportTime() {
