@@ -6,7 +6,6 @@ import android.util.Log;
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransitMode;
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.constant.Unit;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Leg;
@@ -39,12 +38,14 @@ public class OutdoorPath implements DirectionCallback {
     private GoogleMap map;
     private Context context;
     private String transportMode;
+    private boolean isPathSelected;
 
     public OutdoorPath() {
         polylines = new ArrayList<>();
         steps = new ArrayList<>();
         instructions = new ArrayList<>();
-        transportMode = TransportMode.TRANSIT; // default transport mode
+        transportMode = MCGATransportMode.TRANSIT; // default transport mode
+        isPathSelected = false;
     }
 
     /**
@@ -59,6 +60,8 @@ public class OutdoorPath implements DirectionCallback {
             Route route = direction.getRouteList().get(0);
             leg = route.getLegList().get(0);
             steps = leg.getStepList();
+            if(isPathSelected)
+                drawPath();
         }
     }
 
@@ -167,6 +170,10 @@ public class OutdoorPath implements DirectionCallback {
 
     public void setServerKey(String serverKey) {
         this.serverKey = serverKey;
+    }
+
+    public void setPathSelected(boolean isPathSelected) {
+        this.isPathSelected = isPathSelected;
     }
 
     @Override
