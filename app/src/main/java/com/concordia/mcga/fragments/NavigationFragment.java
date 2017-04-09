@@ -237,10 +237,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      */
     public void showDirectionsFragment(boolean isVisible) {
         if (isVisible) {
-            getChildFragmentManager().beginTransaction().show(directionsFragment).commit();
+            getChildFragmentManager().beginTransaction().show(directionsFragment).commitAllowingStateLoss();
 
         } else {
-            getChildFragmentManager().beginTransaction().hide(directionsFragment).commit();
+            getChildFragmentManager().beginTransaction().hide(directionsFragment).commitAllowingStateLoss();
         }
     }
     /*
