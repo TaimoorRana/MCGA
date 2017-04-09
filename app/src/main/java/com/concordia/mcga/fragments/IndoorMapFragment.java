@@ -86,8 +86,8 @@ public class IndoorMapFragment extends Fragment {
     public void initializeBuilding(Building building) {
 
         if (buildingLoaded == null || !buildingLoaded.equals(building)) {
-
             final List<Integer> floorNumbersOrdered = new ArrayList<>();
+            floorButtonContainer.removeAllViews();
 
             //Load Floors
             for (Map.Entry<Integer, Floor> entry : building.getFloorMaps().entrySet()) {
@@ -261,19 +261,31 @@ public class IndoorMapFragment extends Fragment {
      * and will pan and zoom into that room.
      */
     public void onRoomSearch(final Room room) {
+        panToRoom(room);
+    }
+
+    /**
+     * This function pans to a particular room. Will load the building and floor and show it if necessary.
+     *
+     * @param room Any Valid Room
+     */
+    public void panToRoom(final Room room) {
+        if (currentFloor == null || !currentFloor.equals(room.getFloor())) {
+            if (!buildingLoaded.equals(room.getFloor().getBuilding())) {
+                initializeBuilding(room.getFloor().getBuilding());
+            }
+            showFloor(room.getFloor());
+        }
+
         leafletView.post(new Runnable() {
             @Override
             public void run() {
-                if (!currentFloor.equals(room.getFloor()))
-                    showFloor(room.getFloor());
-
                 int x = room.getTile().getCoordinateX();
                 int y = room.getTile().getCoordinateY();
                 leafletView.evaluateJavascript("panTo(" + x + "," + y + ")", null);
             }
         });
     }
-
 
     /**
      * Given a floor, this will return the mapId that identifies the map, allowing its image to be loaded into the canvas.

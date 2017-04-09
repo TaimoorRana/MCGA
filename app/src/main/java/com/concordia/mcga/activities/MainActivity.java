@@ -278,7 +278,8 @@ public class MainActivity extends AppCompatActivity implements
         currentState = NavigationState.START_INDOOR_BUILDING;
         navigationFragment.showIndoorMap(finder.getStartBuildingDirections().keySet().iterator().next().getBuilding());
         final IndoorMapFragment indoorMapFragment = navigationFragment.getIndoorMapFragment();
-        indoorMapFragment.setCurrentFloor(finder.getStartBuildingDirections().keySet().iterator().next());
+        indoorMapFragment.showFloor(finder.getStartBuildingDirections().keySet().iterator().next());
+        indoorMapFragment.panToRoom((Room) finder.getStartPOI());
         indoorMapFragment.drawCurrentWalkablePath();
     }
 
