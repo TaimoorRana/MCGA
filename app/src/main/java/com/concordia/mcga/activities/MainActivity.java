@@ -205,15 +205,32 @@ public class MainActivity extends AppCompatActivity implements
     private void setDirections(){
         directionsBottomSheet = navigationFragment.getDirectionsFragment();
 
+        // Set the indoor directions from the starting building, if any.
+        // Get all the directions from the unordered map from top to bottom. We
         if (finder.getStartBuildingDirections() != null){
-            List<IndoorMapTile> tiles = new ArrayList<>();
+            Map<Floor, List<IndoorMapTile>> directions = finder.getStartBuildingDirections();
 
-            for (List<IndoorMapTile> findTile : finder.getStartBuildingDirections().values()){
-                tiles.addAll(findTile);
+            List<IndoorMapTile> orderedTiles = new ArrayList<>();
+            List<Floor> poppedFloors = new ArrayList<>();
+
+            // Get floors from highest to lowest
+            while (poppedFloors.size() < directions.size()) {
+                Floor localHighest = null;
+
+                for (Floor floor : directions.keySet()) {
+                    if (!poppedFloors.contains(floor) && (localHighest == null ||
+                            floor.getFloorNumber() > localHighest.getFloorNumber())) {
+                        localHighest = floor;
+                    }
+                }
+                orderedTiles.addAll(directions.get(localHighest));
+                poppedFloors.add(localHighest);
             }
-            directionsBottomSheet.addJointPoints(tiles);
+
+            directionsBottomSheet.addJointPoints(orderedTiles);
         }
 
+        // Get all the
         if (navigationFragment.getOutdoorDirections().getDirectionObject() != null) {
             List<String> outdoorsDirection = navigationFragment.getOutdoorDirections().getInstructionsForSelectedTransportMode();
             if (outdoorsDirection.size() > 0) {
@@ -223,6 +240,30 @@ public class MainActivity extends AppCompatActivity implements
                 }
                 directionsBottomSheet.updateDirections();
             }
+        }
+
+        if (finder.getDestBuildingDirections() != null) {
+            Map<Floor, List<IndoorMapTile>> directions = finder.getDestBuildingDirections();
+
+            List<IndoorMapTile> orderedTiles = new ArrayList<>();
+            List<Floor> poppedFloors = new ArrayList<>();
+
+            // Get floors from highest to lowest
+            while (poppedFloors.size() < directions.size()) {
+                Floor localLowest = null;
+
+                // Order from highest to lowest floor
+                for (Floor floor : directions.keySet()) {
+                    if (!poppedFloors.contains(floor) && (localLowest == null ||
+                            floor.getFloorNumber() < localLowest.getFloorNumber())) {
+                        localLowest = floor;
+                    }
+                }
+                orderedTiles.addAll(directions.get(localLowest));
+                poppedFloors.add(localLowest);
+            }
+
+            directionsBottomSheet.addJointPoints(orderedTiles);
         }
     }
 
