@@ -130,12 +130,4 @@ public class TransportButtonFragmentTest {
         assertTrue(transportButtonFragment.getTransportType().equals(MCGATransportMode.WALKING));
     }
 
-    @Test
-    public void testDisplayAllTransportTime() {
-        transportButtonFragment.displayAllTransportTimes();
-        assertTrue(transportButtonFragment.getCarTextView().getText().equals("1 minute"));
-        assertTrue(transportButtonFragment.getPublicTransportTextView().getText().equals("2 minutes"));
-        assertTrue(transportButtonFragment.getBikeTextView().getText().equals("3 minutes"));
-        assertTrue(transportButtonFragment.getWalkTextView().getText().equals("4 minutes"));
-    }
 }
