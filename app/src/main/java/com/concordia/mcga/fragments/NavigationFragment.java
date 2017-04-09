@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ToggleButton;
 
-import com.akexorcist.googledirection.constant.TransportMode;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.helperClasses.GPSManager;
@@ -55,7 +54,7 @@ import static android.content.Context.LOCATION_SERVICE;
 public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         OnCameraIdleListener, Subject {
     //Enum representing which map view is active
-    private enum ViewType {
+    public enum ViewType {
         INDOOR, OUTDOOR
     }
 
@@ -83,15 +82,17 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     private Button campusButton;
     private Button viewSwitchButton;
     private FloatingActionButton mapCenterButton;
-
+    private Button nextDirection, previousDirection;
     //State
     private Building lastClickedBuilding;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         parentLayout = (LinearLayoutCompat) inflater.inflate(R.layout.nav_main_fragment, container, false);
+
 
         //Init Fragments
         transportButtonFragment = (TransportButtonFragment) getChildFragmentManager().findFragmentById(R.id.transportButton);
@@ -128,10 +129,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             public void onClick(View v) {
                 if (viewType == ViewType.OUTDOOR) {
                     showIndoorMap(lastClickedBuilding);
-                    //showDirectionsFragment(true);
                 } else {
                     showOutdoorMap();
-                    //showDirectionsFragment(false);
                 }
             }
         });
@@ -206,7 +205,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorDirections.setContext(getActivity().getApplicationContext());
         outdoorDirections.setServerKey(getResources().getString(R.string.google_maps_key));
         outdoorDirections.setMap(map);
-        outdoorDirections.setSelectedTransportMode(TransportMode.DRIVING);
 
         //Map Customization
         applyCustomGoogleMapsStyle();
@@ -276,9 +274,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * Shows or hides the directions bottom sheet fragment
      * @param isVisible
      */
-    private void showDirectionsFragment(boolean isVisible) {
+    public void showDirectionsFragment(boolean isVisible) {
         if (isVisible) {
             getChildFragmentManager().beginTransaction().show(directionsFragment).commit();
+
         } else {
             getChildFragmentManager().beginTransaction().hide(directionsFragment).commit();
         }
@@ -287,7 +286,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * Shows or hides the indoor map, will hide the outdoormap if visible
      */
     public void showIndoorMap(Building building) {
-        if (building.getShortName().equals("H")) { // TODO: Allow indoor map on other available buildings
+        if (building.getRooms().size() > 0) {
             viewType = ViewType.INDOOR;
 
             showTransportButton(false);
@@ -298,6 +297,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             viewSwitchButton.setText("GO OUTDOORS");
 
             indoorMapFragment.initializeBuilding(building);
+            indoorMapFragment.drawCurrentWalkablePath();
         }
     }
 
@@ -478,10 +478,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         outdoorDirections.requestDirections();
     }
 
-    public void generateIndoorPath(IndoorPOI start, IndoorPOI dest) {
-        indoorMapFragment.generatePath(start, dest);
-    }
-
     /**
      * Applying custom google map style in order to get rid of unwanted POI and other information that is not useful to our application
      */
@@ -530,6 +526,32 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         } else {
             map.setMyLocationEnabled(false);
         }
+    }
+
+    public String getTransportationType() {
+        return transportButtonFragment.getTransportType();
+    }
+
+    public boolean isTransportButtonVisible() { return transportButtonVisible; }
+
+    public ViewType getViewType() {
+        return viewType;
+    }
+
+    public OutdoorDirections getOutdoorDirections() {
+        return outdoorDirections;
+    }
+
+    public IndoorMapFragment getIndoorMapFragment() {
+        return indoorMapFragment;
+    }
+
+    public GoogleMap getMap() {
+        return map;
+    }
+
+    public BottomSheetDirectionsFragment getDirectionsFragment(){
+        return directionsFragment;
     }
 }
 
