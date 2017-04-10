@@ -80,8 +80,8 @@ android:focusableInTouchMode="true">
             android:name="com.concordia.mcga.fragments.TransportButtonFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/mapCenterButton"
-            android:elevation="10dp"
+            android:layout_marginTop="90dip"
+            android:elevation="110dp"
             android:layout_alignParentEnd="true" />
 
         <ToggleButton

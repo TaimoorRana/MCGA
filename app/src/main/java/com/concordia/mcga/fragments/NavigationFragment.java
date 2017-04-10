@@ -225,6 +225,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                         if ((building_flag == FLAG_INFO)) {
                             directionsButton.setVisibility(View.VISIBLE);
                             y = buildingInfoFragment.getTop();
+
                             directionsButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
                             mapCenterButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
                         }
