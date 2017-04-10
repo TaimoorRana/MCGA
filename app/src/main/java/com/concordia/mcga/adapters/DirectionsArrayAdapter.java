@@ -81,7 +81,6 @@ public class DirectionsArrayAdapter extends ArrayAdapter<String> {
                 else if (image.equals("destination"))
                     imageView.setImageResource(R.drawable.ic_add_location_black_24dp);
 
-
                 return rowView;
             } catch (Exception e) {
                 Log.e(TAG, "Exception: " + Log.getStackTraceString(e));

@@ -2,11 +2,24 @@
 var map;
 
 //Path and Marker Groups
+
+//Group for floormaps
 var floormapGroup;
+
+//Group for room icons
 var roomMarkerGroup;
-var pathMarkerGroup;
+
+//Group for room polygons
 var polygonGroup;
+
+//Group for markers that make up paths
+var pathMarkerGroup;
+
+//Group for lines
 var pathGroup;
+
+//Group for step indicator
+var stepIndicatorGroup;
 
 //Lat and Lng Bounds For Currently Loaded Map
 var curLatBound;
@@ -35,6 +48,7 @@ function initmap() {
 	//Marker Groups
 	roomMarkerGroup = L.layerGroup().addTo(map);
 	pathMarkerGroup = L.layerGroup().addTo(map);
+	stepIndicatorGroup = L.layerGroup().addTo(map);
 
 	//Polygon Groups
 	polygonGroup = L.layerGroup().addTo(map);
@@ -177,6 +191,23 @@ function addFloorRooms(roomArray) {
     }
 }
 
+function addStepIndicator(x, y) {
+    stepIndicatorGroup.clearLayers();
+
+    var pointLat = curLatBound - y;
+    var pointLng = x;
+
+    var point = L.latLng([pointLat, pointLng]);
+    var stepIndicator = stepIndicatorIcon(point);
+
+    stepIndicator.addTo(stepIndicatorGroup);
+}
+
+function addStepIndicatorWithPan(x, y) {
+    addStepIndicator(x, y);
+    map.flyTo(L.latLng(curLatBound - y, x));
+}
+
 //Icons
 function maleWashroomIcon(point, roomName) {
     var maleWashroom = L.icon({
@@ -238,6 +269,18 @@ function waterfountainIcon(point, roomName) {
     return L.marker(point, { icon: waterfountain, "roomName": roomName });
 }
 
+function stepIndicatorIcon(point) {
+    var waterfountain = L.icon({
+        iconUrl: 'images/stepindicator.png',
+
+        iconSize: [40, 40],
+        iconAnchor: [20, 20],
+        popupAnchor: [0, 0]
+    });
+
+    return L.marker(point, { icon: waterfountain });
+}
+
 //Utility Functions
 function panTo(x, y) {
     map.flyTo(L.latLng(curLatBound - y, x), panZoom);
@@ -253,6 +296,11 @@ function clearPathLayers() {
 function clearMarkerLayers() {
 	pathMarkerGroup.clearLayers();
 	roomMarkerGroup.clearLayers();
+	stepIndicatorGroup.clearLayers();
+}
+
+function clearStepIndicator() {
+	stepIndicatorGroup.clearLayers();
 }
 
 function clearPolygonLayers() {
@@ -262,7 +310,7 @@ function clearPolygonLayers() {
 function clearAllLayers() {
 	clearPathLayers();
 	clearMarkerLayers();
-	clearPolygonLayers()
+	clearPolygonLayers();
 }
 
 //Document Init

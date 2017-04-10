@@ -10,17 +10,17 @@ import android.widget.TextView;
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
-import com.concordia.mcga.lib.BottomSheet;
+import com.concordia.mcga.bottomsheet.BottomSheet;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
-import com.concordia.mcga.utilities.pathfinding.IndoorDirections;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
@@ -307,6 +307,7 @@ public class DirectionsTest {
 
     @Test
     public void UpdateDirections_FromList_True(){
+        BottomSheetDirectionsFragment fragment = Mockito.spy(BottomSheetDirectionsFragment.class);
         IndoorMapTile tile1 = new IndoorMapTile(0, 0);
         IndoorMapTile tile2 = new IndoorMapTile(10, 0);
         IndoorMapTile tile3 = new IndoorMapTile(10, 12);
@@ -327,11 +328,13 @@ public class DirectionsTest {
         orderedFloors.add(floor);
         orderedFloors.add(floor);
 
-        myFragment.addJointPoints(listTiles, orderedFloors);
+        Mockito.doNothing().when(fragment).drawTile();
+        Mockito.doNothing().when(fragment).updateDirections();
+        fragment.addJunctionPoints(listTiles, orderedFloors);
 
-        List<String> direction = myFragment.getCompleteDirectionsList();
-        List<String> img = myFragment.getCompleteDirectionsList();
+        List<String> direction = fragment.getCompleteDirectionsList();
+        List<String> img = fragment.getCompleteDirectionsList();
 
-        assertNotEquals(direction.get(0), "Turn Left In 10u");
+        assertNotEquals(direction.get(0), "Turn Left For 10u");
     }
 }

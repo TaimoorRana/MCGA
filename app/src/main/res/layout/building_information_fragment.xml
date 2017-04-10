@@ -6,30 +6,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:elevation="100dp"
+    android:fitsSystemWindows="false"
+    android:elevation="1dp"
+    android:background="#00FFFFFF"
     tools:context="com.concordia.mcga.activities.MainActivity">
+
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="710dp"
+        android:layout_height="wrap_content"
+        app:elevation="0dp"
         android:orientation="vertical"
         app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
         android:id="@+id/bottom_sheet"
         app:layout_behavior="@string/BottomSheetBuildingInfo"
         app:anchorPoint="@dimen/anchor_point"
+        android:background="#00FFFFFF"
+        android:fitsSystemWindows="false"
         app:behavior_hideable="true"
-        android:fitsSystemWindows="true">
+        android:outlineProvider="none">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#00FFFFFF"
+            android:id="@+id/linearList"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="vertical"
-                android:layout_height="76dp"
+                android:layout_height="75dp"
                 android:background="@color/place_autocomplete_search_hint"
                 android:paddingTop="0dp"
                 android:paddingStart="16dp"
@@ -83,13 +94,13 @@
 
             <LinearLayout
                 android:orientation="vertical" android:layout_width="match_parent"
-                android:layout_height="72dp"
+                android:layout_height="75sp"
                 android:weightSum="1"
                 android:background="@color/button_secondary_color">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="64dp">
+                    android:layout_height="65sp">
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -99,21 +110,21 @@
                         android:layout_alignParentBottom="true">
 
                         <ImageView
-                            android:layout_width="51dp"
+                            android:layout_width="50sp"
                             android:layout_height="match_parent"
                             app:srcCompat="@drawable/ic_query_builder_black_24dp"
                             android:id="@+id/imageView"
                             android:scaleX="1"
                             android:scaleY="1"
-                            android:layout_marginStart="32dp"
+                            android:layout_marginStart="32sp"
                             android:layout_centerVertical="true"
                             android:layout_alignParentStart="true" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:paddingTop="12dp"
-                            android:paddingBottom="4dp">
+                            android:paddingTop="12sp"
+                            android:paddingBottom="4sp">
 
                             <TextView
                                 android:text="TextView"
@@ -121,7 +132,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
                                 android:layout_alignEnd="@+id/openingTime"
-                                android:layout_marginBottom="10dp"
+                                android:layout_marginBottom="10sp"
                                 android:id="@+id/closingTime"
                                 android:layout_alignStart="@+id/openingTime"
                                 android:textColor="@color/cast_expanded_controller_background_color" />
@@ -130,7 +141,7 @@
                                 android:text="TextView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="32dp"
+                                android:layout_marginStart="32sp"
                                 android:id="@+id/openingTime"
                                 android:layout_alignParentTop="true"
                                 android:layout_alignParentStart="true"
@@ -142,7 +153,7 @@
 
                     <View android:background="@drawable/button_pressed"
                         android:layout_width = "match_parent"
-                        android:layout_height="2dp"/>
+                        android:layout_height="2sp"/>
 
                 </RelativeLayout>
 
@@ -150,12 +161,13 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="2dp"
+                android:layout_height="2sp"
                 android:background="@color/colorPrimary"/>
 
             <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="575dp"
+                android:layout_height="575sp"
+                android:id="@+id/coordinatorList"
                 android:background="@color/button_secondary_color">
 
                 <ListView
@@ -166,7 +178,7 @@
                     android:textAlignment="center"
                     android:background="@color/button_secondary_color"
                     android:divider="@color/colorPrimary"
-                    android:dividerHeight="2dp" />
+                    android:dividerHeight="2sp" />
 
 
             </android.support.design.widget.CoordinatorLayout>
