@@ -288,6 +288,33 @@ public class IndoorMapFragment extends Fragment {
     }
 
     /**
+     * Draws a step indicator icon at a particular tile. Useful for keeping track of what direction is currently relevant.
+     *
+     * @param tile
+     */
+    public void drawStepIndicator(final IndoorMapTile tile){
+        Log.d("DSI", "Step Indicator Drawn");
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                leafletView.evaluateJavascript("addStepIndicatorWithPan(" + tile.getCoordinateX() + "," + tile.getCoordinateY() + ")", null);
+            }
+        });
+    }
+
+    /**
+     * Clears the step indicator.
+     */
+    public void clearStepIndicator(){
+        leafletView.post(new Runnable() {
+            @Override
+            public void run() {
+                leafletView.evaluateJavascript("clearStepIndicator()", null);
+            }
+        });
+    }
+
+    /**
      * Given a floor, this will return the mapId that identifies the map, allowing its image to be loaded into the canvas.
      *
      * @param floor
@@ -307,11 +334,6 @@ public class IndoorMapFragment extends Fragment {
 
     public Floor getCurrentFloor(){
         return this.currentFloor;
-    }
-
-    // STUB
-    public void drawMapTile(IndoorMapTile tile){
-
     }
 }
 

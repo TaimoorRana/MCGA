@@ -5,6 +5,7 @@ import android.util.Log;
 import com.concordia.mcga.exceptions.MCGAJunctionPointException;
 import com.concordia.mcga.models.IndoorMapTile;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -21,6 +22,9 @@ public class IndoorDirections {
     private int orientation;
 
     private static final int ERROR_TOLERANCE = 5;
+
+    //Distance per Pixel
+    public final double DISTANCE_PER_PIXEL = 0.03;
 
     ///////////////
     // Main Code //
@@ -72,9 +76,7 @@ public class IndoorDirections {
 
                 }
 
-
-                // Format looks like: Turn Right In 200U ; where 'U' is for Unit
-                currentDirection = "Go " + turn + " In " + distance + "u";
+                currentDirection = "Go " + turn + " for " + distanceToMeterEstimate(distance);
 
                 // Update 2D array
                 returnString[i - 1][0] = currentDirection;
@@ -338,5 +340,10 @@ public class IndoorDirections {
         else{
             throw new MCGAJunctionPointException("Orientation is Undefined Exception");
         }
+    }
+
+    private String distanceToMeterEstimate(double distance) {
+        DecimalFormat df = new DecimalFormat("#.#");
+        return Double.valueOf(df.format(distance * DISTANCE_PER_PIXEL)) + "m";
     }
 }

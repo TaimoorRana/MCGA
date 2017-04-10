@@ -35,6 +35,9 @@ public class OutdoorDirections {
         outdoorPathList.add(shuttleOutdoorPath);
     }
 
+    public void setOutdoorObjectNull(){
+        this.selectedOutdoorPath = null;
+    }
 
     /**
      * Request directions for all transportation

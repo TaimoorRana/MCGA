@@ -203,6 +203,8 @@ public class MainActivity extends AppCompatActivity implements
      */
     private void setDirections(){
         directionsBottomSheet = navigationFragment.getDirectionsFragment();
+        directionsBottomSheet.tiles.clear();
+        directionsBottomSheet.clearDirections();
 
         // Set the indoor directions from the starting building, if any.
         // Get all the directions from the unordered map from top to bottom. We
@@ -219,7 +221,11 @@ public class MainActivity extends AppCompatActivity implements
                 for (int i = 0; i < outdoorsDirection.size(); i++) {
                     directionsBottomSheet.addOutdoorsDirection(outdoorsDirection.get(i), "none");
                 }
+                if (finder.getStartBuildingDirections() != null) {
+                    directionsBottomSheet.tiles.remove(directionsBottomSheet.tiles.size() - 1);
+                }
                 directionsBottomSheet.updateDirections();
+                navigationFragment.getOutdoorDirections().setOutdoorObjectNull();
             }
         }
 
@@ -606,12 +612,14 @@ public class MainActivity extends AppCompatActivity implements
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter destination...");
             search.setVisibility(View.VISIBLE);
+            navigationFragment.getIndoorMapFragment().clearStepIndicator();
         } else if (getSearchState() == SearchState.DESTINATION) {
             showDirectionsFragment(navigationFragment.FLAG_NO_DISPLAY);
             locationLayout.setVisibility(View.GONE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setQueryHint("Enter location...");
             search.setVisibility(View.VISIBLE);
+            navigationFragment.getIndoorMapFragment().clearStepIndicator();
         } else { // SearchState.LOCATION_DESTINATION
             showDirectionsFragment(navigationFragment.FLAG_DIRECTIONS);
             locationLayout.setVisibility(View.VISIBLE);
