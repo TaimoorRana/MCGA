@@ -87,6 +87,8 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         this.transportType = MCGATransportMode.TRANSIT;
         swapIcons(Transportation.TRANSIT.getIconID());
 
+        setGroupVisible(false);
+
         return view;
     }
 
@@ -625,5 +627,15 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
 
     public void setCampus(Campus c) {
         currentCampus = c;
+    }
+
+    public void setGroupVisible(boolean isVisible) {
+        int visibility = (isVisible) ? View.VISIBLE : View.GONE;
+
+        if (fabExpanded) {
+            toggle();
+        }
+
+        transportExpandFAB.setVisibility(visibility);
     }
 }

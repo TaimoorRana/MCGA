@@ -638,6 +638,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    public TransportButtonFragment getTransportButtonFragment() {
+        return transportButtonFragment;
+    }
+
     public String getTransportationType() {
         return transportButtonFragment.getTransportType();
     }
