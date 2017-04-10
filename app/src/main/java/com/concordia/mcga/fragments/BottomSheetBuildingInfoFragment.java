@@ -99,6 +99,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
             viewSwitchButton.setVisibility(View.VISIBLE);
         } else if (buildingName.equals(resources.getString(R.string.john_molson_building))) {
             displayMBBuildingAssociations();
+        } else if (buildingName.equals("CC")){
             viewSwitchButton.setVisibility(View.VISIBLE);
         }
         else{
@@ -345,10 +346,10 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
      */
     public void displayMBBuildingAssociations(){
         String temp[] = new String[IMAGES_PER_ROW];
-        temp[0] = resources.getString(R.string.association_asfa);
-        temp[1] = resources.getString(R.string.association_asfa);
-        temp[2] = resources.getString(R.string.association_asfa);
-        temp[3] = resources.getString(R.string.association_asfa);
+        temp[0] = resources.getString(R.string.association_jmas);
+        temp[1] = resources.getString(R.string.association_jmac);
+        temp[2] = resources.getString(R.string.association_jmiba);
+        temp[3] = resources.getString(R.string.association_jmma);
         addImages(temp);
         updateImageRow();
 
