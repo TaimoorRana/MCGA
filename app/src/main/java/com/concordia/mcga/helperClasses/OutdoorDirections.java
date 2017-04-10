@@ -31,6 +31,9 @@ public class OutdoorDirections {
         }
     }
 
+    public void setOutdoorObjectNull(){
+        this.selectedOutdoorPath = null;
+    }
 
     /**
      * Request directions for all transportation
