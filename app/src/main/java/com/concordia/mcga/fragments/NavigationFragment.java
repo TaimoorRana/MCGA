@@ -127,7 +127,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 if (viewType == ViewType.INDOOR) {
                     showOutdoorMap();
                 }
+                //Close Search Options
+                ((MainActivity)getActivity()).setSearchState(MainActivity.SearchState.NONE);
+                ((MainActivity)getActivity()).updateSearchUI();
                 ((MainActivity)getActivity()).onClose();
+                //Close slider
+                showBuildingInfoFragment(false);
+                showDirectionsFragment(false);
                 //Camera Movement
                 LatLng location = ((MainActivity) getActivity()).getGpsManager().getLocation();
                 if (location != null) {
