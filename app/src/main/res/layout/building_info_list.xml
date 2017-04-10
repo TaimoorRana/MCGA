@@ -7,49 +7,49 @@
 
     <View android:background="@drawable/button_pressed"
         android:layout_width = "match_parent"
-        android:layout_height="2dp"/>
+        android:layout_height="2sp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="81dp">
+        android:layout_height="80sp">
 
 
         <ImageView
-            android:layout_width="50dp"
+            android:layout_width="50sp"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/cast_ic_notification_stop_live_stream"
             android:id="@+id/buildingImage1"
             android:layout_weight="0.1"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="35dp" />
+            android:layout_marginStart="35sp" />
 
         <ImageView
-            android:layout_width="50dp"
+            android:layout_width="50sp"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/cast_ic_mini_controller_stop_large"
             android:id="@+id/buildingImage2"
             android:layout_weight="0.1"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/buildingImage1"
-            android:layout_marginStart="35dp" />
+            android:layout_marginStart="35sp" />
 
         <ImageView
-            android:layout_width="50dp"
+            android:layout_width="50sp"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/cast_ic_mini_controller_stop_large"
             android:id="@+id/buildingImage4"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="35dp" />
+            android:layout_marginEnd="35sp" />
 
         <ImageView
-            android:layout_width="50dp"
+            android:layout_width="50sp"
             android:layout_height="match_parent"
             app:srcCompat="@drawable/cast_ic_mini_controller_play_large"
             android:id="@+id/buildingImage3"
             android:layout_weight="0.1"
-            android:layout_marginStart="37dp"
+            android:layout_marginStart="35sp"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/buildingImage2" />
     </RelativeLayout>

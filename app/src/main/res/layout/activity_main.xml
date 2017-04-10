@@ -14,17 +14,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <include
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <include
             android:id="@+id/nav_toolbar"
-            layout="@layout/nav_main_toolbar"/>
+            layout="@layout/nav_main_toolbar" />
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/frame">
         </FrameLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 
