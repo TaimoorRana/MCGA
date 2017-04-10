@@ -37,6 +37,7 @@ import com.concordia.mcga.factories.BuildingFactory;
 import com.concordia.mcga.fragments.BottomSheetDirectionsFragment;
 import com.concordia.mcga.fragments.IndoorMapFragment;
 import com.concordia.mcga.fragments.NavigationFragment;
+import com.concordia.mcga.fragments.TransportButtonFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.helperClasses.GPSManager;
 import com.concordia.mcga.helperClasses.IOutdoorPath;
@@ -606,6 +607,7 @@ public class MainActivity extends AppCompatActivity implements
             destinationLayout.setVisibility(View.GONE);
             search.setQueryHint("Enter location...");
             search.setVisibility(View.VISIBLE);
+            setTransportVisibility(false);
         } else if (getSearchState() == SearchState.LOCATION) {
             showDirectionsFragment(navigationFragment.FLAG_NO_DISPLAY);
             locationLayout.setVisibility(View.VISIBLE);
@@ -613,6 +615,7 @@ public class MainActivity extends AppCompatActivity implements
             search.setQueryHint("Enter destination...");
             search.setVisibility(View.VISIBLE);
             navigationFragment.getIndoorMapFragment().clearStepIndicator();
+            setTransportVisibility(false);
         } else if (getSearchState() == SearchState.DESTINATION) {
             showDirectionsFragment(navigationFragment.FLAG_NO_DISPLAY);
             locationLayout.setVisibility(View.GONE);
@@ -620,14 +623,30 @@ public class MainActivity extends AppCompatActivity implements
             search.setQueryHint("Enter location...");
             search.setVisibility(View.VISIBLE);
             navigationFragment.getIndoorMapFragment().clearStepIndicator();
+            setTransportVisibility(false);
         } else { // SearchState.LOCATION_DESTINATION
             showDirectionsFragment(navigationFragment.FLAG_DIRECTIONS);
             locationLayout.setVisibility(View.VISIBLE);
             destinationLayout.setVisibility(View.VISIBLE);
             search.setVisibility(View.GONE);
+            setTransportVisibility(true);
 
             generateDirections(location, destination, navigationFragment.getTransportationType());
 
+        }
+    }
+
+    private void setTransportVisibility(final boolean isVisible) {
+        final TransportButtonFragment transportButtonFragment =
+                navigationFragment.getTransportButtonFragment();
+
+        if (transportButtonFragment != null) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    transportButtonFragment.setGroupVisible(isVisible);
+                }
+            });
         }
     }
 
