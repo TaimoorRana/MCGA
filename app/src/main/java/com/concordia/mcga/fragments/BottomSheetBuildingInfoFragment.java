@@ -1,6 +1,7 @@
 package com.concordia.mcga.fragments;
 
 
+import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,7 +18,7 @@ import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.BuildingInformationArrayAdapter;
-import com.concordia.mcga.lib.BottomSheet;
+import com.concordia.mcga.bottomsheet.BottomSheet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,12 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
 
     private Button viewSwitchButton;
 
+    private int listHeight;
+
+    private String buildingName = "";
+
+    Resources resources;
+
     ////////////////////////////////////////////////////////////
     // CLASS METHODS
     ////////////////////////////////////////////////////////////
@@ -81,10 +88,25 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         setupBottomSheetBehavior();
         overrideBottomSheetCallBack();
         setupListAdapter();
+        resources = getResources();
         return view;
     }
 
-
+    public void updateBottomSheet(){
+        clear();
+        if (buildingName.equals(resources.getString(R.string.hall_building))) {
+            displayHBuildingAssociations();
+            viewSwitchButton.setVisibility(View.VISIBLE);
+        } else if (buildingName.equals(resources.getString(R.string.john_molson_building))) {
+            displayMBBuildingAssociations();
+        } else if (buildingName.equals("CC")){
+            viewSwitchButton.setVisibility(View.VISIBLE);
+        }
+        else{
+            viewSwitchButton.setVisibility(View.GONE);
+        }
+        collapse();
+    }
 
     public Button getViewSwitchButton() {
         return viewSwitchButton;
@@ -98,6 +120,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
         expandButton.setOnClickListener(this);
         viewSwitchButton = (Button) view.findViewById(R.id.viewSwitchButton);
+        viewSwitchButton.setVisibility(View.GONE);
     }
 
     /**
@@ -106,7 +129,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
     private void setupBottomSheetBehavior(){
         behavior = BottomSheet.from(bottomSheet);
         behavior.setmType("building_information");
-        behavior.setState(BottomSheet.STATE_HIDDEN);
+        behavior.setState(BottomSheet.STATE_COLLAPSED);
     }
 
     /**
@@ -118,6 +141,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         closingTime = (TextView) view.findViewById(R.id.closingTime);
         openingTime = (TextView) view.findViewById(R.id.openingTime);
         list = (ListView) view.findViewById(R.id.list1);
+        listHeight = list.getHeight();
     }
 
     /**
@@ -139,10 +163,16 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
                 switch (newState) {
                     case BottomSheet.STATE_COLLAPSED:
                         expandButton.setImageResource(R.drawable.ic_expand_less_black_24dp);
+                        Log.d("bottomsheet-", "STATE_COLLAPSED");
                         break;
 
                     case BottomSheet.STATE_EXPANDED:
                         expandButton.setImageResource(R.drawable.ic_expand_more_black_24dp);
+                        Log.d("bottomsheet-", "STATE_EXPANDED");
+                        break;
+
+                    case BottomSheet.STATE_HIDDEN:
+                        Log.d("bottomsheet-", "STATE_HIDDEN");
                         break;
 
                     default:
@@ -175,8 +205,11 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
             case R.id.expandButton:
                 if (behavior.getState() == BottomSheet.STATE_COLLAPSED){
                     behavior.setState(BottomSheet.STATE_EXPANDED);
-                }else{
+                    Log.d("bottomsheet-", "STATE_EXPANDED");
+                }
+                else{
                     behavior.setState(BottomSheet.STATE_COLLAPSED);
+                    Log.d("bottomsheet-", "STATE_COLLAPSED");
                 }
                 break;
         }
@@ -211,6 +244,16 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         behavior.setState(BottomSheet.STATE_EXPANDED);
     }
 
+
+    // Need to make this relative
+    public int getTop(){
+        int[] location = new int[2];
+        bottom_sheet_title.getLocationOnScreen(location);
+
+
+        return (location[1] - bottom_sheet_title.getHeight());
+    }
+
     /**
      * Obtains the state of the Bottom Sheet
      * 4 is expanded
@@ -229,6 +272,7 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
      */
     public void updateImageRow(){
         adapter.notifyDataSetChanged();
+        list.invalidate();
     }
 
     /**
@@ -253,6 +297,9 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
         }
     }
 
+    public void setBuildingName(String name){
+        buildingName = name;
+    }
 
     /**
      * Adds an image to the array.. If array passed is greater than 4
@@ -277,17 +324,18 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
      */
     public void displayHBuildingAssociations(){
         String temp[] = new String[IMAGES_PER_ROW];
-        temp[0] = "asfa";
-        temp[1] = "sasu";
-        temp[2] = "space";
-        temp[3] = "lifting";
+
+        temp[0] = resources.getString(R.string.association_asfa);
+        temp[1] = resources.getString(R.string.association_sasu);
+        temp[2] = resources.getString(R.string.association_space);
+        temp[3] = resources.getString(R.string.association_lifting);
         addImages(temp);
         updateImageRow();
 
-        temp[0] = "hive";
-        temp[1] = "csu";
-        temp[2] = "ccsu";
-        temp[3] = "scs";
+        temp[0] = resources.getString(R.string.association_hive);
+        temp[1] = resources.getString(R.string.association_csu);
+        temp[2] = resources.getString(R.string.association_ccsu);
+        temp[3] = resources.getString(R.string.association_scs);
         addImages(temp);
         updateImageRow();
 
@@ -298,18 +346,18 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
      */
     public void displayMBBuildingAssociations(){
         String temp[] = new String[IMAGES_PER_ROW];
-        temp[0] = "jmac";
-        temp[1] = "jmiba";
-        temp[2] = "jmma";
-        temp[3] = "jmas";
+        temp[0] = resources.getString(R.string.association_jmas);
+        temp[1] = resources.getString(R.string.association_jmac);
+        temp[2] = resources.getString(R.string.association_jmiba);
+        temp[3] = resources.getString(R.string.association_jmma);
         addImages(temp);
         updateImageRow();
 
 
-        temp[0] = "fisa";
-        temp[1] = "jmucc";
-        temp[2] = "jsec";
-        temp[3] = "jmsb_case_comp";
+        temp[0] = resources.getString(R.string.association_fisa);
+        temp[1] = resources.getString(R.string.association_jmucc);
+        temp[2] = resources.getString(R.string.association_jsec);
+        temp[3] = resources.getString(R.string.association_jmsb_case_comp);
         addImages(temp);
         updateImageRow();
     }
@@ -319,9 +367,11 @@ public class BottomSheetBuildingInfoFragment extends Fragment implements View.On
      * Sets the Bottom Sheet title / building name
      * @param title
      */
-    private void setBottomSheetTitle(String title){
+    private void setBottomSheetTitle(String title) {
         bottom_sheet_title.setText(title);
     }
+
+
 
     /**
      * Sets the building address

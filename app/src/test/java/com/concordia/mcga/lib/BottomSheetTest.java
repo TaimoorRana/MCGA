@@ -15,6 +15,7 @@ import android.widget.ListView;
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
+import com.concordia.mcga.bottomsheet.BottomSheet;
 
 import org.junit.Before;
 import org.junit.Test;

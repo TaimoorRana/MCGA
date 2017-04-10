@@ -5,17 +5,21 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import android.widget.RelativeLayout;
+
 import android.widget.ToggleButton;
+
 
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
@@ -26,7 +30,6 @@ import com.concordia.mcga.helperClasses.OutdoorDirections;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
-import com.concordia.mcga.models.IndoorPOI;
 import com.concordia.mcga.models.POI;
 import com.concordia.mcga.models.StudentSpot;
 import com.concordia.mcga.models.Room;
@@ -66,30 +69,48 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     //State
     private ViewType viewType;
     private Campus currentCampus = Campus.SGW;
+
+    private boolean buildingInfoShown = false;
     private boolean transportButtonVisible = false;
     private ToggleButton toggleButton;
 
+
     //Fragments
-    private LinearLayoutCompat parentLayout;
+    private RelativeLayout parentLayout;
     private SupportMapFragment mapFragment;
     private TransportButtonFragment transportButtonFragment;
     private IndoorMapFragment indoorMapFragment;
     private BottomSheetDirectionsFragment directionsFragment;
     private BottomSheetBuildingInfoFragment buildingInfoFragment;
+
     //View Components
     private Button campusButton;
+    private View navToolBar;
+
+    private boolean directionMode = false;
+
     private Button viewSwitchButton;
+    private FloatingActionButton directionsButton;
     private FloatingActionButton mapCenterButton;
+
+    private POI bottomSheetBuilding;
+    private boolean outdoors = true;
+
     private Button nextDirection, previousDirection;
+
     //State
     private Building lastClickedBuilding;
+
+    public final static int FLAG_DIRECTIONS = 0, FLAG_INFO = 1, FLAG_NO_DISPLAY = -1;
+    private int building_flag = FLAG_NO_DISPLAY;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        parentLayout = (LinearLayoutCompat) inflater.inflate(R.layout.nav_main_fragment, container, false);
+        parentLayout = (RelativeLayout) inflater.inflate(R.layout.nav_main_fragment, container, false);
+        navToolBar = parentLayout.findViewById(R.id.toolbar);
 
 
         //Init Fragments
@@ -118,6 +139,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         campusButton = (Button) parentLayout.findViewById(R.id.campusButton);
         viewSwitchButton = (Button) parentLayout.findViewById(R.id.viewSwitchButton);
+        directionsButton = (FloatingActionButton) parentLayout.findViewById(R.id.directionsButton);
+        directionsButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFlag(FLAG_NO_DISPLAY);
+                if (bottomSheetBuilding != null) {
+                    ((MainActivity) getActivity()).setNavigationPOI(bottomSheetBuilding, false);
+                }
+            }
+        });
 
         campusButton.setVisibility(View.VISIBLE);
         viewSwitchButton.setText("GO INDOORS");
@@ -127,6 +158,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             public void onClick(View v) {
                 if (viewType == ViewType.OUTDOOR) {
                     showIndoorMap(lastClickedBuilding);
+                    setFlag(FLAG_NO_DISPLAY);
                 } else {
                     showOutdoorMap();
                 }
@@ -142,10 +174,9 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         // Set the building information bottomsheet to true
         // When the app starts
         // Set the directions one to false
-        showBuildingInfoFragment(true);
-        showDirectionsFragment(false);
+        setFlag(FLAG_NO_DISPLAY);
 
-        //Requests focus on creation. Prevents text views from being auto selected on launch.
+        buildingInfoFragment.updateBottomSheet();
         parentLayout.requestFocus();
 
         return parentLayout;
@@ -175,6 +206,50 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         });
         //Show outdoor map on start
         showOutdoorMap();
+        relativeButtonThread();
+    }
+
+    /**
+     * Positions the Locate Me button as well as the
+     * Directions button relative to the bottomsheet at all times
+     */
+    private void relativeButtonThread(){
+        //Thread
+        Thread thread = new Thread(){
+            @Override
+            public void run(){
+                while(true) {
+                    try {
+                        sleep(20);
+                        int y = 0;
+                        if ((building_flag == FLAG_INFO)) {
+                            directionsButton.setVisibility(View.VISIBLE);
+                            y = buildingInfoFragment.getTop();
+
+                            directionsButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
+                            mapCenterButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
+                        }
+                        else if (building_flag == FLAG_DIRECTIONS){
+                            //directionsButton.setVisibility(View.INVISIBLE);
+                            y = directionsFragment.getTop();
+                            mapCenterButton.setY(y - mapCenterButton.getHeight());
+                            directionsButton.setY(y -  mapCenterButton.getHeight());
+
+                        }
+                        else if (building_flag == FLAG_NO_DISPLAY)
+                        {
+                            //directionsButton.setVisibility(View.INVISIBLE);
+                            mapCenterButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
+                            directionsButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        thread.start();
     }
 
     @Override
@@ -255,6 +330,31 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         indoorMapFragment.onRoomSearch(room);
     }
 
+    public void setFlag(int flag){
+        building_flag = flag;
+        showBottomSheet();
+    }
+
+    private void showBottomSheet(){
+        if (building_flag == FLAG_DIRECTIONS){
+            Log.d("bottomsheet-", "DIRECTIONS");
+            showBuildingInfoFragment(false);
+            showDirectionsFragment(true);
+        }
+        else if(building_flag == FLAG_INFO){
+            Log.d("bottomsheet-", "INFO");
+            showBuildingInfoFragment(true);
+            showDirectionsFragment(false);
+            buildingInfoFragment.collapse();
+        }
+        else if(building_flag == FLAG_NO_DISPLAY){
+            Log.d("bottomsheet-", "NO_DISPLAY");
+            showDirectionsFragment(false);
+            showBuildingInfoFragment(false);
+        }
+
+    }
+
     /**
      * Shows or hides the indoor map, will hide the outdoormap and transport button if visible
      *
@@ -262,9 +362,16 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      */
     private void showBuildingInfoFragment(boolean isVisible) {
         if (isVisible) {
-            getChildFragmentManager().beginTransaction().show(buildingInfoFragment).commit();
+            getChildFragmentManager().beginTransaction().show(buildingInfoFragment).commitAllowingStateLoss();;
+            buildingInfoFragment.collapse();
+            outdoors = true;
+            // this boolean exist because it is not in the directions fragment
+            // Creates 4 combinations between buildingInfoShown and outdoors
+            buildingInfoShown = true;
         } else {
-            getChildFragmentManager().beginTransaction().hide(buildingInfoFragment).commit();
+            getChildFragmentManager().beginTransaction().hide(buildingInfoFragment).commitAllowingStateLoss();;
+            outdoors = false;
+            buildingInfoShown = false;
         }
     }
 
@@ -273,11 +380,14 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * @param isVisible
      */
     public void showDirectionsFragment(boolean isVisible) {
+        directionMode = isVisible;
+
         if (isVisible) {
             getChildFragmentManager().beginTransaction().show(directionsFragment).commitAllowingStateLoss();
-
+            outdoors = false;
         } else {
             getChildFragmentManager().beginTransaction().hide(directionsFragment).commitAllowingStateLoss();
+            outdoors = true;
         }
     }
     /*
@@ -289,7 +399,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
             showTransportButton(false);
             campusButton.setVisibility(View.GONE);
-            showBuildingInfoFragment(false);
 
             getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
             viewSwitchButton.setText("GO OUTDOORS");
@@ -311,7 +420,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
 
         viewSwitchButton.setText("GO INDOORS");
-        showBuildingInfoFragment(true);
     }
 
     /**
@@ -330,6 +438,19 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
 
     /**
+     * Updates Bottomsheet displaying information about a building
+     * once the user taps on a building
+     * @param buildingName
+     */
+    private void updateBuildingInfoSheet(String buildingName){
+        buildingInfoFragment.setBuildingName(buildingName);
+        buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
+        buildingInfoFragment.updateBottomSheet();
+        setFlag(FLAG_INFO);
+        parentLayout.postInvalidate();
+    }
+
+    /**
      *
      * @param polygon
      */
@@ -342,21 +463,13 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             building = Campus.getBuilding(polygon);
         }
         ((MainActivity) getActivity()).createToast(building.getShortName());
-        String buildingName = building.getShortName();
-        buildingInfoFragment.setBuildingInformation(buildingName, "add", "7:00", "23:00");
-        buildingInfoFragment.clear();
-        // TEMPORARY
-        if (buildingName.equals("H")){
-            buildingInfoFragment.displayHBuildingAssociations();
-        }
-        else if (buildingName.equals("JM")){
-            buildingInfoFragment.displayMBBuildingAssociations();
-        }
-        buildingInfoFragment.collapse();
 
-        ((MainActivity)getActivity()).setNavigationPOI((Building)
-                multiBuildingMap.get(polygon.getId()), false);
+        String name = building.getShortName();
+        updateBuildingInfoSheet(name);
+        bottomSheetBuilding = (Building)multiBuildingMap.get(polygon.getId());
+
     }
+
 
     /**
      *
@@ -371,18 +484,11 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             building = Campus.getBuilding(marker);
         }
         ((MainActivity) getActivity()).createToast(building.getShortName());
-        String buildingName = building.getShortName();
-        buildingInfoFragment.setBuildingInformation(buildingName, "address", "7:00", "23:00");
-        buildingInfoFragment.clear();
-        // TEMPORARY
-        if (buildingName.equals("H")) {
-            buildingInfoFragment.displayHBuildingAssociations();
-        } else if (buildingName.equals("JM")) {
-            buildingInfoFragment.displayMBBuildingAssociations();
-        }
-        buildingInfoFragment.collapse();
 
-        ((MainActivity)getActivity()).setNavigationPOI((Building) multiBuildingMap.get(marker.getId()), false);
+        String name = building.getShortName();
+        updateBuildingInfoSheet(name);
+        bottomSheetBuilding = (Building)multiBuildingMap.get(marker.getId());
+
     }
 
     /**

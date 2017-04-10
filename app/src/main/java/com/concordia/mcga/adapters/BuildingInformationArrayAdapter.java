@@ -1,6 +1,7 @@
 package com.concordia.mcga.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +32,6 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String[]> {
     // 4 images per per row
     private String[] image = new String[IMAGES_PER_ROW];
     private ImageView[] imageView = new ImageView[IMAGES_PER_ROW];
-
-
 
     ////////////////////////////////////////////////////////////
     // CLASS METHODS
@@ -96,8 +95,6 @@ public class BuildingInformationArrayAdapter extends ArrayAdapter<String[]> {
                                                 //////////
                                                 // HALL //
                                                 //////////
-
-
 
                         case "asfa":
                             imageView[i].setImageResource(R.mipmap.ic_asfa);

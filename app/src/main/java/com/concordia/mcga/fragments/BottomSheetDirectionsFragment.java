@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.adapters.DirectionsArrayAdapter;
-import com.concordia.mcga.lib.BottomSheet;
+import com.concordia.mcga.bottomsheet.BottomSheet;
 import com.concordia.mcga.models.Floor;
 import com.concordia.mcga.models.IndoorMapTile;
 import com.concordia.mcga.utilities.pathfinding.IndoorDirections;
@@ -428,6 +428,13 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         return bottomSheetTextView;
     }
 
+    public int getTop(){
+        int[] location = new int[2];
+        bottomSheetTextView.getLocationOnScreen(location);
+
+
+        return (location[1] - bottomSheetTextView.getHeight());
+    }
 
     ////////////////////////////////////
     // AUTO-GENERATE GETTERS
