@@ -383,10 +383,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         directionMode = isVisible;
 
         if (isVisible) {
-            getChildFragmentManager().beginTransaction().show(directionsFragment).commit();
+            getChildFragmentManager().beginTransaction().show(directionsFragment).commitAllowingStateLoss();
             outdoors = false;
         } else {
-            getChildFragmentManager().beginTransaction().hide(directionsFragment).commit();
+            getChildFragmentManager().beginTransaction().hide(directionsFragment).commitAllowingStateLoss();
             outdoors = true;
         }
     }
