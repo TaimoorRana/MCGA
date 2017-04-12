@@ -569,13 +569,17 @@ public class MainActivity extends AppCompatActivity implements
             return false;
         }
         if(location != null && destination != null)
-            updateTransportButtonOptions();
+            updateTransportOptions();
 
         updateSearchUI();
         return true;
     }
 
-    private void updateTransportButtonOptions() {
+    /**
+     * Disables or Enables the shuttle transport depending on if the navigation is done between
+     * campuses or not
+     */
+    private void updateTransportOptions() {
         if(location instanceof Building && destination instanceof Building){
             if(Campus.SGW.getBuildings().contains(location) && Campus.SGW.getBuildings().contains(destination) ||
                     Campus.LOY.getBuildings().contains(location) && Campus.LOY.getBuildings().contains(destination)){
