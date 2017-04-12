@@ -568,9 +568,24 @@ public class MainActivity extends AppCompatActivity implements
         } else { // if searchState == SearchState.LOCATION_DESTINATION
             return false;
         }
+        if(location != null && destination != null)
+            updateTransportButtonOptions();
+
         updateSearchUI();
         return true;
     }
+
+    private void updateTransportButtonOptions() {
+        if(location instanceof Building && destination instanceof Building){
+            if(Campus.SGW.getBuildings().contains(location) && Campus.SGW.getBuildings().contains(destination) ||
+                    Campus.LOY.getBuildings().contains(location) && Campus.LOY.getBuildings().contains(destination)){
+                navigationFragment.getTransportButtonFragment().disableShuttle(true);
+            }else {
+                navigationFragment.getTransportButtonFragment().disableShuttle(false);
+            }
+        }
+    }
+
 
     /**
      * Updates the UI elements associated with the search state.
