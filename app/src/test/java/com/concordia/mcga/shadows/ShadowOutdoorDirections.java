@@ -1,7 +1,7 @@
 package com.concordia.mcga.shadows;
 
 import com.concordia.mcga.helperClasses.MCGATransportMode;
-import com.concordia.mcga.helperClasses.OutdoorDirections;
+import com.concordia.mcga.utilities.pathfinding.OutdoorDirections;
 
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;

@@ -1,7 +1,10 @@
-package com.concordia.mcga.helperClasses;
+package com.concordia.mcga.utilities.pathfinding;
 
 import android.content.Context;
 
+import com.concordia.mcga.fragments.NavigationFragment;
+import com.concordia.mcga.helperClasses.IOutdoorPath;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -25,7 +28,7 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     private String transportMode;
     private int durationMinutes;
     private int durationHours;
-    private String currentCampus = Campus.SGW.getShortName();
+    private Campus startCampus = Campus.SGW;
 
 
     public ShuttleOutdoorPath(){
@@ -37,8 +40,9 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
 
     @Override
     public void setOrigin(LatLng origin) {
+        setStartCampus();
         this.origin = origin;
-        if(currentCampus.equalsIgnoreCase(Campus.SGW.getShortName())) {
+        if(startCampus == Campus.SGW) {
             sgwToLoyPath.setOrigin(SGW_STOP);
             shuttleStopToBuildingPath.setOrigin(LOY_STOP);
         }else {
@@ -52,7 +56,7 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     @Override
     public void setDestination(LatLng destination) {
         this.destination = destination;
-        if(currentCampus.equalsIgnoreCase(Campus.SGW.getShortName())) {
+        if(startCampus == Campus.SGW) {
             userToShuttleStopPath.setDestination(SGW_STOP);
             sgwToLoyPath.setDestination(LOY_STOP);
         }else{
@@ -201,8 +205,14 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         shuttleStopToBuildingPath.drawPath();
     }
 
-    public void setStartCampus(String campus){
-        currentCampus = campus;
+    public void setStartCampus(){
+        Double distanceFromSGWCampus = NavigationFragment.distanceBetween(origin,Campus.SGW.getMapCoordinates());
+        Double distanceFromLOYCampus = NavigationFragment.distanceBetween(origin,Campus.LOY.getMapCoordinates());
+        if(distanceFromSGWCampus <= distanceFromLOYCampus){
+            startCampus = Campus.SGW;
+        }else{
+            startCampus = Campus.LOY;
+        }
     }
 
 

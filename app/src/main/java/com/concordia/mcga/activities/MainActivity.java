@@ -41,8 +41,7 @@ import com.concordia.mcga.fragments.TransportButtonFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.helperClasses.GPSManager;
 import com.concordia.mcga.helperClasses.IOutdoorPath;
-import com.concordia.mcga.helperClasses.OutdoorDirections;
-import com.concordia.mcga.helperClasses.OutdoorPath;
+import com.concordia.mcga.utilities.pathfinding.OutdoorDirections;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Floor;
@@ -53,7 +52,6 @@ import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
