@@ -329,9 +329,7 @@ public class MainActivity extends AppCompatActivity implements
         currentState = NavigationState.OUTDOOR;
         navigationFragment.showOutdoorMap();
         OutdoorDirections outdoorDirections = navigationFragment.getOutdoorDirections();
-        if(outdoorDirections.getDirectionObject() != null) {
-            outdoorDirections.drawPathForSelectedTransportMode();
-        }
+        outdoorDirections.drawPathForSelectedTransportMode();
     }
 
     @Override

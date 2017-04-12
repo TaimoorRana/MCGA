@@ -123,7 +123,9 @@ public class OutdoorDirections {
      */
     public void drawPathForSelectedTransportMode() {
         deleteDirection();
-        selectedOutdoorPath.drawPath();
+        if(selectedOutdoorPath != null) {
+            selectedOutdoorPath.drawPath();
+        }
     }
 
     /**
