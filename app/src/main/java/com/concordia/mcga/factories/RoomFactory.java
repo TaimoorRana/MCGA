@@ -54,8 +54,8 @@ public class RoomFactory {
         }.getType();
         List<LatLng> polygonCoordinates = (List<LatLng>) GSON.fromJson(res.getString(POLYGON_COORDINATE_COLUMN_INDEX), latlngType);
 
-        String roomName = res.getString(ROOM_ICON_COLUMN_INDEX);
-        Room.RoomIcon roomIcon = Room.RoomIcon.valueOf(roomName);
+        String roomResourceName = res.getString(ROOM_ICON_COLUMN_INDEX);
+        Room.RoomIcon roomIcon = Room.RoomIcon.valueOf(roomResourceName);
 
         return new Room(centerCoordinates, name, indoorMapTile, roomNumber, floorNumber, polygonCoordinates, roomIcon);
     }
