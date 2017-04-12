@@ -100,7 +100,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     //State
     private Building lastClickedBuilding;
 
-    public final static int FLAG_DIRECTIONS = 0, FLAG_INFO = 1, FLAG_NO_DISPLAY = -1;
+    public final static int FLAG_DIRECTIONS = 0;
+    public final static int FLAG_INFO = 1;
+    public final static int FLAG_NO_DISPLAY = -1;
+
     private int building_flag = FLAG_NO_DISPLAY;
 
 
@@ -228,14 +231,12 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                         sleep(20);
                         int y = 0;
                         if ((building_flag == FLAG_INFO)) {
-                            directionsButton.setVisibility(View.VISIBLE);
                             y = buildingInfoFragment.getTop();
 
                             directionsButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
                             mapCenterButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
                         }
                         else if (building_flag == FLAG_DIRECTIONS){
-                            //directionsButton.setVisibility(View.INVISIBLE);
                             y = directionsFragment.getTop();
                             mapCenterButton.setY(y - mapCenterButton.getHeight());
                             directionsButton.setY(y -  mapCenterButton.getHeight());
@@ -243,7 +244,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                         }
                         else if (building_flag == FLAG_NO_DISPLAY)
                         {
-                            //directionsButton.setVisibility(View.INVISIBLE);
                             mapCenterButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
                             directionsButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
                         }
@@ -401,8 +401,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     public void showIndoorMap(Building building) {
         if (building.getRooms().size() > 0) {
             viewType = ViewType.INDOOR;
-
             showTransportButton(false);
+            directionsButton.setVisibility(View.GONE);
             campusButton.setVisibility(View.GONE);
 
             getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
@@ -422,6 +422,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         showTransportButton(true);
         campusButton.setVisibility(View.VISIBLE);
+        directionsButton.setVisibility(View.VISIBLE);
+
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
 
         viewSwitchButton.setText("GO INDOORS");
