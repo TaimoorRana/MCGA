@@ -137,6 +137,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     public void clearInstructions() {
         if (instructions != null) {
             instructions.clear();
+            currentStep = 0;
         }
     }
 

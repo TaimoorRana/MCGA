@@ -574,6 +574,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     public void clearAllPaths() {
         clearOutdoorPath();
         clearIndoorPath();
+        clearStepIndicator();
     }
 
     public void clearOutdoorPath() {
@@ -633,11 +634,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     public void camMove(LatLng MyPos, boolean setPersonVisible){
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(MyPos, 16f));//Camera Update method
         if(setPersonVisible) {
-            if(stepIndicatorMarker != null){
-                stepIndicatorMarker.remove();
-            }
+            clearStepIndicator();
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.stepindicator);
             stepIndicatorMarker = map.addMarker(new MarkerOptions().icon(bitmapDescriptor).position(MyPos));
+        }
+    }
+
+    public void clearStepIndicator() {
+        if(stepIndicatorMarker != null){
+            stepIndicatorMarker.remove();
         }
     }
 
