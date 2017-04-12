@@ -27,5 +27,5 @@ public interface IOutdoorPath {
     public int getDurationHours();
     public void setPathSelected(boolean isPathSelected);
     public void clearInstructions();
-
+    public LatLng getNextLatLng();
 }

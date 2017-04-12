@@ -490,7 +490,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 if (!(poi instanceof Room)) {
                     // call navigationfragment
-                    navigationFragment.camMove(poi.getMapCoordinates());
+                    navigationFragment.camMove(poi.getMapCoordinates(), false);
                 } else {
                     // call indoormapfragment
                     navigationFragment.onRoomSearch((Room) poi);

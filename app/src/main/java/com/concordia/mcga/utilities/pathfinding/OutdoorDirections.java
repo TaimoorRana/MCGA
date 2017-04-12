@@ -35,6 +35,8 @@ public class OutdoorDirections {
         shuttleOutdoorPath = new ShuttleOutdoorPath();
         shuttleOutdoorPath.setTransportMode(MCGATransportMode.SHUTTLE);
         outdoorPathList.add(shuttleOutdoorPath);
+
+        selectedOutdoorPath = outdoorPathList.get(2);
     }
 
     public void setOutdoorObjectNull(){
@@ -208,6 +210,13 @@ public class OutdoorDirections {
             }
         }
         return 0;
+    }
+
+
+    public LatLng getNextLatLng(){
+        // for some reason selectedOutdoorPath can be null at this point. So this will reselect it
+        setSelectedTransportMode(selectedTransportMode);
+        return selectedOutdoorPath.getNextLatLng();
     }
 
 }

@@ -167,6 +167,11 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         instructions.clear();
     }
 
+    @Override
+    public LatLng getNextLatLng() {
+        return null;
+    }
+
     /**
      * Deletes Paths on the map
      */

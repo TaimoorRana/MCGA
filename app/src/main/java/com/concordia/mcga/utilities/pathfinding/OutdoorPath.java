@@ -18,6 +18,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.vision.face.Landmark;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     private int durationMinutes;
     private int durationHours;
     private boolean isPathSelected;
+    private int currentStep;
 
     public OutdoorPath() {
         polylines = new ArrayList<>();
@@ -52,6 +54,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
         instructions = new ArrayList<>();
         transportMode = MCGATransportMode.TRANSIT; // default transport mode
         isPathSelected = false;
+        currentStep = 0;
     }
 
     /**
@@ -135,6 +138,22 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
         if (instructions != null) {
             instructions.clear();
         }
+    }
+
+    @Override
+    public LatLng getNextLatLng() {
+        LatLng nextLatLng = null;
+        // if 0, show start location
+        nextLatLng = steps.get(currentStep).getStartLocation().getCoordination();
+        if (currentStep == steps.size()){ // else show end location
+            nextLatLng = steps.get(currentStep - 1).getEndLocation().getCoordination();
+        }
+        currentStep++;
+        // currentStep goes out of bound, reset it to 0
+        if(currentStep > steps.size()){
+            currentStep = 0;
+        }
+        return nextLatLng;
     }
 
     /**

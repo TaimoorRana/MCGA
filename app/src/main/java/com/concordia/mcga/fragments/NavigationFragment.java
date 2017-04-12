@@ -37,9 +37,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.maps.android.SphericalUtil;
 import com.google.gson.Gson;
@@ -53,6 +56,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         OnCameraIdleListener, Subject {
+    private Marker stepIndicatorMarker;
+
     //Enum representing which map view is active
     public enum ViewType {
         INDOOR, OUTDOOR
@@ -139,7 +144,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 //Camera Movement
                 LatLng location = ((MainActivity) getActivity()).getGpsManager().getLocation();
                 if (location != null) {
-                    camMove(location);
+                    camMove(location, false);
                     toggleMapLocation(true);
                 }
             }
@@ -625,8 +630,15 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    public void camMove(LatLng MyPos){
+    public void camMove(LatLng MyPos, boolean setPersonVisible){
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(MyPos, 16f));//Camera Update method
+        if(setPersonVisible) {
+            if(stepIndicatorMarker != null){
+                stepIndicatorMarker.remove();
+            }
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.stepindicator);
+            stepIndicatorMarker = map.addMarker(new MarkerOptions().icon(bitmapDescriptor).position(MyPos));
+        }
     }
 
     public void toggleMapLocation(boolean active) {
