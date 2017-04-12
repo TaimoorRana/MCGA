@@ -1,5 +1,6 @@
 package com.concordia.mcga.helperClasses;
 
+import com.concordia.mcga.utilities.pathfinding.OutdoorDirections;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Before;

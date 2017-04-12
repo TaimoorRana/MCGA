@@ -23,10 +23,9 @@ import android.widget.ToggleButton;
 
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.helperClasses.GPSManager;
 import com.concordia.mcga.activities.StudentSpotActivity;
 import com.concordia.mcga.helperClasses.Observer;
-import com.concordia.mcga.helperClasses.OutdoorDirections;
+import com.concordia.mcga.utilities.pathfinding.OutdoorDirections;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
@@ -301,7 +300,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * This method calculates the distance between two LatLng variables.
      * To be used with method "closestCampus".
      */
-    public Double distanceBetween(LatLng point1, LatLng point2){
+    public static Double distanceBetween(LatLng point1, LatLng point2){
         if(point1==null||point2 == null){
             return 0.0;
         }

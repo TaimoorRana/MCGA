@@ -3,7 +3,7 @@ package com.concordia.mcga.fragments;
 import com.concordia.mcga.activities.BuildConfig;
 import com.concordia.mcga.activities.R;
 import com.concordia.mcga.helperClasses.MCGATransportMode;
-import com.concordia.mcga.helperClasses.OutdoorDirections;
+import com.concordia.mcga.utilities.pathfinding.OutdoorDirections;
 import com.concordia.mcga.shadows.ShadowOutdoorDirections;
 
 import org.junit.Before;

@@ -1,7 +1,9 @@
-package com.concordia.mcga.helperClasses;
+package com.concordia.mcga.utilities.pathfinding;
 
 import android.content.Context;
 
+import com.concordia.mcga.helperClasses.IOutdoorPath;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -204,10 +206,6 @@ public class OutdoorDirections {
             }
         }
         return 0;
-    }
-
-    public void setShuttleStartCampus(String campus){
-        ((ShuttleOutdoorPath)shuttleOutdoorPath).setStartCampus(campus);
     }
 
 }

@@ -41,8 +41,7 @@ import com.concordia.mcga.fragments.TransportButtonFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.helperClasses.GPSManager;
 import com.concordia.mcga.helperClasses.IOutdoorPath;
-import com.concordia.mcga.helperClasses.OutdoorDirections;
-import com.concordia.mcga.helperClasses.OutdoorPath;
+import com.concordia.mcga.utilities.pathfinding.OutdoorDirections;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Floor;
@@ -53,7 +52,6 @@ import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -570,9 +568,28 @@ public class MainActivity extends AppCompatActivity implements
         } else { // if searchState == SearchState.LOCATION_DESTINATION
             return false;
         }
+        if(location != null && destination != null)
+            updateTransportOptions();
+
         updateSearchUI();
         return true;
     }
+
+    /**
+     * Disables or Enables the shuttle transport depending on if the navigation is done between
+     * campuses or not
+     */
+    private void updateTransportOptions() {
+        if(location instanceof Building && destination instanceof Building){
+            if(Campus.SGW.getBuildings().contains(location) && Campus.SGW.getBuildings().contains(destination) ||
+                    Campus.LOY.getBuildings().contains(location) && Campus.LOY.getBuildings().contains(destination)){
+                navigationFragment.getTransportButtonFragment().disableShuttle(true);
+            }else {
+                navigationFragment.getTransportButtonFragment().disableShuttle(false);
+            }
+        }
+    }
+
 
     /**
      * Updates the UI elements associated with the search state.

@@ -1,4 +1,4 @@
-package com.concordia.mcga.helperClasses;
+package com.concordia.mcga.utilities.pathfinding;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,6 +12,8 @@ import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.concordia.mcga.helperClasses.IOutdoorPath;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -72,7 +74,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
 
     @Override
     public void onDirectionFailure(Throwable t) {
-        Log.e("Path Error:", "Unable to get directions");
+        Log.e("Path Error:", t.toString());
     }
 
     /**
