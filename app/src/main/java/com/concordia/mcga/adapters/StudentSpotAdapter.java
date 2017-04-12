@@ -19,7 +19,7 @@ import java.util.List;
 public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
     private final Context context;
     private final DecimalFormat df = new DecimalFormat(".##");
-    private final int RADIUS_EARTH = 6371;
+    private final static int RADIUS_EARTH = 6371;
 
     /**
      * Constructor which takes the list of student spots as well as a coordinate to calculate
@@ -79,7 +79,7 @@ public class StudentSpotAdapter extends ArrayAdapter<StudentSpot> {
      */
     private double getDistance(LatLng start, LatLng end) {
         double lat  = Math.toRadians(end.latitude - start.latitude);
-        double lon = Math.toRadians(end.longitude - end.longitude);
+        double lon = Math.toRadians(end.longitude - start.longitude);
 
         double a = Math.sin(lat / 2) * Math.sin(lat / 2)
                 + Math.cos(Math.toRadians(start.latitude)) * Math.cos(Math.toRadians(end.latitude))
