@@ -13,12 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentSpotFactory {
-    public final static int NAME_COLUMN_INDEX = 0, RATING_COLUMN_INDEX = 1,
-            COORDINATE_COLUMN_INDEX = 2, ADDRESS_COLUMN_INDEX = 3, DESCRIPTION_COLUMN_INDEX = 4,
-            RESOURCE_IMAGE_COLUMN_INDEX = 5;
-    private final Gson GSON;
+    public final static int NAME_COLUMN_INDEX = 0;
+    public final static int RATING_COLUMN_INDEX = 1;
+    public final static int COORDINATE_COLUMN_INDEX = 2;
+    public final static int ADDRESS_COLUMN_INDEX = 3;
+    public final static int DESCRIPTION_COLUMN_INDEX = 4;
+    public final static int RESOURCE_IMAGE_COLUMN_INDEX = 5;
+    private final Gson gson;
 
     private static StudentSpotFactory instance;
+
+    private StudentSpotFactory() {
+        studentSpots = null;
+        gson = new Gson();
+    }
 
     private List<StudentSpot> studentSpots;
 
@@ -27,11 +35,6 @@ public class StudentSpotFactory {
             return instance;
         }
         return instance = new StudentSpotFactory();
-    }
-
-    private StudentSpotFactory() {
-        studentSpots = null;
-        GSON = new Gson();
     }
 
     public List<StudentSpot> getStudentSpots(Resources resources) {
@@ -64,7 +67,7 @@ public class StudentSpotFactory {
             String address = res.getString(ADDRESS_COLUMN_INDEX);
             int resId = resources.getIdentifier(resourceName,"mipmap","com.concordia.mcga");
             float rating = res.getFloat(RATING_COLUMN_INDEX);
-            LatLng centerCoordinates = GSON.fromJson(
+            LatLng centerCoordinates = gson.fromJson(
                     res.getString(COORDINATE_COLUMN_INDEX), LatLng.class);
 
             studentSpots.add(new StudentSpot(

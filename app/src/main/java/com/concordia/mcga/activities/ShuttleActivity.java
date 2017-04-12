@@ -17,13 +17,13 @@ import com.concordia.mcga.exceptions.MCGADatabaseException;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 
 public class ShuttleActivity extends AppCompatActivity {
-    final static int SGW_TO_LOY_MOTH = 0;
-    final static int SGW_TO_LOY_FRI = 1;
-    final static int LOY_TO_SGW_MOTH = 2;
-    final static int LOY_TO_SGW_FRI = 3;
-    final static int SHUTTLE_TABLE_COLUMNS = 4;
+    final private static int SGW_TO_LOY_MOTH = 0;
+    final private static int SGW_TO_LOY_FRI = 1;
+    final private static int LOY_TO_SGW_MOTH = 2;
+    final private static int LOY_TO_SGW_FRI = 3;
+    final private static int SHUTTLE_TABLE_COLUMNS = 4;
 
-    public static String[][] shuttleSchedule;
+    private static String[][] shuttleSchedule;
     private TableLayout tableLayout;
     private Button sgwToLoyola;
     private Button loyolaToSgw;

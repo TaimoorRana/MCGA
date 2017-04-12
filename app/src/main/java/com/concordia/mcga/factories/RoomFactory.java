@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 /**
- *  Factory used to create rooms from the database.
+ * Factory used to create rooms from the database.
  */
 public class RoomFactory {
     final static int NAME_COLUMN_INDEX = 1;
@@ -27,10 +27,11 @@ public class RoomFactory {
 
     private final static Gson GSON = new Gson();
 
-    private RoomFactory(){}
+    private RoomFactory() {
+    }
 
     /**
-     *  Creates a room object based on the row that the cursor is currently on.
+     * Creates a room object based on the row that the cursor is currently on.
      *
      * @param res - The {@link Cursor} object, currently located on a {@link Room}'s row.
      * @return A {@link Room} matching the room pointed to by the cursor.
@@ -41,14 +42,16 @@ public class RoomFactory {
         LatLng centerCoordinates = GSON.fromJson(res.getString(CENTER_COORDINATE_COLUMN_INDEX),
                 LatLng.class);
 
-        Type indoorTileType = new TypeToken<IndoorMapTile>() {}.getType();
+        Type indoorTileType = new TypeToken<IndoorMapTile>() {
+        }.getType();
         IndoorMapTile indoorMapTile = (IndoorMapTile) GSON.fromJson(res.getString(INDOORMAPTILE_COLUMN_INDEX), indoorTileType);
 
 
         String roomNumber = res.getString(ROOM_NUMBER_COLUMN_INDEX);
         int floorNumber = res.getInt(FLOOR_NUMBER_COLUMN_INDEX);
 
-        Type latlngType = new TypeToken<List<LatLng>>() {}.getType();
+        Type latlngType = new TypeToken<List<LatLng>>() {
+        }.getType();
         List<LatLng> polygonCoordinates = (List<LatLng>) GSON.fromJson(res.getString(POLYGON_COORDINATE_COLUMN_INDEX), latlngType);
 
         String roomName = res.getString(ROOM_ICON_COLUMN_INDEX);
@@ -67,9 +70,8 @@ public class RoomFactory {
             }
         } catch (MCGADatabaseException e) {
             throw new Error("Database not initialized");
-        } finally {
-            res.close();
         }
+        res.close();
         return room;
     }
 }
