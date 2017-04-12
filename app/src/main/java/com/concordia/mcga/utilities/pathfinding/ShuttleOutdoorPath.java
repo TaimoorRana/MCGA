@@ -205,6 +205,9 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         shuttleStopToBuildingPath.drawPath();
     }
 
+    /**
+     * Checks in which campus the origin is located in and sets up the startCampus attribute
+     */
     public void setStartCampus(){
         Double distanceFromSGWCampus = NavigationFragment.distanceBetween(origin,Campus.SGW.getMapCoordinates());
         Double distanceFromLOYCampus = NavigationFragment.distanceBetween(origin,Campus.LOY.getMapCoordinates());
