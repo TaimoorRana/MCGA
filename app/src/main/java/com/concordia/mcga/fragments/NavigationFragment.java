@@ -289,11 +289,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         Campus.populateCampusesWithBuildings();
         addBuildingMarkersAndPolygons();
         currentCampus=closestCampus(distanceBetween(((MainActivity) getActivity()).getGpsManager().getLocation(),Campus.SGW.getMapCoordinates()),distanceBetween(((MainActivity) getActivity()).getGpsManager().getLocation(),Campus.LOY.getMapCoordinates()));
-        if(currentCampus == Campus.SGW){
-            toggleButton.setChecked(false);
-        }else{
-            toggleButton.setChecked(true);
-        }
         updateCampus();
     }
 
