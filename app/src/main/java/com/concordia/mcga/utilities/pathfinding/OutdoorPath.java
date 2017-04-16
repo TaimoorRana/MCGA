@@ -47,6 +47,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     private int durationHours;
     private boolean isPathSelected;
     private int currentStep;
+    private List<LatLng> allStartLatLng;
 
     public OutdoorPath() {
         polylines = new ArrayList<>();
@@ -55,6 +56,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
         transportMode = MCGATransportMode.TRANSIT; // default transport mode
         isPathSelected = false;
         currentStep = 0;
+        allStartLatLng = new ArrayList<>();
     }
 
     /**
@@ -258,6 +260,13 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
 
     public void setTransitPathColor(int transitPathColor) {
         this.transitPathColor = transitPathColor;
+    }
+
+    public List<LatLng> getAllStartLatLng(){
+        for(Step step: steps){
+            allStartLatLng.add(step.getStartLocation().getCoordination());
+        }
+        return allStartLatLng;
     }
 
 }

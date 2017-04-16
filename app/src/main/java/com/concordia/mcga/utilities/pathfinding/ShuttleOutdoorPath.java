@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShuttleOutdoorPath implements IOutdoorPath {
+
+    //enum Path{userToShuttleStopPath,sgwToLoyPath,shuttleStopToBuildingPath}
     private OutdoorPath userToShuttleStopPath;
     private OutdoorPath sgwToLoyPath;
     private OutdoorPath shuttleStopToBuildingPath;
@@ -29,6 +31,8 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     private int durationMinutes;
     private int durationHours;
     private Campus startCampus = Campus.SGW;
+    private int currentStep;
+    private List<LatLng> allStartLatlng;
 
 
     public ShuttleOutdoorPath(){
@@ -36,6 +40,7 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         sgwToLoyPath = new OutdoorPath();
         shuttleStopToBuildingPath = new OutdoorPath();
         instructions = new ArrayList<>();
+        allStartLatlng = new ArrayList<>();
     }
 
     @Override
@@ -165,11 +170,27 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     @Override
     public void clearInstructions(){
         instructions.clear();
+        allStartLatlng.clear();
     }
 
     @Override
     public LatLng getNextLatLng() {
-        return null;
+        if(allStartLatlng.isEmpty()){
+            initializeAllStartLatlng();
+        }
+
+        LatLng nextLatLng = null;
+        // if 0, show start location
+        nextLatLng = allStartLatlng.get(currentStep);
+        if (currentStep == allStartLatlng.size()){ // else show end location
+            nextLatLng = allStartLatlng.get(currentStep - 1);
+        }
+        currentStep++;
+        // currentStep goes out of bound, reset it to 0
+        if(currentStep > allStartLatlng.size()){
+            currentStep = 0;
+        }
+        return nextLatLng;
     }
 
     /**
@@ -180,6 +201,12 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         shuttleStopToBuildingPath.deleteDirection();
         userToShuttleStopPath.deleteDirection();
         sgwToLoyPath.deleteDirection();
+    }
+
+    private void initializeAllStartLatlng(){
+        allStartLatlng = new ArrayList<>(userToShuttleStopPath.getAllStartLatLng());
+        allStartLatlng.addAll(sgwToLoyPath.getAllStartLatLng());
+        allStartLatlng.addAll(shuttleStopToBuildingPath.getAllStartLatLng());
     }
 
     /**
