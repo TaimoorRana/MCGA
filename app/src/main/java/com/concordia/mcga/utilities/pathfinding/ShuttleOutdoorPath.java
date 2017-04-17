@@ -162,7 +162,10 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     public List<String> getInstructions() {
         List<String> allInstructions = new ArrayList<>();
         allInstructions.addAll(userToShuttleStopPath.getInstructions());
-        allInstructions.addAll(sgwToLoyPath.getInstructions());
+        // removed last instruction.
+        allInstructions.remove(allInstructions.size()-1);
+        allInstructions.add("Take Concordia's Shuttle Bus");
+        allInstructions.add("Get off Concordia's Shuttle Bus");
         allInstructions.addAll(shuttleStopToBuildingPath.getInstructions());
         return allInstructions;
     }
@@ -180,15 +183,13 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         }
 
         LatLng nextLatLng = null;
-        // if 0, show start location
-        nextLatLng = allStartLatlng.get(currentStep);
-        if (currentStep == allStartLatlng.size()){ // else show end location
-            nextLatLng = allStartLatlng.get(currentStep - 1);
-        }
-        currentStep++;
-        // currentStep goes out of bound, reset it to 0
-        if(currentStep > allStartLatlng.size()){
+        // if all steps are completed, nextLatLng is the previous step end location.
+        if(currentStep >= allStartLatlng.size()){
+            nextLatLng = destination;
             currentStep = 0;
+        }else {
+            nextLatLng = allStartLatlng.get(currentStep);
+            currentStep++;
         }
         return nextLatLng;
     }
@@ -205,7 +206,8 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
 
     private void initializeAllStartLatlng(){
         allStartLatlng = new ArrayList<>(userToShuttleStopPath.getAllStartLatLng());
-        allStartLatlng.addAll(sgwToLoyPath.getAllStartLatLng());
+        allStartLatlng.add(sgwToLoyPath.getOrigin());
+        allStartLatlng.add(sgwToLoyPath.getDestination());
         allStartLatlng.addAll(shuttleStopToBuildingPath.getAllStartLatLng());
     }
 

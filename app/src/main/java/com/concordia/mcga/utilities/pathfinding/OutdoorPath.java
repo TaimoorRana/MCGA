@@ -145,10 +145,11 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
 
     @Override
     public LatLng getNextLatLng() {
-        LatLng nextLatLng = null;
-        // if all steps are completed, nextLatLng is the previous step end location.
+        LatLng nextLatLng;
+        // if all steps are completed, nextLatLng is the destination
         if(currentStep >= steps.size()){
-            nextLatLng = steps.get(currentStep - 1).getEndLocation().getCoordination();
+            nextLatLng = destination;
+            currentStep = 0;
         }else {
             nextLatLng = steps.get(currentStep).getStartLocation().getCoordination();
             currentStep++;
