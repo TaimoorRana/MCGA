@@ -18,7 +18,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.vision.face.Landmark;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +132,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
         for (Step step : steps) {
             instructions.add(step.getHtmlInstruction().replaceAll("\\<[^>]*>", ""));
         }
+        instructions.add("Arrived at " + leg.getEndAddress());
         return instructions;
     }
 
@@ -146,15 +146,12 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     @Override
     public LatLng getNextLatLng() {
         LatLng nextLatLng = null;
-        // if 0, show start location
-        nextLatLng = steps.get(currentStep).getStartLocation().getCoordination();
-        if (currentStep == steps.size()){ // else show end location
+        // if all steps are completed, nextLatLng is the previous step end location.
+        if(currentStep >= steps.size()){
             nextLatLng = steps.get(currentStep - 1).getEndLocation().getCoordination();
-        }
-        currentStep++;
-        // currentStep goes out of bound, reset it to 0
-        if(currentStep > steps.size()){
-            currentStep = 0;
+        }else {
+            nextLatLng = steps.get(currentStep).getStartLocation().getCoordination();
+            currentStep++;
         }
         return nextLatLng;
     }
