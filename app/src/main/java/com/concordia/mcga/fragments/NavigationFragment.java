@@ -477,7 +477,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         if (building == null) {
             building = Campus.getBuilding(polygon);
         }
-        ((MainActivity) getActivity()).createToast(building.getShortName());
 
         String name = building.getShortName();
         updateBuildingInfoSheet(name);
@@ -498,7 +497,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         if(building == null){
             building = Campus.getBuilding(marker);
         }
-        ((MainActivity) getActivity()).createToast(building.getShortName());
 
         String name = building.getShortName();
         updateBuildingInfoSheet(name);
@@ -521,16 +519,23 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
-                lastClickedBuilding = Campus.getBuilding(polygon);
-                setBottomSheetContent(polygon);
+                MainActivity activity = (MainActivity)getActivity();
+                if ((activity != null) && activity.getSearchState() != MainActivity.SearchState.LOCATION_DESTINATION) {
+                    lastClickedBuilding = Campus.getBuilding(polygon);
+                    setBottomSheetContent(polygon);
+                }
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                lastClickedBuilding = Campus.getBuilding(marker);
-                setBottomSheetContent(marker);
-                return true;
+                MainActivity activity = (MainActivity)getActivity();
+                if ((activity != null) && activity.getSearchState() != MainActivity.SearchState.LOCATION_DESTINATION) {
+                    lastClickedBuilding = Campus.getBuilding(marker);
+                    setBottomSheetContent(marker);
+                    return true;
+                }
+                return false;
             }
         });
     }
