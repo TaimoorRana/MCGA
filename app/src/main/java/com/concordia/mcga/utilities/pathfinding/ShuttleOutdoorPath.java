@@ -37,8 +37,10 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
 
     public ShuttleOutdoorPath(){
         userToShuttleStopPath = new OutdoorPath();
+        userToShuttleStopPath.setTransportMode(MCGATransportMode.WALKING);
         sgwToLoyPath = new OutdoorPath();
         shuttleStopToBuildingPath = new OutdoorPath();
+        shuttleStopToBuildingPath.setTransportMode(MCGATransportMode.WALKING);
         instructions = new ArrayList<>();
         allStartLatlng = new ArrayList<>();
     }
@@ -81,6 +83,7 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
      */
     @Override
     public void requestDirection() {
+        currentStep = 0;
         userToShuttleStopPath.requestDirection();
         sgwToLoyPath.requestDirection();
         shuttleStopToBuildingPath.requestDirection();

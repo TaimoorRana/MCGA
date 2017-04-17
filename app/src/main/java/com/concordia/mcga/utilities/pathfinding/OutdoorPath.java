@@ -85,6 +85,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
      * Makes a https request to get a direction from origin to destination with a specified transport mode.
      */
     public void requestDirection() {
+        currentStep = 0;
         GoogleDirection.withServerKey(serverKey)
                 .from(origin)
                 .to(destination)
@@ -260,6 +261,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     }
 
     public List<LatLng> getAllStartLatLng(){
+        allStartLatLng.clear();
         for(Step step: steps){
             allStartLatLng.add(step.getStartLocation().getCoordination());
         }
