@@ -93,7 +93,6 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         currentStep = 0;
         allStartLatLng.clear();
         clearInstructions();
-        deleteDirection();
     }
 
     @Override
