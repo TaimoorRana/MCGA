@@ -56,6 +56,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
         isPathSelected = false;
         currentStep = 0;
         allStartLatLng = new ArrayList<>();
+        leg = new Leg();
     }
 
     /**
