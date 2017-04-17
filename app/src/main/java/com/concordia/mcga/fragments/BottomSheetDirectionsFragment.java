@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +22,6 @@ import com.concordia.mcga.utilities.pathfinding.IndoorDirections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static android.content.ContentValues.TAG;
 
 
 public class BottomSheetDirectionsFragment extends Fragment implements View.OnClickListener{
@@ -369,7 +366,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
             try{
                 // load the outdoors view
                 if (flag.get(currentDirection) == FLAG_OUTDOORS) {
-                    ((NavigationFragment) getParentFragment()).showOutdoorMap();
+                    NavigationFragment navigationFragment = ((NavigationFragment) getParentFragment());
+                    navigationFragment.showOutdoorMap();
+                    navigationFragment.camMove(navigationFragment.getOutdoorDirections().getNextLatLng(), true);
                 }
                 // reset the indoors view if we change floors
                 else if (flag.get(currentDirection) == FLAG_INDOORS){
@@ -585,5 +584,6 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         }
 
     }
+
 
 }

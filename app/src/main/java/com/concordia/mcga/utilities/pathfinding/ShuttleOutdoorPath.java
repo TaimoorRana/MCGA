@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShuttleOutdoorPath implements IOutdoorPath {
+
+    //enum Path{userToShuttleStopPath,sgwToLoyPath,shuttleStopToBuildingPath}
     private OutdoorPath userToShuttleStopPath;
     private OutdoorPath sgwToLoyPath;
     private OutdoorPath shuttleStopToBuildingPath;
@@ -29,13 +31,18 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     private int durationMinutes;
     private int durationHours;
     private Campus startCampus = Campus.SGW;
+    private int currentStep;
+    private List<LatLng> allStartLatLng;
 
 
     public ShuttleOutdoorPath(){
         userToShuttleStopPath = new OutdoorPath();
+        userToShuttleStopPath.setTransportMode(MCGATransportMode.WALKING);
         sgwToLoyPath = new OutdoorPath();
         shuttleStopToBuildingPath = new OutdoorPath();
+        shuttleStopToBuildingPath.setTransportMode(MCGATransportMode.WALKING);
         instructions = new ArrayList<>();
+        allStartLatLng = new ArrayList<>();
     }
 
     @Override
@@ -76,9 +83,17 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
      */
     @Override
     public void requestDirection() {
+        resetAttributes();
         userToShuttleStopPath.requestDirection();
         sgwToLoyPath.requestDirection();
         shuttleStopToBuildingPath.requestDirection();
+    }
+
+    public void resetAttributes(){
+        currentStep = 0;
+        allStartLatLng.clear();
+        clearInstructions();
+        deleteDirection();
     }
 
     @Override
@@ -157,7 +172,10 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     public List<String> getInstructions() {
         List<String> allInstructions = new ArrayList<>();
         allInstructions.addAll(userToShuttleStopPath.getInstructions());
-        allInstructions.addAll(sgwToLoyPath.getInstructions());
+        // removed last instruction.
+        allInstructions.remove(allInstructions.size()-1);
+        allInstructions.add("Take Concordia's Shuttle Bus");
+        allInstructions.add("Get off Concordia's Shuttle Bus");
         allInstructions.addAll(shuttleStopToBuildingPath.getInstructions());
         return allInstructions;
     }
@@ -165,6 +183,23 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     @Override
     public void clearInstructions(){
         instructions.clear();
+    }
+
+    @Override
+    public LatLng getNextLatLng() {
+        if(allStartLatLng.isEmpty()){
+            initializeAllStartLatlng();
+        }
+
+        LatLng nextLatLng = null;
+        // if all steps are completed, nextLatLng is the previous step end location.
+        if(currentStep >= allStartLatLng.size()){
+            nextLatLng = destination;
+        }else {
+            nextLatLng = allStartLatLng.get(currentStep);
+            currentStep++;
+        }
+        return nextLatLng;
     }
 
     /**
@@ -175,6 +210,14 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         shuttleStopToBuildingPath.deleteDirection();
         userToShuttleStopPath.deleteDirection();
         sgwToLoyPath.deleteDirection();
+        allStartLatLng.clear();
+    }
+
+    private void initializeAllStartLatlng(){
+        allStartLatLng = new ArrayList<>(userToShuttleStopPath.getAllStartLatLng());
+        allStartLatLng.add(sgwToLoyPath.getOrigin());
+        allStartLatLng.add(sgwToLoyPath.getDestination());
+        allStartLatLng.addAll(shuttleStopToBuildingPath.getAllStartLatLng());
     }
 
     /**
