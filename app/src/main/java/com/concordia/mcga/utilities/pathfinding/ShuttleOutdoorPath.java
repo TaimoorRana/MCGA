@@ -202,6 +202,7 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         shuttleStopToBuildingPath.deleteDirection();
         userToShuttleStopPath.deleteDirection();
         sgwToLoyPath.deleteDirection();
+        allStartLatlng.clear();
     }
 
     private void initializeAllStartLatlng(){
