@@ -9,7 +9,7 @@
         android:id="@+id/profile_image"
         android:layout_width="76dp"
         android:layout_height="76dp"
-        android:src="@drawable/ic_stingers_icon"
+        android:src="@drawable/tsantalis"
         app:border_color="@color/white"
         android:layout_marginLeft="24dp"
         android:layout_centerVertical="true"
