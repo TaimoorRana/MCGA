@@ -32,7 +32,7 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     private int durationHours;
     private Campus startCampus = Campus.SGW;
     private int currentStep;
-    private List<LatLng> allStartLatlng;
+    private List<LatLng> allStartLatLng;
 
 
     public ShuttleOutdoorPath(){
@@ -42,7 +42,7 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         shuttleStopToBuildingPath = new OutdoorPath();
         shuttleStopToBuildingPath.setTransportMode(MCGATransportMode.WALKING);
         instructions = new ArrayList<>();
-        allStartLatlng = new ArrayList<>();
+        allStartLatLng = new ArrayList<>();
     }
 
     @Override
@@ -83,10 +83,17 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
      */
     @Override
     public void requestDirection() {
-        currentStep = 0;
+        resetAttributes();
         userToShuttleStopPath.requestDirection();
         sgwToLoyPath.requestDirection();
         shuttleStopToBuildingPath.requestDirection();
+    }
+
+    public void resetAttributes(){
+        currentStep = 0;
+        allStartLatLng.clear();
+        clearInstructions();
+        deleteDirection();
     }
 
     @Override
@@ -176,21 +183,20 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     @Override
     public void clearInstructions(){
         instructions.clear();
-        allStartLatlng.clear();
     }
 
     @Override
     public LatLng getNextLatLng() {
-        if(allStartLatlng.isEmpty()){
+        if(allStartLatLng.isEmpty()){
             initializeAllStartLatlng();
         }
 
         LatLng nextLatLng = null;
         // if all steps are completed, nextLatLng is the previous step end location.
-        if(currentStep >= allStartLatlng.size()){
+        if(currentStep >= allStartLatLng.size()){
             nextLatLng = destination;
         }else {
-            nextLatLng = allStartLatlng.get(currentStep);
+            nextLatLng = allStartLatLng.get(currentStep);
             currentStep++;
         }
         return nextLatLng;
@@ -204,14 +210,14 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         shuttleStopToBuildingPath.deleteDirection();
         userToShuttleStopPath.deleteDirection();
         sgwToLoyPath.deleteDirection();
-        allStartLatlng.clear();
+        allStartLatLng.clear();
     }
 
     private void initializeAllStartLatlng(){
-        allStartLatlng = new ArrayList<>(userToShuttleStopPath.getAllStartLatLng());
-        allStartLatlng.add(sgwToLoyPath.getOrigin());
-        allStartLatlng.add(sgwToLoyPath.getDestination());
-        allStartLatlng.addAll(shuttleStopToBuildingPath.getAllStartLatLng());
+        allStartLatLng = new ArrayList<>(userToShuttleStopPath.getAllStartLatLng());
+        allStartLatLng.add(sgwToLoyPath.getOrigin());
+        allStartLatLng.add(sgwToLoyPath.getDestination());
+        allStartLatLng.addAll(shuttleStopToBuildingPath.getAllStartLatLng());
     }
 
     /**

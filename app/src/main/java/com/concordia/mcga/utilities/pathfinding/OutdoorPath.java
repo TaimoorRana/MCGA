@@ -85,7 +85,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
      * Makes a https request to get a direction from origin to destination with a specified transport mode.
      */
     public void requestDirection() {
-        currentStep = 0;
+        resetAttributes();
         GoogleDirection.withServerKey(serverKey)
                 .from(origin)
                 .to(destination)
@@ -94,6 +94,12 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
                 .transitMode(TransitMode.SUBWAY)
                 .unit(Unit.METRIC)
                 .execute(this);
+    }
+
+    private void resetAttributes(){
+        currentStep = 0;
+        allStartLatLng.clear();
+        clearInstructions();
     }
 
     /**
@@ -118,7 +124,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
      * sets origin and destination to null
      */
     public void deleteDirection() {
-        if (polylines != null) {
+        if (polylines != null && !polylines.isEmpty()) {
             for (Polyline polyline : polylines) {
                 polyline.remove();
             }
@@ -140,7 +146,6 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     public void clearInstructions() {
         if (instructions != null) {
             instructions.clear();
-            currentStep = 0;
         }
     }
 
