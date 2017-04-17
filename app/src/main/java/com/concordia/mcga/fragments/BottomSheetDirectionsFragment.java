@@ -184,6 +184,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
                 break;
 
             case R.id.previousButton:
+                adapter.notifyDataSetChanged();
                 previousDirection();
                 break;
 
@@ -353,7 +354,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         displayedDirectionsList.clear();
         displayedDirectionsImage.clear();
 
-        for (int i = currentDirection + 1; i < completeDirectionsList.size(); i++){
+        for (int i = currentDirection ; i < completeDirectionsList.size(); i++){
             displayedDirectionsList.add(completeDirectionsList.get(i));
             displayedDirectionsImage.add(completeDirectionsImage.get(i));
         }
@@ -361,7 +362,10 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
         if (completeDirectionsList.size() > 0) {
             // Set the main direction
-            setTextDirections(completeDirectionsList.get(currentDirection));
+            if(currentDirection<completeDirectionsList.size()){
+                setTextDirections(completeDirectionsList.get(currentDirection));}
+            else{
+                setTextDirections("Arrived at destination");}
             try{
                 // load the outdoors view
                 if (flag.get(currentDirection) == FLAG_OUTDOORS) {
@@ -420,7 +424,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         bottomSheetTextView.setText(direction);
     }
 
-    
+
     /**
      * @return TextView
      */
