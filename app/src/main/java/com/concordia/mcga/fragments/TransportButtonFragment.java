@@ -241,6 +241,11 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
         transportExpandFAB.clearColorFilter();
     }
 
+    public void setDefaultTransportMode(){
+        swapIcons(Transportation.TRANSIT.getIconID());
+        transportType = MCGATransportMode.TRANSIT;
+    }
+
     private void restorePreviousIcon() {
         transportExpandFAB.setImageResource((Integer) transportExpandFAB.getTag());
         transportExpandFAB.clearColorFilter();

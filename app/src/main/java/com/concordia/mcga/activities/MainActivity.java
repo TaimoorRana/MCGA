@@ -588,6 +588,8 @@ public class MainActivity extends AppCompatActivity implements
                 navigationFragment.getTransportButtonFragment().disableShuttle(false);
             }
         }
+
+        navigationFragment.getTransportButtonFragment().setDefaultTransportMode();
     }
 
 
