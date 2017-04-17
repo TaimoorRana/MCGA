@@ -345,17 +345,20 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             Log.d("bottomsheet-", "DIRECTIONS");
             showBuildingInfoFragment(false);
             showDirectionsFragment(true);
+            directionsButton.setVisibility(View.VISIBLE);
         }
         else if(building_flag == FLAG_INFO){
             Log.d("bottomsheet-", "INFO");
             showBuildingInfoFragment(true);
             showDirectionsFragment(false);
             buildingInfoFragment.collapse();
+            directionsButton.setVisibility(View.VISIBLE);
         }
         else if(building_flag == FLAG_NO_DISPLAY){
             Log.d("bottomsheet-", "NO_DISPLAY");
             showDirectionsFragment(false);
             showBuildingInfoFragment(false);
+            directionsButton.setVisibility(View.GONE);
         }
 
     }
@@ -422,7 +425,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         showTransportButton(true);
         campusButton.setVisibility(View.VISIBLE);
-        directionsButton.setVisibility(View.VISIBLE);
+        directionsButton.setVisibility(View.GONE);
 
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
 
