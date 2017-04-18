@@ -368,7 +368,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
                 if (flag.get(currentDirection) == FLAG_OUTDOORS) {
                     NavigationFragment navigationFragment = ((NavigationFragment) getParentFragment());
                     navigationFragment.showOutdoorMap();
-                    navigationFragment.camMove(navigationFragment.getOutdoorDirections().getNextLatLng(), true);
+                    navigationFragment.camMove(navigationFragment.getOutdoorDirections().getLatLng(currentDirection), true);
                 }
                 // reset the indoors view if we change floors
                 else if (flag.get(currentDirection) == FLAG_INDOORS){
