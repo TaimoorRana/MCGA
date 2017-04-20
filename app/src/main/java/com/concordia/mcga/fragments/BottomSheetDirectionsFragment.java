@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -330,7 +331,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
         updateDirections();
 
-        if(currentDirection < flag.size() && flag.get(currentDirection) == FLAG_OUTDOORS){
+        if(currentDirection < flag.size() &&
+                flag.get(currentDirection) == FLAG_OUTDOORS &&
+                flag.get(currentDirection + 1) != FLAG_INDOORS){
             currentOutdoorDirection++;
         }
     }
@@ -348,7 +351,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
         updateDirections();
 
-        if(currentDirection > 0 && flag.get(currentDirection) == FLAG_OUTDOORS){
+        if(currentDirection > 0 &&
+                flag.get(currentDirection) == FLAG_OUTDOORS &&
+                flag.get(currentDirection - 1) != FLAG_INDOORS){
             currentOutdoorDirection--;
         }
     }
