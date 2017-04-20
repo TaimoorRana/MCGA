@@ -47,7 +47,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
     // Counter keeps track of the index of the current direction
     private int currentDirection = 0;
-    private int currentOutdoorDirection = -1;
+    private int currentOutdoorDirection = 0;
 
     // View
     private View view;
@@ -324,14 +324,15 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         if (displayedDirectionsList.size() > 0) {
             currentDirection++;
         }
-        if(currentDirection < flag.size() && flag.get(currentDirection) == FLAG_OUTDOORS){
-            currentOutdoorDirection++;
-        }
         try {
             drawTile();
         } catch (Exception e) {}
 
         updateDirections();
+
+        if(currentDirection < flag.size() && flag.get(currentDirection) == FLAG_OUTDOORS){
+            currentOutdoorDirection++;
+        }
     }
 
     /**
@@ -341,13 +342,15 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         if (currentDirection > 0) {
             currentDirection--;
         }
-        if(currentDirection > 0 && flag.get(currentDirection) == FLAG_OUTDOORS){
-            currentOutdoorDirection--;
-        }
         try {
             drawTile();
         } catch (Exception e) {}
+
         updateDirections();
+
+        if(currentDirection > 0 && flag.get(currentDirection) == FLAG_OUTDOORS){
+            currentOutdoorDirection--;
+        }
     }
 
 
