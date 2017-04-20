@@ -235,22 +235,20 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     try {
                         sleep(20);
                         int y = 0;
+
                         if ((building_flag == FLAG_INFO)) {
                             y = buildingInfoFragment.getTop();
 
-                            directionsButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
                             mapCenterButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
                         }
                         else if (building_flag == FLAG_DIRECTIONS){
                             y = directionsFragment.getTop();
                             mapCenterButton.setY(y - mapCenterButton.getHeight());
-                            directionsButton.setY(y -  mapCenterButton.getHeight());
 
                         }
                         else if (building_flag == FLAG_NO_DISPLAY)
                         {
                             mapCenterButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
-                            directionsButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
                         }
 
                     } catch (Exception e) {
