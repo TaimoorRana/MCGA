@@ -185,20 +185,19 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     }
 
     @Override
-    public LatLng getNextLatLng() {
+    public LatLng getLatLng(int currentStep) {
         if(allStartLatLng.isEmpty()){
             initializeAllStartLatlng();
         }
 
-        LatLng nextLatLng = null;
-        // if all steps are completed, nextLatLng is the previous step end location.
+        LatLng latLng;
+        // if all steps are completed, latLng is the destination
         if(currentStep >= allStartLatLng.size()){
-            nextLatLng = destination;
+            latLng = destination;
         }else {
-            nextLatLng = allStartLatLng.get(currentStep);
-            currentStep++;
+            latLng = allStartLatLng.get(currentStep);
         }
-        return nextLatLng;
+        return latLng;
     }
 
     /**

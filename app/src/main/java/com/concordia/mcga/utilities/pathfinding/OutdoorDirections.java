@@ -213,10 +213,10 @@ public class OutdoorDirections {
     }
 
 
-    public LatLng getNextLatLng(){
+    public LatLng getLatLng(int currentStep){
         // for some reason selectedOutdoorPath can be null at this point. So this will reselect it
         setSelectedTransportMode(selectedTransportMode);
-        return selectedOutdoorPath.getNextLatLng();
+        return selectedOutdoorPath.getLatLng(currentStep);
     }
 
 }
