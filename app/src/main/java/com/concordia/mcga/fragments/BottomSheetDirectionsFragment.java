@@ -281,6 +281,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         completeDirectionsList.clear();
         completeDirectionsImage.clear();
         flag.clear();
+        tiles.clear();
         currentDirection = 0;
         floorAssociation.clear();
         updateDirections();
