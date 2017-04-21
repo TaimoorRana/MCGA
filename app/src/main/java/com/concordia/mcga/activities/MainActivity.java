@@ -156,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements
                             Toast.makeText(getApplicationContext(), "Next Class", Toast.LENGTH_SHORT).show();
                             return true;
                         case R.id.shuttle_schedule:
-                            Toast.makeText(getApplicationContext(), "Shuttle Schedule", Toast.LENGTH_SHORT).show();
                             openShuttleActivity();
                             return true;
                         case R.id.settings:
@@ -164,7 +163,6 @@ public class MainActivity extends AppCompatActivity implements
                             return true;
                         case R.id.student_spots:
                             openSpotActivity();
-                            Toast.makeText(getApplicationContext(), "Student Spots", Toast.LENGTH_SHORT).show();
                             return true;
                         case R.id.about:
                             Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
