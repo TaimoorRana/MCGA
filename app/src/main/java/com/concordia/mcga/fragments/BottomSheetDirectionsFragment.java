@@ -283,6 +283,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         completeDirectionsImage.clear();
         flag.clear();
         currentDirection = 0;
+        currentOutdoorDirection = 0;
         floorAssociation.clear();
         updateDirections();
     }
@@ -322,17 +323,16 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      */
     private void nextDirection(){
         if (displayedDirectionsList.size() > 0) {
-            currentDirection++;
+            if (currentDirection >= 0 && currentDirection < flag.size() &&
+                    flag.get(currentDirection++) == FLAG_OUTDOORS) {
+                currentOutdoorDirection++;
+            }
+            try {
+                drawTile();
+            } catch (Exception e) {}
+            updateDirections();
         }
-        try {
-            drawTile();
-        } catch (Exception e) {}
 
-        updateDirections();
-
-        if(currentDirection < flag.size() && flag.get(currentDirection) == FLAG_OUTDOORS){
-            currentOutdoorDirection++;
-        }
     }
 
     /**
@@ -340,17 +340,16 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      */
     private void previousDirection(){
         if (currentDirection > 0) {
-            currentDirection--;
+            if (currentDirection > 0 && currentDirection <= flag.size()
+                    && flag.get(--currentDirection) == FLAG_OUTDOORS) {
+                currentOutdoorDirection--;
+            }
+            try {
+                drawTile();
+            } catch (Exception e) {}
+            updateDirections();
         }
-        try {
-            drawTile();
-        } catch (Exception e) {}
 
-        updateDirections();
-
-        if(currentDirection > 0 && flag.get(currentDirection) == FLAG_OUTDOORS){
-            currentOutdoorDirection--;
-        }
     }
 
 
