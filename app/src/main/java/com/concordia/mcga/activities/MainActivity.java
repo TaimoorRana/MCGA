@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements
         // Get all the
         if (navigationFragment.getOutdoorDirections().getDirectionObject() != null) {
             List<String> outdoorsDirection = navigationFragment.getOutdoorDirections().getInstructionsForSelectedTransportMode();
-            if (!outdoorsDirection.isEmpty()) {
+            if (!finder.isIndoorsNavigation() &&!outdoorsDirection.isEmpty()) {
 
                 for (int i = 0; i < outdoorsDirection.size(); i++) {
                     directionsBottomSheet.addOutdoorsDirection(outdoorsDirection.get(i), "none");

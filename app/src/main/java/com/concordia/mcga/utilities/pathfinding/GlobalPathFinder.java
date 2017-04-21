@@ -27,6 +27,7 @@ public class GlobalPathFinder implements Runnable, Serializable {
     private LatLng[] outdoorCoordinates;
     private MultiMapPathFinder indoorPathFinder;
     private String mode;
+    private boolean isIndoorsNavigation = false;
 
     /**
      * @param activity reference to the MainActivity
@@ -175,6 +176,8 @@ public class GlobalPathFinder implements Runnable, Serializable {
         IndoorPOI startIndoorPOI = (IndoorPOI) startPOI;
         IndoorPOI destIndoorPOI = (IndoorPOI) destPOI;
 
+        isIndoorsNavigation = true;
+
         Map<Floor, List<IndoorMapTile>> completeDirections = indoorPathFinder.shortestPath(startIndoorPOI, destIndoorPOI);
 
         startBuildingDirections = new LinkedHashMap<>();
@@ -235,6 +238,10 @@ public class GlobalPathFinder implements Runnable, Serializable {
 
     void setIndoorPathFinder(MultiMapPathFinder indoorPathFinder) {
         this.indoorPathFinder = indoorPathFinder;
+    }
+
+    public boolean isIndoorsNavigation(){
+        return isIndoorsNavigation;
     }
 }
 
