@@ -127,7 +127,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      */
     private void setupUiElements(){
         // UI Elements
-        bottomSheetTextView = (TextView) view.findViewById(R.id.bottom_sheet_title);
+        bottomSheetTextView = (TextView) view.findViewById(R.id.bottom_sheet_directions);
         bottomSheetTextView.setText("Directions");
         list = (ListView) view.findViewById(R.id.list1);
         nextButton = (ImageButton) view.findViewById(R.id.nextButton);

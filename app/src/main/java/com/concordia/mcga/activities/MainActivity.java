@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements
                             openSpotActivity();
                             return true;
                         case R.id.about:
-                            Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
+                            openCreditsActivity();
                             return true;
                         default:
                             Toast.makeText(getApplicationContext(), "Error - Navigation Drawer", Toast.LENGTH_SHORT).show();
@@ -262,6 +262,11 @@ public class MainActivity extends AppCompatActivity implements
 
     public void openShuttleActivity() {
         Intent intent = new Intent(this, ShuttleActivity.class);
+        startActivity(intent);
+    }
+
+    public void openCreditsActivity() {
+        Intent intent = new Intent(this, CreditsActivity.class);
         startActivity(intent);
     }
 

@@ -41,4 +41,10 @@
     <string name="hall_building">H</string>
     <string name="john_molson_building">JM</string>
 
+    <string name="title_activity_credits">CreditsActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="contributors">Samuel Campbell\nSylvain Czyzewski\nMihai Damaschin\nAdrianna Diaz\nArek Manoukian\nTaimoor Rana\nMark Snidal</string>
+    <string name="about_MCGA">MCGA Campus Guide Application is meant to help new incoming students navigate and familiarize themselves with Concordia University - Montréal’s two campuses.</string>
+
+
 </resources>
