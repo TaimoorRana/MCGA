@@ -142,7 +142,12 @@ public class OutdoorDirections {
      * @return directions for the selected mode of transportation
      */
     public List<String> getInstructionsForSelectedTransportMode() {
-        return selectedOutdoorPath.getInstructions();
+        List<String> stringsWithoutCanada = new ArrayList<>(selectedOutdoorPath.getInstructions().size());
+        for (String string: selectedOutdoorPath.getInstructions())
+        {
+            stringsWithoutCanada.add(string.replace(", Canada",""));
+        }
+        return stringsWithoutCanada;
     }
 
     public String getSelectedTransportMode() {
