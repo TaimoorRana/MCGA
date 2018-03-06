@@ -1,8 +1,8 @@
 # MCGA
 SOEN 390 Winter 2017
 
-[![Code Climate](https://codeclimate.com/github/Taimoorrana1/MCGA/badges/gpa.svg)](https://codeclimate.com/github/Taimoorrana1/MCGA)
-[![Codecov](https://img.shields.io/codecov/c/github/Taimoorrana1/MCGA.svg)](https://codecov.io/gh/TaimoorRana/MCGA)
+[![Code Climate](https://codeclimate.com/github/TaimoorRana/MCGA/badges/gpa.svg)](https://codeclimate.com/github/TaimoorRana/MCGA)
+[![Codecov](https://img.shields.io/codecov/c/github/TaimoorRana/MCGA.svg)](https://codecov.io/gh/TaimoorRana/MCGA)
 [![Build Status](https://travis-ci.org/TaimoorRana/MCGA.svg?branch=master)](https://travis-ci.org/TaimoorRana/MCGA)
 
 # About
