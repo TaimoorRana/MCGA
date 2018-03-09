@@ -1,4 +1,4 @@
-package com.concordia.mcga.helperClasses;
+package com.concordia.mcga.utilities.pathfinding;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,6 +12,8 @@ import com.akexorcist.googledirection.model.Leg;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.model.Step;
 import com.akexorcist.googledirection.util.DirectionConverter;
+import com.concordia.mcga.helperClasses.IOutdoorPath;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
@@ -43,6 +45,8 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     private int durationMinutes;
     private int durationHours;
     private boolean isPathSelected;
+    private int currentStep;
+    private List<LatLng> allStartLatLng;
 
     public OutdoorPath() {
         polylines = new ArrayList<>();
@@ -50,6 +54,9 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
         instructions = new ArrayList<>();
         transportMode = MCGATransportMode.TRANSIT; // default transport mode
         isPathSelected = false;
+        currentStep = 0;
+        allStartLatLng = new ArrayList<>();
+        leg = new Leg();
     }
 
     /**
@@ -65,20 +72,21 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
             leg = route.getLegList().get(0);
             steps = leg.getStepList();
             setDurationHoursAndMinutes();
-            if(isPathSelected)
+            if (isPathSelected)
                 drawPath();
         }
     }
 
     @Override
     public void onDirectionFailure(Throwable t) {
-        Log.e("Path Error:", "Unable to get directions");
+        Log.e("Path Error:", t.toString());
     }
 
     /**
      * Makes a https request to get a direction from origin to destination with a specified transport mode.
      */
     public void requestDirection() {
+        resetAttributes();
         GoogleDirection.withServerKey(serverKey)
                 .from(origin)
                 .to(destination)
@@ -87,6 +95,12 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
                 .transitMode(TransitMode.SUBWAY)
                 .unit(Unit.METRIC)
                 .execute(this);
+    }
+
+    private void resetAttributes(){
+        currentStep = 0;
+        allStartLatLng.clear();
+        clearInstructions();
     }
 
     /**
@@ -111,7 +125,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
      * sets origin and destination to null
      */
     public void deleteDirection() {
-        if (polylines != null) {
+        if (polylines != null && !polylines.isEmpty()) {
             for (Polyline polyline : polylines) {
                 polyline.remove();
             }
@@ -124,8 +138,9 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     public List<String> getInstructions() {
         instructions.clear();
         for (Step step : steps) {
-            instructions.add(step.getHtmlInstruction().replaceAll("\\<[^>]*>",""));
+            instructions.add(step.getHtmlInstruction().replaceAll("\\<[^>]*>", ""));
         }
+        instructions.add("Arrived at " + leg.getEndAddress());
         return instructions;
     }
 
@@ -133,6 +148,18 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
         if (instructions != null) {
             instructions.clear();
         }
+    }
+
+    @Override
+    public LatLng getLatLng(int currentStep) {
+        LatLng latLng;
+        // if all steps are completed, latLng is the destination
+        if(currentStep >= steps.size()){
+            latLng = destination;
+        }else {
+            latLng = steps.get(currentStep).getStartLocation().getCoordination();
+        }
+        return latLng;
     }
 
     /**
@@ -146,7 +173,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     /**
      * Filters and set minutes and hours for this outdoorPath
      */
-    private  void setDurationHoursAndMinutes(){
+    private void setDurationHoursAndMinutes() {
         final int hoursAndMinutesListMaxSize = 2;
         String duration = getDuration();
 
@@ -160,12 +187,12 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
         Matcher m = r.matcher(duration);
 
         List<Integer> hoursAndMinutes = new ArrayList<>();
-        while(m.find()){
+        while (m.find()) {
             hoursAndMinutes.add(Integer.valueOf(m.group()));
         }
-        if (hoursAndMinutes.size() < hoursAndMinutesListMaxSize){
+        if (hoursAndMinutes.size() < hoursAndMinutesListMaxSize) {
             // add 0 for hours and place it in from of the list if duration is less than an hour
-            hoursAndMinutes.add(0,0);
+            hoursAndMinutes.add(0, 0);
         }
         durationHours = hoursAndMinutes.get(0);
         durationMinutes = hoursAndMinutes.get(1);
@@ -177,7 +204,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     }
 
     public void setOrigin(LatLng origin) {
-            this.origin = origin;
+        this.origin = origin;
     }
 
     public LatLng getDestination() {
@@ -185,7 +212,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
     }
 
     public void setDestination(LatLng destination) {
-            this.destination = destination;
+        this.destination = destination;
     }
 
     public void setMap(GoogleMap map) {
@@ -202,7 +229,7 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
 
     public void setTransportMode(String transportMode) {
         this.transportMode = transportMode;
-        if(transportMode.equalsIgnoreCase(MCGATransportMode.WALKING)){
+        if (transportMode.equalsIgnoreCase(MCGATransportMode.WALKING)) {
             transitPathColor = walkingPathColor;
             transitPathWidth = walkingPathWidth;
         }
@@ -213,13 +240,14 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
         this.serverKey = serverKey;
     }
 
-    public int getDurationMinutes(){
+    public int getDurationMinutes() {
         return durationMinutes;
     }
 
-    public int getDurationHours(){
+    public int getDurationHours() {
         return durationHours;
     }
+
     public void setPathSelected(boolean isPathSelected) {
         this.isPathSelected = isPathSelected;
     }
@@ -235,6 +263,14 @@ public class OutdoorPath implements DirectionCallback, IOutdoorPath {
 
     public void setTransitPathColor(int transitPathColor) {
         this.transitPathColor = transitPathColor;
+    }
+
+    public List<LatLng> getAllStartLatLng(){
+        allStartLatLng.clear();
+        for(Step step: steps){
+            allStartLatLng.add(step.getStartLocation().getCoordination());
+        }
+        return allStartLatLng;
     }
 
 }

@@ -18,7 +18,7 @@ import com.concordia.mcga.activities.R;
 import com.concordia.mcga.activities.ShuttleActivity;
 import com.concordia.mcga.helperClasses.MCGADayOfWeek;
 import com.concordia.mcga.helperClasses.MCGATransportMode;
-import com.concordia.mcga.helperClasses.OutdoorDirections;
+import com.concordia.mcga.utilities.pathfinding.OutdoorDirections;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Transportation;
 
@@ -239,6 +239,11 @@ public class TransportButtonFragment extends Fragment implements View.OnClickLis
             transportExpandFAB.setTag(iconId);
 
         transportExpandFAB.clearColorFilter();
+    }
+
+    public void setDefaultTransportMode(){
+        swapIcons(Transportation.TRANSIT.getIconID());
+        transportType = MCGATransportMode.TRANSIT;
     }
 
     private void restorePreviousIcon() {

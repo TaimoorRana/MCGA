@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +22,6 @@ import com.concordia.mcga.utilities.pathfinding.IndoorDirections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static android.content.ContentValues.TAG;
 
 
 public class BottomSheetDirectionsFragment extends Fragment implements View.OnClickListener{
@@ -50,6 +47,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
     // Counter keeps track of the index of the current direction
     private int currentDirection = 0;
+    private int currentOutdoorDirection = 0;
 
     // View
     private View view;
@@ -129,7 +127,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      */
     private void setupUiElements(){
         // UI Elements
-        bottomSheetTextView = (TextView) view.findViewById(R.id.bottom_sheet_title);
+        bottomSheetTextView = (TextView) view.findViewById(R.id.bottom_sheet_directions);
         bottomSheetTextView.setText("Directions");
         list = (ListView) view.findViewById(R.id.list1);
         nextButton = (ImageButton) view.findViewById(R.id.nextButton);
@@ -184,6 +182,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
                 break;
 
             case R.id.previousButton:
+                adapter.notifyDataSetChanged();
                 previousDirection();
                 break;
 
@@ -283,7 +282,9 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         completeDirectionsList.clear();
         completeDirectionsImage.clear();
         flag.clear();
+        tiles.clear();
         currentDirection = 0;
+        currentOutdoorDirection = 0;
         floorAssociation.clear();
         updateDirections();
     }
@@ -323,13 +324,16 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      */
     private void nextDirection(){
         if (displayedDirectionsList.size() > 0) {
-            currentDirection++;
+            if (currentDirection >= 0 && currentDirection < flag.size() &&
+                    flag.get(currentDirection++) == FLAG_OUTDOORS) {
+                currentOutdoorDirection++;
+            }
+            try {
+                drawTile();
+            } catch (Exception e) {}
+            updateDirections();
         }
-        try {
-            drawTile();
-        } catch (Exception e) {}
 
-        updateDirections();
     }
 
     /**
@@ -337,12 +341,16 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
      */
     private void previousDirection(){
         if (currentDirection > 0) {
-            currentDirection--;
+            if (currentDirection > 0 && currentDirection <= flag.size()
+                    && flag.get(--currentDirection) == FLAG_OUTDOORS) {
+                currentOutdoorDirection--;
+            }
+            try {
+                drawTile();
+            } catch (Exception e) {}
+            updateDirections();
         }
-        try {
-            drawTile();
-        } catch (Exception e) {}
-        updateDirections();
+
     }
 
 
@@ -353,7 +361,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         displayedDirectionsList.clear();
         displayedDirectionsImage.clear();
 
-        for (int i = currentDirection + 1; i < completeDirectionsList.size(); i++){
+        for (int i = currentDirection ; i < completeDirectionsList.size(); i++){
             displayedDirectionsList.add(completeDirectionsList.get(i));
             displayedDirectionsImage.add(completeDirectionsImage.get(i));
         }
@@ -361,11 +369,16 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
 
         if (completeDirectionsList.size() > 0) {
             // Set the main direction
-            setTextDirections(completeDirectionsList.get(currentDirection));
+            if(currentDirection<completeDirectionsList.size()){
+                setTextDirections(completeDirectionsList.get(currentDirection));}
+            else{
+                setTextDirections("Arrived at destination");}
             try{
                 // load the outdoors view
                 if (flag.get(currentDirection) == FLAG_OUTDOORS) {
-                    ((NavigationFragment) getParentFragment()).showOutdoorMap();
+                    NavigationFragment navigationFragment = ((NavigationFragment) getParentFragment());
+                    navigationFragment.showOutdoorMap();
+                    navigationFragment.camMove(navigationFragment.getOutdoorDirections().getLatLng(currentOutdoorDirection), true);
                 }
                 // reset the indoors view if we change floors
                 else if (flag.get(currentDirection) == FLAG_INDOORS){
@@ -420,7 +433,7 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         bottomSheetTextView.setText(direction);
     }
 
-    
+
     /**
      * @return TextView
      */
@@ -581,5 +594,6 @@ public class BottomSheetDirectionsFragment extends Fragment implements View.OnCl
         }
 
     }
+
 
 }

@@ -1,7 +1,10 @@
-package com.concordia.mcga.helperClasses;
+package com.concordia.mcga.utilities.pathfinding;
 
 import android.content.Context;
 
+import com.concordia.mcga.fragments.NavigationFragment;
+import com.concordia.mcga.helperClasses.IOutdoorPath;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.concordia.mcga.models.Campus;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -10,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShuttleOutdoorPath implements IOutdoorPath {
+
+    //enum Path{userToShuttleStopPath,sgwToLoyPath,shuttleStopToBuildingPath}
     private OutdoorPath userToShuttleStopPath;
     private OutdoorPath sgwToLoyPath;
     private OutdoorPath shuttleStopToBuildingPath;
@@ -25,20 +30,26 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     private String transportMode;
     private int durationMinutes;
     private int durationHours;
-    private String currentCampus = Campus.SGW.getShortName();
+    private Campus startCampus = Campus.SGW;
+    private int currentStep;
+    private List<LatLng> allStartLatLng;
 
 
     public ShuttleOutdoorPath(){
         userToShuttleStopPath = new OutdoorPath();
+        userToShuttleStopPath.setTransportMode(MCGATransportMode.WALKING);
         sgwToLoyPath = new OutdoorPath();
         shuttleStopToBuildingPath = new OutdoorPath();
+        shuttleStopToBuildingPath.setTransportMode(MCGATransportMode.WALKING);
         instructions = new ArrayList<>();
+        allStartLatLng = new ArrayList<>();
     }
 
     @Override
     public void setOrigin(LatLng origin) {
+        setStartCampus();
         this.origin = origin;
-        if(currentCampus.equalsIgnoreCase(Campus.SGW.getShortName())) {
+        if(startCampus == Campus.SGW) {
             sgwToLoyPath.setOrigin(SGW_STOP);
             shuttleStopToBuildingPath.setOrigin(LOY_STOP);
         }else {
@@ -52,7 +63,7 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     @Override
     public void setDestination(LatLng destination) {
         this.destination = destination;
-        if(currentCampus.equalsIgnoreCase(Campus.SGW.getShortName())) {
+        if(startCampus == Campus.SGW) {
             userToShuttleStopPath.setDestination(SGW_STOP);
             sgwToLoyPath.setDestination(LOY_STOP);
         }else{
@@ -72,9 +83,16 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
      */
     @Override
     public void requestDirection() {
+        resetAttributes();
         userToShuttleStopPath.requestDirection();
         sgwToLoyPath.requestDirection();
         shuttleStopToBuildingPath.requestDirection();
+    }
+
+    public void resetAttributes(){
+        currentStep = 0;
+        allStartLatLng.clear();
+        clearInstructions();
     }
 
     @Override
@@ -153,7 +171,10 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     public List<String> getInstructions() {
         List<String> allInstructions = new ArrayList<>();
         allInstructions.addAll(userToShuttleStopPath.getInstructions());
-        allInstructions.addAll(sgwToLoyPath.getInstructions());
+        // removed last instruction.
+        allInstructions.remove(allInstructions.size()-1);
+        allInstructions.add("Take Concordia's Shuttle Bus");
+        allInstructions.add("Get off Concordia's Shuttle Bus");
         allInstructions.addAll(shuttleStopToBuildingPath.getInstructions());
         return allInstructions;
     }
@@ -161,6 +182,22 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
     @Override
     public void clearInstructions(){
         instructions.clear();
+    }
+
+    @Override
+    public LatLng getLatLng(int currentStep) {
+        if(allStartLatLng.isEmpty()){
+            initializeAllStartLatlng();
+        }
+
+        LatLng latLng;
+        // if all steps are completed, latLng is the destination
+        if(currentStep >= allStartLatLng.size()){
+            latLng = destination;
+        }else {
+            latLng = allStartLatLng.get(currentStep);
+        }
+        return latLng;
     }
 
     /**
@@ -171,6 +208,14 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         shuttleStopToBuildingPath.deleteDirection();
         userToShuttleStopPath.deleteDirection();
         sgwToLoyPath.deleteDirection();
+        allStartLatLng.clear();
+    }
+
+    private void initializeAllStartLatlng(){
+        allStartLatLng = new ArrayList<>(userToShuttleStopPath.getAllStartLatLng());
+        allStartLatLng.add(sgwToLoyPath.getOrigin());
+        allStartLatLng.add(sgwToLoyPath.getDestination());
+        allStartLatLng.addAll(shuttleStopToBuildingPath.getAllStartLatLng());
     }
 
     /**
@@ -201,8 +246,17 @@ public class ShuttleOutdoorPath implements IOutdoorPath {
         shuttleStopToBuildingPath.drawPath();
     }
 
-    public void setStartCampus(String campus){
-        currentCampus = campus;
+    /**
+     * Checks in which campus the origin is located in and sets up the startCampus attribute
+     */
+    public void setStartCampus(){
+        Double distanceFromSGWCampus = NavigationFragment.distanceBetween(origin,Campus.SGW.getMapCoordinates());
+        Double distanceFromLOYCampus = NavigationFragment.distanceBetween(origin,Campus.LOY.getMapCoordinates());
+        if(distanceFromSGWCampus <= distanceFromLOYCampus){
+            startCampus = Campus.SGW;
+        }else{
+            startCampus = Campus.LOY;
+        }
     }
 
 

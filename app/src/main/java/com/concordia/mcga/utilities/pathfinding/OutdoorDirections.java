@@ -1,7 +1,9 @@
-package com.concordia.mcga.helperClasses;
+package com.concordia.mcga.utilities.pathfinding;
 
 import android.content.Context;
 
+import com.concordia.mcga.helperClasses.IOutdoorPath;
+import com.concordia.mcga.helperClasses.MCGATransportMode;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -33,6 +35,8 @@ public class OutdoorDirections {
         shuttleOutdoorPath = new ShuttleOutdoorPath();
         shuttleOutdoorPath.setTransportMode(MCGATransportMode.SHUTTLE);
         outdoorPathList.add(shuttleOutdoorPath);
+
+        selectedOutdoorPath = outdoorPathList.get(2);
     }
 
     public void setOutdoorObjectNull(){
@@ -121,7 +125,9 @@ public class OutdoorDirections {
      */
     public void drawPathForSelectedTransportMode() {
         deleteDirection();
-        selectedOutdoorPath.drawPath();
+        if(selectedOutdoorPath != null) {
+            selectedOutdoorPath.drawPath();
+        }
     }
 
     /**
@@ -136,7 +142,12 @@ public class OutdoorDirections {
      * @return directions for the selected mode of transportation
      */
     public List<String> getInstructionsForSelectedTransportMode() {
-        return selectedOutdoorPath.getInstructions();
+        List<String> stringsWithoutCanada = new ArrayList<>(selectedOutdoorPath.getInstructions().size());
+        for (String string: selectedOutdoorPath.getInstructions())
+        {
+            stringsWithoutCanada.add(string.replace(", Canada",""));
+        }
+        return stringsWithoutCanada;
     }
 
     public String getSelectedTransportMode() {
@@ -206,8 +217,11 @@ public class OutdoorDirections {
         return 0;
     }
 
-    public void setShuttleStartCampus(String campus){
-        ((ShuttleOutdoorPath)shuttleOutdoorPath).setStartCampus(campus);
+
+    public LatLng getLatLng(int currentStep){
+        // for some reason selectedOutdoorPath can be null at this point. So this will reselect it
+        setSelectedTransportMode(selectedTransportMode);
+        return selectedOutdoorPath.getLatLng(currentStep);
     }
 
 }

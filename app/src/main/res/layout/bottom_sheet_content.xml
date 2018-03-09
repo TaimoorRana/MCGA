@@ -29,9 +29,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="76dp"
                     android:background="@color/place_autocomplete_search_hint"
-                    android:paddingTop="0dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingTop="2dp"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
                     android:paddingBottom="8dp">
 
                     <ImageButton
@@ -56,18 +56,28 @@
                         android:layout_alignTop="@+id/nextButton"
                         android:layout_alignParentStart="true" />
 
+                    <LinearLayout
+                        android:id="@+id/message_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingTop="8dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:gravity="center">
+
                     <TextView
-                        android:id="@+id/bottom_sheet_title"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/bottom_sheet_directions"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:textColor="?android:attr/textColorPrimaryNoDisable"
-                        android:textSize="24sp"
+                        android:textSize="20sp"
                         android:textAlignment="center"
                         android:gravity="center"
                         android:layout_weight="606.34"
                         android:layout_centerVertical="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentEnd="true" />
+                    </LinearLayout>
 
                     <ImageButton
                         android:layout_width="match_parent"

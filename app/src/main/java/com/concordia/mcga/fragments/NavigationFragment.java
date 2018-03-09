@@ -23,10 +23,9 @@ import android.widget.ToggleButton;
 
 import com.concordia.mcga.activities.MainActivity;
 import com.concordia.mcga.activities.R;
-import com.concordia.mcga.helperClasses.GPSManager;
 import com.concordia.mcga.activities.StudentSpotActivity;
 import com.concordia.mcga.helperClasses.Observer;
-import com.concordia.mcga.helperClasses.OutdoorDirections;
+import com.concordia.mcga.utilities.pathfinding.OutdoorDirections;
 import com.concordia.mcga.helperClasses.Subject;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
@@ -38,9 +37,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnCameraIdleListener;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.maps.android.SphericalUtil;
 import com.google.gson.Gson;
@@ -54,6 +56,8 @@ import static android.app.Activity.RESULT_OK;
 
 public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         OnCameraIdleListener, Subject {
+    private Marker stepIndicatorMarker;
+
     //Enum representing which map view is active
     public enum ViewType {
         INDOOR, OUTDOOR
@@ -101,7 +105,10 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     //State
     private Building lastClickedBuilding;
 
-    public final static int FLAG_DIRECTIONS = 0, FLAG_INFO = 1, FLAG_NO_DISPLAY = -1;
+    public final static int FLAG_DIRECTIONS = 0;
+    public final static int FLAG_INFO = 1;
+    public final static int FLAG_NO_DISPLAY = -1;
+
     private int building_flag = FLAG_NO_DISPLAY;
 
 
@@ -137,7 +144,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                 //Camera Movement
                 LatLng location = ((MainActivity) getActivity()).getGpsManager().getLocation();
                 if (location != null) {
-                    camMove(location);
+                    camMove(location, false);
                     toggleMapLocation(true);
                 }
             }
@@ -228,25 +235,20 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
                     try {
                         sleep(20);
                         int y = 0;
+
                         if ((building_flag == FLAG_INFO)) {
-                            directionsButton.setVisibility(View.VISIBLE);
                             y = buildingInfoFragment.getTop();
 
-                            directionsButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
                             mapCenterButton.setY(y - 2 * mapCenterButton.getHeight() + mapCenterButton.getHeight() /2 );
                         }
                         else if (building_flag == FLAG_DIRECTIONS){
-                            //directionsButton.setVisibility(View.INVISIBLE);
                             y = directionsFragment.getTop();
                             mapCenterButton.setY(y - mapCenterButton.getHeight());
-                            directionsButton.setY(y -  mapCenterButton.getHeight());
 
                         }
                         else if (building_flag == FLAG_NO_DISPLAY)
                         {
-                            //directionsButton.setVisibility(View.INVISIBLE);
                             mapCenterButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
-                            directionsButton.setY( parentLayout.getHeight() - mapCenterButton.getHeight());
                         }
 
                     } catch (Exception e) {
@@ -301,7 +303,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
      * This method calculates the distance between two LatLng variables.
      * To be used with method "closestCampus".
      */
-    public Double distanceBetween(LatLng point1, LatLng point2){
+    public static Double distanceBetween(LatLng point1, LatLng point2){
         if(point1==null||point2 == null){
             return 0.0;
         }
@@ -346,17 +348,20 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
             Log.d("bottomsheet-", "DIRECTIONS");
             showBuildingInfoFragment(false);
             showDirectionsFragment(true);
+            directionsButton.setVisibility(View.VISIBLE);
         }
         else if(building_flag == FLAG_INFO){
             Log.d("bottomsheet-", "INFO");
             showBuildingInfoFragment(true);
             showDirectionsFragment(false);
             buildingInfoFragment.collapse();
+            directionsButton.setVisibility(View.VISIBLE);
         }
         else if(building_flag == FLAG_NO_DISPLAY){
             Log.d("bottomsheet-", "NO_DISPLAY");
             showDirectionsFragment(false);
             showBuildingInfoFragment(false);
+            directionsButton.setVisibility(View.GONE);
         }
 
     }
@@ -402,8 +407,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     public void showIndoorMap(Building building) {
         if (building.getRooms().size() > 0) {
             viewType = ViewType.INDOOR;
-
             showTransportButton(false);
+            directionsButton.setVisibility(View.GONE);
             campusButton.setVisibility(View.GONE);
 
             getChildFragmentManager().beginTransaction().show(indoorMapFragment).hide(mapFragment).commit();
@@ -423,6 +428,8 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
 
         showTransportButton(true);
         campusButton.setVisibility(View.VISIBLE);
+        directionsButton.setVisibility(View.GONE);
+
         getChildFragmentManager().beginTransaction().show(mapFragment).hide(indoorMapFragment).commit();
 
         viewSwitchButton.setText("GO INDOORS");
@@ -468,7 +475,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         if (building == null) {
             building = Campus.getBuilding(polygon);
         }
-        ((MainActivity) getActivity()).createToast(building.getShortName());
 
         String name = building.getShortName();
         updateBuildingInfoSheet(name);
@@ -489,7 +495,6 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         if(building == null){
             building = Campus.getBuilding(marker);
         }
-        ((MainActivity) getActivity()).createToast(building.getShortName());
 
         String name = building.getShortName();
         updateBuildingInfoSheet(name);
@@ -512,16 +517,23 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
             public void onPolygonClick(Polygon polygon) {
-                lastClickedBuilding = Campus.getBuilding(polygon);
-                setBottomSheetContent(polygon);
+                MainActivity activity = (MainActivity)getActivity();
+                if ((activity != null) && activity.getSearchState() != MainActivity.SearchState.LOCATION_DESTINATION) {
+                    lastClickedBuilding = Campus.getBuilding(polygon);
+                    setBottomSheetContent(polygon);
+                }
             }
         });
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                lastClickedBuilding = Campus.getBuilding(marker);
-                setBottomSheetContent(marker);
-                return true;
+                MainActivity activity = (MainActivity)getActivity();
+                if ((activity != null) && activity.getSearchState() != MainActivity.SearchState.LOCATION_DESTINATION) {
+                    lastClickedBuilding = Campus.getBuilding(marker);
+                    setBottomSheetContent(marker);
+                    return true;
+                }
+                return false;
             }
         });
     }
@@ -568,6 +580,7 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
     public void clearAllPaths() {
         clearOutdoorPath();
         clearIndoorPath();
+        clearStepIndicator();
     }
 
     public void clearOutdoorPath() {
@@ -624,8 +637,19 @@ public class NavigationFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    public void camMove(LatLng MyPos){
+    public void camMove(LatLng MyPos, boolean setPersonVisible){
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(MyPos, 16f));//Camera Update method
+        if(setPersonVisible) {
+            clearStepIndicator();
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.stepindicator);
+            stepIndicatorMarker = map.addMarker(new MarkerOptions().icon(bitmapDescriptor).position(MyPos));
+        }
+    }
+
+    public void clearStepIndicator() {
+        if(stepIndicatorMarker != null){
+            stepIndicatorMarker.remove();
+        }
     }
 
     public void toggleMapLocation(boolean active) {

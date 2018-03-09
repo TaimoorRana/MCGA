@@ -12,9 +12,15 @@ import com.concordia.mcga.utilities.pathfinding.TiledMap;
 
 public class IndoorMapFactory {
 
-    private final static int X_COORDINATE_INDEX = 2, Y_COORDINATE_INDEX = 3,
-            MAP_HEIGHT_INDEX = 2, MAP_WIDTH_INDEX = 3;
+    private final static int X_COORDINATE_INDEX = 2;
+    private final static int Y_COORDINATE_INDEX = 3;
+    private final static int MAP_HEIGHT_INDEX = 2;
+    private final static int MAP_WIDTH_INDEX = 3;
+
     private static IndoorMapFactory instance;
+
+    IndoorMapFactory() {
+    }
 
     /**
      * @return The singleton instance of this class
@@ -23,7 +29,8 @@ public class IndoorMapFactory {
         if (instance != null) {
             return instance;
         }
-        return instance = new IndoorMapFactory();
+        instance = new IndoorMapFactory();
+        return instance;
     }
 
     /**
@@ -33,8 +40,7 @@ public class IndoorMapFactory {
         IndoorMapFactory.instance = instance;
     }
 
-    IndoorMapFactory() {
-    }
+
 
     /**
      * @param building    - {@link Building} of the desired {@link Floor}
@@ -109,9 +115,7 @@ public class IndoorMapFactory {
             throw new MCGADatabaseException("No Floor Record Found");
         }
 
-        if (db != null) {
-            db.close();
-        }
+        db.close();
         return map;
     }
 

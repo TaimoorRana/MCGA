@@ -41,8 +41,7 @@ import com.concordia.mcga.fragments.TransportButtonFragment;
 import com.concordia.mcga.helperClasses.DatabaseConnector;
 import com.concordia.mcga.helperClasses.GPSManager;
 import com.concordia.mcga.helperClasses.IOutdoorPath;
-import com.concordia.mcga.helperClasses.OutdoorDirections;
-import com.concordia.mcga.helperClasses.OutdoorPath;
+import com.concordia.mcga.utilities.pathfinding.OutdoorDirections;
 import com.concordia.mcga.models.Building;
 import com.concordia.mcga.models.Campus;
 import com.concordia.mcga.models.Floor;
@@ -53,7 +52,6 @@ import com.concordia.mcga.utilities.pathfinding.GlobalPathFinder;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements
                             Toast.makeText(getApplicationContext(), "Next Class", Toast.LENGTH_SHORT).show();
                             return true;
                         case R.id.shuttle_schedule:
-                            Toast.makeText(getApplicationContext(), "Shuttle Schedule", Toast.LENGTH_SHORT).show();
                             openShuttleActivity();
                             return true;
                         case R.id.settings:
@@ -166,10 +163,9 @@ public class MainActivity extends AppCompatActivity implements
                             return true;
                         case R.id.student_spots:
                             openSpotActivity();
-                            Toast.makeText(getApplicationContext(), "Student Spots", Toast.LENGTH_SHORT).show();
                             return true;
                         case R.id.about:
-                            Toast.makeText(getApplicationContext(), "About", Toast.LENGTH_SHORT).show();
+                            openCreditsActivity();
                             return true;
                         default:
                             Toast.makeText(getApplicationContext(), "Error - Navigation Drawer", Toast.LENGTH_SHORT).show();
@@ -217,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements
         // Get all the
         if (navigationFragment.getOutdoorDirections().getDirectionObject() != null) {
             List<String> outdoorsDirection = navigationFragment.getOutdoorDirections().getInstructionsForSelectedTransportMode();
-            if (outdoorsDirection.size() > 0) {
+            if (!finder.isIndoorsNavigation() &&!outdoorsDirection.isEmpty()) {
 
                 for (int i = 0; i < outdoorsDirection.size(); i++) {
                     directionsBottomSheet.addOutdoorsDirection(outdoorsDirection.get(i), "none");
@@ -266,6 +262,11 @@ public class MainActivity extends AppCompatActivity implements
 
     public void openShuttleActivity() {
         Intent intent = new Intent(this, ShuttleActivity.class);
+        startActivity(intent);
+    }
+
+    public void openCreditsActivity() {
+        Intent intent = new Intent(this, CreditsActivity.class);
         startActivity(intent);
     }
 
@@ -492,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements
 
                 if (!(poi instanceof Room)) {
                     // call navigationfragment
-                    navigationFragment.camMove(poi.getMapCoordinates());
+                    navigationFragment.camMove(poi.getMapCoordinates(), false);
                 } else {
                     // call indoormapfragment
                     navigationFragment.onRoomSearch((Room) poi);
@@ -570,9 +571,30 @@ public class MainActivity extends AppCompatActivity implements
         } else { // if searchState == SearchState.LOCATION_DESTINATION
             return false;
         }
+        if(location != null && destination != null)
+            updateTransportOptions();
+
         updateSearchUI();
         return true;
     }
+
+    /**
+     * Disables or Enables the shuttle transport depending on if the navigation is done between
+     * campuses or not
+     */
+    private void updateTransportOptions() {
+        if(location instanceof Building && destination instanceof Building){
+            if(Campus.SGW.getBuildings().contains(location) && Campus.SGW.getBuildings().contains(destination) ||
+                    Campus.LOY.getBuildings().contains(location) && Campus.LOY.getBuildings().contains(destination)){
+                navigationFragment.getTransportButtonFragment().disableShuttle(true);
+            }else {
+                navigationFragment.getTransportButtonFragment().disableShuttle(false);
+            }
+        }
+
+        navigationFragment.getTransportButtonFragment().setDefaultTransportMode();
+    }
+
 
     /**
      * Updates the UI elements associated with the search state.

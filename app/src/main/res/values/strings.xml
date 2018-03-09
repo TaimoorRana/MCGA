@@ -9,8 +9,8 @@
     <string name="about_string">About</string>
     <string name="open_drawer">Open sesame</string>
     <string name="close_drawer">Goodnight sweet prince</string>
-    <string name="username">Richard Stallman</string>
-    <string name="email">rms@gnu.org</string>
+    <string name="username">Dr. Nikolaos Tsantalis</string>
+    <string name="email">nikolaos.tsantalis@concordia.ca</string>
     <string name="button_SGW">SGW</string>
     <string name="button_loyola">LOY</string>
     <string name="location_string">Location:</string>
@@ -40,5 +40,11 @@
 
     <string name="hall_building">H</string>
     <string name="john_molson_building">JM</string>
+
+    <string name="title_activity_credits">CreditsActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="contributors">Samuel Campbell\nSylvain Czyzewski\nMihai Damaschin\nAdrianna Diaz\nArek Manoukian\nTaimoor Rana\nMark Snidal</string>
+    <string name="about_MCGA">MCGA Campus Guide Application is meant to help new incoming students navigate and familiarize themselves with Concordia University - Montréal’s two campuses.</string>
+
 
 </resources>
